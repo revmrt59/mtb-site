@@ -285,6 +285,14 @@ img {
   font-size: 18px;
 }
 
+#doc-target h5 {
+  font-size: 17px;
+  font-weight: 600;
+  margin-top: 1em;
+  margin-bottom: 0.5em;
+}
+
+
 #doc-target p {
   margin: 0.75em 0;      /* was 1em */
   color: var(--mtb-text);

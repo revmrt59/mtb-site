@@ -349,9 +349,13 @@ img {
 
 /* load-doc.js sets data-doc-type="chapter-teaching"
    and marks scripture blocks with .mtb-scripture */
+
+
+body[data-doc-type="chapter-teaching"] #doc-target h5.mtb-scripture,
 body[data-doc-type="chapter-teaching"] #doc-target .mtb-scripture {
   color: blue;
 }
+
 
 
 /* =========================================================

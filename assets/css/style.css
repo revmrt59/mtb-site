@@ -2,6 +2,29 @@
    GLOBAL RESET / BASE
 ========================================================= */
 
+:root {
+  /* Study-surface palette */
+  --mtb-bg: #f6f7f8;           /* page background (reduces white fatigue) */
+  --mtb-surface: #ffffff;      /* content surface */
+  --mtb-muted: #f3f4f6;        /* soft panels */
+  --mtb-border: #e5e7eb;
+  --mtb-border-strong: #d1d5db;
+
+  --mtb-text: #222;
+  --mtb-text-muted: #4b5563;
+
+  --mtb-radius: 10px;
+  --mtb-shadow: 0 10px 30px rgba(17, 24, 39, 0.08);
+
+  --mtb-maxw: 980px;
+  --mtb-doc-maxw: 900px;
+
+  /* Spacing rhythm */
+  --mtb-page-pad-y: 28px;
+  --mtb-doc-pad: 44px;         /* was 48px, slightly tighter */
+  --mtb-nav-pad-x: 48px;
+}
+
 * {
   box-sizing: border-box;
 }
@@ -9,8 +32,8 @@
 body {
   margin: 0;
   font-family: Arial, Helvetica, sans-serif;
-  color: #222;
-  background: #ffffff;
+  color: var(--mtb-text);
+  background: var(--mtb-bg);
 }
 
 a {
@@ -31,8 +54,8 @@ img {
 
 .site-header {
   background: #ffffff;
-  padding: 20px 48px;
-  border-bottom: 1px solid #e5e5e5;
+  padding: 20px var(--mtb-nav-pad-x);
+  border-bottom: 1px solid var(--mtb-border);
 }
 
 .main-nav a {
@@ -139,17 +162,23 @@ img {
 
 /* =========================================================
    BOOK NAVIGATION (SUB PAGES)
+   Goal: anchor controls visually, reduce floating white
 ========================================================= */
 
 .book-nav {
   position: sticky;
   top: 0;
   z-index: 50;
-  background: #ffffff;
-  border-bottom: 1px solid rgba(0,0,0,0.10);
+
+  /* Instead of pure white floating, give it a soft strip */
+  background: rgba(246, 247, 248, 0.92);
+  backdrop-filter: blur(6px);
+
+  border-bottom: 1px solid rgba(0, 0, 0, 0.08);
+
   max-width: 1100px;
   margin: 0 auto;
-  padding: 16px 48px 12px 48px;
+  padding: 14px 48px 12px 48px;
 }
 
 .book-nav-row {
@@ -168,7 +197,7 @@ img {
   padding: 10px 12px;
   font-size: 15px;
   border-radius: 10px;
-  border: 1px solid rgba(0,0,0,0.12);
+  border: 1px solid rgba(0, 0, 0, 0.12);
   background: #ffffff;
   color: #111;
 }
@@ -182,57 +211,127 @@ img {
   display: inline-block;
   padding: 10px 14px;
   border-radius: 10px;
-  border: 1px solid rgba(0,0,0,0.12);
+  border: 1px solid rgba(0, 0, 0, 0.12);
   background: #ffffff;
   color: #222;
   font-size: 15px;
 }
 
 .book-action:hover {
-  background: rgba(0,0,0,0.04);
+  background: rgba(0, 0, 0, 0.04);
 }
 
 .book-action.active {
-  background: rgba(0,0,0,0.10);
-  border-color: rgba(0,0,0,0.25);
+  background: rgba(0, 0, 0, 0.10);
+  border-color: rgba(0, 0, 0, 0.25);
   font-weight: 600;
 }
 
 .book-action.active[aria-current="page"] {
-  outline: 2px solid rgba(0,0,0,0.20);
+  outline: 2px solid rgba(0, 0, 0, 0.18);
   outline-offset: 2px;
 }
 
 
 /* =========================================================
    DOCUMENT CONTENT AREA
+   Goal: create a single reading surface, tighten spacing rhythm
 ========================================================= */
 
+/* Create breathing room around the doc block on subpages */
 .doc {
-  max-width: 900px;
-  margin: 0 auto;
-  padding: 48px;
+  max-width: var(--mtb-doc-maxw);
+  margin: var(--mtb-page-pad-y) auto;
+  padding: var(--mtb-doc-pad);
+
+  background: var(--mtb-surface);
+  border: 1px solid var(--mtb-border);
+  border-radius: var(--mtb-radius);
+  box-shadow: var(--mtb-shadow);
 }
 
+/* Slightly reduce base type size from 18 to 17 for density */
 #doc-target {
-  font-size: 18px;
-  line-height: 1.7;
+  font-size: 17px;
+  line-height: 1.65;
+  color: var(--mtb-text);
 }
 
-/* Make Pandoc output behave */
+/* Make Pandoc output behave, but tighter and more intentional */
 #doc-target h1,
 #doc-target h2,
 #doc-target h3,
 #doc-target h4 {
-  margin-top: 1.8em;
+  margin-top: 1.35em;    /* was 1.8em */
+  margin-bottom: 0.55em;
+  line-height: 1.25;
+}
+
+/* Title sizing: less “poster”, more “study guide” */
+#doc-target h1 {
+  font-size: 34px;
+  letter-spacing: 0.2px;
+  margin-top: 0.15em;
+  margin-bottom: 0.9em;
+  text-align: center;
+}
+
+/* Secondary headings */
+#doc-target h2 {
+  font-size: 22px;
+}
+
+#doc-target h3 {
+  font-size: 18px;
 }
 
 #doc-target p {
-  margin: 1em 0;
+  margin: 0.75em 0;      /* was 1em */
+  color: var(--mtb-text);
 }
 
 #doc-target img {
-  margin: 1.5em auto;
+  margin: 1.25em auto;   /* was 1.5em */
+}
+
+/* Lists: tighten without feeling cramped */
+#doc-target ul,
+#doc-target ol {
+  margin: 0.8em 0 0.9em 1.4em;
+  padding: 0;
+}
+
+#doc-target li {
+  margin: 0.35em 0;
+}
+
+/* Give blockquotes a study-note feel if Pandoc outputs them */
+#doc-target blockquote {
+  margin: 1.1em 0;
+  padding: 14px 18px;
+  background: var(--mtb-muted);
+  border-left: 4px solid var(--mtb-border-strong);
+  color: var(--mtb-text);
+}
+
+
+/* =========================================================
+   OPTIONAL: “Purpose” style helper
+   If you can wrap the Purpose paragraph(s) in a div with class:
+   <div class="chapter-purpose">...</div>
+========================================================= */
+
+.chapter-purpose {
+  background: var(--mtb-muted);
+  border: 1px solid var(--mtb-border);
+  border-left: 4px solid var(--mtb-border-strong);
+  padding: 18px 22px;
+  border-radius: 8px;
+  margin: 0 0 24px 0;
+}
+
+.chapter-purpose p {
+  margin: 0.6em 0;
 }
 
 
@@ -298,6 +397,11 @@ body[data-doc-type="chapter-teaching"] #doc-target .mtb-scripture {
 
 @media (max-width: 768px) {
 
+  :root {
+    --mtb-doc-pad: 28px;
+    --mtb-nav-pad-x: 24px;
+  }
+
   .site-header {
     padding: 16px 24px;
   }
@@ -315,10 +419,24 @@ body[data-doc-type="chapter-teaching"] #doc-target .mtb-scripture {
   }
 
   .doc {
-    padding: 32px 24px;
+    margin: 18px 14px;
+    padding: var(--mtb-doc-pad);
   }
 
   .book-nav {
-    padding: 14px 24px;
+    padding: 12px 18px;
+  }
+
+  #doc-target {
+    font-size: 16px;
+    line-height: 1.65;
+  }
+
+  #doc-target h1 {
+    font-size: 28px;
+  }
+
+  #doc-target h2 {
+    font-size: 20px;
   }
 }

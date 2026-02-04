@@ -1,11 +1,81 @@
 (function () {
 
+  // ==========================================
+  // BOOK → TESTAMENT MAP
+  // ==========================================
+  const BOOK_TESTAMENT = {
+    // New Testament
+    "matthew": "new-testament",
+    "mark": "new-testament",
+    "luke": "new-testament",
+    "john": "new-testament",
+    "acts": "new-testament",
+    "romans": "new-testament",
+    "1-corinthians": "new-testament",
+    "2-corinthians": "new-testament",
+    "galatians": "new-testament",
+    "ephesians": "new-testament",
+    "philippians": "new-testament",
+    "colossians": "new-testament",
+    "1-thessalonians": "new-testament",
+    "2-thessalonians": "new-testament",
+    "1-timothy": "new-testament",
+    "2-timothy": "new-testament",
+    "titus": "new-testament",
+    "philemon": "new-testament",
+    "hebrews": "new-testament",
+    "james": "new-testament",
+    "1-peter": "new-testament",
+    "2-peter": "new-testament",
+    "1-john": "new-testament",
+    "2-john": "new-testament",
+    "3-john": "new-testament",
+    "jude": "new-testament",
+    "revelation": "new-testament",
+
+    // Old Testament
+    "genesis": "old-testament",
+    "exodus": "old-testament",
+    "leviticus": "old-testament",
+    "numbers": "old-testament",
+    "deuteronomy": "old-testament",
+    "joshua": "old-testament",
+    "judges": "old-testament",
+    "ruth": "old-testament",
+    "1-samuel": "old-testament",
+    "2-samuel": "old-testament",
+    "1-kings": "old-testament",
+    "2-kings": "old-testament",
+    "1-chronicles": "old-testament",
+    "2-chronicles": "old-testament",
+    "ezra": "old-testament",
+    "nehemiah": "old-testament",
+    "esther": "old-testament",
+    "job": "old-testament",
+    "psalms": "old-testament",
+    "proverbs": "old-testament",
+    "ecclesiastes": "old-testament",
+    "song-of-solomon": "old-testament",
+    "isaiah": "old-testament",
+    "jeremiah": "old-testament",
+    "lamentations": "old-testament",
+    "ezekiel": "old-testament",
+    "daniel": "old-testament",
+    "hosea": "old-testament",
+    "joel": "old-testament",
+    "amos": "old-testament",
+    "obadiah": "old-testament",
+    "jonah": "old-testament",
+    "micah": "old-testament",
+    "nahum": "old-testament",
+    "habakkuk": "old-testament",
+    "zephaniah": "old-testament",
+    "haggai": "old-testament",
+    "zechariah": "old-testament",
+    "malachi": "old-testament"
+  };
+
   function parseDocName(docName) {
-    // Expected:
-    // <book>-0-book-introduction.html
-    // <book>-<n>-chapter-orientation.html
-    // <book>-<n>-chapter-teaching.html
-    // <book>-<n>-chapter-scripture.html  (new)
     const intro = docName.match(/^([a-z0-9-]+)-0-book-introduction\.html$/);
     if (intro) {
       return { book: intro[1], chapter: 0, type: "book-introduction" };
@@ -22,150 +92,56 @@
   function setBodyDocMeta(meta) {
     document.body.dataset.docType = meta.type || "";
     document.body.dataset.book = meta.book || "";
-    document.body.dataset.chapter = (meta.chapter === null || meta.chapter === undefined) ? "" : String(meta.chapter);
+    document.body.dataset.chapter = meta.chapter ? String(meta.chapter) : "";
+  }
+
+  function buildDocPath(docName) {
+    const meta = parseDocName(docName);
+    const testament = BOOK_TESTAMENT[meta.book] || "new-testament";
+    return `/books/${testament}/${meta.book}/generated/${docName}`;
   }
 
   function markTeachingScriptureBlocks(targetEl) {
-    // Rule: In Teaching docs, Scripture sections are denoted by H5.
-    // Make H5 and the elements that follow it (until the next heading) blue.
     const h5s = Array.from(targetEl.querySelectorAll("h5"));
-    if (!h5s.length) return;
-
     const headingSelector = "h1,h2,h3,h4,h5";
 
     h5s.forEach(h5 => {
       h5.classList.add("mtb-scripture");
-
       let node = h5.nextElementSibling;
-      while (node) {
-        if (node.matches(headingSelector)) break;
+      while (node && !node.matches(headingSelector)) {
         node.classList.add("mtb-scripture");
         node = node.nextElementSibling;
       }
     });
   }
 
-  // -------------------------
-  // Modal popup provision
-  // -------------------------
-  let POPUPS = null;
-
-  function ensureModalExists() {
-    if (document.getElementById("mtbModal")) return;
-
-    const modal = document.createElement("div");
-    modal.id = "mtbModal";
-    modal.className = "mtb-modal";
-    modal.hidden = true;
-
-    modal.innerHTML = `
-      <div class="mtb-modal-inner" role="dialog" aria-modal="true" aria-label="Popup">
-        <button id="mtbModalClose" class="mtb-modal-close" type="button">Close</button>
-        <h3 id="mtbModalTitle"></h3>
-        <div id="mtbModalBody"></div>
-      </div>
-    `;
-
-    document.body.appendChild(modal);
-
-    const closeBtn = document.getElementById("mtbModalClose");
-    closeBtn.addEventListener("click", closePopup);
-
-    modal.addEventListener("click", (e) => {
-      if (e.target === modal) closePopup();
-    });
-  }
-
-  function openPopup(title, html) {
-    ensureModalExists();
-
-    const modal = document.getElementById("mtbModal");
-    const t = document.getElementById("mtbModalTitle");
-    const b = document.getElementById("mtbModalBody");
-
-    t.textContent = title || "";
-    b.innerHTML = html || "";
-    modal.hidden = false;
-  }
-
-  function closePopup() {
-    const modal = document.getElementById("mtbModal");
-    if (modal) modal.hidden = true;
-  }
-
-  async function loadPopupsIfPresent() {
-    if (POPUPS !== null) return; // already attempted
-    try {
-      const r = await fetch("/assets/data/mtb-popups.json", { cache: "no-store" });
-      if (!r.ok) {
-        POPUPS = {};
-        return;
-      }
-      POPUPS = await r.json();
-    } catch {
-      POPUPS = {};
-    }
-  }
-
-  function wirePopupClicks() {
-    document.addEventListener("click", async (e) => {
-      const a = e.target.closest("a.mtb-popup");
-      if (!a) return;
-
-      e.preventDefault();
-
-      await loadPopupsIfPresent();
-
-      const id = a.getAttribute("data-popup-id") || "";
-      if (POPUPS && POPUPS[id]) {
-        openPopup(POPUPS[id].title || "Note", POPUPS[id].html || "");
-      } else {
-        openPopup("Note", "<p>Popup placeholder. Add this id to /assets/data/mtb-popups.json:</p><pre>" + id + "</pre>");
-      }
-    });
-  }
-
-  // -------------------------
-  // Load doc
-  // -------------------------
   const params = new URLSearchParams(window.location.search);
   const docName = params.get("doc") || "titus-0-book-introduction.html";
-  const docPath = "/generated/" + docName;
-
   const meta = parseDocName(docName);
   setBodyDocMeta(meta);
 
-  wirePopupClicks();
+  const docPath = buildDocPath(docName);
 
   fetch(docPath, { cache: "no-store" })
-    .then((r) => {
+    .then(r => {
       if (!r.ok) throw new Error("Failed to load: " + docPath);
       return r.text();
     })
-    .then((html) => {
+    .then(html => {
       const parsed = new DOMParser().parseFromString(html, "text/html");
       const root = parsed.querySelector("#doc-root");
-
-      const content = root
-        ? root.innerHTML
-        : (parsed.body ? parsed.body.innerHTML : html);
+      const content = root ? root.innerHTML : parsed.body.innerHTML;
 
       const target = document.getElementById("doc-target");
-      if (!target) throw new Error("Missing #doc-target in book.html");
-
       target.innerHTML = content;
 
-      // Only Scripture-in-Teaching becomes blue
       if (meta.type === "chapter-teaching") {
         markTeachingScriptureBlocks(target);
       }
     })
-    .catch((err) => {
-      const target = document.getElementById("doc-target");
-      if (target) {
-        target.innerHTML =
-          "<p>Error loading document.</p><pre>" + err.message + "</pre>";
-      }
+    .catch(err => {
+      document.getElementById("doc-target").innerHTML =
+        `<p>Content failed to load.</p><pre>${err.message}</pre>`;
     });
 
 })();

@@ -1,0 +1,111 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Mastering the Bible</title>
+
+  <link rel="stylesheet" href="assets/css/style.css" />
+</head>
+
+<body>
+
+  <!-- SITE HEADER -->
+  <header class="site-header">
+    <nav class="main-nav">
+      <a href="index.html">Home</a>
+      <a href="#">Resources</a>
+      <a href="#">About</a>
+      <a href="#">Donate</a>
+      <a href="#">Contact</a>
+    </nav>
+  </header>
+
+  <!-- BOOK NAVIGATION (TITUS) -->
+<nav class="book-nav" aria-label="MTB navigation">
+  <div class="book-nav-row">
+    <select id="bookSelect" class="book-select">
+      <option value="titus">Titus</option>
+      <!-- Add more books later -->
+      <!-- <option value="genesis">Genesis</option> -->
+    </select>
+
+    <select id="chapterSelect" class="book-select">
+      <option value="0">0</option>
+      <option value="1" selected>1</option>
+      <option value="2">2</option>
+      <option value="3">3</option>
+    </select>
+
+    <a id="introLink" class="book-action" href="#">Book Intro</a>
+    <a id="orientationLink" class="book-action" href="#">Orientation</a>
+    <a id="teachingLink" class="book-action" href="#">Teaching</a>
+  </div>
+</nav>
+
+
+  <!-- DOCUMENT CONTENT -->
+  <main class="doc">
+    <div id="doc-target">Loading…</div>
+  </main>
+
+  <!-- LOAD GENERATED HTML -->
+  <script src="assets/js/load-doc.js"></script>
+
+  <!-- CHAPTER NAV LOGIC -->
+<script>
+  (function () {
+    const params = new URLSearchParams(window.location.search);
+    const doc = params.get("doc") || "";
+
+    const bookSelect = document.getElementById("bookSelect");
+    const chapterSelect = document.getElementById("chapterSelect");
+
+    const introLink = document.getElementById("introLink");
+    const orientationLink = document.getElementById("orientationLink");
+    const teachingLink = document.getElementById("teachingLink");
+
+    if (!bookSelect || !chapterSelect || !introLink || !orientationLink || !teachingLink) return;
+
+    function setLinks(book, chapter) {
+      introLink.href = `book.html?doc=${book}-0-book-introduction.html`;
+
+      if (chapter === "0") {
+        orientationLink.href = `book.html?doc=${book}-0-book-introduction.html`;
+        teachingLink.href = `book.html?doc=${book}-0-book-introduction.html`;
+      } else {
+        orientationLink.href = `book.html?doc=${book}-${chapter}-chapter-orientation.html`;
+        teachingLink.href = `book.html?doc=${book}-${chapter}-chapter-teaching.html`;
+      }
+    }
+
+    // Try to infer dropdown state from current URL
+    // Examples:
+    // titus-0-book-introduction.html
+    // titus-1-chapter-orientation.html
+    const mIntro = doc.match(/^([a-z0-9-]+)-0-book-introduction\.html$/);
+    const mChap = doc.match(/^([a-z0-9-]+)-(\d+)-chapter-(orientation|teaching)\.html$/);
+
+    if (mIntro) {
+      bookSelect.value = mIntro[1];
+      chapterSelect.value = "0";
+    } else if (mChap) {
+      bookSelect.value = mChap[1];
+      chapterSelect.value = mChap[2];
+    }
+
+    setLinks(bookSelect.value, chapterSelect.value);
+
+    bookSelect.addEventListener("change", function () {
+      setLinks(bookSelect.value, chapterSelect.value);
+    });
+
+    chapterSelect.addEventListener("change", function () {
+      setLinks(bookSelect.value, chapterSelect.value);
+    });
+  })();
+</script>
+
+
+</body>
+</html>

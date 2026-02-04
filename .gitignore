@@ -1,0 +1,5 @@
+_pgbackup/
+_pginfo/
+pinegrow_*.json
+Thumbs.db
+.DS_Store

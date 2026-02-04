@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Mastering the Bible</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <link rel="stylesheet" href="/assets/css/style.css">
+</head>
+
+<body>
+
+  <header class="site-header">
+    <nav class="main-nav">
+      <a href="/">Home</a>
+      <a href="/#">Resources</a>
+      <a href="/#">About</a>
+      <a href="/#">Donate</a>
+      <a href="/#">Contact</a>
+    </nav>
+  </header>
+
+  <section class="hero">
+    <div class="hero-overlay"></div>
+
+    <div class="hero-content">
+      <h1>Mastering the Bible</h1>
+
+      <p>
+        Helping you understand what you are reading and apply it to everyday life
+      </p>
+
+      <!-- BOOK / CHAPTER JUMP -->
+      <div class="bible-jump">
+        <label>
+          Book
+          <select id="bookSelect"></select>
+        </label>
+
+        <label>
+          Chapter
+          <select id="chapterSelect"></select>
+        </label>
+
+        <button id="goBtn" type="button">Go</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- LOCKED HERO JUMP LOGIC -->
+  <script src="/assets/js/jshero-jump.js"></script>
+
+</body>
+</html>

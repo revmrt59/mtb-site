@@ -1,0 +1,240 @@
+/* =========================================================
+   GLOBAL RESET / BASE
+========================================================= */
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  font-family: Arial, Helvetica, sans-serif;
+  color: #222;
+  background: #ffffff;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+img {
+  max-width: 100%;
+  height: auto;
+  display: block;
+}
+
+
+/* =========================================================
+   SITE HEADER / MAIN NAV
+========================================================= */
+
+.site-header {
+  background: #ffffff;
+  padding: 20px 48px;
+  border-bottom: 1px solid #e5e5e5;
+}
+
+.main-nav a {
+  margin-right: 28px;
+  font-size: 16px;
+  color: #444;
+}
+
+.main-nav a:hover {
+  text-decoration: underline;
+}
+
+
+/* =========================================================
+   HERO SECTION
+========================================================= */
+
+.hero {
+  position: relative;
+  min-height: 80vh;
+  width: 100%;
+
+  background-image: url("/assets/images/hero.jpg");
+  background-size: cover;
+  background-position: center center;
+  background-repeat: no-repeat;
+  background-color: #111;
+
+  display: flex;
+  align-items: center;
+}
+
+.hero-overlay {
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.45);
+}
+
+.hero-content {
+  position: relative;
+  z-index: 2;
+
+  max-width: 900px;
+  padding: 120px 48px;
+  margin: 0 auto;
+
+  text-align: center;
+  color: #ffffff;
+}
+
+.hero h1 {
+  font-size: 56px;
+  margin: 0 0 20px 0;
+}
+
+.hero p {
+  font-size: 20px;
+  line-height: 1.6;
+  margin: 0 0 36px 0;
+}
+
+
+/* =========================================================
+   HERO BOOK / CHAPTER JUMP
+========================================================= */
+
+.bible-jump {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 14px;
+  justify-content: center;
+  align-items: flex-end;
+}
+
+.bible-jump label {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  font-size: 14px;
+  color: #ffffff;
+  text-align: left;
+}
+
+.bible-jump select {
+  min-width: 170px;
+  padding: 10px 12px;
+  font-size: 16px;
+  border-radius: 8px;
+  border: 1px solid #cfcfcf;
+  background: #ffffff;
+  color: #111;
+}
+
+.bible-jump button {
+  padding: 10px 18px;
+  font-size: 16px;
+  border-radius: 8px;
+  border: 1px solid #cfcfcf;
+  background: #ffffff;
+  color: #000000;
+  cursor: pointer;
+}
+
+.bible-jump button:hover {
+  background: #f0f0f0;
+}
+
+
+/* =========================================================
+   BOOK NAVIGATION (SUB PAGES)
+========================================================= */
+
+.book-nav {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 16px 48px 22px 48px;
+}
+
+.book-nav-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 14px;
+  align-items: center;
+}
+
+.book-select {
+  padding: 8px 10px;
+  font-size: 15px;
+}
+
+.book-action {
+  padding: 8px 14px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  font-size: 15px;
+  background: #fafafa;
+}
+
+.book-action:hover {
+  background: #f0f0f0;
+}
+
+
+/* =========================================================
+   DOCUMENT CONTENT AREA
+========================================================= */
+
+.doc {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 48px;
+}
+
+#doc-target {
+  font-size: 18px;
+  line-height: 1.7;
+}
+
+/* Make Pandoc output behave */
+#doc-target h1,
+#doc-target h2,
+#doc-target h3,
+#doc-target h4 {
+  margin-top: 1.8em;
+}
+
+#doc-target p {
+  margin: 1em 0;
+}
+
+#doc-target img {
+  margin: 1.5em auto;
+}
+
+
+/* =========================================================
+   RESPONSIVE ADJUSTMENTS
+========================================================= */
+
+@media (max-width: 768px) {
+
+  .site-header {
+    padding: 16px 24px;
+  }
+
+  .hero-content {
+    padding: 80px 24px;
+  }
+
+  .hero h1 {
+    font-size: 40px;
+  }
+
+  .hero p {
+    font-size: 18px;
+  }
+
+  .doc {
+    padding: 32px 24px;
+  }
+
+  .book-nav {
+    padding: 14px 24px;
+  }
+}

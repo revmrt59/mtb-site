@@ -54,13 +54,11 @@ img {
   position: relative;
   min-height: 80vh;
   width: 100%;
-
   background-image: url("/assets/images/hero.jpg");
   background-size: cover;
   background-position: center center;
   background-repeat: no-repeat;
   background-color: #111;
-
   display: flex;
   align-items: center;
 }
@@ -74,11 +72,9 @@ img {
 .hero-content {
   position: relative;
   z-index: 2;
-
   max-width: 900px;
   padding: 120px 48px;
   margin: 0 auto;
-
   text-align: center;
   color: #ffffff;
 }
@@ -146,33 +142,65 @@ img {
 ========================================================= */
 
 .book-nav {
+  position: sticky;
+  top: 0;
+  z-index: 50;
+  background: #ffffff;
+  border-bottom: 1px solid rgba(0,0,0,0.10);
   max-width: 1100px;
   margin: 0 auto;
-  padding: 16px 48px 22px 48px;
+  padding: 16px 48px 12px 48px;
 }
 
 .book-nav-row {
   display: flex;
-  flex-wrap: wrap;
-  gap: 14px;
+  gap: 10px;
   align-items: center;
+  flex-wrap: wrap;
+  margin-bottom: 10px;
+}
+
+.book-nav-row:last-child {
+  margin-bottom: 0;
 }
 
 .book-select {
-  padding: 8px 10px;
+  padding: 10px 12px;
   font-size: 15px;
+  border-radius: 10px;
+  border: 1px solid rgba(0,0,0,0.12);
+  background: #ffffff;
+  color: #111;
 }
 
+
+/* =========================================================
+   SECTION BUTTONS / TABS
+========================================================= */
+
 .book-action {
-  padding: 8px 14px;
-  border: 1px solid #ccc;
-  border-radius: 6px;
+  display: inline-block;
+  padding: 10px 14px;
+  border-radius: 10px;
+  border: 1px solid rgba(0,0,0,0.12);
+  background: #ffffff;
+  color: #222;
   font-size: 15px;
-  background: #fafafa;
 }
 
 .book-action:hover {
-  background: #f0f0f0;
+  background: rgba(0,0,0,0.04);
+}
+
+.book-action.active {
+  background: rgba(0,0,0,0.10);
+  border-color: rgba(0,0,0,0.25);
+  font-weight: 600;
+}
+
+.book-action.active[aria-current="page"] {
+  outline: 2px solid rgba(0,0,0,0.20);
+  outline-offset: 2px;
 }
 
 
@@ -209,10 +237,10 @@ img {
 
 
 /* =========================================================
-   SCRIPTURE BLUE ONLY INSIDE TEACHING (H5-BASED)
+   SCRIPTURE BLUE ONLY INSIDE TEACHING
 ========================================================= */
 
-/* load-doc.js adds data-doc-type="chapter-teaching" on body
+/* load-doc.js sets data-doc-type="chapter-teaching"
    and marks scripture blocks with .mtb-scripture */
 body[data-doc-type="chapter-teaching"] #doc-target .mtb-scripture {
   color: blue;

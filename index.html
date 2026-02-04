@@ -15,7 +15,6 @@
       <a href="/">Home</a>
       <a href="/#">Resources</a>
       <a href="/#">About</a>
-     
       <a href="/#">Contact</a>
     </nav>
   </header>
@@ -34,12 +33,16 @@
       <div class="bible-jump">
         <label>
           Book
-          <select id="bookSelect"></select>
+          <select id="bookSelect">
+            <option value="">Select Book</option>
+          </select>
         </label>
 
         <label>
           Chapter
-          <select id="chapterSelect"></select>
+          <select id="chapterSelect" disabled>
+            <option value=""></option>
+          </select>
         </label>
 
         <button id="goBtn" type="button">Go</button>
@@ -47,8 +50,7 @@
     </div>
   </section>
 
-  <!-- LOCKED HERO JUMP LOGIC -->
+  <!-- HERO JUMP LOGIC -->
   <script src="/assets/js/jshero-jump.js"></script>
 
-</body>
-</html>
+<

@@ -16,33 +16,25 @@
       <a href="index.html">Home</a>
       <a href="#">Resources</a>
       <a href="#">About</a>
-      <a href="#">Donate</a>
       <a href="#">Contact</a>
     </nav>
   </header>
 
-  <!-- BOOK NAVIGATION (TITUS) -->
-<nav class="book-nav" aria-label="MTB navigation">
-  <div class="book-nav-row">
-    <select id="bookSelect" class="book-select">
-      <option value="titus">Titus</option>
-      <!-- Add more books later -->
-      <!-- <option value="genesis">Genesis</option> -->
-    </select>
+  <!-- BOOK NAVIGATION -->
+  <nav class="book-nav" aria-label="MTB navigation">
+    <div class="book-nav-row">
 
-    <select id="chapterSelect" class="book-select">
-      <option value="0">0</option>
-      <option value="1" selected>1</option>
-      <option value="2">2</option>
-      <option value="3">3</option>
-    </select>
+      <select id="bookSelect" class="book-select" aria-label="Book"></select>
 
-    <a id="introLink" class="book-action" href="#">Book Intro</a>
-    <a id="orientationLink" class="book-action" href="#">Orientation</a>
-    <a id="teachingLink" class="book-action" href="#">Teaching</a>
-  </div>
-</nav>
+      <select id="chapterSelect" class="book-select" aria-label="Chapter"></select>
 
+      <a id="introLink" class="book-action" href="#">Book Intro</a>
+      <a id="orientationLink" class="book-action" href="#">Orientation</a>
+      <a id="teachingLink" class="book-action" href="#">Teaching</a>
+      <a id="scriptureLink" class="book-action" href="#">Scripture</a>
+
+    </div>
+  </nav>
 
   <!-- DOCUMENT CONTENT -->
   <main class="doc">
@@ -53,59 +45,97 @@
   <script src="assets/js/load-doc.js"></script>
 
   <!-- CHAPTER NAV LOGIC -->
-<script>
-  (function () {
-    const params = new URLSearchParams(window.location.search);
-    const doc = params.get("doc") || "";
+  <script>
+    (function () {
 
-    const bookSelect = document.getElementById("bookSelect");
-    const chapterSelect = document.getElementById("chapterSelect");
+      // =========================
+      // MTB CONTENT MANIFEST (EDIT THIS AS YOU ADD MATERIAL)
+      // =========================
+      const MTB_CONTENT = [
+        {
+          name: "Titus",
+          slug: "titus",
+          chapters: [1, 2, 3]
+        }
+      ];
 
-    const introLink = document.getElementById("introLink");
-    const orientationLink = document.getElementById("orientationLink");
-    const teachingLink = document.getElementById("teachingLink");
+      const params = new URLSearchParams(window.location.search);
+      const doc = params.get("doc") || "";
 
-    if (!bookSelect || !chapterSelect || !introLink || !orientationLink || !teachingLink) return;
+      const bookSelect = document.getElementById("bookSelect");
+      const chapterSelect = document.getElementById("chapterSelect");
 
-    function setLinks(book, chapter) {
-      introLink.href = `book.html?doc=${book}-0-book-introduction.html`;
+      const introLink = document.getElementById("introLink");
+      const orientationLink = document.getElementById("orientationLink");
+      const teachingLink = document.getElementById("teachingLink");
+      const scriptureLink = document.getElementById("scriptureLink");
 
-      if (chapter === "0") {
-        orientationLink.href = `book.html?doc=${book}-0-book-introduction.html`;
-        teachingLink.href = `book.html?doc=${book}-0-book-introduction.html`;
-      } else {
-        orientationLink.href = `book.html?doc=${book}-${chapter}-chapter-orientation.html`;
-        teachingLink.href = `book.html?doc=${book}-${chapter}-chapter-teaching.html`;
+      if (!bookSelect || !chapterSelect || !introLink || !orientationLink || !teachingLink || !scriptureLink) return;
+
+      function populateBooks() {
+        bookSelect.innerHTML = "";
+
+        MTB_CONTENT.forEach(book => {
+          if (!book.chapters || book.chapters.length === 0) return;
+          const opt = document.createElement("option");
+          opt.value = book.slug;
+          opt.textContent = book.name;
+          bookSelect.appendChild(opt);
+        });
       }
-    }
 
-    // Try to infer dropdown state from current URL
-    // Examples:
-    // titus-0-book-introduction.html
-    // titus-1-chapter-orientation.html
-    const mIntro = doc.match(/^([a-z0-9-]+)-0-book-introduction\.html$/);
-    const mChap = doc.match(/^([a-z0-9-]+)-(\d+)-chapter-(orientation|teaching)\.html$/);
+      function populateChaptersForBook(bookSlug) {
+        chapterSelect.innerHTML = "";
 
-    if (mIntro) {
-      bookSelect.value = mIntro[1];
-      chapterSelect.value = "0";
-    } else if (mChap) {
-      bookSelect.value = mChap[1];
-      chapterSelect.value = mChap[2];
-    }
+        const book = MTB_CONTENT.find(b => b.slug === bookSlug);
+        const chapters = book && book.chapters ? book.chapters : [];
 
-    setLinks(bookSelect.value, chapterSelect.value);
+        chapters.forEach(n => {
+          const opt = document.createElement("option");
+          opt.value = String(n);
+          opt.textContent = String(n);
+          chapterSelect.appendChild(opt);
+        });
+      }
 
-    bookSelect.addEventListener("change", function () {
-      setLinks(bookSelect.value, chapterSelect.value);
-    });
+      function getBookName(bookSlug) {
+        const b = MTB_CONTENT.find(x => x.slug === bookSlug);
+        return b ? b.name : bookSlug;
+      }
 
-    chapterSelect.addEventListener("change", function () {
-      setLinks(bookSelect.value, chapterSelect.value);
-    });
-  })();
-</script>
+      function setTabNames(bookSlug, chapterNum) {
+        const bookName = getBookName(bookSlug);
 
+        introLink.textContent = "What is " + bookName + " About?";
+        orientationLink.textContent = "What is " + bookName + " " + chapterNum + " About?";
+        teachingLink.textContent = "Understanding " + bookName + " " + chapterNum;
+        scriptureLink.textContent = bookName + " " + chapterNum + " Parallel Versions";
+      }
 
-</body>
-</html>
+      function setLinks(bookSlug, chapterNum) {
+        // Intro is always chapter 0
+        introLink.href = "book.html?doc=" + encodeURIComponent(bookSlug + "-0-book-introduction.html");
+
+        // Orientation / Teaching / Scripture use chapter N
+        orientationLink.href = "book.html?doc=" + encodeURIComponent(bookSlug + "-" + chapterNum + "-chapter-orientation.html");
+        teachingLink.href = "book.html?doc=" + encodeURIComponent(bookSlug + "-" + chapterNum + "-chapter-teaching.html");
+        scriptureLink.href = "book.html?doc=" + encodeURIComponent(bookSlug + "-" + chapterNum + "-chapter-scripture.html");
+
+        setTabNames(bookSlug, chapterNum);
+      }
+
+      // Infer dropdown state from current URL doc param
+      const mIntro = doc.match(/^([a-z0-9-]+)-0-book-introduction\.html$/);
+      const mChap = doc.match(/^([a-z0-9-]+)-(\d+)-chapter-(orientation|teaching|scripture)\.html$/);
+
+      populateBooks();
+
+      // Defaults if doc param missing or not matched
+      let currentBook = MTB_CONTENT[0] ? MTB_CONTENT[0].slug : "titus";
+      let currentChapter = (MTB_CONTENT[0] && MTB_CONTENT[0].chapters && MTB_CONTENT[0].chapters[0]) ? MTB_CONTENT[0].chapters[0] : 1;
+
+      if (mIntro) {
+        currentBook = mIntro[1];
+        // If you're viewing the intro, pick the first chapter for the dropdown (no chapter 0 option)
+        const b = MTB_CONTENT.find(x => x.slug === currentBook);
+        currentChapter = (b &

@@ -10,7 +10,7 @@
 
 <body>
 
-  <!-- SITE HEADER -->
+  <!-- SITE HEADER (Donate removed) -->
   <header class="site-header">
     <nav class="main-nav">
       <a href="index.html">Home</a>
@@ -41,22 +41,16 @@
     <div id="doc-target">Loading…</div>
   </main>
 
-  <!-- LOAD GENERATED HTML -->
+  <!-- Loader that fetches /books/<testament>/<book>/generated/<doc> -->
   <script src="assets/js/load-doc.js"></script>
 
-  <!-- CHAPTER NAV LOGIC -->
+  <!-- Dropdowns + dynamic tab names -->
   <script>
     (function () {
 
-      // =========================
-      // MTB CONTENT MANIFEST (EDIT THIS AS YOU ADD MATERIAL)
-      // =========================
+      // For now, hardcode what exists. Later we can drive this from a manifest JSON.
       const MTB_CONTENT = [
-        {
-          name: "Titus",
-          slug: "titus",
-          chapters: [1, 2, 3]
-        }
+        { name: "Titus", slug: "titus", chapters: [1, 2, 3] }
       ];
 
       const params = new URLSearchParams(window.location.search);
@@ -70,11 +64,10 @@
       const teachingLink = document.getElementById("teachingLink");
       const scriptureLink = document.getElementById("scriptureLink");
 
-      if (!bookSelect || !chapterSelect || !introLink || !orientationLink || !teachingLink || !scriptureLink) return;
+      if (!bookSelect || !chapterSelect) return;
 
       function populateBooks() {
         bookSelect.innerHTML = "";
-
         MTB_CONTENT.forEach(book => {
           if (!book.chapters || book.chapters.length === 0) return;
           const opt = document.createElement("option");
@@ -84,16 +77,15 @@
         });
       }
 
-      function populateChaptersForBook(bookSlug) {
+      function populateChapters(bookSlug) {
         chapterSelect.innerHTML = "";
-
         const book = MTB_CONTENT.find(b => b.slug === bookSlug);
-        const chapters = book && book.chapters ? book.chapters : [];
+        const chapters = (book && book.chapters) ? book.chapters : [];
 
         chapters.forEach(n => {
           const opt = document.createElement("option");
           opt.value = String(n);
-          opt.textContent = String(n);
+          opt.textContent = "Chapter " + n;
           chapterSelect.appendChild(opt);
         });
       }
@@ -106,6 +98,7 @@
       function setTabNames(bookSlug, chapterNum) {
         const bookName = getBookName(bookSlug);
 
+        // Your exact requested labels
         introLink.textContent = "What is " + bookName + " About?";
         orientationLink.textContent = "What is " + bookName + " " + chapterNum + " About?";
         teachingLink.textContent = "Understanding " + bookName + " " + chapterNum;
@@ -113,10 +106,10 @@
       }
 
       function setLinks(bookSlug, chapterNum) {
-        // Intro is always chapter 0
+        // Book intro is always chapter 0
         introLink.href = "book.html?doc=" + encodeURIComponent(bookSlug + "-0-book-introduction.html");
 
-        // Orientation / Teaching / Scripture use chapter N
+        // Chapter content
         orientationLink.href = "book.html?doc=" + encodeURIComponent(bookSlug + "-" + chapterNum + "-chapter-orientation.html");
         teachingLink.href = "book.html?doc=" + encodeURIComponent(bookSlug + "-" + chapterNum + "-chapter-teaching.html");
         scriptureLink.href = "book.html?doc=" + encodeURIComponent(bookSlug + "-" + chapterNum + "-chapter-scripture.html");
@@ -124,18 +117,57 @@
         setTabNames(bookSlug, chapterNum);
       }
 
-      // Infer dropdown state from current URL doc param
-      const mIntro = doc.match(/^([a-z0-9-]+)-0-book-introduction\.html$/);
-      const mChap = doc.match(/^([a-z0-9-]+)-(\d+)-chapter-(orientation|teaching|scripture)\.html$/);
+      function inferFromDocParam() {
+        // doc examples:
+        // titus-0-book-introduction.html
+        // titus-1-chapter-orientation.html
+        // titus-1-chapter-teaching.html
+        // titus-1-chapter-scripture.html
 
+        const intro = doc.match(/^([a-z0-9-]+)-0-book-introduction\.html$/);
+        if (intro) return { book: intro[1], chapter: null };
+
+        const chap = doc.match(/^([a-z0-9-]+)-(\d+)-chapter-(orientation|teaching|scripture)\.html$/);
+        if (chap) return { book: chap[1], chapter: Number(chap[2]) };
+
+        // fallback
+        const first = MTB_CONTENT[0] || { slug: "titus", chapters: [1] };
+        return { book: first.slug, chapter: first.chapters[0] || 1 };
+      }
+
+      // INIT
       populateBooks();
 
-      // Defaults if doc param missing or not matched
-      let currentBook = MTB_CONTENT[0] ? MTB_CONTENT[0].slug : "titus";
-      let currentChapter = (MTB_CONTENT[0] && MTB_CONTENT[0].chapters && MTB_CONTENT[0].chapters[0]) ? MTB_CONTENT[0].chapters[0] : 1;
+      const inferred = inferFromDocParam();
+      const currentBook = inferred.book || (MTB_CONTENT[0] ? MTB_CONTENT[0].slug : "titus");
 
-      if (mIntro) {
-        currentBook = mIntro[1];
-        // If you're viewing the intro, pick the first chapter for the dropdown (no chapter 0 option)
-        const b = MTB_CONTENT.find(x => x.slug === currentBook);
-        currentChapter = (b &
+      bookSelect.value = currentBook;
+      populateChapters(currentBook);
+
+      // If viewing intro, pick first chapter in dropdown
+      const bookObj = MTB_CONTENT.find(b => b.slug === currentBook);
+      const firstChapter = (bookObj && bookObj.chapters && bookObj.chapters.length) ? bookObj.chapters[0] : 1;
+      const currentChapter = inferred.chapter ? inferred.chapter : firstChapter;
+
+      chapterSelect.value = "Chapter " + currentChapter; // in case of mismatch
+      chapterSelect.value = String(currentChapter);
+
+      setLinks(currentBook, currentChapter);
+
+      bookSelect.addEventListener("change", function () {
+        populateChapters(bookSelect.value);
+        const b = MTB_CONTENT.find(x => x.slug === bookSelect.value);
+        const chap = (b && b.chapters && b.chapters.length) ? b.chapters[0] : 1;
+        chapterSelect.value = String(chap);
+        setLinks(bookSelect.value, chap);
+      });
+
+      chapterSelect.addEventListener("change", function () {
+        setLinks(bookSelect.value, chapterSelect.value);
+      });
+
+    })();
+  </script>
+
+</body>
+</html>

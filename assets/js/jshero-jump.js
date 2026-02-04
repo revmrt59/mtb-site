@@ -14,7 +14,7 @@
   ];
 
   // Hero navigation always lands on Chapter Orientation
-  const CONTENT_TYPE = "chapter-orientation";
+ const CONTENT_TYPE = "chapter-scripture";
 
   function el(id) {
     return document.getElementById(id);

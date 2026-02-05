@@ -5,23 +5,28 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Mastering the Bible</title>
 
- 
-<link rel="stylesheet" href="/assets/css/style.css?v=20260204" />
+  <link rel="stylesheet" href="/assets/css/style.css?v=20260205" />
 </head>
 
 <body>
 
-  <!-- SITE HEADER (Donate removed) -->
   <header class="site-header">
-    <nav class="main-nav">
-      <a href="index.html">Home</a>
-      <a href="#">Resources</a>
-      <a href="#">About</a>
-      <a href="#">Contact</a>
-    </nav>
+<nav class="main-nav">
+  <a href="/index.html">Home</a>
+
+  <!--
+  <a href="#">Resources</a>
+  -->
+
+  <a href="/about.html">About</a>
+
+  <!--
+  <a href="#">Contact</a>
+  -->
+</nav>
+
   </header>
 
-  <!-- BOOK NAVIGATION -->
   <nav class="book-nav">
     <div class="book-nav-row">
       <select id="bookSelect" class="book-select" aria-label="Book"></select>
@@ -36,19 +41,15 @@
     </div>
   </nav>
 
-  <!-- DOCUMENT CONTENT -->
   <main class="doc">
     <div id="doc-target">Loading…</div>
   </main>
 
-  <!-- Loader that fetches /books/<testament>/<book>/generated/<doc> -->
-  <script src="assets/js/load-doc.js"></script>
+  <script src="/assets/js/load-doc.js"></script>
 
-  <!-- Dropdowns + dynamic tab names + active tab -->
   <script>
     (function () {
 
-      // For now, hardcode what exists. Later we can drive this from a manifest JSON.
       const MTB_CONTENT = [
         { name: "Titus", slug: "titus", chapters: [1, 2, 3] }
       ];
@@ -156,8 +157,6 @@
 
         setTabNames(bookSlug, chapterNum);
 
-        // If the current page is one of these docs, highlight correctly.
-        // Otherwise, highlight nothing.
         const current = new URLSearchParams(window.location.search).get("doc") || "";
         setActiveTabFromDoc(current);
       }
@@ -173,7 +172,6 @@
         return { book: first.slug, chapter: first.chapters[0] || 1 };
       }
 
-      // INIT
       populateBooks();
 
       const inferred = inferFromDocParam();
@@ -191,14 +189,11 @@
       setLinks(currentBook, currentChapter);
       setActiveTabFromDoc(doc);
 
-      // EVENTS
       bookSelect.addEventListener("change", function () {
         populateChapters(bookSelect.value);
         const b = MTB_CONTENT.find(x => x.slug === bookSelect.value);
         const chap = (b && b.chapters && b.chapters.length) ? b.chapters[0] : 1;
         chapterSelect.value = String(chap);
-
-        // On book change, default to Scripture tab? (optional later)
         setLinks(bookSelect.value, chap);
       });
 
@@ -206,7 +201,6 @@
         setLinks(bookSelect.value, chapterSelect.value);
       });
 
-      // Optional: set active state immediately on click (nice feel)
       [introLink, orientationLink, teachingLink, scriptureLink].forEach(a => {
         if (!a) return;
         a.addEventListener("click", () => {

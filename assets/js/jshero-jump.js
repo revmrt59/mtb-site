@@ -1,50 +1,36 @@
 (function () {
 
   // =========================
-  // MTB CONTENT MANIFEST (EDIT THIS AS YOU ADD MATERIAL)
+  // MTB CONTENT MANIFEST
   // =========================
-  // Only list books/chapters you actually have in /generated/
-  // Book intro is always chapter 0 doc: <slug>-0-book-introduction.html
   const MTB_CONTENT = [
-    {
-      name: "Titus",
-      slug: "titus",
-      chapters: [1, 2, 3]
-    }
+    { name: "Titus", slug: "titus", chapters: [1, 2, 3] },
+    { name: "3 John", slug: "3-john", chapters: [1] },
+    { name: "Obadiah", slug: "obadiah", chapters: [1] }
   ];
-
-  // Hero navigation always lands on Chapter Orientation
- const CONTENT_TYPE = "chapter-scripture";
 
   function el(id) {
     return document.getElementById(id);
   }
 
-  // =========================
-  // LOCKED FILENAME BUILDER
-  // =========================
-  function buildDocName(bookSlug, chapter) {
-    return bookSlug + "-" + chapter + "-" + CONTENT_TYPE + ".html";
-  }
-
+  // Always land on Chapter Scripture
   function buildUrl(bookSlug, chapter) {
-    const doc = buildDocName(bookSlug, chapter);
-    return "/book.html?doc=" + encodeURIComponent(doc);
+    return "/book.html" +
+      "?book=" + encodeURIComponent(bookSlug) +
+      "&chapter=" + encodeURIComponent(String(chapter)) +
+      "&tab=chapter_scripture";
   }
 
   function populateBooks(select) {
     select.innerHTML = "";
 
-    // Default option
     const placeholder = document.createElement("option");
     placeholder.value = "";
     placeholder.textContent = "Select Book";
     select.appendChild(placeholder);
 
     MTB_CONTENT.forEach(book => {
-      // Only show book if it has at least one chapter listed
       if (!book.chapters || book.chapters.length === 0) return;
-
       const opt = document.createElement("option");
       opt.value = book.slug;
       opt.textContent = book.name;
@@ -66,7 +52,6 @@
 
   function populateChapters(select, chapterNums) {
     resetChapters(select);
-
     if (!chapterNums || chapterNums.length === 0) return;
 
     chapterNums.forEach(n => {
@@ -76,8 +61,6 @@
       select.appendChild(opt);
     });
 
-    // Keep it blank per your requirement; enable dropdown
-    select.value = "";
     select.disabled = false;
   }
 
@@ -94,7 +77,6 @@
     const chapterSelect = el("chapterSelect");
     const goBtn = el("goBtn");
 
-    // Fail silently if controls are absent
     if (!bookSelect || !chapterSelect || !goBtn) return;
 
     populateBooks(bookSelect);
@@ -113,18 +95,11 @@
       const book = selectedBook(bookSelect);
       if (!book) return;
 
-      // If chapter blank, default to first available chapter
       const chapter = chapterSelect.value
         ? Number(chapterSelect.value)
-        : (book.chapters && book.chapters.length ? book.chapters[0] : null);
-
-      if (!chapter) return;
+        : book.chapters[0];
 
       window.location.href = buildUrl(book.slug, chapter);
-    });
-
-    chapterSelect.addEventListener("keydown", function (e) {
-      if (e.key === "Enter") goBtn.click();
     });
   });
 

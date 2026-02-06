@@ -1,0 +1,175 @@
+/* =========================================================
+   GLOBAL RESET / BASE
+========================================================= */
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  font-family: Arial, Helvetica, sans-serif;
+  color: #222;
+  background: #ffffff;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+a:hover {
+  text-decoration: underline;
+}
+
+img {
+  max-width: 100%;
+  height: auto;
+  display: block;
+}
+
+/* =========================================================
+   DOC PAGES: restore gray gutters outside the content shell
+========================================================= */
+
+body[data-doc-type] {
+  background: #f3f3f3;
+}
+
+body[data-doc-type] .doc-shell {
+  background: #ffffff;
+  border-radius: 10px;
+  box-shadow: 0 10px 24px rgba(0,0,0,0.08);
+}
+
+/* =========================================================
+   SITE HEADER / MAIN NAV
+========================================================= */
+
+.site-header {
+  background: #ffffff;
+  padding: 20px 48px;
+  border-bottom: 1px solid #e5e5e5;
+}
+
+.main-nav a {
+  margin-right: 28px;
+  font-size: 16px;
+  color: #444;
+}
+
+.main-nav a:last-child {
+  margin-right: 0;
+}
+
+/* =========================================================
+   HERO SECTION (HOME ONLY)
+========================================================= */
+
+.hero {
+  position: relative;
+  min-height: 80vh;
+  width: 100%;
+  background-image: url("/assets/images/hero.jpg");
+  background-size: cover;
+  background-position: center center;
+}
+
+.hero-overlay {
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.45);
+}
+
+.hero-content {
+  position: relative;
+  z-index: 1;
+  color: #ffffff;
+  max-width: 720px;
+  padding: 120px 48px;
+  margin: 0 auto;
+  text-align: center;
+}
+
+.hero-content h1 {
+  font-size: 44px;
+  margin: 0 0 18px 0;
+}
+
+.hero-content p {
+  font-size: 20px;
+  line-height: 1.5;
+}
+
+/* =========================================================
+   DOCUMENT CONTENT
+========================================================= */
+
+#doc-target {
+  line-height: 1.6;
+  font-size: 16px;
+}
+
+#doc-target h1 { font-size: 28px; margin-top: 0; }
+#doc-target h2 { font-size: 22px; margin-top: 32px; }
+#doc-target h3 { font-size: 19px; margin-top: 26px; }
+
+/* =========================================================
+   SCRIPTURE TOGGLE (tables only)
+========================================================= */
+
+body[data-doc-type="chapter-scripture"].hide-nkjv #doc-target th:nth-child(2),
+body[data-doc-type="chapter-scripture"].hide-nkjv #doc-target td:nth-child(2) {
+  display: none !important;
+}
+
+body[data-doc-type="chapter-scripture"].hide-nlt #doc-target th:nth-child(3),
+body[data-doc-type="chapter-scripture"].hide-nlt #doc-target td:nth-child(3) {
+  display: none !important;
+}
+
+/* =========================================================
+   MTB Scripture Block (Reviewer-Ready)
+========================================================= */
+
+#doc-target .mtb-scripture-block {
+  margin: 1.6em 0;
+  padding: 1.4em 1.6em;
+  background: #f7f9fc;
+  border-left: 4px solid #3b6fb6;
+  border-radius: 6px;
+
+  font-size: 0.95rem;
+  line-height: 1.65;
+  color: #222;
+}
+
+/* Scripture paragraphs */
+#doc-target .mtb-scripture-block p {
+  margin: 0.65em 0;
+}
+
+/* First and last paragraph tighten slightly */
+#doc-target .mtb-scripture-block p:first-child {
+  margin-top: 0;
+}
+
+#doc-target .mtb-scripture-block p:last-child {
+  margin-bottom: 0;
+}
+
+/* Verse numbers, if present */
+#doc-target .mtb-scripture-block .verse-number {
+  font-weight: 600;
+  color: #555;
+}
+
+/* Translation label inside block */
+#doc-target .mtb-scripture-block .scripture-translation {
+  display: block;
+  margin-top: 0.8em;
+  font-size: 0.8rem;
+  color: #666;
+  text-align: right;
+  font-style: italic;
+}

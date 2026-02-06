@@ -2,216 +2,46 @@
 <html lang="en">
 <head>
   <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Mastering the Bible</title>
-
-  <link rel="stylesheet" href="/assets/css/style.css?v=20260205" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Mastering the Bible - Book</title>
+  <link rel="stylesheet" href="assets/css/style.css" />
 </head>
 
 <body>
-
   <header class="site-header">
-<nav class="main-nav">
-  <a href="/index.html">Home</a>
-
-  <!--
-  <a href="#">Resources</a>
-  -->
-
-  <a href="/about.html">About</a>
-
-  <!--
-  <a href="#">Contact</a>
-  -->
-</nav>
-
+    <nav class="main-nav">
+      <a href="index.html">Home</a>
+      <a href="/about.html">About</a>
+    </nav>
   </header>
 
-  <nav class="book-nav">
-    <div class="book-nav-row">
-      <select id="bookSelect" class="book-select" aria-label="Book"></select>
-      <select id="chapterSelect" class="book-select" aria-label="Chapter"></select>
-    </div>
+  <main class="doc-shell">
+    <section class="doc-header">
+      <h1 id="book-title"></h1>
+      <p id="book-subtitle" class="muted"></p>
+    </section>
 
-    <div class="book-nav-row">
-      <a id="introLink" class="book-action" href="#"></a>
-      <a id="orientationLink" class="book-action" href="#"></a>
-      <a id="teachingLink" class="book-action" href="#"></a>
-      <a id="scriptureLink" class="book-action" href="#"></a>
-    </div>
-  </nav>
+    <section class="tabs-shell">
+      <div class="tabs" id="tabs"></div>
+      <!-- Deeper Dive dropdown is injected here by book.js -->
+    </section>
 
-  <main class="doc">
-    <div id="doc-target">Loading…</div>
+    <section class="doc-layout">
+      <article class="doc-main">
+        <div id="doc-target" class="doc-content"></div>
+      </article>
+    </section>
   </main>
 
-  <script src="/assets/js/load-doc.js"></script>
+  <!-- TAB CONTROLLER (includes Deeper Dive dropdown logic) -->
+  <script src="assets/js/book.js"></script>
 
-  <script>
-    (function () {
 
-      const MTB_CONTENT = [
-        { name: "Titus", slug: "titus", chapters: [1, 2, 3] }
-      ];
+<!-- CORE DOC LOADER -->
+<script src="assets/js/load-doc.js"></script>
+<script src="/assets/js/scripture-controls.js"></script>
+<script src="/assets/js/load-doc.js"></script>
 
-      const params = new URLSearchParams(window.location.search);
-      const doc = params.get("doc") || "";
-
-      const bookSelect = document.getElementById("bookSelect");
-      const chapterSelect = document.getElementById("chapterSelect");
-
-      const introLink = document.getElementById("introLink");
-      const orientationLink = document.getElementById("orientationLink");
-      const teachingLink = document.getElementById("teachingLink");
-      const scriptureLink = document.getElementById("scriptureLink");
-
-      if (!bookSelect || !chapterSelect) return;
-
-      function setActiveTabFromDoc(docName) {
-        const all = [introLink, orientationLink, teachingLink, scriptureLink].filter(Boolean);
-        all.forEach(a => {
-          a.classList.remove("active");
-          a.removeAttribute("aria-current");
-        });
-
-        if (!docName) return;
-
-        if (docName.includes("-0-book-introduction.html")) {
-          introLink.classList.add("active");
-          introLink.setAttribute("aria-current", "page");
-          return;
-        }
-
-        if (docName.includes("-chapter-orientation.html")) {
-          orientationLink.classList.add("active");
-          orientationLink.setAttribute("aria-current", "page");
-          return;
-        }
-
-        if (docName.includes("-chapter-teaching.html")) {
-          teachingLink.classList.add("active");
-          teachingLink.setAttribute("aria-current", "page");
-          return;
-        }
-
-        if (docName.includes("-chapter-scripture.html")) {
-          scriptureLink.classList.add("active");
-          scriptureLink.setAttribute("aria-current", "page");
-          return;
-        }
-      }
-
-      function populateBooks() {
-        bookSelect.innerHTML = "";
-        MTB_CONTENT.forEach(book => {
-          if (!book.chapters || book.chapters.length === 0) return;
-          const opt = document.createElement("option");
-          opt.value = book.slug;
-          opt.textContent = book.name;
-          bookSelect.appendChild(opt);
-        });
-      }
-
-      function populateChapters(bookSlug) {
-        chapterSelect.innerHTML = "";
-        const book = MTB_CONTENT.find(b => b.slug === bookSlug);
-        const chapters = (book && book.chapters) ? book.chapters : [];
-
-        chapters.forEach(n => {
-          const opt = document.createElement("option");
-          opt.value = String(n);
-          opt.textContent = "Chapter " + n;
-          chapterSelect.appendChild(opt);
-        });
-      }
-
-      function getBookName(bookSlug) {
-        const b = MTB_CONTENT.find(x => x.slug === bookSlug);
-        return b ? b.name : bookSlug;
-      }
-
-      function setTabNames(bookSlug, chapterNum) {
-        const bookName = getBookName(bookSlug);
-
-        introLink.textContent = "What is " + bookName + " About?";
-        orientationLink.textContent = "What is " + bookName + " " + chapterNum + " About?";
-        teachingLink.textContent = "Understanding " + bookName + " " + chapterNum;
-        scriptureLink.textContent = bookName + " " + chapterNum + " Parallel Versions";
-      }
-
-      function buildDocName(bookSlug, chapterNum, kind) {
-        if (kind === "book-introduction") return bookSlug + "-0-book-introduction.html";
-        return bookSlug + "-" + chapterNum + "-chapter-" + kind + ".html";
-      }
-
-      function setLinks(bookSlug, chapterNum) {
-        const introDoc = buildDocName(bookSlug, chapterNum, "book-introduction");
-        const orientDoc = buildDocName(bookSlug, chapterNum, "orientation");
-        const teachDoc = buildDocName(bookSlug, chapterNum, "teaching");
-        const scrDoc = buildDocName(bookSlug, chapterNum, "scripture");
-
-        introLink.href = "book.html?doc=" + encodeURIComponent(introDoc);
-        orientationLink.href = "book.html?doc=" + encodeURIComponent(orientDoc);
-        teachingLink.href = "book.html?doc=" + encodeURIComponent(teachDoc);
-        scriptureLink.href = "book.html?doc=" + encodeURIComponent(scrDoc);
-
-        setTabNames(bookSlug, chapterNum);
-
-        const current = new URLSearchParams(window.location.search).get("doc") || "";
-        setActiveTabFromDoc(current);
-      }
-
-      function inferFromDocParam() {
-        const intro = doc.match(/^([a-z0-9-]+)-0-book-introduction\.html$/);
-        if (intro) return { book: intro[1], chapter: null };
-
-        const chap = doc.match(/^([a-z0-9-]+)-(\d+)-chapter-(orientation|teaching|scripture)\.html$/);
-        if (chap) return { book: chap[1], chapter: Number(chap[2]) };
-
-        const first = MTB_CONTENT[0] || { slug: "titus", chapters: [1] };
-        return { book: first.slug, chapter: first.chapters[0] || 1 };
-      }
-
-      populateBooks();
-
-      const inferred = inferFromDocParam();
-      const currentBook = inferred.book || (MTB_CONTENT[0] ? MTB_CONTENT[0].slug : "titus");
-
-      bookSelect.value = currentBook;
-      populateChapters(currentBook);
-
-      const bookObj = MTB_CONTENT.find(b => b.slug === currentBook);
-      const firstChapter = (bookObj && bookObj.chapters && bookObj.chapters.length) ? bookObj.chapters[0] : 1;
-      const currentChapter = inferred.chapter ? inferred.chapter : firstChapter;
-
-      chapterSelect.value = String(currentChapter);
-
-      setLinks(currentBook, currentChapter);
-      setActiveTabFromDoc(doc);
-
-      bookSelect.addEventListener("change", function () {
-        populateChapters(bookSelect.value);
-        const b = MTB_CONTENT.find(x => x.slug === bookSelect.value);
-        const chap = (b && b.chapters && b.chapters.length) ? b.chapters[0] : 1;
-        chapterSelect.value = String(chap);
-        setLinks(bookSelect.value, chap);
-      });
-
-      chapterSelect.addEventListener("change", function () {
-        setLinks(bookSelect.value, chapterSelect.value);
-      });
-
-      [introLink, orientationLink, teachingLink, scriptureLink].forEach(a => {
-        if (!a) return;
-        a.addEventListener("click", () => {
-          const u = new URL(a.href, window.location.origin);
-          const nextDoc = u.searchParams.get("doc") || "";
-          setActiveTabFromDoc(nextDoc);
-        });
-      });
-
-    })();
-  </script>
 
 </body>
 </html>

@@ -77,14 +77,21 @@
 
   function parseDocName(docName) {
     const intro = docName.match(/^([a-z0-9-]+)-0-book-introduction\.html$/);
-    if (intro) {
-      return { book: intro[1], chapter: 0, type: "book-introduction" };
-    }
+    if (intro) return { book: intro[1], chapter: 0, type: "book-introduction" };
 
-    const chap = docName.match(/^([a-z0-9-]+)-(\d+)-chapter-(orientation|teaching|scripture)\.html$/);
-    if (chap) {
-      return { book: chap[1], chapter: Number(chap[2]), type: "chapter-" + chap[3] };
-    }
+    const chap = docName.match(
+      /^([a-z0-9-]+)-(\d+)-chapter-(scripture|orientation|explanation|insights)\.html$/
+    );
+    if (chap) return { book: chap[1], chapter: Number(chap[2]), type: "chapter-" + chap[3] };
+
+    const kwc = docName.match(/^([a-z0-9-]+)-(\d+)-key-words-and-concepts\.html$/);
+    if (kwc) return { book: kwc[1], chapter: Number(kwc[2]), type: "key-words-and-concepts" };
+
+    const eg = docName.match(/^([a-z0-9-]+)-(\d+)-eg-culture\.html$/);
+    if (eg) return { book: eg[1], chapter: Number(eg[2]), type: "eg-culture" };
+
+    const dd = docName.match(/^([a-z0-9-]+)-(\d+)-deeper-dive\.html$/);
+    if (dd) return { book: dd[1], chapter: Number(dd[2]), type: "deeper-dive" };
 
     return { book: "", chapter: null, type: "" };
   }
@@ -101,47 +108,143 @@
     return `/books/${testament}/${meta.book}/generated/${docName}`;
   }
 
-  function markTeachingScriptureBlocks(targetEl) {
-    const h5s = Array.from(targetEl.querySelectorAll("h5"));
-    const headingSelector = "h1,h2,h3,h4,h5";
-
-    h5s.forEach(h5 => {
-      h5.classList.add("mtb-scripture");
-      let node = h5.nextElementSibling;
-      while (node && !node.matches(headingSelector)) {
-        node.classList.add("mtb-scripture");
-        node = node.nextElementSibling;
-      }
-    });
+  function tabToDocSuffix(tab) {
+    const map = {
+      chapter_scripture: "chapter-scripture",
+      book_introduction: "book-introduction",
+      chapter_orientation: "chapter-orientation",
+      chapter_explanation: "chapter-explanation",
+      chapter_insights: "chapter-insights",
+      key_words_and_concepts: "key-words-and-concepts",
+      eg_culture: "eg-culture",
+      deeper_dive: "deeper-dive"
+    };
+    return map[tab] || "chapter-scripture";
   }
 
-  const params = new URLSearchParams(window.location.search);
-  const docName = params.get("doc") || "titus-0-book-introduction.html";
-  const meta = parseDocName(docName);
-  setBodyDocMeta(meta);
+  function buildDocNameFromParams(book, chapter, tab) {
+    if (!book) return "titus-0-book-introduction.html";
+    if (tab === "book_introduction") return `${book}-0-book-introduction.html`;
+    const suffix = tabToDocSuffix(tab);
+    return `${book}-${chapter}-${suffix}.html`;
+  }
 
-  const docPath = buildDocPath(docName);
+  function safeDocName(name) {
+    return /^[a-z0-9\-]+-(0|\d+)-[a-z0-9\-]+\.html$/i.test(name) ? name : "";
+  }
 
-  fetch(docPath, { cache: "no-store" })
-    .then(r => {
-      if (!r.ok) throw new Error("Failed to load: " + docPath);
-      return r.text();
-    })
-    .then(html => {
-      const parsed = new DOMParser().parseFromString(html, "text/html");
-      const root = parsed.querySelector("#doc-root");
-      const content = root ? root.innerHTML : parsed.body.innerHTML;
+  function fixMojibake(html) {
+    const map = [
+      ["ΓÇ£", "“"], ["ΓÇØ", "”"], ["ΓÇ¥", "”"],
+      ["ΓÇÿ", "‘"], ["ΓÇÖ", "’"], ["ΓÇª", "…"],
+      ["ΓÇô", "—"], ["ΓÇû", "–"],
+      ["Â ", " "], ["Â", ""]
+    ];
+    let out = html;
+    map.forEach(([bad, good]) => { out = out.split(bad).join(good); });
+    return out;
+  }
 
-      const target = document.getElementById("doc-target");
-      target.innerHTML = content;
+  // ----------------------------------------------------------
+  // Scripture toggle UI (built-in, cannot go missing)
+  // ----------------------------------------------------------
+  function removeScriptureControls() {
+    const existing = document.querySelector(".scripture-controls");
+    if (existing) existing.remove();
+    document.body.classList.remove("hide-nkjv");
+    document.body.classList.remove("hide-nlt");
+  }
 
-      if (meta.type === "chapter-teaching") {
-        markTeachingScriptureBlocks(target);
-      }
-    })
-    .catch(err => {
-      document.getElementById("doc-target").innerHTML =
-        `<p>Content failed to load.</p><pre>${err.message}</pre>`;
+  function addScriptureControls() {
+    const target = document.getElementById("doc-target");
+    if (!target) return;
+
+    removeScriptureControls();
+
+    const bar = document.createElement("div");
+    bar.className = "scripture-controls";
+
+    function makeBtn(label, onClick, extraClass) {
+      const b = document.createElement("button");
+      b.type = "button";
+      b.className = "sc-btn" + (extraClass ? " " + extraClass : "");
+      b.textContent = label;
+      b.addEventListener("click", (e) => {
+        e.preventDefault();
+        onClick();
+      });
+      return b;
+    }
+
+    const btnBoth = makeBtn("Both", () => {
+      document.body.classList.remove("hide-nkjv");
+      document.body.classList.remove("hide-nlt");
+    }, "sc-btn-reset");
+
+    const btnNKJV = makeBtn("NKJV Only", () => {
+      document.body.classList.remove("hide-nkjv");
+      document.body.classList.add("hide-nlt");
     });
+
+    const btnNLT = makeBtn("NLT Only", () => {
+      document.body.classList.add("hide-nkjv");
+      document.body.classList.remove("hide-nlt");
+    });
+
+    bar.appendChild(btnBoth);
+    bar.appendChild(btnNKJV);
+    bar.appendChild(btnNLT);
+
+    target.parentNode.insertBefore(bar, target);
+  }
+
+  function loadCurrentDoc() {
+    removeScriptureControls();
+
+    const params = new URLSearchParams(window.location.search);
+    const docParam = params.get("doc");
+    const bookParam = params.get("book");
+    const chapterParam = params.get("chapter") || "1";
+    const tabParam = params.get("tab") || "chapter_scripture";
+
+    const docName = docParam
+      ? safeDocName(docParam)
+      : (bookParam
+          ? buildDocNameFromParams(bookParam, chapterParam, tabParam)
+          : "titus-0-book-introduction.html");
+
+    const meta = parseDocName(docName);
+    setBodyDocMeta(meta);
+
+    const docPath = buildDocPath(docName);
+
+    fetch(docPath, { cache: "no-store" })
+      .then(r => {
+        if (!r.ok) throw new Error("Failed to load: " + docPath);
+        return r.text();
+      })
+      .then(html => {
+        const parsed = new DOMParser().parseFromString(html, "text/html");
+        const root = parsed.querySelector("#doc-root");
+        const content = root ? root.innerHTML : parsed.body.innerHTML;
+
+        const target = document.getElementById("doc-target");
+        if (!target) return;
+
+        target.innerHTML = fixMojibake(content);
+
+        if (meta.type === "chapter-scripture") {
+          addScriptureControls();
+        }
+      })
+      .catch(err => {
+        const target = document.getElementById("doc-target");
+        if (!target) return;
+        target.innerHTML = `<p>Content failed to load.</p><pre>${err.message}</pre>`;
+      });
+  }
+
+  loadCurrentDoc();
+  window.addEventListener("popstate", loadCurrentDoc);
 
 })();

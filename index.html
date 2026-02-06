@@ -4,27 +4,16 @@
   <meta charset="UTF-8">
   <title>Mastering the Bible</title>
   <meta name="viewport" content="width=device-width, initial-scale=1">
-
   <link rel="stylesheet" href="/assets/css/style.css?v=20260205">
 </head>
 
 <body>
 
   <header class="site-header">
-	<nav class="main-nav">
-  		<a href="/index.html">Home</a>
-
-  			<!--
-  <a href="#">Resources</a>
-  -->
-
-  <a href="/about.html">About</a>
-
-  <!--
-  <a href="#">Contact</a>
-  -->
-</nav>
-
+    <nav class="main-nav">
+      <a href="/index.html">Home</a>
+      <a href="/about.html">About</a>
+    </nav>
   </header>
 
   <section class="hero">
@@ -32,25 +21,18 @@
 
     <div class="hero-content">
       <h1>Mastering the Bible</h1>
+      <p>Helping you understand what you are reading and apply it to everyday life</p>
 
-      <p>
-        Helping you understand what you are reading and apply it to everyday life
-      </p>
+      <div class="hero-controls bible-jump">
+        <label for="bookSelect">Book</label>
+        <select id="bookSelect">
+          <option value="">Select Book</option>
+        </select>
 
-      <div class="bible-jump">
-        <label>
-          Book
-          <select id="bookSelect">
-            <option value="">Select Book</option>
-          </select>
-        </label>
-
-        <label>
-          Chapter
-          <select id="chapterSelect" disabled>
-            <option value=""></option>
-          </select>
-        </label>
+        <label for="chapterSelect">Chapter</label>
+        <select id="chapterSelect" disabled>
+          <option value=""></option>
+        </select>
 
         <button id="goBtn" type="button">Go</button>
       </div>

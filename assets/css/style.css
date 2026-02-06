@@ -2,42 +2,46 @@
    GLOBAL RESET / BASE
 ========================================================= */
 
-:root {
-  --mtb-bg: #f6f7f8;
-  --mtb-surface: #ffffff;
-  --mtb-muted: #f3f4f6;
-  --mtb-border: #e5e7eb;
-  --mtb-border-strong: #d1d5db;
-
-  --mtb-text: #222;
-  --mtb-text-muted: #4b5563;
-
-  --mtb-radius: 10px;
-  --mtb-shadow: 0 10px 30px rgba(17, 24, 39, 0.08);
-
-  --mtb-doc-maxw: 900px;
-
-  --mtb-page-pad-y: 28px;
-  --mtb-doc-pad: 44px;
-  --mtb-nav-pad-x: 48px;
-
-  /* Scripture presentation (book/orientation/teaching only) */
-  --mtb-scripture-color: blue;
+* {
+  box-sizing: border-box;
 }
-
-* { box-sizing: border-box; }
 
 body {
   margin: 0;
   font-family: Arial, Helvetica, sans-serif;
-  color: var(--mtb-text);
-  background: var(--mtb-bg);
+  color: #222;
+  background: #ffffff;
 }
 
-a { color: inherit; text-decoration: none; }
+a {
+  color: inherit;
+  text-decoration: none;
+}
 
-img { max-width: 100%; height: auto; display: block; }
+a:hover {
+  text-decoration: underline;
+}
 
+img {
+  max-width: 100%;
+  height: auto;
+  display: block;
+}
+
+/* =========================================================
+   DOC PAGES: restore gray gutters outside the content shell
+   (Home page remains unaffected because it has no data-doc-type)
+========================================================= */
+
+body[data-doc-type] {
+  background: #f3f3f3;
+}
+
+body[data-doc-type] .doc-shell {
+  background: #ffffff;
+  border-radius: 10px;
+  box-shadow: 0 10px 24px rgba(0,0,0,0.08);
+}
 
 /* =========================================================
    SITE HEADER / MAIN NAV
@@ -45,8 +49,8 @@ img { max-width: 100%; height: auto; display: block; }
 
 .site-header {
   background: #ffffff;
-  padding: 20px var(--mtb-nav-pad-x);
-  border-bottom: 1px solid var(--mtb-border);
+  padding: 20px 48px;
+  border-bottom: 1px solid #e5e5e5;
 }
 
 .main-nav a {
@@ -55,15 +59,12 @@ img { max-width: 100%; height: auto; display: block; }
   color: #444;
 }
 
-.main-nav a:hover { text-decoration: underline; }
-
-.main-nav a.active {
-  text-decoration: underline;
+.main-nav a:last-child {
+  margin-right: 0;
 }
 
-
 /* =========================================================
-   HERO SECTION
+   HERO SECTION (HOME ONLY)
 ========================================================= */
 
 .hero {
@@ -73,10 +74,6 @@ img { max-width: 100%; height: auto; display: block; }
   background-image: url("/assets/images/hero.jpg");
   background-size: cover;
   background-position: center center;
-  background-repeat: no-repeat;
-  background-color: #111;
-  display: flex;
-  align-items: center;
 }
 
 .hero-overlay {
@@ -87,378 +84,371 @@ img { max-width: 100%; height: auto; display: block; }
 
 .hero-content {
   position: relative;
-  z-index: 2;
-  max-width: 900px;
+  z-index: 1;
+  color: #ffffff;
+  max-width: 720px;
   padding: 120px 48px;
   margin: 0 auto;
   text-align: center;
-  color: #ffffff;
 }
 
-.hero h1 { font-size: 56px; margin: 0 0 20px 0; }
+.hero-content h1 {
+  font-size: 44px;
+  margin: 0 0 18px 0;
+}
 
-.hero p { font-size: 20px; line-height: 1.6; margin: 0 0 36px 0; }
+.hero-content p {
+  font-size: 20px;
+  line-height: 1.5;
+}
 
-
-/* =========================================================
-   HERO BOOK / CHAPTER JUMP
-========================================================= */
-
-.bible-jump {
+.hero .hero-controls {
+  margin-top: 32px;
   display: flex;
-  flex-wrap: wrap;
-  gap: 14px;
   justify-content: center;
-  align-items: flex-end;
+  align-items: center;
+  gap: 18px;
+  max-width: 980px;
+  margin-left: auto;
+  margin-right: auto;
 }
 
-.bible-jump label {
-  display: flex;
-  flex-direction: column;
-  gap: 6px;
-  font-size: 14px;
+.hero .hero-controls label {
+  font-size: 18px;
   color: #ffffff;
-  text-align: left;
 }
 
-.bible-jump select {
-  min-width: 170px;
-  padding: 10px 12px;
+.hero .hero-controls select {
   font-size: 16px;
-  border-radius: 8px;
-  border: 1px solid #cfcfcf;
-  background: #ffffff;
-  color: #111;
+  padding: 8px 12px;
+  height: 40px;
+  min-width: 240px;
+  width: 280px;
+  max-width: 80vw;
+  border-radius: 6px;
 }
 
-.bible-jump button {
-  padding: 10px 18px;
+/* If you have separate book/chapter selects by id or name */
+.hero .hero-controls #book-select,
+.hero .hero-controls #chapter-select,
+.hero .hero-controls select[name="book"],
+.hero .hero-controls select[name="chapter"] {
+  width: 320px;
+  max-width: 90vw;
+}
+
+.hero .hero-controls button {
   font-size: 16px;
-  border-radius: 8px;
-  border: 1px solid #cfcfcf;
+  padding: 8px 18px;
+  height: 40px;
+  min-width: 90px;
+  border-radius: 6px;
+  font-weight: 600;
+}
+
+@media (max-width: 700px) {
+  .hero-controls {
+    flex-wrap: wrap;
+  }
+
+  .hero-controls select {
+    min-width: 260px;
+  }
+}
+
+/* =========================================================
+   HOME: BUTTON CENTERING + SPACING (safe, only if present)
+========================================================= */
+
+.home-actions,
+.hero-actions,
+.book-buttons,
+.book-grid {
+  max-width: 1100px;
+  margin: 28px auto 0;
+  padding: 0 24px;
+}
+
+.book-buttons,
+.home-actions {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 14px;
+}
+
+/* Works for <a> links styled as buttons and real <button> */
+.book-buttons a,
+.book-buttons button,
+.home-actions a,
+.home-actions button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 220px;
+  padding: 14px 18px;
+  border-radius: 10px;
+  background: rgba(255,255,255,0.92);
+  color: #222;
+  font-weight: 600;
+  box-shadow: 0 10px 22px rgba(0,0,0,0.12);
+  text-decoration: none;
+  border: 1px solid rgba(255,255,255,0.35);
+}
+
+.book-buttons a:hover,
+.book-buttons button:hover,
+.home-actions a:hover,
+.home-actions button:hover {
+  text-decoration: none;
+  transform: translateY(-1px);
+}
+
+/* Common alternate class patterns (if your HTML uses these) */
+.hero-content .buttons,
+.hero-content .button-row,
+.hero-content .cta-buttons {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 14px;
+  margin-top: 28px;
+}
+
+.hero-content .buttons a,
+.hero-content .button-row a,
+.hero-content .cta-buttons a,
+.hero-content .buttons button,
+.hero-content .button-row button,
+.hero-content .cta-buttons button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 220px;
+  padding: 14px 18px;
+  border-radius: 10px;
+  background: rgba(255,255,255,0.92);
+  color: #222;
+  font-weight: 600;
+  box-shadow: 0 10px 22px rgba(0,0,0,0.12);
+  text-decoration: none;
+  border: 1px solid rgba(255,255,255,0.35);
+}
+
+@media (max-width: 700px) {
+  .book-buttons a,
+  .book-buttons button,
+  .home-actions a,
+  .home-actions button,
+  .hero-content .buttons a,
+  .hero-content .button-row a,
+  .hero-content .cta-buttons a,
+  .hero-content .buttons button,
+  .hero-content .button-row button,
+  .hero-content .cta-buttons button {
+    min-width: 92vw;
+  }
+}
+
+/* =========================================================
+   DOCUMENT SHELL
+========================================================= */
+
+.doc-shell {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 36px 32px 64px;
+}
+
+.doc-header {
+  margin-bottom: 22px;
+}
+
+.doc-header h1 {
+  margin: 0 0 6px 0;
+  font-size: 30px;
+}
+
+.doc-header .muted {
+  color: #666;
+  font-size: 15px;
+}
+
+/* =========================================================
+   TABS
+========================================================= */
+
+.tabs-shell {
+  position: relative;
+  margin-bottom: 26px;
+}
+
+.tabs {
+  display: flex;
+  flex-wrap: nowrap;         /* keep on one line */
+  gap: 6px;
+  overflow-x: auto;          /* scroll if too many */
+  padding-bottom: 8px;
+}
+
+.tabs button {
+  appearance: none;
+  border: 1px solid #dcdcdc;
   background: #ffffff;
-  color: #000000;
+  color: #333;
+  padding: 10px 14px;
+  border-radius: 10px;
+  font-size: 14px;
   cursor: pointer;
+  white-space: nowrap;
 }
 
-.bible-jump button:hover { background: #f0f0f0; }
+.tabs button:hover {
+  background: #f7f7f7;
+}
 
+.tabs button.active {
+  border-color: #3b6fb6;
+  background: #3b6fb6;
+  color: #ffffff;
+}
 
 /* =========================================================
-   ABOUT NAV (ABOUT PAGE)
+   DOC LAYOUT (MAIN + RIGHT SIDEBAR)
 ========================================================= */
 
-.about-nav {
-  position: sticky;
-  top: 0;
-  z-index: 50;
-  background: rgba(246, 247, 248, 0.92);
-  backdrop-filter: blur(6px);
-  border-bottom: 1px solid rgba(0, 0, 0, 0.08);
-  max-width: 1100px;
-  margin: 0 auto;
-  padding: 14px 48px 12px 48px;
+.doc-layout {
+  display: grid;
+  grid-template-columns: 1fr 320px;
+  gap: 28px;
 }
 
-.about-nav-row {
-  display: flex;
-  gap: 10px;
-  align-items: center;
-  flex-wrap: wrap;
+@media (max-width: 980px) {
+  .doc-layout {
+    grid-template-columns: 1fr;
+  }
 }
-
-.about-action {
-  display: inline-block;
-  padding: 10px 14px;
-  border-radius: 10px;
-  border: 1px solid rgba(0, 0, 0, 0.12);
-  background: #ffffff;
-  color: #222;
-  font-size: 15px;
-}
-
-.about-action:hover { background: rgba(0, 0, 0, 0.04); }
-
-.about-action.active {
-  background: rgba(0, 0, 0, 0.10);
-  border-color: rgba(0, 0, 0, 0.25);
-  font-weight: 600;
-}
-
-.about-action.active[aria-current="page"] {
-  outline: 2px solid rgba(0, 0, 0, 0.18);
-  outline-offset: 2px;
-}
-
 
 /* =========================================================
-   BOOK NAVIGATION (SUB PAGES)
+   MAIN CONTENT AREA
 ========================================================= */
 
-.book-nav {
-  position: sticky;
-  top: 0;
-  z-index: 50;
-  background: rgba(246, 247, 248, 0.92);
-  backdrop-filter: blur(6px);
-  border-bottom: 1px solid rgba(0, 0, 0, 0.08);
-  max-width: 1100px;
-  margin: 0 auto;
-  padding: 14px 48px 12px 48px;
-}
-
-.book-nav-row {
-  display: flex;
-  gap: 10px;
-  align-items: center;
-  flex-wrap: wrap;
-  margin-bottom: 10px;
-}
-
-.book-nav-row:last-child { margin-bottom: 0; }
-
-.book-select {
-  padding: 10px 12px;
-  font-size: 15px;
-  border-radius: 10px;
-  border: 1px solid rgba(0, 0, 0, 0.12);
-  background: #ffffff;
-  color: #111;
-}
-
-
-/* =========================================================
-   SECTION BUTTONS / TABS
-========================================================= */
-
-.book-action {
-  display: inline-block;
-  padding: 10px 14px;
-  border-radius: 10px;
-  border: 1px solid rgba(0, 0, 0, 0.12);
-  background: #ffffff;
-  color: #222;
-  font-size: 15px;
-}
-
-.book-action:hover { background: rgba(0, 0, 0, 0.04); }
-
-.book-action.active {
-  background: rgba(0, 0, 0, 0.10);
-  border-color: rgba(0, 0, 0, 0.25);
-  font-weight: 600;
-}
-
-.book-action.active[aria-current="page"] {
-  outline: 2px solid rgba(0, 0, 0, 0.18);
-  outline-offset: 2px;
-}
-
-
-/* =========================================================
-   DOCUMENT CONTENT AREA
-========================================================= */
-
-.doc {
-  max-width: var(--mtb-doc-maxw);
-  margin: var(--mtb-page-pad-y) auto;
-  padding: var(--mtb-doc-pad);
-  background: var(--mtb-surface);
-  border: 1px solid var(--mtb-border);
-  border-radius: var(--mtb-radius);
-  box-shadow: var(--mtb-shadow);
+.doc-main {
+  min-width: 0;
 }
 
 #doc-target {
-  font-size: 17px;
-  line-height: 1.65;
-  color: var(--mtb-text);
+  line-height: 1.6;
+  font-size: 16px;
 }
 
-#doc-target h1,
-#doc-target h2,
-#doc-target h3,
-#doc-target h4,
-#doc-target h5 {
-  margin-top: 1.35em;
-  margin-bottom: 0.55em;
-  line-height: 1.25;
-}
-
-#doc-target h1 {
-  font-size: 34px;
-  letter-spacing: 0.2px;
-  margin-top: 0.15em;
-  margin-bottom: 0.9em;
-  text-align: center;
-}
-
-#doc-target h2 { font-size: 22px; }
-#doc-target h3 { font-size: 18px; }
-
-/* Dedicated Bible text heading level */
-#doc-target h5 {
-  font-size: 17px;
-  font-weight: 600;
-  line-height: 1.35;
-}
+#doc-target h1 { font-size: 28px; margin-top: 0; }
+#doc-target h2 { font-size: 22px; margin-top: 32px; }
+#doc-target h3 { font-size: 19px; margin-top: 26px; }
 
 #doc-target p {
-  margin: 0.75em 0;
-  color: var(--mtb-text);
+  margin: 0.9em 0;
 }
-
-#doc-target img { margin: 1.25em auto; }
 
 #doc-target ul,
 #doc-target ol {
-  margin: 0.8em 0 0.9em 1.4em;
-  padding: 0;
+  margin: 0.9em 0 0.9em 1.2em;
 }
-
-#doc-target li { margin: 0.35em 0; }
-
-#doc-target blockquote {
-  margin: 1.1em 0;
-  padding: 14px 18px;
-  background: var(--mtb-muted);
-  border-left: 4px solid var(--mtb-border-strong);
-  color: var(--mtb-text);
-}
-
 
 /* =========================================================
-   PURPOSE BLOCK (OPTIONAL)
+   RIGHT SIDEBAR
 ========================================================= */
 
-.chapter-purpose {
-  background: var(--mtb-muted);
-  border: 1px solid var(--mtb-border);
-  border-left: 4px solid var(--mtb-border-strong);
-  padding: 18px 22px;
-  border-radius: 8px;
-  margin: 0 0 24px 0;
-}
-
-.chapter-purpose p { margin: 0.6em 0; }
-
-
-
-/* =========================================================
-   WORD HIGHLIGHT → STANDARD MTB CALLOUT BOX
-   (Yellow highlight in Word becomes neutral box on site)
-========================================================= */
-
-#doc-target mark,
-#doc-target span[style*="background-color"] {
-  display: block;
-  background: var(--mtb-muted);              /* same as blockquote */
-  border-left: 4px solid var(--mtb-border-strong);
-  padding: 14px 18px;
-  margin: 1.1em 0;
-  border-radius: 8px;
-  color: var(--mtb-text);
-  font-style: italic;
-}
-
-
-/* =========================================================
-   BIBLE TEXT STYLING (Book + Orientation + Teaching)
-   Rule: Word Heading 5 becomes HTML <h5>
-   We EXCLUDE chapter-scripture (Parallel Versions)
-========================================================= */
-
-/* Bible text heading itself */
-body:not([data-doc-type="chapter-scripture"]) #doc-target h5 {
-  color: var(--mtb-scripture-color);
-}
-
-/* Bible text content immediately following that heading
-   CSS-only: color a reasonable run of siblings */
-body:not([data-doc-type="chapter-scripture"]) #doc-target h5 + p,
-body:not([data-doc-type="chapter-scripture"]) #doc-target h5 + p + p,
-body:not([data-doc-type="chapter-scripture"]) #doc-target h5 + p + p + p,
-body:not([data-doc-type="chapter-scripture"]) #doc-target h5 + p + p + p + p,
-body:not([data-doc-type="chapter-scripture"]) #doc-target h5 + p + p + p + p + p,
-body:not([data-doc-type="chapter-scripture"]) #doc-target h5 + ul,
-body:not([data-doc-type="chapter-scripture"]) #doc-target h5 + ol,
-body:not([data-doc-type="chapter-scripture"]) #doc-target h5 + blockquote {
-  color: var(--mtb-scripture-color);
-}
-
-
-/* =========================================================
-   POPUP MODAL (STRUCTURAL PROVISION)
-========================================================= */
-
-.mtb-modal {
-  position: fixed;
-  inset: 0;
-  background: rgba(0, 0, 0, 0.55);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 24px;
-  z-index: 9999;
-}
-
-.mtb-modal-inner {
-  width: min(820px, 100%);
+.doc-side {
+  position: sticky;
+  top: 22px;
+  align-self: start;
   background: #ffffff;
+  border: 1px solid #e6e6e6;
   border-radius: 10px;
-  padding: 18px 18px 22px 18px;
-  box-shadow: 0 10px 35px rgba(0, 0, 0, 0.25);
+  padding: 16px;
 }
 
-.mtb-modal-close {
-  display: inline-block;
-  padding: 8px 12px;
-  border: 1px solid #ccc;
-  border-radius: 6px;
-  background: #fafafa;
+.doc-side h3 {
+  margin: 0 0 10px 0;
+  font-size: 16px;
+}
+
+.doc-side .side-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.doc-side .side-actions button {
+  appearance: none;
+  border: 1px solid #dcdcdc;
+  background: #ffffff;
+  color: #333;
+  padding: 10px 12px;
+  border-radius: 10px;
+  font-size: 14px;
   cursor: pointer;
 }
 
-.mtb-modal-close:hover { background: #f0f0f0; }
-
-#mtbModalTitle { margin: 14px 0 10px 0; }
-
-#mtbModalBody p { margin: 10px 0; }
-
+.doc-side .side-actions button:hover {
+  background: #f7f7f7;
+}
 
 /* =========================================================
-   RESPONSIVE ADJUSTMENTS
+   SCRIPTURE TOGGLE (tables only)
 ========================================================= */
 
-@media (max-width: 768px) {
+body[data-doc-type="chapter-scripture"].hide-nkjv #doc-target th:nth-child(2),
+body[data-doc-type="chapter-scripture"].hide-nkjv #doc-target td:nth-child(2) {
+  display: none !important;
+}
 
-  :root {
-    --mtb-doc-pad: 28px;
-    --mtb-nav-pad-x: 24px;
-  }
+body[data-doc-type="chapter-scripture"].hide-nlt #doc-target th:nth-child(3),
+body[data-doc-type="chapter-scripture"].hide-nlt #doc-target td:nth-child(3) {
+  display: none !important;
+}
 
-  .site-header { padding: 16px 24px; }
+/* =========================================================
+   MTB Scripture Block (Word → HTML)
+   - Targets blocks wrapped by the pandoc Lua filter:
+     <div class="mtb-scripture-block"> ... </div>
+========================================================= */
 
-  .hero-content { padding: 80px 24px; }
+#doc-target .mtb-scripture-block {
+  margin: 1.5em 0;
+  padding: 1.25em 1.5em;
+  background: #f7f9fc;
+  border-left: 4px solid #3b6fb6;
+  border-radius: 6px;
 
-  .hero h1 { font-size: 40px; }
+  font-size: 0.95rem;
+  line-height: 1.6;
+  color: #222;
+}
 
-  .hero p { font-size: 18px; }
+#doc-target .mtb-scripture-block p {
+  margin: 0.5em 0;
+}
 
-  .doc {
-    margin: 18px 14px;
-    padding: var(--mtb-doc-pad);
-  }
+#doc-target .mtb-scripture-block p:first-child {
+  margin-top: 0;
+}
 
-  .book-nav { padding: 12px 18px; }
-  .about-nav { padding: 12px 18px; }
+#doc-target .mtb-scripture-block p:last-child {
+  margin-bottom: 0;
+}
 
-  #doc-target {
-    font-size: 16px;
-    line-height: 1.65;
-  }
+#doc-target .mtb-scripture-block .verse-number {
+  font-weight: 600;
+  color: #555;
+}
 
-  #doc-target h1 { font-size: 28px; }
-
-  #doc-target h2 { font-size: 20px; }
+#doc-target .mtb-scripture-block .scripture-translation {
+  display: block;
+  margin-top: 0.75em;
+  font-size: 0.8rem;
+  color: #666;
+  text-align: right;
+  font-style: italic;
 }

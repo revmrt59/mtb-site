@@ -1,0 +1,22 @@
+{
+  "title": "3 John",
+  "subtitle": "Walking in truth through faithful love and healthy leadership.",
+  "tabs": {
+    "chapter_scripture": "C:\Users\Mike\Documents\MTB\GitHub\mtb-site\books\new-testament\3-john\generated/3john_1_chapter_scripture.html",
+    "book_introduction": "C:\Users\Mike\Documents\MTB\GitHub\mtb-site\books\new-testament\3-john\generated/3john_book_introduction.html",
+    "chapter_orientation": "C:\Users\Mike\Documents\MTB\GitHub\mtb-site\books\new-testament\3-john\generated/3john_1_chapter_orientation.html",
+    "chapter_explanation": "C:\Users\Mike\Documents\MTB\GitHub\mtb-site\books\new-testament\3-john\generatedn/3john_1_chapter_explanation.html",
+    "chapter_reflections": "C:\Users\Mike\Documents\MTB\GitHub\mtb-site\books\new-testament\3-john\generated/3john_1_reflections.html",
+    "chapter_word_studies": "C:\Users\Mike\Documents\MTB\GitHub\mtb-site\books\new-testament\3-john\generated/3john_1_word_studies.html",
+    "eg_culture": "C:\Users\Mike\Documents\MTB\GitHub\mtb-site\books\new-testament\3-john\generated/3john_1_eg_culture.html"
+  },
+  "deeper_dive": {
+    "landing": "C:\Users\Mike\Documents\MTB\GitHub\mtb-site\books\new-testament\3-john\generated/3john_1_deeper_dive_landing.html",
+    "items": [
+      {
+        "title": "Truth",
+        "href": "C:\Users\Mike\Documents\MTB\GitHub\mtb-site\books\new-testament\3-john\generated/3john_1_deeper_dive_truth.html"
+      }
+    ]
+  }
+}

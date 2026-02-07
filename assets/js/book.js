@@ -8,7 +8,7 @@
     { key: "chapter_orientation", label: "Chapter Orientation" },
     { key: "chapter_explanation", label: "Chapter Explanation" },
     { key: "chapter_insights", label: "Chapter Insights" },
-    { key: "key_words_and_concepts", label: "Key Words and Concepts" },
+    { key: "key_words_and_concepts", label: "Word Studies" },
     { key: "eg_culture", label: "EG Culture" },
     { key: "deeper_dive", label: "Deeper Dive" } // single button only
   ];
@@ -374,7 +374,7 @@
       btn.dataset.tab = t.key;
       btn.textContent = t.label;
 
-      if (t.key === activeTab) btn.classList.add("is-active");
+      if (t.key === activeTab) btn.classList.add("active");
 
       btn.addEventListener("click", () => {
         // Single Deeper Dive button behavior
@@ -412,7 +412,7 @@
     const activeTab = params.tab || "chapter_scripture";
     const buttons = Array.from(document.querySelectorAll("#tabs .tab-btn"));
     buttons.forEach(b => {
-      if (b.dataset.tab === activeTab) b.classList.add("is-active");
+      if (b.dataset.tab === activeTab) b.classList.add("active");
       else b.classList.remove("is-active");
     });
   }

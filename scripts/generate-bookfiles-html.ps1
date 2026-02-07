@@ -273,3 +273,34 @@ Write-Host "Done." -ForegroundColor Cyan
 Write-Host ("Converted: {0}" -f $converted)
 Write-Host ("Skipped:   {0}" -f $skipped)
 Write-Host ""
+
+# =========================================================
+# POST-PROCESS: Fix mojibake in generated HTML (encoding-safe)
+# =========================================================
+# NOTE:
+# Do not paste mojibake characters into this script.
+# All matching is done via Unicode codepoints on purpose.
+
+# Build the exact "ΓÇö" sequence from codepoints (avoid literal paste issues)
+$G  = [char]0x0393   # Γ
+$C  = [char]0x00C7   # Ç
+$oe = [char]0x00F6   # ö
+
+$GCoe = "$G$C$oe"    # ΓÇö
+$Coe  = "$C$oe"      # Çö
+
+Get-ChildItem -Path $outDir -Filter *.html -Recurse -File | ForEach-Object {
+
+  $path = $_.FullName
+  $text = Get-Content -Raw -Encoding UTF8 $path
+
+  $fixed = $text `
+    -replace [regex]::Escape($GCoe), " - " `
+    -replace [regex]::Escape($Coe),  " - "
+
+  if ($fixed -ne $text) {
+    Set-Content -Path $path -Encoding UTF8 -NoNewline -Value $fixed
+    Write-Host "Cleaned mojibake in: $path" -ForegroundColor Cyan
+  }
+}
+

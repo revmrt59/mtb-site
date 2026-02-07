@@ -407,15 +407,25 @@
     });
   }
 
-  function syncActiveTab() {
-    const params = getParams();
-    const activeTab = params.tab || "chapter_scripture";
-    const buttons = Array.from(document.querySelectorAll("#tabs .tab-btn"));
-    buttons.forEach(b => {
-      if (b.dataset.tab === activeTab) b.classList.add("active");
-      else b.classList.remove("is-active");
-    });
+function syncActiveTab() {
+  const params = getParams();
+  const activeTab = params.tab || "chapter_scripture";
+  const buttons = Array.from(document.querySelectorAll("#tabs .tab-btn"));
+
+  // Clear active state from all tabs
+  buttons.forEach(b => {
+    b.classList.remove("active");
+    b.removeAttribute("aria-current");
+  });
+
+  // Activate the current tab
+  const current = buttons.find(b => b.dataset.tab === activeTab);
+  if (current) {
+    current.classList.add("active");
+    current.setAttribute("aria-current", "page");
   }
+}
+
 
   // ==========================================
   // INIT

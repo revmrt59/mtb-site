@@ -491,3 +491,51 @@ body[data-doc-type="chapter-scripture"].hide-nlt #doc-target td:nth-child(3) {
   text-align: right;
   font-style: italic;
 }
+
+/* =========================================================
+   ABOUT PAGE BUTTON ROW
+   ========================================================= */
+
+.about-nav {
+  display: block;
+  margin: 14px auto;
+  padding: 0 16px;
+  max-width: 1100px;
+  position: relative;
+  z-index: 5; /* keeps it above any layout background layers */
+}
+
+.about-nav-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.about-nav a {
+  display: inline-block;
+  padding: 10px 12px;
+  border: 1px solid #c9cdd3;
+  border-radius: 8px;
+  text-decoration: none;
+  color: inherit;
+  background: #f5f6f8;
+  line-height: 1.2;
+}
+
+.about-nav a:hover {
+  border-color: #3b6fb6;
+}
+
+.about-nav a:focus {
+  outline: 2px solid #3b6fb6;
+  outline-offset: 2px;
+}
+/* About buttons active state */
+.about-action.active,
+.about-action[aria-current="page"] {
+  border-color: #3b6fb6;
+  background: #3b6fb6;
+  color: #ffffff;
+}
+
+

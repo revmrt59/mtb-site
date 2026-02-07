@@ -1,0 +1,117 @@
+<!-- File: /resources/index.html -->
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Mastering the Bible - Resources</title>
+  <link rel="stylesheet" href="/assets/css/style.css" />
+</head>
+
+<body data-doc-type="resources-index">
+  <header class="site-header">
+    <nav class="main-nav">
+      <a href="/index.html">Home</a>
+      <a href="/about.html">About</a>
+      <a href="/resources/index.html" class="active" aria-current="page">Resources</a>
+    </nav>
+  </header>
+
+  <main class="doc-shell">
+    <section class="doc-header">
+      <h1>Resources</h1>
+      <p class="muted">Bible-level reference material.</p>
+    </section>
+
+    <section class="doc-layout">
+      <article class="doc-main">
+        <table class="resource-table">
+          <thead>
+            <tr>
+              <th>Resource</th>
+              <th>Description</th>
+              <th>PDF</th>
+            </tr>
+          </thead>
+          <tbody id="resourcesTbody">
+            <tr>
+              <td colspan="3" class="muted">Loading resources…</td>
+            </tr>
+          </tbody>
+        </table>
+      </article>
+    </section>
+  </main>
+
+  <script>
+    (function () {
+      const tbody = document.getElementById("resourcesTbody");
+
+      function esc(s) {
+        return String(s ?? "")
+          .replace(/&/g, "&amp;")
+          .replace(/</g, "&lt;")
+          .replace(/>/g, "&gt;")
+          .replace(/"/g, "&quot;")
+          .replace(/'/g, "&#39;");
+      }
+
+      function fileToPdfHref(file) {
+        // Optional PDF convention: /resources/pdf/<same base>.pdf
+        const base = String(file || "").replace(/\.html?$/i, "");
+        return base ? ("/resources/pdf/" + base + ".pdf") : "";
+      }
+
+      fetch("/resources/resources.json", { cache: "no-store" })
+        .then(r => {
+          if (!r.ok) throw new Error("resources.json not found");
+          return r.json();
+        })
+        .then(items => {
+          if (!Array.isArray(items) || items.length === 0) {
+            tbody.innerHTML = `<tr><td colspan="3" class="muted">No resources found.</td></tr>`;
+            return;
+          }
+
+          // Sort by title for a stable table
+          items.sort((a, b) => String(a.title || "").localeCompare(String(b.title || "")));
+
+          const rows = items.map(it => {
+            const file = it.file || it.html || "";
+            const title = it.title || file;
+            const desc = it.description || "";
+            const viewHref = "/resources/view.html?doc=" + encodeURIComponent(file);
+            const pdfHref = it.pdf || fileToPdfHref(file);
+
+            const pdfCell = pdfHref
+              ? `<a href="${esc(pdfHref)}">PDF</a>`
+              : "";
+
+            return `
+              <tr>
+                <td><a href="${esc(viewHref)}">${esc(title)}</a></td>
+                <td>${esc(desc)}</td>
+                <td>${pdfCell}</td>
+              </tr>
+            `;
+          }).join("");
+
+          tbody.innerHTML = rows;
+        })
+        .catch(err => {
+          tbody.innerHTML = `
+            <tr>
+              <td colspan="3">
+                <div class="muted">
+                  Resources index is not ready yet. Missing or invalid <code>/resources/resources.json</code>.
+                </div>
+              </td>
+            </tr>
+          `;
+          console.error(err);
+        });
+    })();
+  </script>
+</body>
+</html>
+

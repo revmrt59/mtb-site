@@ -154,6 +154,56 @@
   }
 
   // ==========================================
+
+  // ==========================================
+  // WORD STUDY MARKERS (CHAPTER EXPLANATION)
+  // Turns: pride (H2087) into <span class="ws" data-ws="H2087">pride</span>
+  // ==========================================
+  function enhanceStrongMarkersToWordStudies(rootEl) {
+    if (!rootEl) return;
+
+    // Matches: word (G####) or word (H####)
+    const re = /(\b[\w’'-]+\b)\s*\((G\d{3,5}|H\d{3,5})\)/g;
+
+    const walker = document.createTreeWalker(rootEl, NodeFilter.SHOW_TEXT, null);
+    const textNodes = [];
+    while (walker.nextNode()) textNodes.push(walker.currentNode);
+
+    textNodes.forEach((node) => {
+      const text = node.nodeValue;
+      if (!text) return;
+
+      re.lastIndex = 0;
+      if (!re.test(text)) return;
+      re.lastIndex = 0;
+
+      const frag = document.createDocumentFragment();
+      let last = 0;
+      let m;
+
+      while ((m = re.exec(text)) !== null) {
+        const full = m[0];
+        const word = m[1];
+        const strong = m[2];
+        const start = m.index;
+
+        if (start > last) frag.appendChild(document.createTextNode(text.slice(last, start)));
+
+        const span = document.createElement("span");
+        span.className = "ws";
+        span.setAttribute("data-ws", strong);
+        span.textContent = word;
+        frag.appendChild(span);
+
+        // Marker is removed from display here (clean reading)
+        last = start + full.length;
+      }
+
+      if (last < text.length) frag.appendChild(document.createTextNode(text.slice(last)));
+
+      node.parentNode.replaceChild(frag, node);
+    });
+  }
   // SCRIPTURE CONTROLS (UNCHANGED)
   // ==========================================
   function removeScriptureControls() {
@@ -239,87 +289,37 @@
         if (!target) return;
 
         target.innerHTML = fixMojibake(content);
-                if (meta.type === "chapter-explanation") {
+
+                // ----------------------------------------------------------
+        // Chapter Explanation: convert "word (G####/H####)" markers + set JSON path
+        // ----------------------------------------------------------
+        const isExplanation =
+          meta.type === "chapter-explanation" ||
+          meta.key === "chapter_explanation" ||
+          /chapter[-_]?explanation\.html$/i.test(docName);
+
+        if (isExplanation) {
+          // Convert: pride (H2087) -> <span class="ws" data-ws="H2087">pride</span>
           enhanceStrongMarkersToWordStudies(target);
-        }
-        if (meta.type === "chapter-explanation") {
-          const wsJsonName = docName.replace("chapter-explanation.html", "wordstudies.json");
+
+          // Build JSON path in the SAME folder as the loaded doc
+          const wsJsonName = docName
+            .replace(/chapter[-_]?explanation\.html$/i, "wordstudies.json");
+
+          const baseDir = docPath.slice(0, docPath.lastIndexOf("/") + 1);
+          const wsJsonPath = baseDir + wsJsonName;
+
           document.body.setAttribute("data-doc-type", "chapter-explanation");
-          document.body.setAttribute("data-ws-json", buildDocPath(wsJsonName));
+          document.body.setAttribute("data-ws-json", wsJsonPath);
         } else {
           document.body.removeAttribute("data-ws-json");
           document.body.removeAttribute("data-doc-type");
         }
 
 
-function enhanceStrongMarkersToWordStudies(rootEl) {
-  if (!rootEl) return;
-
-  // Matches: pride (H2087) / faith (G4102)
-  const re = /(\b[\w’'-]+\b)\s*\((G\d{3,5}|H\d{3,5})\)/g;
-
-  const walker = document.createTreeWalker(rootEl, NodeFilter.SHOW_TEXT, null);
-  const textNodes = [];
-  while (walker.nextNode()) textNodes.push(walker.currentNode);
-
-  textNodes.forEach((node) => {
-    const text = node.nodeValue;
-    if (!text) return;
-
-    re.lastIndex = 0;
-    if (!re.test(text)) return;
-    re.lastIndex = 0;
-
-    const frag = document.createDocumentFragment();
-    let last = 0;
-    let m;
-
-    while ((m = re.exec(text)) !== null) {
-      const full = m[0];
-      const word = m[1];
-      const strong = m[2];
-      const start = m.index;
-
-      if (start > last) frag.appendChild(document.createTextNode(text.slice(last, start)));
-
-      const span = document.createElement("span");
-      span.className = "ws";
-      span.setAttribute("data-ws", strong);
-      span.textContent = word;
-      frag.appendChild(span);
-
-      // Marker is removed from display here (clean reading)
-      last = start + full.length;
-    }
-
-    if (last < text.length) frag.appendChild(document.createTextNode(text.slice(last)));
-
-    node.parentNode.replaceChild(frag, node);
-  });
-}
+  
 
 
-
-                // ----------------------------------------------------------
-        // WORD STUDY HOVER/POPUP: ONLY FOR CHAPTER EXPLANATION
-        // ----------------------------------------------------------
-        if (meta.type === "chapter-explanation") {
-          // Point to the per-chapter JSON file that backs hover + modal.
-          // Expected naming: "<docName>" with "chapter-explanation.html" replaced by "wordstudies.json"
-          // Example: "obadiah-1-chapter-explanation.html" -> "obadiah-1-wordstudies.json"
-          const wsJson = docName
-            .replace("chapter-explanation.html", "wordstudies.json")
-            .replace("chapter_explanation.html", "wordstudies.json"); // safety if underscore variant exists
-
-          document.body.setAttribute("data-doc-type", "chapter-explanation");
-          document.body.setAttribute("data-ws-json", buildDocPath(wsJson));
-        } else {
-          // Make it impossible for hover to run on other tabs (including Chapter Scripture)
-          if (document.body.getAttribute("data-doc-type") === "chapter-explanation") {
-            document.body.removeAttribute("data-doc-type");
-          }
-          document.body.removeAttribute("data-ws-json");
-        }
 
 
         if (meta.type === "chapter-scripture") {

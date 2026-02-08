@@ -45,13 +45,17 @@
     modalEl = document.createElement("div");
     modalEl.className = "ws-modal";
     modalEl.style.display = "none";
-    modalEl.innerHTML = `
-      <div class="ws-modal-backdrop" data-close="1"></div>
-      <div class="ws-modal-panel" role="dialog" aria-modal="true" aria-label="Word Study">
-        <button class="ws-modal-close" type="button" data-close="1">Close</button>
-        <div class="ws-modal-body"></div>
-      </div>
-    `;
+modalEl.innerHTML = `
+  <div class="ws-modal-backdrop" data-close="1"></div>
+
+  <div class="ws-modal-panel" role="dialog" aria-modal="true" aria-label="Word Study">
+    <div class="ws-modal-header">
+      <button class="ws-modal-close" type="button" data-close="1" aria-label="Close">Close</button>
+    </div>
+    <div class="ws-modal-body"></div>
+  </div>
+`;
+
     document.body.appendChild(modalEl);
 
     modalEl.addEventListener("click", (e) => {

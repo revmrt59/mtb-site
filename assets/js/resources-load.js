@@ -8,13 +8,6 @@
     return new URLSearchParams(window.location.search).get(name);
   }
 
-  function normalizeDoc(doc) {
-    if (!doc) return "";
-    doc = String(doc).trim().replace(/\\/g, "/");
-    doc = doc.split("/").pop(); // filename only
-    return doc;
-  }
-
   function cleanMeta(s) {
     return String(s || "")
       .replace(/^(Title|Description)\s*:\s*/i, "")
@@ -28,15 +21,20 @@
     document.title = "Mastering the Bible - " + (title || "Resource");
   }
 
-  function setLinks(msgHtml) {
+  function setLinks(html) {
     if (!linksEl) return;
-    linksEl.innerHTML = `<a href="/resources/index.html">Back to Resources</a>` + (msgHtml ? ` | ${msgHtml}` : "");
+    linksEl.innerHTML = `<a href="/resources/index.html">Back to Resources</a>` + (html ? ` | ${html}` : "");
   }
 
   async function loadResource() {
-    if (!target) return;
+    // If target is missing, nothing can render.
+    if (!target) {
+      setHeader("Resource", "");
+      setLinks(`<span class="muted">Missing #doc-target in view.html</span>`);
+      return;
+    }
 
-    const doc = normalizeDoc(getParam("doc"));
+    const doc = (getParam("doc") || "").trim();
     if (!doc) {
       setHeader("No resource selected", "");
       setLinks("");
@@ -45,22 +43,21 @@
     }
 
     const url = "/resources/" + encodeURIComponent(doc);
-    setLinks(`<span class="muted">Loading: ${url}</span>`);
+    setLinks(`<span class="muted">Loading…</span>`);
 
     let html = "";
     try {
       const res = await fetch(url, { cache: "no-store" });
       if (!res.ok) {
         setHeader("Resource file not found", "");
-        setLinks(`<span class="muted">Not found: ${url} (HTTP ${res.status})</span>`);
+        setLinks(`<span class="muted">HTTP ${res.status}: ${url}</span>`);
         target.innerHTML = `<p class="muted">Resource file not found. <a href="/resources/index.html">Go back</a>.</p>`;
         return;
       }
       html = await res.text();
     } catch (err) {
-      console.error(err);
       setHeader("Fetch failed", "");
-      setLinks(`<span class="muted">Error fetching: ${url}</span>`);
+      setLinks(`<span class="muted">Error fetching ${url}</span>`);
       target.innerHTML = `<p class="muted">Fetch failed: ${String(err)}</p>`;
       return;
     }
@@ -69,33 +66,26 @@
     const temp = document.createElement("div");
     temp.innerHTML = html;
 
-    const root = temp.querySelector("#doc-root") || temp;
+    // Prefer doc-root wrapper if present
+    const docRoot = temp.querySelector("#doc-root") || temp;
 
-  // Strip Title: and Description: lines from the body and use them for the header
-let title = "Resource";
-let desc = "";
+    // Find first two meaningful TOP-LEVEL blocks (robust for headings or paragraphs)
+    const top = Array.from(docRoot.children)
+      .map(el => ({ el, text: (el.textContent || "").trim() }))
+      .filter(x => x.text.length > 0);
 
-const labeled = Array.from(root.querySelectorAll("p, h1, h2, h3, h4, h5, h6, div"))
-  .map(el => ({ el, text: (el.textContent || "").trim() }))
-  .filter(x => x.text.length > 0);
+    const title = cleanMeta(top[0]?.text || "Resource");
+    const desc = cleanMeta(top[1]?.text || "");
 
-const titleItem = labeled.find(x => /^Title\s*:/i.test(x.text));
-if (titleItem) {
-  title = cleanMeta(titleItem.text);
-  titleItem.el.remove();
-}
+    setHeader(title, desc);
+    setLinks(""); // clear Loading
 
-const descItem = labeled.find(x => /^Description\s*:/i.test(x.text));
-if (descItem) {
-  desc = cleanMeta(descItem.text);
-  descItem.el.remove();
-}
+    // Remove those exact blocks from the body so they don’t duplicate
+    if (top[0]?.el) top[0].el.remove();
+    if (top[1]?.el) top[1].el.remove();
 
-setHeader(title, desc);
-
-
-
-    target.innerHTML = root.innerHTML;
+    // Render remaining content
+    target.innerHTML = docRoot.innerHTML;
   }
 
   loadResource();

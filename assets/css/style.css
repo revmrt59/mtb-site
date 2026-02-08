@@ -132,9 +132,8 @@ body[data-doc-type] .doc-shell {
   white-space: nowrap;
   max-width: 100%;
   overflow: hidden;
-  text-overflow: ellipsis; /* optional */
+  text-overflow: ellipsis;
 }
-
 
 /* If you have separate book/chapter selects by id or name */
 .hero .hero-controls #book-select,
@@ -229,7 +228,6 @@ body[data-doc-type] .doc-shell {
   max-width: 100%;
 }
 
-
 .hero-content .buttons a,
 .hero-content .button-row a,
 .hero-content .cta-buttons a,
@@ -300,9 +298,9 @@ body[data-doc-type] .doc-shell {
 
 .tabs {
   display: flex;
-  flex-wrap: nowrap;         /* keep on one line */
+  flex-wrap: nowrap;
   gap: 6px;
-  overflow-x: auto;          /* scroll if too many */
+  overflow-x: auto;
   padding-bottom: 8px;
 }
 
@@ -327,7 +325,7 @@ body[data-doc-type] .doc-shell {
   border-color: #cfcfcf;
 }
 
-/* Active tab (support both .active and legacy .is-active just in case) */
+/* Active tab */
 .tabs .tab-btn.active,
 .tabs button.active,
 .tabs .tab-btn.is-active,
@@ -336,21 +334,6 @@ body[data-doc-type] .doc-shell {
   border-color: #3b6fb6;
   color: #ffffff;
 }
-/* keep version button blue while pressed */
-.scripture-controls {
-  display: flex;
-  gap: 8px;
-  margin-bottom: 12px;
-}
-
-.scripture-controls .sc-btn.is-active {
-  border-color: #3b6fb6;
-  background: #3b6fb6;
-  color: #ffffff;
-}
-
-
-
 
 /* Ensure hover/focus doesn't make multiple tabs look active */
 .tabs .tab-btn.active:hover,
@@ -366,6 +349,21 @@ body[data-doc-type] .doc-shell {
   color: #ffffff;
 }
 
+/* =========================================================
+   Chapter Scripture – Translation Toggle Buttons (single source of truth)
+========================================================= */
+
+.scripture-controls {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 12px;
+}
+
+.scripture-controls .sc-btn.is-active {
+  border-color: #3b6fb6;
+  background: #3b6fb6;
+  color: #ffffff;
+}
 
 /* =========================================================
    DOC LAYOUT (MAIN + RIGHT SIDEBAR)
@@ -382,8 +380,11 @@ body[data-doc-type] .doc-shell {
     grid-template-columns: 1fr;
   }
 }
-/* not sure if this is where this goes MRT */
-.resource-table a { text-decoration: underline; }
+
+/* Resources table links */
+.resource-table a {
+  text-decoration: underline;
+}
 
 /* =========================================================
    MAIN CONTENT AREA
@@ -452,28 +453,7 @@ body[data-doc-type] .doc-shell {
 }
 
 /* =========================================================
-   SCRIPTURE TOGGLE (tables only)
-========================================================= */
-
-body[data-doc-type="chapter-scripture"].hide-nkjv #doc-target th:nth-child(2),
-body[data-doc-type="chapter-scripture"].hide-nkjv #doc-target td:nth-child(2),
-body[data-doc-type="chapter_scripture"].hide-nkjv #doc-target th:nth-child(2),
-body[data-doc-type="chapter_scripture"].hide-nkjv #doc-target td:nth-child(2) {
-  display: none !important;
-}
-
-body[data-doc-type="chapter-scripture"].hide-nlt #doc-target th:nth-child(3),
-body[data-doc-type="chapter-scripture"].hide-nlt #doc-target td:nth-child(3),
-body[data-doc-type="chapter_scripture"].hide-nlt #doc-target th:nth-child(3),
-body[data-doc-type="chapter_scripture"].hide-nlt #doc-target td:nth-child(3) {
-  display: none !important;
-}
-
-
-/* =========================================================
    MTB Scripture Block (Word → HTML)
-   - Targets blocks wrapped by the pandoc Lua filter:
-     <div class="mtb-scripture-block"> ... </div>
 ========================================================= */
 
 #doc-target .mtb-scripture-block {
@@ -482,7 +462,6 @@ body[data-doc-type="chapter_scripture"].hide-nlt #doc-target td:nth-child(3) {
   background: #f7f9fc;
   border-left: 4px solid #3b6fb6;
   border-radius: 6px;
-
   font-size: 0.95rem;
   line-height: 1.6;
   color: #222;
@@ -516,7 +495,7 @@ body[data-doc-type="chapter_scripture"].hide-nlt #doc-target td:nth-child(3) {
 
 /* =========================================================
    ABOUT PAGE BUTTON ROW
-   ========================================================= */
+========================================================= */
 
 .about-nav {
   display: block;
@@ -524,7 +503,7 @@ body[data-doc-type="chapter_scripture"].hide-nlt #doc-target td:nth-child(3) {
   padding: 0 16px;
   max-width: 1100px;
   position: relative;
-  z-index: 5; /* keeps it above any layout background layers */
+  z-index: 5;
 }
 
 .about-nav-row {
@@ -552,6 +531,7 @@ body[data-doc-type="chapter_scripture"].hide-nlt #doc-target td:nth-child(3) {
   outline: 2px solid #3b6fb6;
   outline-offset: 2px;
 }
+
 /* About buttons active state */
 .about-action.active,
 .about-action[aria-current="page"] {
@@ -559,6 +539,7 @@ body[data-doc-type="chapter_scripture"].hide-nlt #doc-target td:nth-child(3) {
   background: #3b6fb6;
   color: #ffffff;
 }
+
 /* === Resources table links: force visibility === */
 .resource-table a {
   color: #3b6fb6;
@@ -567,24 +548,9 @@ body[data-doc-type="chapter_scripture"].hide-nlt #doc-target td:nth-child(3) {
   cursor: pointer;
 }
 
-/* ==========================================
-   Chapter Scripture – Translation Toggles
-   ========================================== */
-
-.scripture-controls {
-  display: flex;
-  gap: 8px;
-  margin-bottom: 12px;
-}
-
-.scripture-controls .sc-btn.is-active {
-  border-color: #3b6fb6;
-  background: #3b6fb6;
-  color: #ffffff;
-}
-
 /* NOTE: Word Study Modal styles are consolidated below.
    Do not add overrides elsewhere. */
+
 /* === hover for word studies === */
 .ws {
   cursor: help;
@@ -627,50 +593,40 @@ body[data-doc-type="chapter_scripture"].hide-nlt #doc-target td:nth-child(3) {
   margin: 6vh auto;
   width: min(920px, calc(100vw - 24px));
   max-height: 88vh;
-
   display: flex;
   flex-direction: column;
-
-  overflow: hidden; /* header stays; body scrolls */
+  overflow: hidden;
   background: #ffffff;
   border-radius: 14px;
   box-shadow: 0 16px 50px rgba(0,0,0,.30);
 }
 
-/* Sticky header bar (Windows-like) */
 .ws-modal-header {
   position: sticky;
   top: 0;
   z-index: 10;
-
   display: flex;
   justify-content: flex-end;
   align-items: center;
-
   padding: 12px 12px;
   background: #f5f5f5;
   border-bottom: 1px solid #ddd;
 }
 
-/* Close button (not full-width, never clipped) */
 .ws-modal-close {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-
   padding: 8px 12px;
   margin: 0;
-
   font-size: 14px;
   line-height: 1.2;
-
   background: #ffffff;
   border: 1px solid #ccc;
   border-radius: 8px;
   cursor: pointer;
 }
 
-/* Scroll only the modal content */
 .ws-modal-body {
   overflow-y: auto;
   padding: 16px;

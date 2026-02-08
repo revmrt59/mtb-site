@@ -367,6 +367,8 @@ body[data-doc-type] .doc-shell {
     grid-template-columns: 1fr;
   }
 }
+/* not sure if this is where this goes MRT */
+.resource-table a { text-decoration: underline; }
 
 /* =========================================================
    MAIN CONTENT AREA
@@ -536,6 +538,13 @@ body[data-doc-type="chapter-scripture"].hide-nlt #doc-target td:nth-child(3) {
   border-color: #3b6fb6;
   background: #3b6fb6;
   color: #ffffff;
+}
+/* === Resources table links: force visibility === */
+.resource-table a {
+  color: #3b6fb6;
+  text-decoration: underline;
+  font-weight: 600;
+  cursor: pointer;
 }
 
 

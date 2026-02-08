@@ -20,6 +20,8 @@
   <main class="doc-shell">
     <section class="doc-header">
       <h1>Resources</h1>
+      
+
       <p class="muted">Bible-level reference material.</p>
     </section>
 
@@ -30,12 +32,13 @@
             <tr>
               <th>Resource</th>
               <th>Description</th>
+              <th>Open</th>
               <th>PDF</th>
             </tr>
           </thead>
           <tbody id="resourcesTbody">
             <tr>
-              <td colspan="3" class="muted">Loading resources…</td>
+              <td colspan="4" class="muted">Loading resources…</td>
             </tr>
           </tbody>
         </table>
@@ -68,7 +71,10 @@
           return r.json();
         })
         .then(items => {
-          if (!Array.isArray(items) || items.length === 0) {
+  if (!Array.isArray(items)) items = items ? [items] : [];
+  if (items.length === 0) {
+
+      
             tbody.innerHTML = `<tr><td colspan="3" class="muted">No resources found.</td></tr>`;
             return;
           }
@@ -78,22 +84,29 @@
 
           const rows = items.map(it => {
             const file = it.file || it.html || "";
-            const title = it.title || file;
-            const desc = it.description || "";
+            const clean = s => String(s || "").replace(/^(Title|Description)\s*:\s*/i, "").trim();
+const title = clean(it.title || file);
+const desc  = clean(it.description || "");
+
             const viewHref = "/resources/view.html?doc=" + encodeURIComponent(file);
-            const pdfHref = it.pdf || fileToPdfHref(file);
+            const pdfHref = it.pdf || "";
 
             const pdfCell = pdfHref
               ? `<a href="${esc(pdfHref)}">PDF</a>`
               : "";
 
-            return `
-              <tr>
-                <td><a href="${esc(viewHref)}">${esc(title)}</a></td>
-                <td>${esc(desc)}</td>
-                <td>${pdfCell}</td>
-              </tr>
-            `;
+  return `
+  <tr>
+    <td><a href="${esc(viewHref)}">${esc(title)}</a></td>
+    <td>${esc(desc)}</td>
+    <td><a href="${esc(viewHref)}">Open</a></td>
+    <td>${pdfCell}</td>
+  </tr>
+`;
+
+
+            
+
           }).join("");
 
           tbody.innerHTML = rows;

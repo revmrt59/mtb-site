@@ -5,6 +5,9 @@
   let tooltipEl = null;
   let modalEl = null;
 
+  // Cache fetched HTML word-study docs
+  const docCache = new Map();
+
   function ensureTooltip() {
     if (tooltipEl) return tooltipEl;
     tooltipEl = document.createElement("div");
@@ -76,8 +79,10 @@
     if (body) body.innerHTML = "";
   }
 
+  // ----------------------------
+  // JSON mode (existing behavior)
+  // ----------------------------
   function getJsonUrl() {
-    // This is the single source of truth
     return document.body.getAttribute("data-ws-json");
   }
 
@@ -102,7 +107,6 @@
     const url = getJsonUrl();
     if (!url) return null;
 
-    // Ensure cache is loaded before reading
     try {
       await loadWordStudies(url);
     } catch {
@@ -112,11 +116,78 @@
     return cache[key] || null;
   }
 
-  function bindWordStudies() {
-    const jsonUrl = getJsonUrl();
-    if (!jsonUrl) return; // don’t bind until the page tells us where JSON is
+  // ----------------------------
+  // HTML doc mode (new behavior)
+  // ----------------------------
+  function resolveDocUrl(raw) {
+    if (!raw) return null;
+    try {
+      return new URL(raw, window.location.origin).toString();
+    } catch {
+      return null;
+    }
+  }
 
-    const wsEls = document.querySelectorAll(".ws[data-ws]");
+  function extractDocBodyHtml(fullHtml) {
+    const temp = document.createElement("div");
+    temp.innerHTML = fullHtml;
+
+    const body = temp.querySelector("body");
+    if (body) return body.innerHTML;
+
+    return fullHtml;
+  }
+function extractSummaryFromHtml(fullHtml) {
+  const temp = document.createElement("div");
+  temp.innerHTML = fullHtml;
+
+  // Primary: <h2 id="summary">Summary</h2> followed by a <p>
+  const h = temp.querySelector("h2#summary");
+  if (h) {
+    let n = h.nextElementSibling;
+    while (n) {
+      const text = (n.textContent || "").trim();
+      if (n.tagName === "P" && text.length > 0) return text;
+      if (text.length > 0) break;
+      n = n.nextElementSibling;
+    }
+  }
+
+  return null;
+}
+
+
+  async function loadDocHtml(docUrl) {
+    const url = resolveDocUrl(docUrl);
+    if (!url) return null;
+
+    if (docCache.has(url)) return docCache.get(url);
+
+    const res = await fetch(url, { cache: "no-store" });
+    if (!res.ok) throw new Error(`Failed to load word study file: ${url}`);
+
+    const html = await res.text();
+    const bodyHtml = extractDocBodyHtml(html);
+
+    docCache.set(url, bodyHtml);
+    return bodyHtml;
+  }
+
+  function getDocUrlFromEl(el) {
+    // Prefer explicit doc pointer
+    const d = el.getAttribute("data-ws-doc");
+    if (d) return d;
+
+    // Optional support if you ever use <a href="...">
+    const href = el.getAttribute("href");
+    if (href && href !== "#") return href;
+
+    return null;
+  }
+
+  function bindWordStudies() {
+    // Bind ANY .ws elements. JSON is optional now.
+    const wsEls = document.querySelectorAll(".ws");
     if (!wsEls.length) return;
 
     let hoverTimer = null;
@@ -125,21 +196,48 @@
       if (el.dataset.wsBound === "1") return;
       el.dataset.wsBound = "1";
 
-      const key = el.getAttribute("data-ws");
+      const key = el.getAttribute("data-ws");   // JSON key (optional)
+      const docUrl = getDocUrlFromEl(el);       // HTML file url (optional)
 
-      el.addEventListener("mouseenter", (e) => {
-        hoverTimer = window.setTimeout(async () => {
-          const item = await getItem(key);
-          if (!item || !item.short) return;
-          showTooltip(item.short, e.clientX, e.clientY);
-        }, 150);
-      });
+el.addEventListener("mouseenter", (e) => {
+  hoverTimer = window.setTimeout(async () => {
+    if (key) {
+      const item = await getItem(key);
+      if (item && item.short) {
+        showTooltip(item.short, e.clientX, e.clientY);
+        return;
+      }
+    }
+
+if (docUrl) {
+  try {
+    const html = await loadDocHtml(docUrl);
+    const summary = extractSummaryFromHtml(html);
+
+    if (summary) {
+      showTooltip(summary, e.clientX, e.clientY);
+    } else {
+      showTooltip("Click for word study", e.clientX, e.clientY);
+    }
+  } catch {
+    showTooltip("Click for word study", e.clientX, e.clientY);
+  }
+  return;
+}
+
+  }, 150);
+});
+
 
       el.addEventListener("mousemove", async (e) => {
         if (tooltipEl && tooltipEl.style.display === "block") {
-          const item = await getItem(key);
-          if (!item || !item.short) return;
-          showTooltip(item.short, e.clientX, e.clientY);
+          if (key) {
+            const item = await getItem(key);
+            if (item && item.short) {
+              showTooltip(item.short, e.clientX, e.clientY);
+              return;
+            }
+          }
         }
       });
 
@@ -150,14 +248,36 @@
 
       el.addEventListener("click", async (e) => {
         e.preventDefault();
-        const item = await getItem(key);
-        if (!item) return;
-
         hideTooltip();
-        showModal(
-          item.longHtml ||
-          `<p><strong>${item.term || key}</strong></p><p>${item.gloss || ""}</p>`
-        );
+
+        // 1) Prefer HTML doc mode when present
+        if (docUrl) {
+          try {
+            const html = await loadDocHtml(docUrl);
+            showModal(html);
+          } catch (err) {
+            console.error(err);
+            showModal(
+              `<p class='muted'>Could not load word study.</p>
+               <p class='muted'>${resolveDocUrl(docUrl) || docUrl}</p>`
+            );
+          }
+          return;
+        }
+
+        // 2) Fall back to JSON mode
+        if (key) {
+          const item = await getItem(key);
+          if (!item) return;
+          showModal(
+            item.longHtml ||
+              `<p><strong>${item.term || key}</strong></p><p>${item.gloss || ""}</p>`
+          );
+          return;
+        }
+
+        // 3) Nothing to load
+        console.warn("Clicked .ws without data-ws-doc or data-ws:", el);
       });
     });
   }
@@ -165,17 +285,14 @@
   function startObservers() {
     const docTarget = document.getElementById("doc-target");
 
-    // 1) Observe doc-target changes (tab loads replace content)
     if (docTarget) {
       const obs = new MutationObserver(() => bindWordStudies());
       obs.observe(docTarget, { childList: true, subtree: true });
     }
 
-    // 2) Observe body attribute changes (load-doc sets data-ws-json after load)
     const bodyObs = new MutationObserver(() => bindWordStudies());
     bodyObs.observe(document.body, { attributes: true, attributeFilter: ["data-ws-json"] });
 
-    // Try once immediately too
     bindWordStudies();
   }
 

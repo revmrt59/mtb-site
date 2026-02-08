@@ -1,7 +1,5 @@
-﻿[
-  {
-    "file": "test.html",
-    "title": "Why Study the Old Testament",
-    "description": "Nine Reasons Why We Should Study the Old Testament"
-  }
-]
+﻿{
+    "file":  "test.html",
+    "title":  "Title: Why Study the Old Testament",
+    "description":  "Description: Nine Reasons Why We Should Study the Old Testament"
+}

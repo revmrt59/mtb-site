@@ -75,7 +75,11 @@
     "malachi": "old-testament"
   };
 
+  // ==========================================
+  // DOC PARSING
+  // ==========================================
   function parseDocName(docName) {
+
     const intro = docName.match(/^([a-z0-9-]+)-0-book-introduction\.html$/);
     if (intro) return { book: intro[1], chapter: 0, type: "book-introduction" };
 
@@ -84,14 +88,11 @@
     );
     if (chap) return { book: chap[1], chapter: Number(chap[2]), type: "chapter-" + chap[3] };
 
-    const kwc = docName.match(/^([a-z0-9-]+)-(\d+)-key-words-and-concepts\.html$/);
-    if (kwc) return { book: kwc[1], chapter: Number(kwc[2]), type: "key-words-and-concepts" };
-
     const eg = docName.match(/^([a-z0-9-]+)-(\d+)-eg-culture\.html$/);
     if (eg) return { book: eg[1], chapter: Number(eg[2]), type: "eg-culture" };
 
-    const dd = docName.match(/^([a-z0-9-]+)-(\d+)-deeper-dive\.html$/);
-    if (dd) return { book: dd[1], chapter: Number(dd[2]), type: "deeper-dive" };
+    const res = docName.match(/^([a-z0-9-]+)-(\d+)-resources\.html$/);
+    if (res) return { book: res[1], chapter: Number(res[2]), type: "resources" };
 
     return { book: "", chapter: null, type: "" };
   }
@@ -102,6 +103,9 @@
     document.body.dataset.chapter = meta.chapter ? String(meta.chapter) : "";
   }
 
+  // ==========================================
+  // PATH BUILDING
+  // ==========================================
   function buildDocPath(docName) {
     const meta = parseDocName(docName);
     const testament = BOOK_TESTAMENT[meta.book] || "new-testament";
@@ -115,9 +119,8 @@
       chapter_orientation: "chapter-orientation",
       chapter_explanation: "chapter-explanation",
       chapter_insights: "chapter-insights",
-      key_words_and_concepts: "key-words-and-concepts",
       eg_culture: "eg-culture",
-      deeper_dive: "deeper-dive"
+      resources: "resources"
     };
     return map[tab] || "chapter-scripture";
   }
@@ -133,6 +136,9 @@
     return /^[a-z0-9\-]+-(0|\d+)-[a-z0-9\-]+\.html$/i.test(name) ? name : "";
   }
 
+  // ==========================================
+  // MOJIBAKE FIX
+  // ==========================================
   function fixMojibake(html) {
     const map = [
       ["ΓÇ£", "“"], ["ΓÇØ", "”"], ["ΓÇ¥", "”"],
@@ -141,13 +147,15 @@
       ["Â ", " "], ["Â", ""]
     ];
     let out = html;
-    map.forEach(([bad, good]) => { out = out.split(bad).join(good); });
+    map.forEach(([bad, good]) => {
+      out = out.split(bad).join(good);
+    });
     return out;
   }
 
-  // ----------------------------------------------------------
-  // Scripture toggle UI (built-in, cannot go missing)
-  // ----------------------------------------------------------
+  // ==========================================
+  // SCRIPTURE CONTROLS (UNCHANGED)
+  // ==========================================
   function removeScriptureControls() {
     const existing = document.querySelector(".scripture-controls");
     if (existing) existing.remove();
@@ -169,36 +177,35 @@
       b.type = "button";
       b.className = "sc-btn" + (extraClass ? " " + extraClass : "");
       b.textContent = label;
-      b.addEventListener("click", (e) => {
+      b.addEventListener("click", e => {
         e.preventDefault();
         onClick();
       });
       return b;
     }
 
-    const btnBoth = makeBtn("Both", () => {
-      document.body.classList.remove("hide-nkjv");
-      document.body.classList.remove("hide-nlt");
-    }, "sc-btn-reset");
+    bar.appendChild(makeBtn("Both", () => {
+      document.body.classList.remove("hide-nkjv", "hide-nlt");
+    }, "sc-btn-reset"));
 
-    const btnNKJV = makeBtn("NKJV Only", () => {
+    bar.appendChild(makeBtn("NKJV Only", () => {
       document.body.classList.remove("hide-nkjv");
       document.body.classList.add("hide-nlt");
-    });
+    }));
 
-    const btnNLT = makeBtn("NLT Only", () => {
+    bar.appendChild(makeBtn("NLT Only", () => {
       document.body.classList.add("hide-nkjv");
       document.body.classList.remove("hide-nlt");
-    });
-
-    bar.appendChild(btnBoth);
-    bar.appendChild(btnNKJV);
-    bar.appendChild(btnNLT);
+    }));
 
     target.parentNode.insertBefore(bar, target);
   }
 
+  // ==========================================
+  // MAIN LOAD
+  // ==========================================
   function loadCurrentDoc() {
+
     removeScriptureControls();
 
     const params = new URLSearchParams(window.location.search);

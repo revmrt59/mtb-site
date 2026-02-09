@@ -132,9 +132,8 @@ body[data-doc-type] .doc-shell {
   white-space: nowrap;
   max-width: 100%;
   overflow: hidden;
-  text-overflow: ellipsis; /* optional */
+  text-overflow: ellipsis;
 }
-
 
 /* If you have separate book/chapter selects by id or name */
 .hero .hero-controls #book-select,
@@ -229,7 +228,6 @@ body[data-doc-type] .doc-shell {
   max-width: 100%;
 }
 
-
 .hero-content .buttons a,
 .hero-content .button-row a,
 .hero-content .cta-buttons a,
@@ -300,29 +298,14 @@ body[data-doc-type] .doc-shell {
 
 .tabs {
   display: flex;
-  flex-wrap: nowrap;         /* keep on one line */
+  flex-wrap: nowrap;
   gap: 6px;
-  overflow-x: auto;          /* scroll if too many */
+  overflow-x: auto;
   padding-bottom: 8px;
 }
 
-.tabs button {
-  appearance: none;
-  border: 1px solid #dcdcdc;
-  background: #ffffff;
-  color: #333;
-  padding: 10px 14px;
-  border-radius: 10px;
-  font-size: 14px;
-  cursor: pointer;
-  white-space: nowrap;
-}
-
-.tabs button:hover {
-  background: #f7f7f7;
-}
-
-/* Base tab style (inactive) */
+/* Inactive tab buttons (default) */
+.tabs .tab-btn,
 .tabs button {
   appearance: none;
   border: 1px solid #dcdcdc;
@@ -330,22 +313,57 @@ body[data-doc-type] .doc-shell {
   color: #444;
   padding: 10px 14px;
   border-radius: 10px;
+  font-size: 14px;
   cursor: pointer;
   white-space: nowrap;
 }
 
-/* Hover state (only when NOT active) */
+/* Hover ONLY for inactive tabs */
+.tabs .tab-btn:not(.active):hover,
 .tabs button:not(.active):hover {
   background: #e9e9e9;
+  border-color: #cfcfcf;
 }
 
 /* Active tab */
-.tabs button.active {
+.tabs .tab-btn.active,
+.tabs button.active,
+.tabs .tab-btn.is-active,
+.tabs button.is-active {
   background: #3b6fb6;
   border-color: #3b6fb6;
   color: #ffffff;
 }
 
+/* Ensure hover/focus doesn't make multiple tabs look active */
+.tabs .tab-btn.active:hover,
+.tabs button.active:hover,
+.tabs .tab-btn.active:focus,
+.tabs button.active:focus,
+.tabs .tab-btn.is-active:hover,
+.tabs button.is-active:hover,
+.tabs .tab-btn.is-active:focus,
+.tabs button.is-active:focus {
+  background: #3b6fb6;
+  border-color: #3b6fb6;
+  color: #ffffff;
+}
+
+/* =========================================================
+   Chapter Scripture – Translation Toggle Buttons (single source of truth)
+========================================================= */
+
+.scripture-controls {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 12px;
+}
+
+.scripture-controls .sc-btn.is-active {
+  border-color: #3b6fb6;
+  background: #3b6fb6;
+  color: #ffffff;
+}
 
 /* =========================================================
    DOC LAYOUT (MAIN + RIGHT SIDEBAR)
@@ -361,6 +379,11 @@ body[data-doc-type] .doc-shell {
   .doc-layout {
     grid-template-columns: 1fr;
   }
+}
+
+/* Resources table links */
+.resource-table a {
+  text-decoration: underline;
 }
 
 /* =========================================================
@@ -430,23 +453,7 @@ body[data-doc-type] .doc-shell {
 }
 
 /* =========================================================
-   SCRIPTURE TOGGLE (tables only)
-========================================================= */
-
-body[data-doc-type="chapter-scripture"].hide-nkjv #doc-target th:nth-child(2),
-body[data-doc-type="chapter-scripture"].hide-nkjv #doc-target td:nth-child(2) {
-  display: none !important;
-}
-
-body[data-doc-type="chapter-scripture"].hide-nlt #doc-target th:nth-child(3),
-body[data-doc-type="chapter-scripture"].hide-nlt #doc-target td:nth-child(3) {
-  display: none !important;
-}
-
-/* =========================================================
    MTB Scripture Block (Word → HTML)
-   - Targets blocks wrapped by the pandoc Lua filter:
-     <div class="mtb-scripture-block"> ... </div>
 ========================================================= */
 
 #doc-target .mtb-scripture-block {
@@ -455,7 +462,6 @@ body[data-doc-type="chapter-scripture"].hide-nlt #doc-target td:nth-child(3) {
   background: #f7f9fc;
   border-left: 4px solid #3b6fb6;
   border-radius: 6px;
-
   font-size: 0.95rem;
   line-height: 1.6;
   color: #222;
@@ -485,4 +491,240 @@ body[data-doc-type="chapter-scripture"].hide-nlt #doc-target td:nth-child(3) {
   color: #666;
   text-align: right;
   font-style: italic;
+}
+
+/* =========================================================
+   ABOUT PAGE BUTTON ROW
+========================================================= */
+
+.about-nav {
+  display: block;
+  margin: 14px auto;
+  padding: 0 16px;
+  max-width: 1100px;
+  position: relative;
+  z-index: 5;
+}
+
+.about-nav-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.about-nav a {
+  display: inline-block;
+  padding: 10px 12px;
+  border: 1px solid #c9cdd3;
+  border-radius: 8px;
+  text-decoration: none;
+  color: inherit;
+  background: #f5f6f8;
+  line-height: 1.2;
+}
+
+.about-nav a:hover {
+  border-color: #3b6fb6;
+}
+
+.about-nav a:focus {
+  outline: 2px solid #3b6fb6;
+  outline-offset: 2px;
+}
+
+/* About buttons active state */
+.about-action.active,
+.about-action[aria-current="page"] {
+  border-color: #3b6fb6;
+  background: #3b6fb6;
+  color: #ffffff;
+}
+
+/* === Resources table links: force visibility === */
+.resource-table a {
+  color: #3b6fb6;
+  text-decoration: underline;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+/* NOTE: Word Study Modal styles are consolidated below.
+   Do not add overrides elsewhere. */
+
+/* === hover for word studies === */
+.ws {
+  cursor: help;
+  text-decoration: underline;
+  text-decoration-style: dotted;
+  text-underline-offset: 3px;
+}
+
+.ws-tooltip {
+  position: fixed;
+  z-index: 9999;
+  max-width: 320px;
+  padding: 10px 12px;
+  border: 1px solid rgba(0,0,0,.12);
+  border-radius: 10px;
+  background: #ffffff;
+  box-shadow: 0 10px 28px rgba(0,0,0,.18);
+  font-size: 14px;
+  line-height: 1.35;
+}
+
+/* =========================================================
+   WORD STUDY MODAL (single source of truth)
+========================================================= */
+
+.ws-modal {
+  position: fixed;
+  inset: 0;
+  z-index: 9998;
+}
+
+.ws-modal-backdrop {
+  position: absolute;
+  inset: 0;
+  background: rgba(0,0,0,.40);
+}
+
+.ws-modal-panel {
+  position: relative;
+  margin: 6vh auto;
+  width: min(920px, calc(100vw - 24px));
+  max-height: 88vh;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  background: #ffffff;
+  border-radius: 14px;
+  box-shadow: 0 16px 50px rgba(0,0,0,.30);
+}
+
+.ws-modal-header {
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  padding: 12px 12px;
+  background: #f5f5f5;
+  border-bottom: 1px solid #ddd;
+}
+
+.ws-modal-close {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 8px 12px;
+  margin: 0;
+  font-size: 14px;
+  line-height: 1.2;
+  background: #ffffff;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+.ws-modal-body {
+  overflow-y: auto;
+  padding: 16px;
+}
+/* =========================================================
+   ABOUT PAGE – RESTORE CENTERING + BLUE GUTTER
+   (scoped so nothing else is affected)
+========================================================= */
+
+body[data-page="about"] {
+  background: #f3f6fb;
+}
+
+body[data-page="about"] .doc-shell {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding-left: 32px;
+  padding-right: 32px;
+  background: #ffffff;
+  border-radius: 10px;
+  box-shadow: 0 10px 24px rgba(0,0,0,0.08);
+}
+/* =========================================================
+   ABOUT PAGE – RESTORE CENTERING + BLUE/GRAY GUTTER
+   (detect About page by About UI elements)
+========================================================= */
+
+body:has(#about-tabs),
+body:has(.about-nav) {
+  background: #f3f6fb;
+}
+
+body:has(#about-tabs) .doc-shell,
+body:has(.about-nav) .doc-shell {
+  background: #ffffff;
+  border-radius: 10px;
+  box-shadow: 0 10px 24px rgba(0,0,0,0.08);
+  max-width: 1200px;
+  margin: 0 auto;
+  padding-left: 32px;
+  padding-right: 32px;
+}
+/* =========================================================
+   ABOUT PAGE – FORCE CENTERED CONTENT CONTAINER
+   (this fixes left-edge alignment issue)
+========================================================= */
+
+/* Detect About page */
+body:has(#about-tabs),
+body:has(.about-nav) {
+  background: #f3f6fb;
+}
+
+/* Center the actual About content */
+body:has(#about-tabs) main,
+body:has(.about-nav) main {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding-left: 32px;
+  padding-right: 32px;
+}
+
+/* Give the white card look */
+body:has(#about-tabs) main > section,
+body:has(.about-nav) main > section {
+  background: #ffffff;
+  border-radius: 10px;
+  box-shadow: 0 10px 24px rgba(0,0,0,0.08);
+  padding: 32px;
+}
+/* =========================================================
+   ABOUT PAGE – WHITE CARD WRAP
+   (keeps gutters blue, content on white)
+========================================================= */
+
+body:has(#about-tabs) main,
+body:has(.about-nav) main {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 32px;
+}
+
+/* Make the MAIN itself the white card */
+body:has(#about-tabs) main,
+body:has(.about-nav) main {
+  background: #ffffff;
+  border-radius: 10px;
+  box-shadow: 0 10px 24px rgba(0,0,0,0.08);
+  padding: 32px;
+}
+
+/* Keep spacing consistent around the card */
+body:has(#about-tabs) main {
+  margin-top: 36px;
+  margin-bottom: 64px;
+}
+
+body:has(.about-nav) main {
+  margin-top: 36px;
+  margin-bottom: 64px;
 }

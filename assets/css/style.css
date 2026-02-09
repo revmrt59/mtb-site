@@ -728,3 +728,220 @@ body:has(.about-nav) main {
   margin-top: 36px;
   margin-bottom: 64px;
 }
+/* =========================================================
+   CHAPTER SCRIPTURE PAGE – LAYOUT (WIDE COLUMNS + BLUE GUTTERS)
+   Scope: only pages that render the scripture toggle controls.
+   Safe: does not affect About, Resources, or other doc tabs.
+========================================================= */
+
+/* Make the scripture view full-width by removing the sidebar only on scripture pages */
+body:has(.scripture-controls) .doc-layout {
+  grid-template-columns: 1fr;
+}
+
+/* Give the whole scripture page the “blue gutter” look */
+body:has(.scripture-controls) {
+  background: #f3f6fb;
+}
+
+/* Keep the main content in a centered white card */
+body:has(.scripture-controls) .doc-shell {
+  background: #ffffff;
+  border-radius: 10px;
+  box-shadow: 0 10px 24px rgba(0,0,0,0.08);
+}
+
+/* Add a soft blue “pad” around the scripture table area (inside the white card) */
+body:has(.scripture-controls) #doc-target {
+  background: #f3f6fb;
+  border-radius: 10px;
+  padding: 18px;
+}
+
+/* Scripture table sizing + column spacing */
+body:has(.scripture-controls) #doc-target table.mtb-scripture-table,
+body:has(.scripture-controls) #doc-target table[data-mode] {
+  width: 100%;
+  table-layout: fixed;          /* forces usable column widths */
+  border-collapse: separate;
+  border-spacing: 16px 0;       /* space between NKJV and NLT columns */
+  background: transparent;
+}
+
+/* Default text size (adjust to taste) */
+body:has(.scripture-controls) #doc-target table.mtb-scripture-table td,
+body:has(.scripture-controls) #doc-target table.mtb-scripture-table th {
+  font-size: 17px;
+  line-height: 1.55;
+}
+
+/* Verse-number column: narrow and right-aligned */
+body:has(.scripture-controls) #doc-target table.mtb-scripture-table th:first-child,
+body:has(.scripture-controls) #doc-target table.mtb-scripture-table td:first-child {
+  width: 64px;
+  text-align: right;
+  color: #666;
+  padding-right: 10px;
+  font-size: 15px;
+}
+
+/* Translation cells: white “cards” */
+body:has(.scripture-controls) #doc-target table.mtb-scripture-table th:nth-child(2),
+body:has(.scripture-controls) #doc-target table.mtb-scripture-table td:nth-child(2),
+body:has(.scripture-controls) #doc-target table.mtb-scripture-table th:nth-child(3),
+body:has(.scripture-controls) #doc-target table.mtb-scripture-table td:nth-child(3) {
+  background: #ffffff;
+  border: 1px solid #e3e7ef;
+  border-radius: 10px;
+  padding: 10px 14px;
+  vertical-align: top;
+}
+
+/* Visible divider / separation when BOTH translations are shown */
+body:has(.scripture-controls) #doc-target table[data-mode="both"] th:nth-child(2),
+body:has(.scripture-controls) #doc-target table[data-mode="both"] td:nth-child(2) {
+  box-shadow: 6px 0 0 0 #f3f6fb; /* creates a clean gutter edge */
+}
+
+/* When only one translation is visible, let it “feel” full width */
+body:has(.scripture-controls) #doc-target table[data-mode="nkjv"] td:nth-child(2),
+body:has(.scripture-controls) #doc-target table[data-mode="nlt"] td:nth-child(3) {
+  padding-left: 16px;
+  padding-right: 16px;
+}
+
+/* Scripture controls bar spacing */
+body:has(.scripture-controls) .scripture-controls {
+  margin-bottom: 14px;
+}
+/* =========================================================
+   CHAPTER SCRIPTURE – GAP + FULL-WIDTH SINGLE TRANSLATION
+   (Overrides earlier scripture table rules)
+========================================================= */
+
+/* In Both mode: create a real gutter + divider */
+body:has(.scripture-controls) #doc-target table.mtb-scripture-table[data-mode="both"] td:nth-child(2),
+body:has(.scripture-controls) #doc-target table.mtb-scripture-table[data-mode="both"] th:nth-child(2) {
+  padding-right: 26px !important;          /* space on right of NKJV */
+  border-right: 2px solid #e0e6f2 !important; /* visible divider */
+}
+
+body:has(.scripture-controls) #doc-target table.mtb-scripture-table[data-mode="both"] td:nth-child(3),
+body:has(.scripture-controls) #doc-target table.mtb-scripture-table[data-mode="both"] th:nth-child(3) {
+  padding-left: 26px !important;           /* space on left of NLT */
+}
+
+/* Make sure the table can actually expand */
+body:has(.scripture-controls) #doc-target table.mtb-scripture-table {
+  width: 100% !important;
+  table-layout: auto !important;  /* lets colspan work naturally */
+  border-collapse: separate !important;
+}
+/* =========================================================
+   CHAPTER SCRIPTURE – WIDER + BLUE GUTTERS + REAL GAP
+   Triggers only when the scripture controls bar exists.
+========================================================= */
+
+/* Full-width scripture view (no sidebar squeeze) */
+body:has(.scripture-controls) .doc-layout {
+  grid-template-columns: 1fr;
+}
+
+/* Blue/gray gutters outside */
+body:has(.scripture-controls) {
+  background: #f3f6fb;
+}
+
+/* Blue pad around the table (inside the white shell) */
+body:has(.scripture-controls) #doc-target {
+  background: #f3f6fb;
+  border-radius: 10px;
+  padding: 18px;
+}
+
+/* Let the table reflow (so colspan expands to full combined width) */
+body:has(.scripture-controls) #doc-target table {
+  width: 100% !important;
+  table-layout: auto !important;
+  border-collapse: separate !important;
+  border-spacing: 0 !important;
+}
+
+/* Both-mode: create real gap + divider */
+body:has(.scripture-controls) #doc-target table[data-mode="both"] td:nth-child(2),
+body:has(.scripture-controls) #doc-target table[data-mode="both"] th:nth-child(2) {
+  padding-right: 28px !important;
+  border-right: 2px solid #d6deee !important;
+}
+
+body:has(.scripture-controls) #doc-target table[data-mode="both"] td:nth-child(3),
+body:has(.scripture-controls) #doc-target table[data-mode="both"] th:nth-child(3) {
+  padding-left: 28px !important;
+}
+/* =========================================================
+   CHAPTER SCRIPTURE – WIDE LAYOUT + BLUE GUTTERS + COLUMN GAP
+   Trigger: body.mtb-has-scripture-controls (set by scripture-controls.js)
+========================================================= */
+
+body.mtb-has-scripture-controls {
+  background: #f3f6fb;
+}
+
+body.mtb-has-scripture-controls .doc-layout {
+  grid-template-columns: 1fr;
+}
+
+body.mtb-has-scripture-controls #doc-target {
+  background: #f3f6fb;
+  border-radius: 10px;
+  padding: 18px;
+}
+
+/* Table must be allowed to reflow for colspan to work */
+body.mtb-has-scripture-controls #doc-target table.mtb-scripture-table {
+  width: 100% !important;
+  table-layout: auto !important;
+  border-collapse: separate !important;
+  border-spacing: 0 !important;
+}
+
+/* Make translation columns feel like separate panels */
+body.mtb-has-scripture-controls #doc-target table.mtb-scripture-table th:nth-child(2),
+body.mtb-has-scripture-controls #doc-target table.mtb-scripture-table td:nth-child(2),
+body.mtb-has-scripture-controls #doc-target table.mtb-scripture-table th:nth-child(3),
+body.mtb-has-scripture-controls #doc-target table.mtb-scripture-table td:nth-child(3) {
+  background: #ffffff;
+  border: 1px solid #e3e7ef;
+  border-radius: 10px;
+  padding: 10px 14px;
+  vertical-align: top;
+}
+
+/* Gap + divider when both columns are present */
+body.mtb-has-scripture-controls #doc-target table.mtb-scripture-table[data-mode="both"] th:nth-child(2),
+body.mtb-has-scripture-controls #doc-target table.mtb-scripture-table[data-mode="both"] td:nth-child(2) {
+  padding-right: 28px !important;
+  border-right: 2px solid #d6deee !important;
+}
+
+body.mtb-has-scripture-controls #doc-target table.mtb-scripture-table[data-mode="both"] th:nth-child(3),
+body.mtb-has-scripture-controls #doc-target table.mtb-scripture-table[data-mode="both"] td:nth-child(3) {
+  padding-left: 28px !important;
+}
+
+/* Verse number column */
+body.mtb-has-scripture-controls #doc-target table.mtb-scripture-table th:first-child,
+body.mtb-has-scripture-controls #doc-target table.mtb-scripture-table td:first-child {
+  width: 64px;
+  text-align: right;
+  color: #666;
+  padding-right: 10px;
+  font-size: 15px;
+}
+
+/* Slightly larger scripture text */
+body.mtb-has-scripture-controls #doc-target table.mtb-scripture-table td,
+body.mtb-has-scripture-controls #doc-target table.mtb-scripture-table th {
+  font-size: 17px;
+  line-height: 1.55;
+}

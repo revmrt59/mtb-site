@@ -195,13 +195,21 @@ end
 function Convert-DocxToHtmlFragment([string]$docxPath, [string]$siteRoot) {
   $filterPath = Ensure-MtbPandocFilter $siteRoot
 
-  # IMPORTANT: docx+styles is required, otherwise Word styles are lost.
-  # --wrap=none produces fragment HTML for your loader.
-  Write-Host ("RUN  pandoc `"$docxPath`" -f docx+styles -t html5 --wrap=none --lua-filter=`"$filterPath`"") -ForegroundColor DarkGray
+  # Write to a temp file so PowerShell never decodes pandoc stdout incorrectly
+  $tmp = [System.IO.Path]::ChangeExtension([System.IO.Path]::GetTempFileName(), ".html")
 
-  $html = & pandoc $docxPath -f docx+styles -t html5 --wrap=none --lua-filter="$filterPath"
+  Write-Host ("RUN  pandoc `"$docxPath`" -f docx+styles -t html5 --wrap=none --lua-filter=`"$filterPath`" -o `"$tmp`"") -ForegroundColor DarkGray
+
+  & pandoc $docxPath -f docx+styles -t html5 --wrap=none --lua-filter="$filterPath" -o $tmp | Out-Null
+
+  if (-not (Test-Path $tmp)) { throw "Pandoc did not produce output file." }
+
+  $html = Get-Content -Path $tmp -Raw -Encoding UTF8
+  Remove-Item $tmp -ErrorAction SilentlyContinue
+
   return $html
 }
+
 
 function Wrap-InDocRoot([string]$innerHtml) {
   return "<div id=`"doc-root`">`n$innerHtml`n</div>`n"
@@ -360,7 +368,8 @@ Get-ChildItem $resourcesDir -Filter *.html -File |
   Where-Object { $_.Name -notin @("index.html", "view.html") } |
   Sort-Object Name |
   ForEach-Object {
-    $html = Get-Content $_.FullName -Raw
+    $html = Get-Content $_.FullName -Raw -Encoding UTF8
+
     $meta = Get-FirstTwoBlocks $html
     $items += [pscustomobject]@{
       file = $_.Name

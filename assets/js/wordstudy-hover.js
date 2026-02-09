@@ -104,6 +104,7 @@ modalEl.innerHTML = `
 
     const data = await res.json();
     cache = { ...data, __loaded: true };
+
     return cache;
   }
 
@@ -177,6 +178,17 @@ function extractSummaryFromHtml(fullHtml) {
   return null;
 }
 
+function fixMojibake(html) {
+  const map = [
+    ["ΓÇ£", "“"], ["ΓÇØ", "”"], ["ΓÇ¥", "”"],
+    ["ΓÇÿ", "‘"], ["ΓÇÖ", "’"], ["ΓÇª", "…"],
+    ["ΓÇô", "—"], ["ΓÇû", "–"],
+    ["Â ", " "], ["Â", ""]
+  ];
+  let out = html;
+  map.forEach(([bad, good]) => { out = out.split(bad).join(good); });
+  return out;
+}
 
 
   async function loadDocHtml(docUrl) {
@@ -188,12 +200,14 @@ function extractSummaryFromHtml(fullHtml) {
     const res = await fetch(url, { cache: "no-store" });
     if (!res.ok) throw new Error(`Failed to load word study file: ${url}`);
 
-    const html = await res.text();
-    const bodyHtml = extractDocBodyHtml(html);
+const html = await res.text();
+const bodyHtml = extractDocBodyHtml(html);
+const cleaned = fixMojibake(bodyHtml);
 
-    
-    return bodyHtml;
-  }
+docCache.set(url, cleaned);
+return cleaned;
+}
+
 
   function getDocUrlFromEl(el) {
     // Prefer explicit doc pointer

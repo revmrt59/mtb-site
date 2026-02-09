@@ -157,51 +157,80 @@
   // WORD STUDY MARKERS (CHAPTER EXPLANATION)
   // Turns: pride (H2087) into <span class="ws" data-ws="H2087">pride</span>
   // ==========================================
-  function enhanceStrongMarkersToWordStudies(rootEl) {
-    if (!rootEl) return;
+function enhanceStrongMarkersToWordStudies(rootEl, meta, docPath) {
+  if (!rootEl) return;
 
-    // Matches: word (G####) or word (H####)
-    const re = /(\b[\w’'-]+\b)\s*\((G\d{3,5}|H\d{3,5})\)/g;
+  // Matches: word (G####) or word (H####)
+  const re = /(\b[\w’'-]+\b)\s*\((G\d{3,5}|H\d{3,5})\)/g;
 
-    const walker = document.createTreeWalker(rootEl, NodeFilter.SHOW_TEXT, null);
-    const textNodes = [];
-    while (walker.nextNode()) textNodes.push(walker.currentNode);
+  const baseDir = docPath ? docPath.slice(0, docPath.lastIndexOf("/") + 1) : "";
 
-    textNodes.forEach((node) => {
-      const text = node.nodeValue;
-      if (!text) return;
-
-      re.lastIndex = 0;
-      if (!re.test(text)) return;
-      re.lastIndex = 0;
-
-      const frag = document.createDocumentFragment();
-      let last = 0;
-      let m;
-
-      while ((m = re.exec(text)) !== null) {
-        const full = m[0];
-        const word = m[1];
-        const strong = m[2];
-        const start = m.index;
-
-        if (start > last) frag.appendChild(document.createTextNode(text.slice(last, start)));
-
-        const span = document.createElement("span");
-        span.className = "ws";
-        span.setAttribute("data-ws", strong);
-        span.textContent = word;
-        frag.appendChild(span);
-
-        // Marker is removed from display here (clean reading)
-        last = start + full.length;
-      }
-
-      if (last < text.length) frag.appendChild(document.createTextNode(text.slice(last)));
-
-      node.parentNode.replaceChild(frag, node);
-    });
+  function slugify(s) {
+    return (s || "")
+      .toLowerCase()
+      .replace(/[’']/g, "")          // remove apostrophes
+      .replace(/[^a-z0-9]+/g, "-")   // non-alphanum -> dash
+      .replace(/^-+|-+$/g, "");      // trim dashes
   }
+
+  function buildWsDocPath(word, strong) {
+    if (!meta || !meta.book || !meta.chapter || !baseDir) return null;
+
+    // Match your generated file: obadiah-1-h1347-pride.html
+    const strongLower = String(strong).toLowerCase();     // H1347 -> h1347
+    const wordSlug = slugify(word);
+
+    // If wordSlug is empty, don’t emit a doc pointer
+    if (!wordSlug) return null;
+
+    return `${baseDir}${meta.book}-${meta.chapter}-${strongLower}-${wordSlug}.html`;
+  }
+
+  const walker = document.createTreeWalker(rootEl, NodeFilter.SHOW_TEXT, null);
+  const textNodes = [];
+  while (walker.nextNode()) textNodes.push(walker.currentNode);
+
+  textNodes.forEach((node) => {
+    const text = node.nodeValue;
+    if (!text) return;
+
+    re.lastIndex = 0;
+    if (!re.test(text)) return;
+    re.lastIndex = 0;
+
+    const frag = document.createDocumentFragment();
+    let last = 0;
+    let m;
+
+    while ((m = re.exec(text)) !== null) {
+      const full = m[0];
+      const word = m[1];
+      const strong = m[2];
+      const start = m.index;
+
+      if (start > last) frag.appendChild(document.createTextNode(text.slice(last, start)));
+
+      const span = document.createElement("span");
+      span.className = "ws";
+      span.setAttribute("data-ws", strong);
+      span.textContent = word;
+
+      // NEW: attach HTML doc pointer (canonical source)
+      const wsDoc = buildWsDocPath(word, strong);
+      if (wsDoc) span.setAttribute("data-ws-doc", wsDoc);
+
+      frag.appendChild(span);
+
+      // remove marker from display
+      last = start + full.length;
+    }
+
+    if (last < text.length) frag.appendChild(document.createTextNode(text.slice(last)));
+
+    node.parentNode.replaceChild(frag, node);
+  });
+}
+
 
   // ==========================================
   // SCRIPTURE CONTROLS (UPDATED: ACTIVE BUTTON + DIRECT COLUMN TOGGLE)
@@ -322,6 +351,18 @@
         if (!target) return;
 
         target.innerHTML = fixMojibake(content);
+        // ----------------------------------------------------------
+// Re-bind Word Study hover + popup AFTER content injection
+// ----------------------------------------------------------
+try {
+  if (window.MTBWordStudyHover && typeof window.MTBWordStudyHover.bind === "function") {
+    window.MTBWordStudyHover.bind(target);
+  }
+} catch (e) {
+  console.warn("MTBWordStudyHover bind failed:", e);
+}
+
+
 
         // ----------------------------------------------------------
         // Chapter Explanation: convert "word (G####/H####)" markers + set JSON path
@@ -333,7 +374,8 @@
 
         if (isExplanation) {
           // Convert: pride (H2087) -> <span class="ws" data-ws="H2087">pride</span>
-          enhanceStrongMarkersToWordStudies(target);
+          enhanceStrongMarkersToWordStudies(target, meta, docPath);
+
 
           // Build JSON path in the SAME folder as the loaded doc
           const wsJsonName = docName

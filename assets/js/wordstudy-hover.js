@@ -145,27 +145,45 @@ function extractSummaryFromHtml(fullHtml) {
   const temp = document.createElement("div");
   temp.innerHTML = fullHtml;
 
-  // Primary: <h2 id="summary">Summary</h2> followed by a <p>
   const h = temp.querySelector("h2#summary");
-  if (h) {
-    let n = h.nextElementSibling;
-    while (n) {
-      const text = (n.textContent || "").trim();
-      if (n.tagName === "P" && text.length > 0) return text;
-      if (text.length > 0) break;
-      n = n.nextElementSibling;
+  if (!h) return null;
+
+  // Look forward for the first non-empty paragraph,
+  // either as a sibling <p> OR a <p> inside a wrapper.
+  let n = h.nextElementSibling;
+  while (n) {
+    // direct <p>
+    if (n.tagName === "P") {
+      const t = (n.textContent || "").trim();
+      if (t) return t;
     }
+
+    // wrapper that contains a <p>
+    if (n.querySelector) {
+      const p = n.querySelector("p");
+      if (p) {
+        const t = (p.textContent || "").trim();
+        if (t) return t;
+      }
+    }
+
+    // stop once we hit meaningful content that isn't summary-paragraph-ish
+    const text = (n.textContent || "").trim();
+    if (text.length > 0) break;
+
+    n = n.nextElementSibling;
   }
 
   return null;
 }
 
 
+
   async function loadDocHtml(docUrl) {
     const url = resolveDocUrl(docUrl);
     if (!url) return null;
 
-    if (docCache.has(url)) return docCache.get(url);
+    
 
     const res = await fetch(url, { cache: "no-store" });
     if (!res.ok) throw new Error(`Failed to load word study file: ${url}`);
@@ -173,7 +191,7 @@ function extractSummaryFromHtml(fullHtml) {
     const html = await res.text();
     const bodyHtml = extractDocBodyHtml(html);
 
-    docCache.set(url, bodyHtml);
+    
     return bodyHtml;
   }
 
@@ -205,6 +223,20 @@ function extractSummaryFromHtml(fullHtml) {
 
 el.addEventListener("mouseenter", (e) => {
   hoverTimer = window.setTimeout(async () => {
+
+    // 1) Prefer HTML doc mode when present
+    if (docUrl) {
+      try {
+        const html = await loadDocHtml(docUrl);
+        const summary = extractSummaryFromHtml(html);
+        showTooltip(summary || "Click for word study", e.clientX, e.clientY);
+      } catch {
+        showTooltip("Click for word study", e.clientX, e.clientY);
+      }
+      return;
+    }
+
+    // 2) Fall back to JSON
     if (key) {
       const item = await getItem(key);
       if (item && item.short) {
@@ -213,24 +245,9 @@ el.addEventListener("mouseenter", (e) => {
       }
     }
 
-if (docUrl) {
-  try {
-    const html = await loadDocHtml(docUrl);
-    const summary = extractSummaryFromHtml(html);
-
-    if (summary) {
-      showTooltip(summary, e.clientX, e.clientY);
-    } else {
-      showTooltip("Click for word study", e.clientX, e.clientY);
-    }
-  } catch {
-    showTooltip("Click for word study", e.clientX, e.clientY);
-  }
-  return;
-}
-
   }, 150);
 });
+
 
 
       el.addEventListener("mousemove", async (e) => {

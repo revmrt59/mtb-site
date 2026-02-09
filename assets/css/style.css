@@ -631,3 +631,100 @@ body[data-doc-type] .doc-shell {
   overflow-y: auto;
   padding: 16px;
 }
+/* =========================================================
+   ABOUT PAGE – RESTORE CENTERING + BLUE GUTTER
+   (scoped so nothing else is affected)
+========================================================= */
+
+body[data-page="about"] {
+  background: #f3f6fb;
+}
+
+body[data-page="about"] .doc-shell {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding-left: 32px;
+  padding-right: 32px;
+  background: #ffffff;
+  border-radius: 10px;
+  box-shadow: 0 10px 24px rgba(0,0,0,0.08);
+}
+/* =========================================================
+   ABOUT PAGE – RESTORE CENTERING + BLUE/GRAY GUTTER
+   (detect About page by About UI elements)
+========================================================= */
+
+body:has(#about-tabs),
+body:has(.about-nav) {
+  background: #f3f6fb;
+}
+
+body:has(#about-tabs) .doc-shell,
+body:has(.about-nav) .doc-shell {
+  background: #ffffff;
+  border-radius: 10px;
+  box-shadow: 0 10px 24px rgba(0,0,0,0.08);
+  max-width: 1200px;
+  margin: 0 auto;
+  padding-left: 32px;
+  padding-right: 32px;
+}
+/* =========================================================
+   ABOUT PAGE – FORCE CENTERED CONTENT CONTAINER
+   (this fixes left-edge alignment issue)
+========================================================= */
+
+/* Detect About page */
+body:has(#about-tabs),
+body:has(.about-nav) {
+  background: #f3f6fb;
+}
+
+/* Center the actual About content */
+body:has(#about-tabs) main,
+body:has(.about-nav) main {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding-left: 32px;
+  padding-right: 32px;
+}
+
+/* Give the white card look */
+body:has(#about-tabs) main > section,
+body:has(.about-nav) main > section {
+  background: #ffffff;
+  border-radius: 10px;
+  box-shadow: 0 10px 24px rgba(0,0,0,0.08);
+  padding: 32px;
+}
+/* =========================================================
+   ABOUT PAGE – WHITE CARD WRAP
+   (keeps gutters blue, content on white)
+========================================================= */
+
+body:has(#about-tabs) main,
+body:has(.about-nav) main {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 32px;
+}
+
+/* Make the MAIN itself the white card */
+body:has(#about-tabs) main,
+body:has(.about-nav) main {
+  background: #ffffff;
+  border-radius: 10px;
+  box-shadow: 0 10px 24px rgba(0,0,0,0.08);
+  padding: 32px;
+}
+
+/* Keep spacing consistent around the card */
+body:has(#about-tabs) main {
+  margin-top: 36px;
+  margin-bottom: 64px;
+}
+
+body:has(.about-nav) main {
+  margin-top: 36px;
+  margin-bottom: 64px;
+}

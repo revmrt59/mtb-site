@@ -945,3 +945,25 @@ body.mtb-has-scripture-controls #doc-target table.mtb-scripture-table th {
   font-size: 17px;
   line-height: 1.55;
 }
+/* =========================================================
+   CHAPTER SCRIPTURE – TIGHTER HEADER ROW (NKJV / NLT)
+========================================================= */
+
+body.mtb-has-scripture-controls
+#doc-target
+table.mtb-scripture-table thead th {
+  padding-top: 1px !important;
+  padding-bottom: 1px !important;
+  font-size: 12px;          /* slightly smaller than body text */
+  line-height: 0.2;
+}
+
+/* Reduce visual height caused by rounded cards on header only */
+body.mtb-has-scripture-controls
+#doc-target
+table.mtb-scripture-table thead th:nth-child(2),
+body.mtb-has-scripture-controls
+#doc-target
+table.mtb-scripture-table thead th:nth-child(3) {
+  border-radius: 8px;
+}

@@ -54,12 +54,10 @@ end
 local function block_is_scripture(b)
   if not b then return false end
 
-  -- Case 1: block itself carries custom-style=MTB Scripture (common: Div in docx+styles)
   if is_scripture_style_name(get_custom_style(b)) then
     return true
   end
 
-  -- Case 2: Para/Plain contains an inline marker somewhere
   if (b.t == "Para" or b.t == "Plain") and b.content then
     for _, inl in ipairs(b.content) do
       if inline_contains_scripture(inl) then return true end

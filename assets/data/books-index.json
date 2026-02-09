@@ -1,0 +1,20 @@
+﻿[
+    {
+        "slug":  "3-john",
+        "name":  "3 John",
+        "testament":  "new-testament",
+        "hasBookIntroduction":  true,
+        "chapters":  1,
+        "generatedCount":  8,
+        "hasAnyGenerated":  true
+    },
+    {
+        "slug":  "obadiah",
+        "name":  "Obadiah",
+        "testament":  "old-testament",
+        "hasBookIntroduction":  true,
+        "chapters":  1,
+        "generatedCount":  15,
+        "hasAnyGenerated":  true
+    }
+]

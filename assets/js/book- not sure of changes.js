@@ -35,7 +35,7 @@
     "2-thessalonians": "new-testament",
     "1-timothy": "new-testament",
     "2-timothy": "new-testament",
-    "titus-disabled": "new-testament",
+    "titus": "new-testament",
     "philemon": "new-testament",
     "hebrews": "new-testament",
     "james": "new-testament",

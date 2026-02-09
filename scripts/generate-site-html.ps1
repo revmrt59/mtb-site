@@ -3,34 +3,22 @@
 # One script for: BOOKS, ABOUT, RESOURCES
 #
 # Requires: pandoc on PATH
+# PowerShell: Windows PowerShell 5.1 compatible
 # =========================================================
-#
-# Locked behavior (MTB):
-# - Converts every .docx in SRC_ROOT into an HTML fragment (no full HTML wrapper)
-# - Preserves Word custom styles via: -f docx+styles
-# - Wraps consecutive Scripture paragraphs styled "MTB Scripture" (or "MTB Scripture Block")
-#   into: <div class="mtb-scripture-block"> ... </div>
-# - Strips custom-style attributes so style names never appear in the HTML
-# - Wraps final output in: <div id="doc-root"> ... </div>
-#
-# Modes:
-# - BOOK: outputs to mtb-site\books\<testament>\<book-slug>\generated\
-# - ABOUT: outputs to mtb-site\about\
-# - RESOURCES: outputs to mtb-site\resources\
-#
-# NOTE: This script does NOT build resources.json yet. That is a separate step we can add next.
 
 # -----------------------------
-# EDIT THESE CONSTANTS (OPTIONAL)
+# EDIT THESE CONSTANTS (ONCE)
 # -----------------------------
 
 # Your website repo root (folder that contains index.html, book.html, assets, books, about, resources)
 $SITE_ROOT = "C:\Users\Mike\Documents\MTB\GitHub\mtb-site"
 
-# Default source folders (optional convenience)
-$DEFAULT_BOOK_SRC      = "C:\Users\Mike\Documents\MTB\mtb-source\source\books\old-testament\obadiah"
-$DEFAULT_ABOUT_SRC     = "C:\Users\Mike\Documents\MTB\mtb-source\source\about"
-$DEFAULT_RESOURCES_SRC = "C:\Users\Mike\Documents\MTB\mtb-source\source\resources"
+# MTB source root (folder that contains: books\old-testament\..., books\new-testament\..., about, resources)
+$MTB_SOURCE_ROOT = "C:\Users\Mike\Documents\MTB\mtb-source\source"
+
+# Standard source folders
+$DEFAULT_ABOUT_SRC     = Join-Path $MTB_SOURCE_ROOT "about"
+$DEFAULT_RESOURCES_SRC = Join-Path $MTB_SOURCE_ROOT "resources"
 
 # -----------------------------
 # END CONSTANTS
@@ -72,22 +60,33 @@ function Ask-YesNo([string]$q) {
   }
 }
 
+# Canonical site slug: "3John" -> "3-john", "1 Corinthians" -> "1-corinthians"
 function Slugify([string]$s) {
+  if ([string]::IsNullOrWhiteSpace($s)) { return "" }
+
   $s = $s.Trim().ToLowerInvariant()
+
+  # Convert "3John" -> "3 John", "1Peter" -> "1 Peter" so we get proper hyphens later
+  $s = $s -replace '^(\d+)([a-z])', '$1 $2'
+
+  # Normalize whitespace to hyphens
   $s = $s -replace '\s+', '-'
+
+  # Remove everything except a-z, 0-9, and hyphen
   $s = $s -replace '[^a-z0-9\-]', ''
+
+  # Collapse multiple hyphens
   $s = $s -replace '\-+', '-'
+
   return $s
 }
 
 function Ensure-MtbPandocFilter([string]$siteRoot) {
-  # Keep the filter in one stable location inside the site repo
   $toolsDir = Join-Path $siteRoot "_tools\pandoc"
   $filterPath = Join-Path $toolsDir "mtb-styles.lua"
 
   Ensure-Folder $toolsDir
 
-  # Robust scripture wrapper: works when pandoc attaches custom-style to Para/Plain OR Div.
   $lua = @'
 -- MTB Scripture Block wrapper (robust)
 -- Requires pandoc input: docx+styles
@@ -145,12 +144,10 @@ end
 local function block_is_scripture(b)
   if not b then return false end
 
-  -- Case 1: block itself carries custom-style=MTB Scripture (common: Div in docx+styles)
   if is_scripture_style_name(get_custom_style(b)) then
     return true
   end
 
-  -- Case 2: Para/Plain contains an inline marker somewhere
   if (b.t == "Para" or b.t == "Plain") and b.content then
     for _, inl in ipairs(b.content) do
       if inline_contains_scripture(inl) then return true end
@@ -194,33 +191,71 @@ end
 
 function Convert-DocxToHtmlFragment([string]$docxPath, [string]$siteRoot) {
   $filterPath = Ensure-MtbPandocFilter $siteRoot
-
-  # Write to a temp file so PowerShell never decodes pandoc stdout incorrectly
   $tmp = [System.IO.Path]::ChangeExtension([System.IO.Path]::GetTempFileName(), ".html")
 
   Write-Host ("RUN  pandoc `"$docxPath`" -f docx+styles -t html5 --wrap=none --lua-filter=`"$filterPath`" -o `"$tmp`"") -ForegroundColor DarkGray
-
   & pandoc $docxPath -f docx+styles -t html5 --wrap=none --lua-filter="$filterPath" -o $tmp | Out-Null
 
   if (-not (Test-Path $tmp)) { throw "Pandoc did not produce output file." }
 
   $html = Get-Content -Path $tmp -Raw -Encoding UTF8
   Remove-Item $tmp -ErrorAction SilentlyContinue
-
   return $html
 }
-
 
 function Wrap-InDocRoot([string]$innerHtml) {
   return "<div id=`"doc-root`">`n$innerHtml`n</div>`n"
 }
 
+# Resolve source folder using BOTH:
+#   canonical slug: 3-john
+#   source style:   3john / 1corinthians / etc. (matches 3John / 1Corinthians folders)
+function Resolve-BookSource([string]$bookSlug, [string]$rawBookInput, [ref]$testamentOut) {
+  $booksBase = Join-Path $MTB_SOURCE_ROOT "books"
+
+  $rawSafe = ""
+  if ($null -ne $rawBookInput) { $rawSafe = $rawBookInput }
+  $rawSafe = $rawSafe.Trim()
+
+  $candidates = @()
+
+  if (-not [string]::IsNullOrWhiteSpace($bookSlug)) {
+    $candidates += $bookSlug
+    $candidates += ($bookSlug -replace "-", "")
+  }
+
+  if (-not [string]::IsNullOrWhiteSpace($rawSafe)) {
+    $rawNorm = $rawSafe
+    $rawNorm = $rawNorm -replace "\s+", ""
+    $rawNorm = $rawNorm -replace "-", ""
+    $rawNorm = $rawNorm -replace "[^A-Za-z0-9]", ""
+    if (-not [string]::IsNullOrWhiteSpace($rawNorm)) {
+      $candidates += $rawNorm
+      $candidates += $rawNorm.ToLowerInvariant()
+    }
+  }
+
+  $candidates = $candidates | Select-Object -Unique
+
+  foreach ($cand in $candidates) {
+    $ot = Join-Path $booksBase ("old-testament\{0}" -f $cand)
+    $nt = Join-Path $booksBase ("new-testament\{0}" -f $cand)
+
+    if (Test-Path $ot) { $testamentOut.Value = "old-testament"; return $ot }
+    if (Test-Path $nt) { $testamentOut.Value = "new-testament"; return $nt }
+  }
+
+  $otExpected = Join-Path $booksBase ("old-testament\{0}" -f $bookSlug)
+  $ntExpected = Join-Path $booksBase ("new-testament\{0}" -f $bookSlug)
+
+  Write-Die "Could not find book source folder for slug '$bookSlug'. Expected one of:`n$otExpected`n$ntExpected`nTried these source variants: $($candidates -join ', ')"
+}
+
 # -----------------------------
 # MODE ROUTING
 # -----------------------------
-if (-not (Test-Path $SITE_ROOT)) {
-  Write-Die "SITE_ROOT does not exist: $SITE_ROOT"
-}
+if (-not (Test-Path $SITE_ROOT)) { Write-Die "SITE_ROOT does not exist: $SITE_ROOT" }
+if (-not (Test-Path $MTB_SOURCE_ROOT)) { Write-Die "MTB_SOURCE_ROOT does not exist: $MTB_SOURCE_ROOT" }
 
 $IsBook = Ask-YesNo "Is this a BOOK upload"
 $IsAbout = $false
@@ -246,33 +281,25 @@ $BOOK_SLUG = ""
 $testament = ""
 
 if ($IsBook) {
-  $SRC_ROOT = Prompt-NonEmpty "Source DOCX folder for this BOOK" $DEFAULT_BOOK_SRC
-  $BOOK_SLUG = Prompt-NonEmpty "Book slug (example: obadiah)" ""
-  $BOOK_SLUG = Slugify $BOOK_SLUG
+  $rawBook = Prompt-NonEmpty "Book (examples: obadiah, 3 John, 3John, 1Corinthians, 1 Corinthians)" ""
+  $BOOK_SLUG = Slugify $rawBook
 
-  # Decide testament folder based on SRC_ROOT path (keeps your prior behavior)
-  $testament = "new-testament"
-  if ($SRC_ROOT.ToLowerInvariant().Contains("\old-testament\")) { $testament = "old-testament" }
-  if ($SRC_ROOT.ToLowerInvariant().Contains("\new-testament\")) { $testament = "new-testament" }
+  $testRef = [ref] ""
+  $SRC_ROOT = Resolve-BookSource $BOOK_SLUG $rawBook $testRef
+  $testament = $testRef.Value
 
   $outDir = Join-Path $SITE_ROOT ("books\{0}\{1}\generated" -f $testament, $BOOK_SLUG)
 }
 elseif ($IsAbout) {
   $SRC_ROOT = $DEFAULT_ABOUT_SRC
-  Write-Host ("Using ABOUT source: {0}" -f $SRC_ROOT) -ForegroundColor DarkGray
   $outDir = Join-Path $SITE_ROOT "about"
 }
 elseif ($IsResources) {
   $SRC_ROOT = $DEFAULT_RESOURCES_SRC
-  Write-Host ("Using RESOURCES source: {0}" -f $SRC_ROOT) -ForegroundColor DarkGray
   $outDir = Join-Path $SITE_ROOT "resources"
 }
 
-
-if (-not (Test-Path $SRC_ROOT)) {
-  Write-Die "SRC_ROOT does not exist: $SRC_ROOT"
-}
-
+if (-not (Test-Path $SRC_ROOT)) { Write-Die "SRC_ROOT does not exist: $SRC_ROOT" }
 Ensure-Folder $outDir
 
 Write-Host ""
@@ -292,16 +319,12 @@ Write-Host ""
 # -----------------------------
 # CONVERT DOCX FILES
 # -----------------------------
-
 $docxFiles = @(Get-ChildItem -Path $SRC_ROOT -Filter "*.docx" -File)
 if ($docxFiles.Length -eq 0) {
   Write-Die "No DOCX files found in: $SRC_ROOT"
 }
 
-
-# UTF8 without BOM for stable browser reading
 $utf8NoBom = New-Object System.Text.UTF8Encoding($false)
-
 $converted = 0
 $skipped = 0
 
@@ -310,14 +333,11 @@ foreach ($f in $docxFiles) {
     $docxPath = $f.FullName
     $baseName = [System.IO.Path]::GetFileNameWithoutExtension($f.Name)
 
-    # Output filename: slugified doc name
     $outName = (Slugify $baseName) + ".html"
     $outPath = Join-Path $outDir $outName
 
     $frag = Convert-DocxToHtmlFragment $docxPath $SITE_ROOT
-    if ([string]::IsNullOrWhiteSpace($frag)) {
-      throw "Pandoc returned empty output."
-    }
+    if ([string]::IsNullOrWhiteSpace($frag)) { throw "Pandoc returned empty output." }
 
     $final = Wrap-InDocRoot $frag
     [System.IO.File]::WriteAllText($outPath, $final, $utf8NoBom)
@@ -337,9 +357,10 @@ Write-Host ("Converted: {0}" -f $converted)
 Write-Host ("Skipped:   {0}" -f $skipped)
 Write-Host ""
 
-# NOTE:
-# - Next step (later): for RESOURCES mode, generate /resources/resources.json from first two blocks.
-$resourcesDir = "C:\Users\Mike\Documents\MTB\GitHub\mtb-site\resources"
+# -----------------------------
+# RESOURCES.JSON (always refresh when script runs)
+# -----------------------------
+$resourcesDir = Join-Path $SITE_ROOT "resources"
 $outJson = Join-Path $resourcesDir "resources.json"
 
 function Strip-Tags([string]$s) {
@@ -350,34 +371,27 @@ function Strip-Tags([string]$s) {
 }
 
 function Get-FirstTwoBlocks([string]$html) {
-  # Grab first two <p> blocks (Pandoc will normally emit title/desc as first two paragraphs)
   $ms = [regex]::Matches($html, "(?is)<p\b[^>]*>.*?</p>")
   $first = if ($ms.Count -ge 1) { Strip-Tags $ms[0].Value } else { "" }
   $second = if ($ms.Count -ge 2) { Strip-Tags $ms[1].Value } else { "" }
   return @($first, $second)
 }
-function Clean-Meta([string]$s) {
-  if (-not $s) { return "" }
-  $t = $s.Trim()
-  $t = $t -replace '^(Title|Description)\s*:\s*', ''
-  return $t.Trim()
-}
 
 $items = @()
-Get-ChildItem $resourcesDir -Filter *.html -File |
-  Where-Object { $_.Name -notin @("index.html", "view.html") } |
-  Sort-Object Name |
-  ForEach-Object {
-    $html = Get-Content $_.FullName -Raw -Encoding UTF8
-
-    $meta = Get-FirstTwoBlocks $html
-    $items += [pscustomobject]@{
-      file = $_.Name
-      title = $meta[0]
-      description = $meta[1]
+if (Test-Path $resourcesDir) {
+  Get-ChildItem $resourcesDir -Filter *.html -File |
+    Where-Object { $_.Name -notin @("index.html", "view.html") } |
+    Sort-Object Name |
+    ForEach-Object {
+      $html = Get-Content $_.FullName -Raw -Encoding UTF8
+      $meta = Get-FirstTwoBlocks $html
+      $items += [pscustomobject]@{
+        file = $_.Name
+        title = $meta[0]
+        description = $meta[1]
+      }
     }
-  }
-@($items) | ConvertTo-Json -Depth 4 | Set-Content -Path $outJson -Encoding UTF8
 
-
-Write-Host "Wrote: $outJson"
+  @($items) | ConvertTo-Json -Depth 4 | Set-Content -Path $outJson -Encoding UTF8
+  Write-Host "Wrote: $outJson"
+}

@@ -955,7 +955,7 @@ table.mtb-scripture-table thead th {
   padding-top: 1px !important;
   padding-bottom: 1px !important;
   font-size: 12px;          /* slightly smaller than body text */
-  line-height: 0.2;
+  line-height: 0.1;
 }
 
 /* Reduce visual height caused by rounded cards on header only */
@@ -967,3 +967,33 @@ body.mtb-has-scripture-controls
 table.mtb-scripture-table thead th:nth-child(3) {
   border-radius: 8px;
 }
+/* =========================================================
+   CHAPTER HEADER – INLINE BOOK + CHAPTER
+   (applies to all chapter-level pages)
+========================================================= */
+
+.doc-header {
+  display: flex;
+  align-items: baseline;
+  gap: 14px;
+  margin-bottom: 14px;
+
+  --chapter-title-size: 30px; /* match your current .doc-header h1 size */
+}
+
+.doc-header h1 {
+  margin: 0;
+  line-height: 1.1;
+  font-size: var(--chapter-title-size);
+}
+
+/* Chapter label (e.g. "Chapter 1") */
+.doc-header .muted,
+.doc-header p {
+  margin: 0;
+  font-size: var(--chapter-title-size) !important; /* override earlier .muted 15px */
+  font-weight: 700;
+  color: #666;
+  white-space: nowrap;
+}
+

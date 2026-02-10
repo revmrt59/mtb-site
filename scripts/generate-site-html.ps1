@@ -207,9 +207,126 @@ function Wrap-InDocRoot([string]$innerHtml) {
   return "<div id=`"doc-root`">`n$innerHtml`n</div>`n"
 }
 
+function Ensure-ResourcesIndexPages([string]$outDir, [string]$bookSlug) {
+  # Rebuild {book}-{chapter}-resources.html (chapter index) every run.
+  # It lists any existing {book}-{chapter}-resources-*.html topic pages.
+  # Chapter 0 (book-level files) are ignored for resources.
+
+$DASH = "[-\u2013\u2014]"  # hyphen, en dash, em dash (unicode-safe)
+
+
+  $rxAny   = [regex]("^" + [regex]::Escape($bookSlug) + "${DASH}(?<ch>\d+)${DASH}.+?\.html$", "IgnoreCase")
+$rxTopic = [regex]("^" + [regex]::Escape($bookSlug) + "${DASH}(?<ch>\d+)${DASH}resources${DASH}.+?\.html$", "IgnoreCase")
+
+  # Build base href to generated folder (absolute path under SITE_ROOT)
+  $baseHref = ""
+  if ($outDir.StartsWith($SITE_ROOT)) {
+    $rel = $outDir.Substring($SITE_ROOT.Length)
+    $rel = $rel -replace "\\", "/"
+    if (-not $rel.StartsWith("/")) { $rel = "/" + $rel }
+    $baseHref = $rel.TrimEnd("/")
+  }
+
+  $chapters = New-Object System.Collections.Generic.HashSet[int]
+  $topicsByCh = @{}
+
+  Get-ChildItem -Path $outDir -Filter "*.html" -File | ForEach-Object {
+
+    $mAny = $rxAny.Match($_.Name)
+    if ($mAny.Success) {
+      $chInt = [int]$mAny.Groups["ch"].Value
+      if ($chInt -ge 1) { [void]$chapters.Add($chInt) }
+    }
+
+    $mTopic = $rxTopic.Match($_.Name)
+    if ($mTopic.Success) {
+      $chInt = [int]$mTopic.Groups["ch"].Value
+      if ($chInt -lt 1) { return }
+
+      if (-not $topicsByCh.ContainsKey($chInt)) { $topicsByCh[$chInt] = @() }
+      $topicsByCh[$chInt] += $_.Name
+    }
+  }
+
+  foreach ($ch in ($chapters | Sort-Object)) {
+
+    $indexName = "$bookSlug-$ch-resources.html"
+    $indexPath = Join-Path $outDir $indexName
+
+    $topicFiles = @()
+    if ($topicsByCh.ContainsKey($ch)) { $topicFiles = $topicsByCh[$ch] | Sort-Object }
+
+    $lines = @()
+    $lines += "<div id=`"doc-root`">"
+    $lines += "<h1>Chapter Resources</h1>"
+
+    if ($topicFiles.Count -eq 0) {
+      $lines += "<p>No additional chapter resources are available yet.</p>"
+    } else {
+      $lines += "<p>Additional resources for this chapter:</p>"
+      $lines += "<ul>"
+      foreach ($fn in $topicFiles) {
+        # Turn "{book}-{ch}-resources-truth.html" into "Truth"
+        $prefixRx = "^" + [regex]::Escape($bookSlug) + $DASH + $ch + $DASH + "resources" + $DASH
+        $label = $fn -replace $prefixRx, ""
+        $label = $label -replace "\.html$",""
+        $label = ($label -replace $DASH," ")
+        $label = (Get-Culture).TextInfo.ToTitleCase($label)
+
+        $href = $fn
+        if (-not [string]::IsNullOrWhiteSpace($baseHref)) {
+          $href = $baseHref + "/" + $fn
+        }
+
+        $lines += ("  <li><a href=`"{0}`">{1}</a></li>" -f $href, $label)
+      }
+      $lines += "</ul>"
+    }
+
+    $lines += "</div>"
+
+    $utf8NoBom = New-Object System.Text.UTF8Encoding($false)
+    [System.IO.File]::WriteAllText($indexPath, ($lines -join "`n") + "`n", $utf8NoBom)
+
+    Write-Host ("MAKE {0}" -f $indexName) -ForegroundColor Green
+  }
+}
+
+
 # Resolve source folder using BOTH:
 #   canonical slug: 3-john
 #   source style:   3john / 1corinthians / etc. (matches 3John / 1Corinthians folders)
+
+function Cleanup-StaleResourceTopics([string]$outDir, [string]$bookSlug, [string]$srcRoot) {
+  # Delete generated resource TOPIC pages that are not backed by a Resources DOCX in mtb-source.
+  # This prevents "ghost" resource topic pages when a DOCX is renamed/deleted.
+  # It does NOT delete the chapter index pages "{book}-{ch}-resources.html".
+
+  if ([string]::IsNullOrWhiteSpace($srcRoot) -or (-not (Test-Path $srcRoot))) {
+    Write-Die "Cleanup-StaleResourceTopics: srcRoot not found: $srcRoot"
+  }
+
+  $expected = New-Object System.Collections.Generic.HashSet[string]
+
+  Get-ChildItem -Path $srcRoot -Filter "*.docx" -File | ForEach-Object {
+    $base = [System.IO.Path]::GetFileNameWithoutExtension($_.Name)
+    if ($base -notmatch "(?i)\bResources\b") { return }
+
+    $slug = Slugify $base
+    if ([string]::IsNullOrWhiteSpace($slug)) { return }
+
+    [void]$expected.Add( ($slug + ".html").ToLowerInvariant() )
+  }
+
+  Get-ChildItem -Path $outDir -Filter "$bookSlug-*-resources-*.html" -File | ForEach-Object {
+    $n = $_.Name.ToLowerInvariant()
+    if (-not $expected.Contains($n)) {
+      Remove-Item $_.FullName -Force
+      Write-Host ("DELETE stale resource topic: {0}" -f $_.Name) -ForegroundColor DarkYellow
+    }
+  }
+}
+
 function Resolve-BookSource([string]$bookSlug, [string]$rawBookInput, [ref]$testamentOut) {
   $booksBase = Join-Path $MTB_SOURCE_ROOT "books"
 
@@ -356,6 +473,78 @@ Write-Host "Done." -ForegroundColor Cyan
 Write-Host ("Converted: {0}" -f $converted)
 Write-Host ("Skipped:   {0}" -f $skipped)
 Write-Host ""
+
+
+if ($IsBook) {
+  Cleanup-StaleResourceTopics $outDir $BOOK_SLUG $SRC_ROOT
+  Ensure-ResourcesIndexPages $outDir $BOOK_SLUG
+}
+# ============================================================
+# FINAL SWEEP: Build chapter resources index pages from topics
+# (Resources are 100% generated artifacts)
+# ============================================================
+
+try {
+  $mtbSiteRoot = $SITE_ROOT
+  $booksRoot = Join-Path $mtbSiteRoot "books"
+
+  if (Test-Path $booksRoot) {
+    Get-ChildItem $booksRoot -Recurse -Directory -Filter "generated" | ForEach-Object {
+      $genDir = $_.FullName
+
+      # Find any chapter resource topic pages: {book}-{ch}-resources-{topic}.html
+      $topicFiles = Get-ChildItem $genDir -File -Filter "*-resources-*.html" -ErrorAction SilentlyContinue
+      if (-not $topicFiles -or $topicFiles.Count -eq 0) { return }
+
+      # Group topic files by "{book}-{ch}" prefix
+      $groups = @{}
+      foreach ($f in $topicFiles) {
+        if ($f.Name -match '^(?<prefix>.+?-\d+)-resources-(?<topic>.+?)\.html$') {
+          $prefix = $Matches.prefix
+          if (-not $groups.ContainsKey($prefix)) { $groups[$prefix] = @() }
+          $groups[$prefix] += $f
+        }
+      }
+
+      foreach ($prefix in $groups.Keys) {
+        $items = $groups[$prefix] | Sort-Object Name
+        $indexPath = Join-Path $genDir ($prefix + "-resources.html")
+
+        $lines = @()
+        $lines += "<div id=`"doc-root`">"
+        $lines += "<h1>Chapter Resources</h1>"
+
+        if ($items.Count -eq 0) {
+          $lines += "<p>No resources for this chapter yet.</p>"
+        } else {
+          $lines += "<ul>"
+          foreach ($t in $items) {
+            $label = $t.Name -replace ("^" + [regex]::Escape($prefix) + "-resources-"), ""
+            $label = $label -replace "\.html$", ""
+            $label = $label -replace "-", " "
+            $label = (Get-Culture).TextInfo.ToTitleCase($label)
+
+            # Build absolute href from site root (forward slashes)
+            $rel = $t.FullName.Substring($mtbSiteRoot.Length) -replace "\\","/"
+            if (-not $rel.StartsWith("/")) { $rel = "/" + $rel }
+
+            $lines += "  <li><a href=`"$rel`">$label</a></li>"
+          }
+          $lines += "</ul>"
+        }
+
+        $lines += "</div>"
+
+        $utf8NoBom = New-Object System.Text.UTF8Encoding($false)
+        [System.IO.File]::WriteAllText($indexPath, ($lines -join "`n") + "`n", $utf8NoBom)
+        Write-Host "WROTE RESOURCES INDEX: $indexPath" -ForegroundColor Green
+      }
+    }
+  }
+}
+catch {
+  Write-Host ("WARN: resources index sweep failed: {0}" -f $_.Exception.Message) -ForegroundColor Yellow
+}
 
 # -----------------------------
 # RESOURCES.JSON (always refresh when script runs)

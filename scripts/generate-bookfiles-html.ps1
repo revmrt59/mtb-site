@@ -208,14 +208,23 @@ function Wrap-InDocRoot([string]$innerHtml) {
 }
 
 function Ensure-ResourcesIndexPages([string]$outDir, [string]$bookSlug) {
-  # Create {book}-{chapter}-resources.html (chapter index) when missing.
+  # Rebuild {book}-{chapter}-resources.html (chapter index) every run.
   # It lists any existing {book}-{chapter}-resources-*.html topic pages.
   # Chapter 0 (book-level files) are ignored for resources.
 
   $DASH = "[-–—]"  # ASCII hyphen, en dash, em dash
 
-  $rxAny = [regex]("^" + [regex]::Escape($bookSlug) + "$DASH(?<ch>\d+)$DASH.+?\.html$", "IgnoreCase")
+  $rxAny   = [regex]("^" + [regex]::Escape($bookSlug) + "$DASH(?<ch>\d+)$DASH.+?\.html$", "IgnoreCase")
   $rxTopic = [regex]("^" + [regex]::Escape($bookSlug) + "$DASH(?<ch>\d+)$DASHresources$DASH.+?\.html$", "IgnoreCase")
+
+  # Build base href to generated folder (absolute path under SITE_ROOT)
+  $baseHref = ""
+  if ($outDir.StartsWith($SITE_ROOT)) {
+    $rel = $outDir.Substring($SITE_ROOT.Length)
+    $rel = $rel -replace "\\", "/"
+    if (-not $rel.StartsWith("/")) { $rel = "/" + $rel }
+    $baseHref = $rel.TrimEnd("/")
+  }
 
   $chapters = New-Object System.Collections.Generic.HashSet[int]
   $topicsByCh = @{}
@@ -243,9 +252,6 @@ function Ensure-ResourcesIndexPages([string]$outDir, [string]$bookSlug) {
     $indexName = "$bookSlug-$ch-resources.html"
     $indexPath = Join-Path $outDir $indexName
 
-    # Always (re)build the chapter resources index so new topic files
-    # are picked up automatically.
-
     $topicFiles = @()
     if ($topicsByCh.ContainsKey($ch)) { $topicFiles = $topicsByCh[$ch] | Sort-Object }
 
@@ -265,10 +271,12 @@ function Ensure-ResourcesIndexPages([string]$outDir, [string]$bookSlug) {
         $label = $label -replace "\.html$",""
         $label = ($label -replace $DASH," ")
         $label = (Get-Culture).TextInfo.ToTitleCase($label)
-        # IMPORTANT: when this HTML is injected into book.html,
-        # relative links would resolve against /book.html and break.
-        # So we link back into the shell using query params.
-        $href = ("/book.html?book={0}&chapter={1}&tab=resources&doc={2}" -f $bookSlug, $ch, $fn)
+
+        $href = $fn
+        if (-not [string]::IsNullOrWhiteSpace($baseHref)) {
+          $href = $baseHref + "/" + $fn
+        }
+
         $lines += ("  <li><a href=`"{0}`">{1}</a></li>" -f $href, $label)
       }
       $lines += "</ul>"
@@ -287,6 +295,37 @@ function Ensure-ResourcesIndexPages([string]$outDir, [string]$bookSlug) {
 # Resolve source folder using BOTH:
 #   canonical slug: 3-john
 #   source style:   3john / 1corinthians / etc. (matches 3John / 1Corinthians folders)
+
+function Cleanup-StaleResourceTopics([string]$outDir, [string]$bookSlug, [string]$srcRoot) {
+  # Delete generated resource TOPIC pages that are not backed by a Resources DOCX in mtb-source.
+  # This prevents "ghost" resource topic pages when a DOCX is renamed/deleted.
+  # It does NOT delete the chapter index pages "{book}-{ch}-resources.html".
+
+  if ([string]::IsNullOrWhiteSpace($srcRoot) -or (-not (Test-Path $srcRoot))) {
+    Write-Die "Cleanup-StaleResourceTopics: srcRoot not found: $srcRoot"
+  }
+
+  $expected = New-Object System.Collections.Generic.HashSet[string]
+
+  Get-ChildItem -Path $srcRoot -Filter "*.docx" -File | ForEach-Object {
+    $base = [System.IO.Path]::GetFileNameWithoutExtension($_.Name)
+    if ($base -notmatch "(?i)\bResources\b") { return }
+
+    $slug = Slugify $base
+    if ([string]::IsNullOrWhiteSpace($slug)) { return }
+
+    [void]$expected.Add( ($slug + ".html").ToLowerInvariant() )
+  }
+
+  Get-ChildItem -Path $outDir -Filter "$bookSlug-*-resources-*.html" -File | ForEach-Object {
+    $n = $_.Name.ToLowerInvariant()
+    if (-not $expected.Contains($n)) {
+      Remove-Item $_.FullName -Force
+      Write-Host ("DELETE stale resource topic: {0}" -f $_.Name) -ForegroundColor DarkYellow
+    }
+  }
+}
+
 function Resolve-BookSource([string]$bookSlug, [string]$rawBookInput, [ref]$testamentOut) {
   $booksBase = Join-Path $MTB_SOURCE_ROOT "books"
 
@@ -436,6 +475,7 @@ Write-Host ""
 
 
 if ($IsBook) {
+  Cleanup-StaleResourceTopics $outDir $BOOK_SLUG $SRC_ROOT
   Ensure-ResourcesIndexPages $outDir $BOOK_SLUG
 }
 # -----------------------------

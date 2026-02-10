@@ -7,7 +7,7 @@
     // { name: "Titus", slug: "titus", chapters: [1, 2, 3] },
     { name: "3 John", slug: "3-john", chapters: [1] },
     { name: "Obadiah", slug: "obadiah", chapters: [1] },
-    { name: "Romans", slug: "romans", chapters: [1] }
+    { name: "Titus", slug: "titus", chapters: [1] }
   ];
 
   function el(id) {

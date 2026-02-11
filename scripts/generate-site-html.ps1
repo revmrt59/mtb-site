@@ -1,586 +1,362 @@
-# =========================================================
-# Mastering the Bible - Unified DOCX -> HTML Generator
-# One script for: BOOKS, ABOUT, RESOURCES
-#
-# Requires: pandoc on PATH
+﻿# =========================================================
+# Mastering the Bible - site Generator (FULL, VERIFIED)
+# Modes: BOOK / ABOUT / RESOURCES
 # PowerShell: Windows PowerShell 5.1 compatible
 # =========================================================
 
 # -----------------------------
 # EDIT THESE CONSTANTS (ONCE)
 # -----------------------------
-
-# Your website repo root (folder that contains index.html, book.html, assets, books, about, resources)
+# Your website repo root (folder containing index.html, book.html, assets, books, about, resources)
 $SITE_ROOT = "C:\Users\Mike\Documents\MTB\GitHub\mtb-site"
 
-# MTB source root (folder that contains: books\old-testament\..., books\new-testament\..., about, resources)
+# MTB source root (folder containing about, resources, books\old-testament, books\new-testament)
 $MTB_SOURCE_ROOT = "C:\Users\Mike\Documents\MTB\mtb-source\source"
 
-# Standard source folders
 $DEFAULT_ABOUT_SRC     = Join-Path $MTB_SOURCE_ROOT "about"
 $DEFAULT_RESOURCES_SRC = Join-Path $MTB_SOURCE_ROOT "resources"
+$DEFAULT_BOOKS_SRC     = Join-Path $MTB_SOURCE_ROOT "books"
+
+# Pandoc must be on PATH (or set full path to pandoc.exe)
+$PANDOC = "pandoc"
 
 # -----------------------------
-# END CONSTANTS
+# HELPERS
 # -----------------------------
-
-Set-StrictMode -Version Latest
-$ErrorActionPreference = "Stop"
-
-function Write-Die([string]$msg) {
+function Fail($msg) {
   Write-Host ""
-  Write-Host $msg -ForegroundColor Red
-  Write-Host ""
+  Write-Host "ERROR: $msg" -ForegroundColor Red
   exit 1
 }
 
-function Ensure-Folder([string]$path) {
-  if (-not (Test-Path $path)) {
-    New-Item -ItemType Directory -Force -Path $path | Out-Null
-  }
+function Ensure-Path($p) {
+  if (-not (Test-Path $p)) { New-Item -ItemType Directory -Path $p | Out-Null }
 }
 
-function Prompt-NonEmpty([string]$label, [string]$defaultValue = "") {
+function Prompt-NonEmpty($label, $default) {
+  $prompt = $label
+  if (-not [string]::IsNullOrWhiteSpace($default)) { $prompt = "$label [$default]" }
   while ($true) {
-    $prompt = $label
-    if (-not [string]::IsNullOrWhiteSpace($defaultValue)) {
-      $prompt = "$label [$defaultValue]"
-    }
-    $v = (Read-Host $prompt).Trim()
-    if ([string]::IsNullOrWhiteSpace($v)) { $v = $defaultValue }
-    if (-not [string]::IsNullOrWhiteSpace($v)) { return $v }
+    $v = Read-Host $prompt
+    if ([string]::IsNullOrWhiteSpace($v)) { $v = $default }
+    if (-not [string]::IsNullOrWhiteSpace($v)) { return $v.Trim() }
+    Write-Host "Please enter a value." -ForegroundColor Yellow
   }
 }
 
-function Ask-YesNo([string]$q) {
-  while ($true) {
-    $a = (Read-Host "$q (y/n)").Trim().ToLowerInvariant()
-    if ($a -in @("y","yes")) { return $true }
-    if ($a -in @("n","no"))  { return $false }
-  }
+function Slugify($s) {
+  if ($null -eq $s) { return "" }
+  if ($s -is [System.Array]) { $s = ($s -join " ") }
+
+  $t = ([string]$s).Trim().ToLowerInvariant()
+  $t = $t -replace "[’‘`´]", "'"
+  $t = $t -replace "[\u2013\u2014]", "-"   # en/em dash -> hyphen (no literal dash chars)
+  $t = $t -replace "[^a-z0-9\-\s']", ""
+  $t = $t -replace "\s+", "-"
+  $t = $t -replace "-{2,}", "-"
+  $t = $t.Trim("-")
+  return $t
 }
 
-# Canonical site slug: "3John" -> "3-john", "1 Corinthians" -> "1-corinthians"
-function Slugify([string]$s) {
-  if ([string]::IsNullOrWhiteSpace($s)) { return "" }
-
-  $s = $s.Trim().ToLowerInvariant()
-
-  # Convert "3John" -> "3 John", "1Peter" -> "1 Peter" so we get proper hyphens later
-  $s = $s -replace '^(\d+)([a-z])', '$1 $2'
-
-  # Normalize whitespace to hyphens
-  $s = $s -replace '\s+', '-'
-
-  # Remove everything except a-z, 0-9, and hyphen
-  $s = $s -replace '[^a-z0-9\-]', ''
-
-  # Collapse multiple hyphens
-  $s = $s -replace '\-+', '-'
-
-  return $s
-}
-
-function Ensure-MtbPandocFilter([string]$siteRoot) {
-  $toolsDir = Join-Path $siteRoot "_tools\pandoc"
-  $filterPath = Join-Path $toolsDir "mtb-styles.lua"
-
-  Ensure-Folder $toolsDir
-
-  $lua = @'
--- MTB Scripture Block wrapper (robust)
--- Requires pandoc input: docx+styles
---
--- Wraps consecutive blocks marked with:
---   custom-style = "MTB Scripture" OR "MTB Scripture Block"
--- into:
---   <div class="mtb-scripture-block"> ... </div>
---
--- Also strips all "custom-style" attributes so style names never appear in output.
-
-local SCRIPTURE_STYLES = {
-  ["MTB Scripture"] = true,
-  ["MTB Scripture Block"] = true
-}
-
-local function get_custom_style(el)
-  if not el or not el.attr or not el.attr.attributes then return nil end
-  return el.attr.attributes["custom-style"]
-end
-
-local function is_scripture_style_name(name)
-  return name and SCRIPTURE_STYLES[name] or false
-end
-
-local function strip_custom_style(el)
-  if el and el.attr and el.attr.attributes then
-    el.attr.attributes["custom-style"] = nil
-  end
-  return el
-end
-
-local function inline_contains_scripture(inl)
-  if not inl then return false end
-
-  if inl.t == "Span" then
-    if is_scripture_style_name(get_custom_style(inl)) then return true end
-    if inl.content then
-      for _, c in ipairs(inl.content) do
-        if inline_contains_scripture(c) then return true end
-      end
-    end
-    return false
-  end
-
-  if inl.content and type(inl.content) == "table" then
-    for _, c in ipairs(inl.content) do
-      if inline_contains_scripture(c) then return true end
-    end
-  end
-
-  return false
-end
-
-local function block_is_scripture(b)
-  if not b then return false end
-
-  if is_scripture_style_name(get_custom_style(b)) then
-    return true
-  end
-
-  if (b.t == "Para" or b.t == "Plain") and b.content then
-    for _, inl in ipairs(b.content) do
-      if inline_contains_scripture(inl) then return true end
-    end
-  end
-
-  return false
-end
-
-function Pandoc(doc)
-  local out = pandoc.List:new()
-  local blocks = doc.blocks
-  local i = 1
-
-  while i <= #blocks do
-    local b = blocks[i]
-
-    if block_is_scripture(b) then
-      local group = pandoc.List:new()
-
-      while i <= #blocks and block_is_scripture(blocks[i]) do
-        group:insert(strip_custom_style(blocks[i]))
-        i = i + 1
-      end
-
-      out:insert(pandoc.Div(group, pandoc.Attr("", {"mtb-scripture-block"}, {})))
-    else
-      out:insert(strip_custom_style(b))
-      i = i + 1
-    end
-  end
-
-  doc.blocks = out
-  return doc
-end
-'@
-
-  Set-Content -Path $filterPath -Value $lua -Encoding UTF8
-  return $filterPath
-}
-
-function Convert-DocxToHtmlFragment([string]$docxPath, [string]$siteRoot) {
-  $filterPath = Ensure-MtbPandocFilter $siteRoot
-  $tmp = [System.IO.Path]::ChangeExtension([System.IO.Path]::GetTempFileName(), ".html")
-
-  Write-Host ("RUN  pandoc `"$docxPath`" -f docx+styles -t html5 --wrap=none --lua-filter=`"$filterPath`" -o `"$tmp`"") -ForegroundColor DarkGray
-  & pandoc $docxPath -f docx+styles -t html5 --wrap=none --lua-filter="$filterPath" -o $tmp | Out-Null
-
-  if (-not (Test-Path $tmp)) { throw "Pandoc did not produce output file." }
-
-  $html = Get-Content -Path $tmp -Raw -Encoding UTF8
-  Remove-Item $tmp -ErrorAction SilentlyContinue
-  return $html
-}
-
-function Wrap-InDocRoot([string]$innerHtml) {
-  return "<div id=`"doc-root`">`n$innerHtml`n</div>`n"
-}
-
-function Ensure-ResourcesIndexPages([string]$outDir, [string]$bookSlug) {
-  # Rebuild {book}-{chapter}-resources.html (chapter index) every run.
-  # It lists any existing {book}-{chapter}-resources-*.html topic pages.
-  # Chapter 0 (book-level files) are ignored for resources.
-
-$DASH = "[-\u2013\u2014]"  # hyphen, en dash, em dash (unicode-safe)
-
-
-  $rxAny   = [regex]("^" + [regex]::Escape($bookSlug) + "${DASH}(?<ch>\d+)${DASH}.+?\.html$", "IgnoreCase")
-$rxTopic = [regex]("^" + [regex]::Escape($bookSlug) + "${DASH}(?<ch>\d+)${DASH}resources${DASH}.+?\.html$", "IgnoreCase")
-
-  # Build base href to generated folder (absolute path under SITE_ROOT)
-  $baseHref = ""
-  if ($outDir.StartsWith($SITE_ROOT)) {
-    $rel = $outDir.Substring($SITE_ROOT.Length)
-    $rel = $rel -replace "\\", "/"
-    if (-not $rel.StartsWith("/")) { $rel = "/" + $rel }
-    $baseHref = $rel.TrimEnd("/")
-  }
-
-  $chapters = New-Object System.Collections.Generic.HashSet[int]
-  $topicsByCh = @{}
-
-  Get-ChildItem -Path $outDir -Filter "*.html" -File | ForEach-Object {
-
-    $mAny = $rxAny.Match($_.Name)
-    if ($mAny.Success) {
-      $chInt = [int]$mAny.Groups["ch"].Value
-      if ($chInt -ge 1) { [void]$chapters.Add($chInt) }
-    }
-
-    $mTopic = $rxTopic.Match($_.Name)
-    if ($mTopic.Success) {
-      $chInt = [int]$mTopic.Groups["ch"].Value
-      if ($chInt -lt 1) { return }
-
-      if (-not $topicsByCh.ContainsKey($chInt)) { $topicsByCh[$chInt] = @() }
-      $topicsByCh[$chInt] += $_.Name
-    }
-  }
-
-  foreach ($ch in ($chapters | Sort-Object)) {
-
-    $indexName = "$bookSlug-$ch-resources.html"
-    $indexPath = Join-Path $outDir $indexName
-
-    $topicFiles = @()
-    if ($topicsByCh.ContainsKey($ch)) { $topicFiles = $topicsByCh[$ch] | Sort-Object }
-
-    $lines = @()
-    $lines += "<div id=`"doc-root`">"
-    $lines += "<h1>Chapter Resources</h1>"
-
-    if ($topicFiles.Count -eq 0) {
-      $lines += "<p>No additional chapter resources are available yet.</p>"
-    } else {
-      $lines += "<p>Additional resources for this chapter:</p>"
-      $lines += "<ul>"
-      foreach ($fn in $topicFiles) {
-        # Turn "{book}-{ch}-resources-truth.html" into "Truth"
-        $prefixRx = "^" + [regex]::Escape($bookSlug) + $DASH + $ch + $DASH + "resources" + $DASH
-        $label = $fn -replace $prefixRx, ""
-        $label = $label -replace "\.html$",""
-        $label = ($label -replace $DASH," ")
-        $label = (Get-Culture).TextInfo.ToTitleCase($label)
-
-        $href = $fn
-        if (-not [string]::IsNullOrWhiteSpace($baseHref)) {
-          $href = $baseHref + "/" + $fn
-        }
-
-        $lines += ("  <li><a href=`"{0}`">{1}</a></li>" -f $href, $label)
-      }
-      $lines += "</ul>"
-    }
-
-    $lines += "</div>"
-
-    $utf8NoBom = New-Object System.Text.UTF8Encoding($false)
-    [System.IO.File]::WriteAllText($indexPath, ($lines -join "`n") + "`n", $utf8NoBom)
-
-    Write-Host ("MAKE {0}" -f $indexName) -ForegroundColor Green
-  }
-}
-
-
-# Resolve source folder using BOTH:
-#   canonical slug: 3-john
-#   source style:   3john / 1corinthians / etc. (matches 3John / 1Corinthians folders)
-
-function Cleanup-StaleResourceTopics([string]$outDir, [string]$bookSlug, [string]$srcRoot) {
-  # Delete generated resource TOPIC pages that are not backed by a Resources DOCX in mtb-source.
-  # This prevents "ghost" resource topic pages when a DOCX is renamed/deleted.
-  # It does NOT delete the chapter index pages "{book}-{ch}-resources.html".
-
-  if ([string]::IsNullOrWhiteSpace($srcRoot) -or (-not (Test-Path $srcRoot))) {
-    Write-Die "Cleanup-StaleResourceTopics: srcRoot not found: $srcRoot"
-  }
-
-  $expected = New-Object System.Collections.Generic.HashSet[string]
-
-  Get-ChildItem -Path $srcRoot -Filter "*.docx" -File | ForEach-Object {
-    $base = [System.IO.Path]::GetFileNameWithoutExtension($_.Name)
-    if ($base -notmatch "(?i)\bResources\b") { return }
-
-    $slug = Slugify $base
-    if ([string]::IsNullOrWhiteSpace($slug)) { return }
-
-    [void]$expected.Add( ($slug + ".html").ToLowerInvariant() )
-  }
-
-  Get-ChildItem -Path $outDir -Filter "$bookSlug-*-resources-*.html" -File | ForEach-Object {
-    $n = $_.Name.ToLowerInvariant()
-    if (-not $expected.Contains($n)) {
-      Remove-Item $_.FullName -Force
-      Write-Host ("DELETE stale resource topic: {0}" -f $_.Name) -ForegroundColor DarkYellow
-    }
-  }
-}
-
-function Resolve-BookSource([string]$bookSlug, [string]$rawBookInput, [ref]$testamentOut) {
-  $booksBase = Join-Path $MTB_SOURCE_ROOT "books"
-
-  $rawSafe = ""
-  if ($null -ne $rawBookInput) { $rawSafe = $rawBookInput }
-  $rawSafe = $rawSafe.Trim()
-
-  $candidates = @()
-
-  if (-not [string]::IsNullOrWhiteSpace($bookSlug)) {
-    $candidates += $bookSlug
-    $candidates += ($bookSlug -replace "-", "")
-  }
-
-  if (-not [string]::IsNullOrWhiteSpace($rawSafe)) {
-    $rawNorm = $rawSafe
-    $rawNorm = $rawNorm -replace "\s+", ""
-    $rawNorm = $rawNorm -replace "-", ""
-    $rawNorm = $rawNorm -replace "[^A-Za-z0-9]", ""
-    if (-not [string]::IsNullOrWhiteSpace($rawNorm)) {
-      $candidates += $rawNorm
-      $candidates += $rawNorm.ToLowerInvariant()
-    }
-  }
-
-  $candidates = $candidates | Select-Object -Unique
-
-  foreach ($cand in $candidates) {
-    $ot = Join-Path $booksBase ("old-testament\{0}" -f $cand)
-    $nt = Join-Path $booksBase ("new-testament\{0}" -f $cand)
-
-    if (Test-Path $ot) { $testamentOut.Value = "old-testament"; return $ot }
-    if (Test-Path $nt) { $testamentOut.Value = "new-testament"; return $nt }
-  }
-
-  $otExpected = Join-Path $booksBase ("old-testament\{0}" -f $bookSlug)
-  $ntExpected = Join-Path $booksBase ("new-testament\{0}" -f $bookSlug)
-
-  Write-Die "Could not find book source folder for slug '$bookSlug'. Expected one of:`n$otExpected`n$ntExpected`nTried these source variants: $($candidates -join ', ')"
-}
-
-# -----------------------------
-# MODE ROUTING
-# -----------------------------
-if (-not (Test-Path $SITE_ROOT)) { Write-Die "SITE_ROOT does not exist: $SITE_ROOT" }
-if (-not (Test-Path $MTB_SOURCE_ROOT)) { Write-Die "MTB_SOURCE_ROOT does not exist: $MTB_SOURCE_ROOT" }
-
-$IsBook = Ask-YesNo "Is this a BOOK upload"
-$IsAbout = $false
-$IsResources = $false
-
-if (-not $IsBook) {
-  $IsAbout = Ask-YesNo "Is this an ABOUT upload"
-  if (-not $IsAbout) {
-    $IsResources = Ask-YesNo "Is this a RESOURCES upload"
-  }
-}
-
-if (-not ($IsBook -or $IsAbout -or $IsResources)) {
-  Write-Die "No mode selected. Exiting."
-}
-
-# -----------------------------
-# INPUTS + OUTPUT TARGET
-# -----------------------------
-$SRC_ROOT = ""
-$outDir = ""
-$BOOK_SLUG = ""
-$testament = ""
-
-if ($IsBook) {
-  $rawBook = Prompt-NonEmpty "Book (examples: obadiah, 3 John, 3John, 1Corinthians, 1 Corinthians)" ""
-  $BOOK_SLUG = Slugify $rawBook
-
-  $testRef = [ref] ""
-  $SRC_ROOT = Resolve-BookSource $BOOK_SLUG $rawBook $testRef
-  $testament = $testRef.Value
-
-  $outDir = Join-Path $SITE_ROOT ("books\{0}\{1}\generated" -f $testament, $BOOK_SLUG)
-}
-elseif ($IsAbout) {
-  $SRC_ROOT = $DEFAULT_ABOUT_SRC
-  $outDir = Join-Path $SITE_ROOT "about"
-}
-elseif ($IsResources) {
-  $SRC_ROOT = $DEFAULT_RESOURCES_SRC
-  $outDir = Join-Path $SITE_ROOT "resources"
-}
-
-if (-not (Test-Path $SRC_ROOT)) { Write-Die "SRC_ROOT does not exist: $SRC_ROOT" }
-Ensure-Folder $outDir
-
-Write-Host ""
-Write-Host "==================================================" -ForegroundColor Cyan
-if ($IsBook) {
-  Write-Host ("MODE:   BOOK  ({0} / {1})" -f $testament, $BOOK_SLUG) -ForegroundColor Cyan
-} elseif ($IsAbout) {
-  Write-Host "MODE:   ABOUT" -ForegroundColor Cyan
-} else {
-  Write-Host "MODE:   RESOURCES" -ForegroundColor Cyan
-}
-Write-Host ("Source: {0}" -f $SRC_ROOT) -ForegroundColor DarkGray
-Write-Host ("Output: {0}" -f $outDir) -ForegroundColor DarkGray
-Write-Host "==================================================" -ForegroundColor Cyan
-Write-Host ""
-
-# -----------------------------
-# CONVERT DOCX FILES
-# -----------------------------
-$docxFiles = @(Get-ChildItem -Path $SRC_ROOT -Filter "*.docx" -File)
-if ($docxFiles.Length -eq 0) {
-  Write-Die "No DOCX files found in: $SRC_ROOT"
-}
-
-$utf8NoBom = New-Object System.Text.UTF8Encoding($false)
-$converted = 0
-$skipped = 0
-
-foreach ($f in $docxFiles) {
+function Convert-DocxToHtmlFragment($docxPath) {
+  if (-not (Test-Path $docxPath)) { throw "DOCX not found: $docxPath" }
+
+  # Intentionally NOT using --extract-media to avoid permission/lock issues.
+  $args = @(
+    "--from=docx",
+    "--to=html",
+    "--standalone=false",
+    "--wrap=none",
+    "--quiet",
+    $docxPath
+  )
+
+  $errFile = [System.IO.Path]::GetTempFileName()
   try {
-    $docxPath = $f.FullName
-    $baseName = [System.IO.Path]::GetFileNameWithoutExtension($f.Name)
+    $stdout = & $PANDOC @args 2> $errFile
+    $exitCode = $LASTEXITCODE
+    $stderr = ""
+    if (Test-Path $errFile) { $stderr = Get-Content -Path $errFile -Raw }
 
-    $outName = (Slugify $baseName) + ".html"
-    $outPath = Join-Path $outDir $outName
+    if ($exitCode -ne 0) { throw "Pandoc failed ($exitCode):`n$stderr" }
 
-    $frag = Convert-DocxToHtmlFragment $docxPath $SITE_ROOT
-    if ([string]::IsNullOrWhiteSpace($frag)) { throw "Pandoc returned empty output." }
-
-    $final = Wrap-InDocRoot $frag
-    [System.IO.File]::WriteAllText($outPath, $final, $utf8NoBom)
-
-    Write-Host ("OK   {0}  ->  {1}" -f $f.Name, $outName) -ForegroundColor Green
-    $converted++
+    if ($stdout -is [System.Array]) { return ($stdout -join "`n") }
+    return [string]$stdout
   }
-  catch {
-    Write-Host ("SKIP {0}  ({1})" -f $f.Name, $_.Exception.Message) -ForegroundColor Yellow
-    $skipped++
+  finally {
+    if (Test-Path $errFile) { Remove-Item $errFile -Force -ErrorAction SilentlyContinue }
   }
 }
 
-Write-Host ""
-Write-Host "Done." -ForegroundColor Cyan
-Write-Host ("Converted: {0}" -f $converted)
-Write-Host ("Skipped:   {0}" -f $skipped)
-Write-Host ""
+# ---------------------------------------------------------
+# Mojibake cleanup BEFORE saving HTML (no non-ASCII literals)
+# - Fixes ΓÇö / ΓÇô / ΓÇò dashes
+# - Fixes NBSP junk (┬á, Â)
+# - Strips box-drawing / block-element garbage (╬┤╬¡╧ë etc.)
+# ---------------------------------------------------------
+function Fix-MojibakeHtml([string]$html) {
+  if ([string]::IsNullOrEmpty($html)) { return $html }
 
+  $Gamma = [char]0x0393
+  $Cced  = [char]0x00C7
+  $Atil  = [char]0x00C2
+  $BoxT  = [char]0x252C
+  $aAc   = [char]0x00E1
+  $u     = "u"
 
-if ($IsBook) {
-  Cleanup-StaleResourceTopics $outDir $BOOK_SLUG $SRC_ROOT
-  Ensure-ResourcesIndexPages $outDir $BOOK_SLUG
-}
-# ============================================================
-# FINAL SWEEP: Build chapter resources index pages from topics
-# (Resources are 100% generated artifacts)
-# ============================================================
+  # Bad sequences (constructed safely)
+  $bad_GC_o_grave   = "$Gamma$Cced$([char]0x00F2)"
+  $bad_GC_o_circ    = "$Gamma$Cced$([char]0x00F4)"
+  $bad_GC_o_umlaut  = "$Gamma$Cced$([char]0x00F6)"
+  $bad_GC_u_circ    = "$Gamma$Cced$([char]0x00FB)"
+  $bad_u_GC_o_grave   = "$u$bad_GC_o_grave"
+  $bad_u_GC_o_circ    = "$u$bad_GC_o_circ"
+  $bad_u_GC_o_umlaut  = "$u$bad_GC_o_umlaut"
 
-try {
-  $mtbSiteRoot = $SITE_ROOT
-  $booksRoot = Join-Path $mtbSiteRoot "books"
+  $bad_Box_aAc     = "$BoxT$aAc"   # ┬á
+  $bad_Atil_space  = "$Atil "      # Â<space>
+  $bad_Atil        = "$Atil"       # Â
 
-  if (Test-Path $booksRoot) {
-    Get-ChildItem $booksRoot -Recurse -Directory -Filter "generated" | ForEach-Object {
-      $genDir = $_.FullName
+  $emdash = [char]0x2014
+  $endash = [char]0x2013
 
-      # Find any chapter resource topic pages: {book}-{ch}-resources-{topic}.html
-      $topicFiles = Get-ChildItem $genDir -File -Filter "*-resources-*.html" -ErrorAction SilentlyContinue
-      if (-not $topicFiles -or $topicFiles.Count -eq 0) { return }
+  $out = $html
 
-      # Group topic files by "{book}-{ch}" prefix
-      $groups = @{}
-      foreach ($f in $topicFiles) {
-        if ($f.Name -match '^(?<prefix>.+?-\d+)-resources-(?<topic>.+?)\.html$') {
-          $prefix = $Matches.prefix
-          if (-not $groups.ContainsKey($prefix)) { $groups[$prefix] = @() }
-          $groups[$prefix] += $f
-        }
-      }
+  # Exact replaces
+  $out = $out.Replace($bad_u_GC_o_umlaut, $emdash)
+  $out = $out.Replace($bad_u_GC_o_circ,   $emdash)
+  $out = $out.Replace($bad_u_GC_o_grave,  $emdash)
 
-      foreach ($prefix in $groups.Keys) {
-        $items = $groups[$prefix] | Sort-Object Name
-        $indexPath = Join-Path $genDir ($prefix + "-resources.html")
+  $out = $out.Replace($bad_GC_o_umlaut, $emdash)
+  $out = $out.Replace($bad_GC_o_circ,   $emdash)
+  $out = $out.Replace($bad_GC_o_grave,  $emdash)
+  $out = $out.Replace($bad_GC_u_circ,   $endash)
 
-        $lines = @()
-        $lines += "<div id=`"doc-root`">"
-        $lines += "<h1>Chapter Resources</h1>"
+  $out = $out.Replace($bad_Box_aAc, " ")
+  $out = $out.Replace($bad_Atil_space, " ")
+  $out = $out.Replace($bad_Atil, "")
 
-        if ($items.Count -eq 0) {
-          $lines += "<p>No resources for this chapter yet.</p>"
-        } else {
-          $lines += "<ul>"
-          foreach ($t in $items) {
-            $label = $t.Name -replace ("^" + [regex]::Escape($prefix) + "-resources-"), ""
-            $label = $label -replace "\.html$", ""
-            $label = $label -replace "-", " "
-            $label = (Get-Culture).TextInfo.ToTitleCase($label)
+  # Normalize real NBSP and HTML NBSP entity
+  $out = $out.Replace([char]0x00A0, " ")
+  $out = $out -replace "&nbsp;", " "
 
-            # Build absolute href from site root (forward slashes)
-            $rel = $t.FullName.Substring($mtbSiteRoot.Length) -replace "\\","/"
-            if (-not $rel.StartsWith("/")) { $rel = "/" + $rel }
+  # Regex safety net for ANY remaining ΓÇ + (ò ô ö û)
+  $gcPrefix = [regex]::Escape("$Gamma$Cced")
+  $out = [regex]::Replace($out, ($gcPrefix + "[\u00F2\u00F4\u00F6]"), ([string]$emdash))
+  $out = [regex]::Replace($out, ($gcPrefix + "[\u00FB]"), ([string]$endash))
 
-            $lines += "  <li><a href=`"$rel`">$label</a></li>"
-          }
-          $lines += "</ul>"
-        }
+  # Strip box-drawing + block elements (CP437-style mojibake such as ╬┤╬¡╧ë)
+  $out = [regex]::Replace($out, "[\u2500-\u257F\u2580-\u259F]", "")
 
-        $lines += "</div>"
+  # Tidy multiple spaces/tabs
+  $out = $out -replace "[ \t]{2,}", " "
 
-        $utf8NoBom = New-Object System.Text.UTF8Encoding($false)
-        [System.IO.File]::WriteAllText($indexPath, ($lines -join "`n") + "`n", $utf8NoBom)
-        Write-Host "WROTE RESOURCES INDEX: $indexPath" -ForegroundColor Green
-      }
-    }
-  }
-}
-catch {
-  Write-Host ("WARN: resources index sweep failed: {0}" -f $_.Exception.Message) -ForegroundColor Yellow
+  return $out
 }
 
 # -----------------------------
-# RESOURCES.JSON (always refresh when script runs)
+# FIXED: Resolve testament using Contains (no regex)
 # -----------------------------
-$resourcesDir = Join-Path $SITE_ROOT "resources"
-$outJson = Join-Path $resourcesDir "resources.json"
+function Resolve-BookSource($bookSlug, [ref]$testamentOut) {
+  $bookSlug = [string](@($bookSlug)[0])
 
-function Strip-Tags([string]$s) {
-  if (-not $s) { return "" }
-  $t = [regex]::Replace($s, "<[^>]+>", "")
-  $t = $t -replace "\s+", " "
-  return $t.Trim()
-}
+  $candidates = @(
+    (Join-Path $DEFAULT_BOOKS_SRC ("new-testament\" + $bookSlug)),
+    (Join-Path $DEFAULT_BOOKS_SRC ("old-testament\" + $bookSlug))
+  )
 
-function Get-FirstTwoBlocks([string]$html) {
-  $ms = [regex]::Matches($html, "(?is)<p\b[^>]*>.*?</p>")
-  $first = if ($ms.Count -ge 1) { Strip-Tags $ms[0].Value } else { "" }
-  $second = if ($ms.Count -ge 2) { Strip-Tags $ms[1].Value } else { "" }
-  return @($first, $second)
-}
-
-$items = @()
-if (Test-Path $resourcesDir) {
-  Get-ChildItem $resourcesDir -Filter *.html -File |
-    Where-Object { $_.Name -notin @("index.html", "view.html") } |
-    Sort-Object Name |
-    ForEach-Object {
-      $html = Get-Content $_.FullName -Raw -Encoding UTF8
-      $meta = Get-FirstTwoBlocks $html
-      $items += [pscustomobject]@{
-        file = $_.Name
-        title = $meta[0]
-        description = $meta[1]
+  foreach ($c in $candidates) {
+    if (Test-Path $c) {
+      if ($c.ToLowerInvariant().Contains("\new-testament\")) {
+        $testamentOut.Value = "new-testament"
+      } else {
+        $testamentOut.Value = "old-testament"
       }
+      return $c
+    }
+  }
+
+  $found = Get-ChildItem $DEFAULT_BOOKS_SRC -Directory -Recurse -ErrorAction SilentlyContinue |
+    Where-Object { $_.Name -ieq $bookSlug } |
+    Select-Object -First 1
+
+  if ($null -ne $found) {
+    if ($found.FullName.ToLowerInvariant().Contains("\new-testament\")) {
+      $testamentOut.Value = "new-testament"
+    } else {
+      $testamentOut.Value = "old-testament"
+    }
+    return $found.FullName
+  }
+
+  return $null
+}
+
+function Canonicalize-WordStudyNames($outDir, $bookSlug) {
+  $rx = [regex]('^(?<book>' + [regex]::Escape($bookSlug) + ')-(?<ch>\d+)-(?<strong>[gh]\d+)(?:-.+)?\.html$')
+
+  Get-ChildItem -Path $outDir -Filter "*.html" | ForEach-Object {
+    $name = $_.Name.ToLowerInvariant()
+    if (-not $rx.IsMatch($name)) { return }
+
+    $m = $rx.Match($name)
+    $ch = $m.Groups["ch"].Value
+    $strong = $m.Groups["strong"].Value
+
+    $letter = $strong.Substring(0,1)
+    $digits = $strong.Substring(1)
+    $n = [int]$digits
+
+    $canonical = "$bookSlug-$ch-$letter$n.html"
+    $destPath = Join-Path $outDir $canonical
+
+    if ($_.FullName -ieq $destPath) { return }
+
+    if (Test-Path $destPath) {
+      Write-Host "WARN: canonical exists, keeping '$($_.Name)' (collision on $canonical)" -ForegroundColor Yellow
+      return
     }
 
-  @($items) | ConvertTo-Json -Depth 4 | Set-Content -Path $outJson -Encoding UTF8
-  Write-Host "Wrote: $outJson"
+    Rename-Item -Path $_.FullName -NewName $canonical
+  }
 }
+
+# -----------------------------
+# MAIN
+# -----------------------------
+Write-Host ""
+Write-Host "Mastering the Bible - site Generator"
+Write-Host ""
+
+$Mode = Prompt-NonEmpty "Mode (BOOK / ABOUT / RESOURCES)" "BOOK"
+$Mode = $Mode.Trim().ToUpperInvariant()
+
+if ($Mode -eq "BOOK") {
+
+  Write-Host ""
+  Write-Host "Mode: BOOK"
+
+  $rawBook = Prompt-NonEmpty "Book (example: titus, obadiah)" ""
+  $BOOK_SLUG = [string](@(Slugify $rawBook)[0])
+  if ([string]::IsNullOrWhiteSpace($BOOK_SLUG)) { Fail "Invalid book name." }
+
+  $testament = ""
+  $bookSource = Resolve-BookSource $BOOK_SLUG ([ref]$testament)
+  if ($null -eq $bookSource) { Fail "Book source folder not found for '$rawBook' (slug '$BOOK_SLUG'). Expected under: $DEFAULT_BOOKS_SRC" }
+
+  $outDir = Join-Path $SITE_ROOT ("books\" + $testament + "\" + $BOOK_SLUG + "\generated")
+  Ensure-Path $outDir
+
+  # Print resolved output dir
+  $resolvedOut = (Resolve-Path $outDir).Path
+  Write-Host "Source: $bookSource"
+  Write-Host "Output: $resolvedOut"
+  Write-Host ""
+
+  $docxFiles = Get-ChildItem $bookSource -Filter "*.docx" -Recurse -ErrorAction SilentlyContinue
+  if ($null -eq $docxFiles -or $docxFiles.Count -eq 0) { Fail "No DOCX files found under: $bookSource" }
+
+  $debugShown = 0
+
+  foreach ($docx in $docxFiles) {
+    try {
+      Write-Host ("Processing " + $docx.Name + "...")
+      $html = Convert-DocxToHtmlFragment $docx.FullName
+      $html = Fix-MojibakeHtml $html
+
+      $base = [System.IO.Path]::GetFileNameWithoutExtension($docx.Name)
+      $outName = (Slugify $base) + ".html"
+      $outPath = Join-Path $outDir $outName
+
+      Set-Content -Path $outPath -Value $html -Encoding UTF8 -Force
+
+      if ($debugShown -lt 3) {
+        Write-Host ("WROTE: " + (Resolve-Path $outPath).Path) -ForegroundColor Cyan
+        $debugShown++
+      }
+
+      Write-Host ("OK   " + $docx.Name + "  ->  " + $outName) -ForegroundColor Green
+    }
+    catch {
+      Write-Host ("FAIL " + $docx.Name) -ForegroundColor Red
+      Write-Host ($_.Exception.Message) -ForegroundColor Red
+    }
+  }
+
+  Canonicalize-WordStudyNames $outDir $BOOK_SLUG
+
+  $count = (Get-ChildItem $outDir -Filter "*.html" -ErrorAction SilentlyContinue | Measure-Object).Count
+  Write-Host ""
+  Write-Host ("BOOK generation complete. HTML files in output: " + $count) -ForegroundColor Green
+  exit 0
+}
+
+if ($Mode -eq "ABOUT") {
+
+  Write-Host ""
+  Write-Host "Mode: ABOUT"
+  if (-not (Test-Path $DEFAULT_ABOUT_SRC)) { Fail "About source not found: $DEFAULT_ABOUT_SRC" }
+
+  $outDir = Join-Path $SITE_ROOT "about"
+  Ensure-Path $outDir
+
+  $docxFiles = Get-ChildItem $DEFAULT_ABOUT_SRC -Filter "*.docx" -ErrorAction SilentlyContinue
+  foreach ($docx in $docxFiles) {
+    try {
+      Write-Host ("Processing " + $docx.Name + "...")
+      $html = Convert-DocxToHtmlFragment $docx.FullName
+      $html = Fix-MojibakeHtml $html
+
+      $base = [System.IO.Path]::GetFileNameWithoutExtension($docx.Name)
+      $slug = Slugify $base
+      $outPath = Join-Path $outDir ($slug + ".html")
+
+      Set-Content -Path $outPath -Value $html -Encoding UTF8 -Force
+      Write-Host ("OK   " + $docx.Name + "  ->  " + ([System.IO.Path]::GetFileName($outPath))) -ForegroundColor Green
+    }
+    catch {
+      Write-Host ("FAIL " + $docx.Name) -ForegroundColor Red
+      Write-Host ($_.Exception.Message) -ForegroundColor Red
+    }
+  }
+
+  Write-Host ""
+  Write-Host "ABOUT generation complete." -ForegroundColor Green
+  exit 0
+}
+
+if ($Mode -eq "RESOURCES") {
+
+  Write-Host ""
+  Write-Host "Mode: RESOURCES"
+  if (-not (Test-Path $DEFAULT_RESOURCES_SRC)) { Fail "Resources source not found: $DEFAULT_RESOURCES_SRC" }
+
+  $outDir = Join-Path $SITE_ROOT "resources"
+  Ensure-Path $outDir
+
+  $docxFiles = Get-ChildItem $DEFAULT_RESOURCES_SRC -Filter "*.docx" -ErrorAction SilentlyContinue
+  foreach ($docx in $docxFiles) {
+    try {
+      Write-Host ("Processing " + $docx.Name + "...")
+      $html = Convert-DocxToHtmlFragment $docx.FullName
+      $html = Fix-MojibakeHtml $html
+
+      $base = [System.IO.Path]::GetFileNameWithoutExtension($docx.Name)
+      $slug = Slugify $base
+      $outPath = Join-Path $outDir ($slug + ".html")
+
+      Set-Content -Path $outPath -Value $html -Encoding UTF8 -Force
+      Write-Host ("OK   " + $docx.Name + "  ->  " + ([System.IO.Path]::GetFileName($outPath))) -ForegroundColor Green
+    }
+    catch {
+      Write-Host ("FAIL " + $docx.Name) -ForegroundColor Red
+      Write-Host ($_.Exception.Message) -ForegroundColor Red
+    }
+  }
+
+  Write-Host ""
+  Write-Host "RESOURCES generation complete." -ForegroundColor Green
+  exit 0
+}
+
+Fail "Unknown mode '$Mode'. Use BOOK, ABOUT, or RESOURCES."

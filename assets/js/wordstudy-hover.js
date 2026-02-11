@@ -20,7 +20,7 @@
 
   function showTooltip(text, x, y) {
     const el = ensureTooltip();
-    el.textContent = text;
+    el.textContent = fixMojibake(text);
     el.style.display = "block";
 
     const pad = 12;
@@ -45,16 +45,17 @@
     modalEl = document.createElement("div");
     modalEl.className = "ws-modal";
     modalEl.style.display = "none";
-modalEl.innerHTML = `
-  <div class="ws-modal-backdrop" data-close="1"></div>
 
-  <div class="ws-modal-panel" role="dialog" aria-modal="true" aria-label="Word Study">
-    <div class="ws-modal-header">
-      <button class="ws-modal-close" type="button" data-close="1" aria-label="Close">Close</button>
-    </div>
-    <div class="ws-modal-body"></div>
-  </div>
-`;
+    modalEl.innerHTML = `
+      <div class="ws-modal-backdrop" data-close="1"></div>
+
+      <div class="ws-modal-panel" role="dialog" aria-modal="true" aria-label="Word Study">
+        <div class="ws-modal-header">
+          <button class="ws-modal-close" type="button" data-close="1" aria-label="Close">Close</button>
+        </div>
+        <div class="ws-modal-body"></div>
+      </div>
+    `;
 
     document.body.appendChild(modalEl);
 
@@ -72,7 +73,7 @@ modalEl.innerHTML = `
   function showModal(html) {
     const el = ensureModal();
     const body = el.querySelector(".ws-modal-body");
-    body.innerHTML = html || "<p class='muted'>No details available.</p>";
+    body.innerHTML = fixMojibake(html) || "<p class='muted'>No details available.</p>";
     el.style.display = "block";
   }
 
@@ -142,130 +143,142 @@ modalEl.innerHTML = `
 
     return fullHtml;
   }
-function extractSummaryFromHtml(fullHtml) {
-  const temp = document.createElement("div");
-  temp.innerHTML = fullHtml;
 
-  const h = temp.querySelector("h2#summary");
-  if (!h) return null;
+  function fixMojibake(input) {
+    if (input == null) return input;
+    let s = String(input);
 
-  // Look forward for the first non-empty paragraph,
-  // either as a sibling <p> OR a <p> inside a wrapper.
-  let n = h.nextElementSibling;
-  while (n) {
-    // direct <p>
-    if (n.tagName === "P") {
-      const t = (n.textContent || "").trim();
-      if (t) return t;
-    }
+    // Normalize NBSP (real + common mangled forms)
+    s = s.replace(/\u00A0/g, " ");
+    s = s.replace(/&nbsp;/g, " ");
+    s = s.split("┬á").join(" ");
+    s = s.split("Â ").join(" ");
+    s = s.split("Â").join("");
 
-    // wrapper that contains a <p>
-    if (n.querySelector) {
-      const p = n.querySelector("p");
-      if (p) {
-        const t = (p.textContent || "").trim();
-        if (t) return t;
-      }
-    }
+    // Common double-encoded "ΓÇ.." family (seen in your hover/popup)
+    const map1 = [
+      ["ΓÇ£", "“"], ["ΓÇØ", "”"], ["ΓÇ¥", "”"],
+      ["ΓÇÿ", "‘"], ["ΓÇÖ", "’"],
+      ["ΓÇª", "…"],
+      ["ΓÇô", "—"], ["ΓÇò", "—"],
+      ["ΓÇû", "–"],
+      ["ΓÂ ", " "], ["ΓÂ", ""]
+    ];
 
-    // stop once we hit meaningful content that isn't summary-paragraph-ish
-    const text = (n.textContent || "").trim();
-    if (text.length > 0) break;
+    // Common UTF-8-as-Win1252 "â€.." family
+    const map2 = [
+      ["â€”", "—"], ["â€“", "–"],
+      ["â€œ", "“"], ["â€", "”"],
+      ["â€˜", "‘"], ["â€™", "’"],
+      ["â€¦", "…"]
+    ];
 
-    n = n.nextElementSibling;
+    // Common double-encoded "Γâ.." family
+    const map3 = [
+      ["Γâ€”", "—"], ["Γâ€“", "–"],
+      ["Γâ€œ", "“"], ["Γâ€", "”"],
+      ["Γâ€˜", "‘"], ["Γâ€™", "’"],
+      ["Γâ€¦", "…"]
+    ];
+
+    const applyMap = (str, map) => {
+      let out = str;
+      for (const [bad, good] of map) out = out.split(bad).join(good);
+      return out;
+    };
+
+    // Two passes catches many "double mangled" strings
+    s = applyMap(s, map1);
+    s = applyMap(s, map2);
+    s = applyMap(s, map3);
+
+    s = applyMap(s, map1);
+    s = applyMap(s, map2);
+    s = applyMap(s, map3);
+
+    // Tidy spacing
+    s = s.replace(/[ \t]{2,}/g, " ");
+
+    return s;
   }
 
-  return null;
-}
+  // Key fix: skip empty <p> (including NBSP) after the Summary heading
+  function extractSummaryFromHtml(html) {
+    const temp = document.createElement("div");
+    temp.innerHTML = html;
 
-function fixMojibake(html) {
-  const map = [
-    ["ΓÇ£", "“"], ["ΓÇØ", "”"], ["ΓÇ¥", "”"],
-    ["ΓÇÿ", "‘"], ["ΓÇÖ", "’"], ["ΓÇª", "…"],
-    ["ΓÇô", "—"], ["ΓÇû", "–"],
-    ["Â ", " "], ["Â", ""]
-  ];
-  let out = html;
-  map.forEach(([bad, good]) => { out = out.split(bad).join(good); });
-  return out;
-}
+    const root = temp.querySelector("#doc-root") || temp;
+    const h2 = root.querySelector("h2#summary");
+    if (!h2) return null;
 
+    let el = h2.nextElementSibling;
+    while (el) {
+      if (el.tagName === "P") {
+        const txt = (el.textContent || "").replace(/\u00A0/g, " ").trim();
+        if (txt.length > 0) return txt;
+      }
+      el = el.nextElementSibling;
+    }
+    return null;
+  }
 
   async function loadDocHtml(docUrl) {
     const url = resolveDocUrl(docUrl);
     if (!url) return null;
 
-    
+    // Cache hit
+    if (docCache.has(url)) return docCache.get(url);
 
     const res = await fetch(url, { cache: "no-store" });
     if (!res.ok) throw new Error(`Failed to load word study file: ${url}`);
 
-const html = await res.text();
-const bodyHtml = extractDocBodyHtml(html);
-const cleaned = fixMojibake(bodyHtml);
+    const html = await res.text();
+    const bodyHtml = extractDocBodyHtml(html);
+    const cleaned = fixMojibake(bodyHtml);
 
-docCache.set(url, cleaned);
-return cleaned;
-}
-
+    docCache.set(url, cleaned);
+    return cleaned;
+  }
 
   function getDocUrlFromEl(el) {
-    // Prefer explicit doc pointer
     const d = el.getAttribute("data-ws-doc");
     if (d) return d;
 
-    // Optional support if you ever use <a href="...">
     const href = el.getAttribute("href");
     if (href && href !== "#") return href;
 
     return null;
   }
 
-  function bindWordStudies() {
-    // Bind ANY .ws elements. JSON is optional now.
-    const wsEls = document.querySelectorAll(".ws");
+  function bindWordStudies(root) {
+    const scope = root || document;
+    const wsEls = scope.querySelectorAll(".ws");
     if (!wsEls.length) return;
-
-    let hoverTimer = null;
 
     wsEls.forEach((el) => {
       if (el.dataset.wsBound === "1") return;
       el.dataset.wsBound = "1";
 
+      let hoverTimer = null;
+
       const key = el.getAttribute("data-ws");   // JSON key (optional)
-      const docUrl = getDocUrlFromEl(el);       // HTML file url (optional)
+      const docUrl = getDocUrlFromEl(el);       // HTML doc url (optional)
 
-el.addEventListener("mouseenter", (e) => {
-  hoverTimer = window.setTimeout(async () => {
+      el.addEventListener("mouseenter", (e) => {
+        hoverTimer = window.setTimeout(async () => {
+          // Prefer HTML doc mode when present
+          if (docUrl) {
+            try {
+              const html = await loadDocHtml(docUrl);
+              const summary = extractSummaryFromHtml(html);
+              showTooltip(summary || "Click for word study", e.clientX, e.clientY);
+            } catch {
+              showTooltip("Click for word study", e.clientX, e.clientY);
+            }
+            return;
+          }
 
-    // 1) Prefer HTML doc mode when present
-    if (docUrl) {
-      try {
-        const html = await loadDocHtml(docUrl);
-        const summary = extractSummaryFromHtml(html);
-        showTooltip(summary || "Click for word study", e.clientX, e.clientY);
-      } catch {
-        showTooltip("Click for word study", e.clientX, e.clientY);
-      }
-      return;
-    }
-
-    // 2) Fall back to JSON
-    if (key) {
-      const item = await getItem(key);
-      if (item && item.short) {
-        showTooltip(item.short, e.clientX, e.clientY);
-        return;
-      }
-    }
-
-  }, 150);
-});
-
-
-
-      el.addEventListener("mousemove", async (e) => {
-        if (tooltipEl && tooltipEl.style.display === "block") {
+          // Fall back to JSON
           if (key) {
             const item = await getItem(key);
             if (item && item.short) {
@@ -273,6 +286,14 @@ el.addEventListener("mouseenter", (e) => {
               return;
             }
           }
+        }, 150);
+      });
+
+      el.addEventListener("mousemove", (e) => {
+        if (tooltipEl && tooltipEl.style.display === "block") {
+          // just reposition; don’t refetch on every move
+          const txt = tooltipEl.textContent || "";
+          showTooltip(txt, e.clientX, e.clientY);
         }
       });
 
@@ -285,7 +306,7 @@ el.addEventListener("mouseenter", (e) => {
         e.preventDefault();
         hideTooltip();
 
-        // 1) Prefer HTML doc mode when present
+        // Prefer HTML doc mode when present
         if (docUrl) {
           try {
             const html = await loadDocHtml(docUrl);
@@ -300,18 +321,17 @@ el.addEventListener("mouseenter", (e) => {
           return;
         }
 
-        // 2) Fall back to JSON mode
+        // Fall back to JSON mode
         if (key) {
           const item = await getItem(key);
           if (!item) return;
           showModal(
             item.longHtml ||
-              `<p><strong>${item.term || key}</strong></p><p>${item.gloss || ""}</p>`
+            `<p><strong>${item.term || key}</strong></p><p>${item.gloss || ""}</p>`
           );
           return;
         }
 
-        // 3) Nothing to load
         console.warn("Clicked .ws without data-ws-doc or data-ws:", el);
       });
     });
@@ -321,15 +341,20 @@ el.addEventListener("mouseenter", (e) => {
     const docTarget = document.getElementById("doc-target");
 
     if (docTarget) {
-      const obs = new MutationObserver(() => bindWordStudies());
+      const obs = new MutationObserver(() => bindWordStudies(docTarget));
       obs.observe(docTarget, { childList: true, subtree: true });
     }
 
-    const bodyObs = new MutationObserver(() => bindWordStudies());
+    const bodyObs = new MutationObserver(() => bindWordStudies(document));
     bodyObs.observe(document.body, { attributes: true, attributeFilter: ["data-ws-json"] });
 
-    bindWordStudies();
+    bindWordStudies(document);
   }
+
+  // Expose a manual bind hook (your load-doc.js calls this)
+  window.MTBWordStudyHover = {
+    bind: (root) => bindWordStudies(root || document)
+  };
 
   document.addEventListener("DOMContentLoaded", startObservers);
 })();

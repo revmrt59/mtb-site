@@ -153,6 +153,60 @@ function Fix-MojibakeHtml([string]$html) {
 
   return $out
 }
+function Remove-PandocDecorations([string]$html) {
+  if ([string]::IsNullOrEmpty($html)) { return $html }
+
+  $out = $html
+
+  # 1) Remove the common “top bar” artifact:
+  # Pandoc often emits a first <p><img ...></p> for a thin horizontal line/shape.
+  # We remove very short images (height in px/in/cm/mm that indicates “rule/line”).
+  $out = [regex]::Replace(
+    $out,
+    '^\s*<p>\s*<img\b[^>]*?(?:style="[^"]*?\bheight:\s*(?:0\.\d+(?:in|cm|mm)|[0-8]px)[^"]*?"|height="(?:[0-8])")?[^>]*>\s*</p>\s*',
+    '',
+    [System.Text.RegularExpressions.RegexOptions]::IgnoreCase
+  )
+
+  # 2) As a safety net, remove ANY remaining “thin rule” images anywhere in the document.
+  $out = [regex]::Replace(
+    $out,
+    '<p>\s*<img\b[^>]*?(?:style="[^"]*?\bheight:\s*(?:0\.\d+(?:in|cm|mm)|[0-8]px)[^"]*?"|height="(?:[0-8])")[^>]*>\s*</p>\s*',
+    '',
+    [System.Text.RegularExpressions.RegexOptions]::IgnoreCase
+  )
+
+  return $out
+}
+function Remove-PandocDecorationsKeepImages([string]$html) {
+  if ([string]::IsNullOrEmpty($html)) { return $html }
+
+  $out = $html
+
+  # Remove figure blocks that contain a "thin" image (rule/line/shape)
+  # We consider "thin" as height <= 12px OR height <= 0.2in OR <= 0.5cm/mm equivalent.
+  $out = [regex]::Replace(
+    $out,
+    '(?is)<figure\b[^>]*>[\s\S]*?<img\b[^>]*?(?:height\s*=\s*"(?:\d{1,2})"|style\s*=\s*"[^"]*?\bheight\s*:\s*(?:\d{1,2}px|0\.\d+(?:in|cm|mm))[^"]*")[^>]*>[\s\S]*?</figure>\s*',
+    ''
+  )
+
+  # Remove <p> wrappers that contain a thin image
+  $out = [regex]::Replace(
+    $out,
+    '(?is)<p>\s*<img\b[^>]*?(?:height\s*=\s*"(?:\d{1,2})"|style\s*=\s*"[^"]*?\bheight\s*:\s*(?:\d{1,2}px|0\.\d+(?:in|cm|mm))[^"]*")[^>]*>\s*</p>\s*',
+    ''
+  )
+
+  # Remove standalone thin <img> tags (just in case)
+  $out = [regex]::Replace(
+    $out,
+    '(?is)<img\b[^>]*?(?:height\s*=\s*"(?:\d{1,2})"|style\s*=\s*"[^"]*?\bheight\s*:\s*(?:\d{1,2}px|0\.\d+(?:in|cm|mm))[^"]*")[^>]*>\s*',
+    ''
+  )
+
+  return $out
+}
 
 # -----------------------------
 # FIXED: Resolve testament using Contains (no regex)

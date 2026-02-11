@@ -997,3 +997,8 @@ table.mtb-scripture-table thead th:nth-child(3) {
   white-space: nowrap;
 }
 
+@media (pointer: coarse) {
+  .ws-tooltip {
+    display: none !important;
+  }
+}

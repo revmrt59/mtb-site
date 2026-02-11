@@ -17,6 +17,13 @@
     document.body.appendChild(tooltipEl);
     return tooltipEl;
   }
+function isTouchDevice() {
+  return (
+    "ontouchstart" in window ||
+    (navigator.maxTouchPoints || 0) > 0 ||
+    window.matchMedia && window.matchMedia("(pointer: coarse)").matches
+  );
+}
 
   function showTooltip(text, x, y) {
     const el = ensureTooltip();
@@ -251,22 +258,33 @@
   }
 
   function bindWordStudies(root) {
-    const scope = root || document;
-    const wsEls = scope.querySelectorAll(".ws");
-    if (!wsEls.length) return;
+  const scope = root || document;
+  const wsEls = scope.querySelectorAll(".ws");
+  if (!wsEls.length) return;
 
-    wsEls.forEach((el) => {
-      if (el.dataset.wsBound === "1") return;
-      el.dataset.wsBound = "1";
+  const isTouch =
+    "ontouchstart" in window ||
+    (navigator.maxTouchPoints || 0) > 0 ||
+    (window.matchMedia && window.matchMedia("(pointer: coarse)").matches);
 
-      let hoverTimer = null;
+  wsEls.forEach((el) => {
+    if (el.dataset.wsBound === "1") return;
+    el.dataset.wsBound = "1";
 
-      const key = el.getAttribute("data-ws");   // JSON key (optional)
-      const docUrl = getDocUrlFromEl(el);       // HTML doc url (optional)
+    let hoverTimer = null;
+
+    const key = el.getAttribute("data-ws");     // JSON key (optional)
+    const docUrl = getDocUrlFromEl(el);         // HTML doc url (optional)
+
+    // -----------------------------
+    // DESKTOP HOVER (only if not touch)
+    // -----------------------------
+    if (!isTouch) {
 
       el.addEventListener("mouseenter", (e) => {
         hoverTimer = window.setTimeout(async () => {
-          // Prefer HTML doc mode when present
+
+          // Prefer HTML doc mode
           if (docUrl) {
             try {
               const html = await loadDocHtml(docUrl);
@@ -278,16 +296,61 @@
             return;
           }
 
-          // Fall back to JSON
+          // Fallback to JSON mode
           if (key) {
             const item = await getItem(key);
             if (item && item.short) {
               showTooltip(item.short, e.clientX, e.clientY);
-              return;
             }
           }
+
         }, 150);
       });
+
+      el.addEventListener("mousemove", (e) => {
+        if (tooltipEl && tooltipEl.style.display === "block") {
+          showTooltip(tooltipEl.textContent, e.clientX, e.clientY);
+        }
+      });
+
+      el.addEventListener("mouseleave", () => {
+        if (hoverTimer) window.clearTimeout(hoverTimer);
+        hideTooltip();
+      });
+    }
+
+    // -----------------------------
+    // CLICK / TAP (always enabled)
+    // -----------------------------
+    el.addEventListener("click", async (e) => {
+      e.preventDefault();
+      hideTooltip();
+
+      // Prefer HTML doc mode
+      if (docUrl) {
+        try {
+          const html = await loadDocHtml(docUrl);
+          showModal(html);
+        } catch {
+          showModal("<p class='muted'>Could not load word study.</p>");
+        }
+        return;
+      }
+
+      // Fallback to JSON mode
+      if (key) {
+        const item = await getItem(key);
+        if (!item) return;
+
+        showModal(
+          item.longHtml ||
+          `<p><strong>${item.term || key}</strong></p><p>${item.gloss || ""}</p>`
+        );
+      }
+    });
+  });
+}
+
 
       el.addEventListener("mousemove", (e) => {
         if (tooltipEl && tooltipEl.style.display === "block") {

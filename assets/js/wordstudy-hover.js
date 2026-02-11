@@ -1,37 +1,71 @@
-(function () {
-  let cache = {};
-  let cacheUrl = null;
+// wordstudy-hover.js
+// Desktop/laptop: hover shows extracted Summary from the word-study HTML; click opens full popup
+// Mobile/touch: no hover tooltip; tap reliably opens full popup (and suppresses OS dictionary/selection)
+// Includes mojibake cleanup (including ΓÇó -> •) and skips blank paragraphs after Summary
 
+(function () {
+  // ---------------------------------------------------
+  // State
+  // ---------------------------------------------------
   let tooltipEl = null;
   let modalEl = null;
 
   // Cache fetched HTML word-study docs
   const docCache = new Map();
 
+  // ---------------------------------------------------
+  // Device detection
+  // ---------------------------------------------------
+  function isTouchDevice() {
+    return (
+      "ontouchstart" in window ||
+      (navigator.maxTouchPoints || 0) > 0 ||
+      (window.matchMedia && window.matchMedia("(pointer: coarse)").matches)
+    );
+  }
+
+  // ---------------------------------------------------
+  // Mojibake fix (applied to loaded HTML)
+  // ---------------------------------------------------
+  function fixMojibake(html) {
+    const map = [
+      ["ΓÇ£", "“"], ["ΓÇØ", "”"], ["ΓÇ¥", "”"],
+      ["ΓÇÿ", "‘"], ["ΓÇÖ", "’"], ["ΓÇª", "…"],
+      ["ΓÇô", "—"], ["ΓÇû", "–"],
+      ["ΓÇó", "•"],
+      ["Â ", " "], ["Â", ""]
+    ];
+    let out = html || "";
+    map.forEach(([bad, good]) => { out = out.split(bad).join(good); });
+    return out;
+  }
+
+  // ---------------------------------------------------
+  // Tooltip (desktop only)
+  // ---------------------------------------------------
   function ensureTooltip() {
+    if (isTouchDevice()) return null; // never show tooltips on touch devices
     if (tooltipEl) return tooltipEl;
+
     tooltipEl = document.createElement("div");
     tooltipEl.className = "ws-tooltip";
     tooltipEl.setAttribute("role", "tooltip");
     tooltipEl.style.display = "none";
     document.body.appendChild(tooltipEl);
+
     return tooltipEl;
   }
-function isTouchDevice() {
-  return (
-    "ontouchstart" in window ||
-    (navigator.maxTouchPoints || 0) > 0 ||
-    window.matchMedia && window.matchMedia("(pointer: coarse)").matches
-  );
-}
 
   function showTooltip(text, x, y) {
     const el = ensureTooltip();
-    el.textContent = fixMojibake(text);
+    if (!el) return;
+
+    el.textContent = text || "";
     el.style.display = "block";
 
     const pad = 12;
     const rect = el.getBoundingClientRect();
+
     let left = x + pad;
     let top = y + pad;
 
@@ -46,6 +80,9 @@ function isTouchDevice() {
     if (tooltipEl) tooltipEl.style.display = "none";
   }
 
+  // ---------------------------------------------------
+  // Modal
+  // ---------------------------------------------------
   function ensureModal() {
     if (modalEl) return modalEl;
 
@@ -55,7 +92,6 @@ function isTouchDevice() {
 
     modalEl.innerHTML = `
       <div class="ws-modal-backdrop" data-close="1"></div>
-
       <div class="ws-modal-panel" role="dialog" aria-modal="true" aria-label="Word Study">
         <div class="ws-modal-header">
           <button class="ws-modal-close" type="button" data-close="1" aria-label="Close">Close</button>
@@ -66,10 +102,12 @@ function isTouchDevice() {
 
     document.body.appendChild(modalEl);
 
+    // Close on backdrop / close button
     modalEl.addEventListener("click", (e) => {
       if (e.target && e.target.getAttribute("data-close")) hideModal();
     });
 
+    // Close on Escape
     document.addEventListener("keydown", (e) => {
       if (e.key === "Escape") hideModal();
     });
@@ -78,9 +116,10 @@ function isTouchDevice() {
   }
 
   function showModal(html) {
+    hideTooltip(); // critical for mobile overlay issues
     const el = ensureModal();
     const body = el.querySelector(".ws-modal-body");
-    body.innerHTML = fixMojibake(html) || "<p class='muted'>No details available.</p>";
+    body.innerHTML = html || "<p class='muted'>No details available.</p>";
     el.style.display = "block";
   }
 
@@ -91,47 +130,9 @@ function isTouchDevice() {
     if (body) body.innerHTML = "";
   }
 
-  // ----------------------------
-  // JSON mode (existing behavior)
-  // ----------------------------
-  function getJsonUrl() {
-    return document.body.getAttribute("data-ws-json");
-  }
-
-  async function loadWordStudies(url) {
-    if (!url) return null;
-
-    if (cacheUrl !== url) {
-      cache = {};
-      cacheUrl = url;
-    }
-    if (cache.__loaded) return cache;
-
-    const res = await fetch(url, { cache: "no-store" });
-    if (!res.ok) throw new Error("Failed to load word studies JSON");
-
-    const data = await res.json();
-    cache = { ...data, __loaded: true };
-
-    return cache;
-  }
-
-  async function getItem(key) {
-    const url = getJsonUrl();
-    if (!url) return null;
-
-    try {
-      await loadWordStudies(url);
-    } catch {
-      return null;
-    }
-
-    return cache[key] || null;
-  }
-
-  // ----------------------------
-  // HTML doc mode (new behavior)
-  // ----------------------------
+  // ---------------------------------------------------
+  // HTML loading + parsing
+  // ---------------------------------------------------
   function resolveDocUrl(raw) {
     if (!raw) return null;
     try {
@@ -141,9 +142,29 @@ function isTouchDevice() {
     }
   }
 
-  function extractDocBodyHtml(fullHtml) {
+  async function loadDocHtml(docUrl) {
+    const url = resolveDocUrl(docUrl);
+    if (!url) return null;
+
+    if (docCache.has(url)) return docCache.get(url);
+
+    const res = await fetch(url, { cache: "no-store" });
+    if (!res.ok) throw new Error(`Failed to load word study file: ${url}`);
+
+    const raw = await res.text();
+    const cleaned = fixMojibake(raw);
+
+    docCache.set(url, cleaned);
+    return cleaned;
+  }
+
+  // Extract #doc-root inner HTML when present; else use body inner; else raw
+  function extractDocRootInnerHtml(fullHtml) {
     const temp = document.createElement("div");
     temp.innerHTML = fullHtml;
+
+    const root = temp.querySelector("#doc-root");
+    if (root) return root.innerHTML;
 
     const body = temp.querySelector("body");
     if (body) return body.innerHTML;
@@ -151,68 +172,13 @@ function isTouchDevice() {
     return fullHtml;
   }
 
-  function fixMojibake(input) {
-    if (input == null) return input;
-    let s = String(input);
-
-    // Normalize NBSP (real + common mangled forms)
-    s = s.replace(/\u00A0/g, " ");
-    s = s.replace(/&nbsp;/g, " ");
-    s = s.split("┬á").join(" ");
-    s = s.split("Â ").join(" ");
-    s = s.split("Â").join("");
-
-    // Common double-encoded "ΓÇ.." family (seen in your hover/popup)
-    const map1 = [
-      ["ΓÇ£", "“"], ["ΓÇØ", "”"], ["ΓÇ¥", "”"],
-      ["ΓÇÿ", "‘"], ["ΓÇÖ", "’"],
-      ["ΓÇª", "…"],
-      ["ΓÇô", "—"], ["ΓÇò", "—"],
-      ["ΓÇû", "–"],
-      ["ΓÂ ", " "], ["ΓÂ", ""]
-    ];
-
-    // Common UTF-8-as-Win1252 "â€.." family
-    const map2 = [
-      ["â€”", "—"], ["â€“", "–"],
-      ["â€œ", "“"], ["â€", "”"],
-      ["â€˜", "‘"], ["â€™", "’"],
-      ["â€¦", "…"]
-    ];
-
-    // Common double-encoded "Γâ.." family
-    const map3 = [
-      ["Γâ€”", "—"], ["Γâ€“", "–"],
-      ["Γâ€œ", "“"], ["Γâ€", "”"],
-      ["Γâ€˜", "‘"], ["Γâ€™", "’"],
-      ["Γâ€¦", "…"]
-    ];
-
-    const applyMap = (str, map) => {
-      let out = str;
-      for (const [bad, good] of map) out = out.split(bad).join(good);
-      return out;
-    };
-
-    // Two passes catches many "double mangled" strings
-    s = applyMap(s, map1);
-    s = applyMap(s, map2);
-    s = applyMap(s, map3);
-
-    s = applyMap(s, map1);
-    s = applyMap(s, map2);
-    s = applyMap(s, map3);
-
-    // Tidy spacing
-    s = s.replace(/[ \t]{2,}/g, " ");
-
-    return s;
-  }
-
-  // Key fix: skip empty <p> (including NBSP) after the Summary heading
-  function extractSummaryFromHtml(html) {
+  // Summary extractor:
+  // - Finds h2#summary
+  // - Takes the first non-empty <p> after it
+  // - Treats NBSP as whitespace
+  function extractSummaryFromHtml(fullHtml) {
     const temp = document.createElement("div");
-    temp.innerHTML = html;
+    temp.innerHTML = fullHtml;
 
     const root = temp.querySelector("#doc-root") || temp;
     const h2 = root.querySelector("h2#summary");
@@ -229,192 +195,112 @@ function isTouchDevice() {
     return null;
   }
 
-  async function loadDocHtml(docUrl) {
-    const url = resolveDocUrl(docUrl);
-    if (!url) return null;
-
-    // Cache hit
-    if (docCache.has(url)) return docCache.get(url);
-
-    const res = await fetch(url, { cache: "no-store" });
-    if (!res.ok) throw new Error(`Failed to load word study file: ${url}`);
-
-    const html = await res.text();
-    const bodyHtml = extractDocBodyHtml(html);
-    const cleaned = fixMojibake(bodyHtml);
-
-    docCache.set(url, cleaned);
-    return cleaned;
-  }
-
   function getDocUrlFromEl(el) {
+    // Primary: data-ws-doc
     const d = el.getAttribute("data-ws-doc");
     if (d) return d;
 
+    // Fallback: href
     const href = el.getAttribute("href");
     if (href && href !== "#") return href;
 
     return null;
   }
 
+  // ---------------------------------------------------
+  // Binding
+  // ---------------------------------------------------
   function bindWordStudies(root) {
-  const scope = root || document;
-  const wsEls = scope.querySelectorAll(".ws");
-  if (!wsEls.length) return;
+    const scope = root || document;
+    const wsEls = scope.querySelectorAll(".ws");
+    if (!wsEls.length) return;
 
-  const isTouch =
-    "ontouchstart" in window ||
-    (navigator.maxTouchPoints || 0) > 0 ||
-    (window.matchMedia && window.matchMedia("(pointer: coarse)").matches);
+    const touch = isTouchDevice();
 
-  wsEls.forEach((el) => {
-    if (el.dataset.wsBound === "1") return;
-    el.dataset.wsBound = "1";
+    wsEls.forEach((el) => {
+      if (el.dataset.wsBound === "1") return;
+      el.dataset.wsBound = "1";
 
-    let hoverTimer = null;
+      const docUrl = getDocUrlFromEl(el);
+      let hoverTimer = null;
 
-    const key = el.getAttribute("data-ws");     // JSON key (optional)
-    const docUrl = getDocUrlFromEl(el);         // HTML doc url (optional)
+      // Desktop hover: show extracted Summary
+      if (!touch) {
+        el.addEventListener("mouseenter", (e) => {
+          hoverTimer = window.setTimeout(async () => {
+            if (!docUrl) return;
 
-    // -----------------------------
-    // DESKTOP HOVER (only if not touch)
-    // -----------------------------
-    if (!isTouch) {
-
-      el.addEventListener("mouseenter", (e) => {
-        hoverTimer = window.setTimeout(async () => {
-
-          // Prefer HTML doc mode
-          if (docUrl) {
             try {
-              const html = await loadDocHtml(docUrl);
-              const summary = extractSummaryFromHtml(html);
+              const fullHtml = await loadDocHtml(docUrl);
+              const summary = extractSummaryFromHtml(fullHtml);
               showTooltip(summary || "Click for word study", e.clientX, e.clientY);
             } catch {
               showTooltip("Click for word study", e.clientX, e.clientY);
             }
-            return;
+          }, 150);
+        });
+
+        el.addEventListener("mousemove", (e) => {
+          if (tooltipEl && tooltipEl.style.display === "block") {
+            showTooltip(tooltipEl.textContent || "", e.clientX, e.clientY);
           }
+        });
 
-          // Fallback to JSON mode
-          if (key) {
-            const item = await getItem(key);
-            if (item && item.short) {
-              showTooltip(item.short, e.clientX, e.clientY);
-            }
-          }
+        el.addEventListener("mouseleave", () => {
+          if (hoverTimer) window.clearTimeout(hoverTimer);
+          hideTooltip();
+        });
+      }
 
-        }, 150);
-      });
-
-      el.addEventListener("mousemove", (e) => {
-        if (tooltipEl && tooltipEl.style.display === "block") {
-          showTooltip(tooltipEl.textContent, e.clientX, e.clientY);
+      // Reliable opener for desktop + mobile
+      const openWordStudy = async (e) => {
+        if (e) {
+          e.preventDefault();
+          e.stopPropagation();
         }
-      });
-
-      el.addEventListener("mouseleave", () => {
-        if (hoverTimer) window.clearTimeout(hoverTimer);
         hideTooltip();
-      });
-    }
 
-    // -----------------------------
-    // CLICK / TAP (always enabled)
-    // -----------------------------
-    el.addEventListener("click", async (e) => {
-      e.preventDefault();
-      hideTooltip();
+        if (!docUrl) return;
 
-      // Prefer HTML doc mode
-      if (docUrl) {
         try {
-          const html = await loadDocHtml(docUrl);
-          showModal(html);
-        } catch {
-          showModal("<p class='muted'>Could not load word study.</p>");
-        }
-        return;
-      }
-
-      // Fallback to JSON mode
-      if (key) {
-        const item = await getItem(key);
-        if (!item) return;
-
-        showModal(
-          item.longHtml ||
-          `<p><strong>${item.term || key}</strong></p><p>${item.gloss || ""}</p>`
-        );
-      }
-    });
-  });
-}
-
-
-      el.addEventListener("mousemove", (e) => {
-        if (tooltipEl && tooltipEl.style.display === "block") {
-          // just reposition; don’t refetch on every move
-          const txt = tooltipEl.textContent || "";
-          showTooltip(txt, e.clientX, e.clientY);
-        }
-      });
-
-      el.addEventListener("mouseleave", () => {
-        if (hoverTimer) window.clearTimeout(hoverTimer);
-        hideTooltip();
-      });
-
-      el.addEventListener("click", async (e) => {
-        e.preventDefault();
-        hideTooltip();
-
-        // Prefer HTML doc mode when present
-        if (docUrl) {
-          try {
-            const html = await loadDocHtml(docUrl);
-            showModal(html);
-          } catch (err) {
-            console.error(err);
-            showModal(
-              `<p class='muted'>Could not load word study.</p>
-               <p class='muted'>${resolveDocUrl(docUrl) || docUrl}</p>`
-            );
-          }
-          return;
-        }
-
-        // Fall back to JSON mode
-        if (key) {
-          const item = await getItem(key);
-          if (!item) return;
+          const fullHtml = await loadDocHtml(docUrl);
+          const bodyHtml = extractDocRootInnerHtml(fullHtml);
+          showModal(bodyHtml);
+        } catch (err) {
+          console.error(err);
           showModal(
-            item.longHtml ||
-            `<p><strong>${item.term || key}</strong></p><p>${item.gloss || ""}</p>`
+            `<p class="muted">Could not load word study.</p>
+             <p class="muted">${resolveDocUrl(docUrl) || docUrl}</p>`
           );
-          return;
         }
+      };
 
-        console.warn("Clicked .ws without data-ws-doc or data-ws:", el);
-      });
+      if (touch) {
+        // Prevent iOS/Android "Define/Look Up" callout and text selection behaviors
+        el.addEventListener("touchstart", (e) => {
+          e.preventDefault();
+          e.stopPropagation();
+        }, { passive: false });
+
+        el.addEventListener("touchend", openWordStudy, { passive: false });
+      } else {
+        el.addEventListener("click", openWordStudy);
+      }
     });
   }
 
   function startObservers() {
     const docTarget = document.getElementById("doc-target");
-
     if (docTarget) {
       const obs = new MutationObserver(() => bindWordStudies(docTarget));
       obs.observe(docTarget, { childList: true, subtree: true });
     }
 
-    const bodyObs = new MutationObserver(() => bindWordStudies(document));
-    bodyObs.observe(document.body, { attributes: true, attributeFilter: ["data-ws-json"] });
-
+    // Initial bind
     bindWordStudies(document);
   }
 
-  // Expose a manual bind hook (your load-doc.js calls this)
+  // Expose hook for load-doc.js (so it can rebind after injecting HTML)
   window.MTBWordStudyHover = {
     bind: (root) => bindWordStudies(root || document)
   };

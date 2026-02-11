@@ -113,63 +113,67 @@
   // ==========================================
   // MOJIBAKE FIX
   // ==========================================
-  function fixMojibake(input) {
-    if (input == null) return input;
-    let s = String(input);
+function fixMojibake(input) {
+  if (input == null) return input;
+  let s = String(input);
 
-    // Normalize NBSP (real + common mangled forms)
-    s = s.replace(/\u00A0/g, " ");
-    s = s.replace(/&nbsp;/g, " ");
-    s = s.split("┬á").join(" ");
-    s = s.split("Â ").join(" ");
-    s = s.split("Â").join("");
+  // Normalize NBSP (real + common mangled forms)
+  s = s.replace(/\u00A0/g, " ");
+  s = s.replace(/&nbsp;/g, " ");
+  s = s.split("┬á").join(" ");
+  s = s.split("Â ").join(" ");
+  s = s.split("Â").join("");
 
-    // Common double-encoded "ΓÇ.." family (seen in content + hover/popup)
-    const map1 = [
-      ["ΓÇ£", "“"], ["ΓÇØ", "”"], ["ΓÇ¥", "”"],
-      ["ΓÇÿ", "‘"], ["ΓÇÖ", "’"],
-      ["ΓÇª", "…"],
-      ["ΓÇô", "—"], ["ΓÇò", "—"],
-      ["ΓÇû", "–"],
-      ["ΓÂ ", " "], ["ΓÂ", ""]
-    ];
+  // Common double-encoded "ΓÇ.." family
+  const map1 = [
+    ["ΓÇ£", "“"], ["ΓÇØ", "”"], ["ΓÇ¥", "”"],
+    ["ΓÇÿ", "‘"], ["ΓÇÖ", "’"],
+    ["ΓÇª", "…"],
+    ["ΓÇô", "—"], ["ΓÇò", "—"],
+    ["ΓÇû", "–"],
+    ["ΓÇó", "•"],   // ← bullet fix
+    ["ΓÂ ", " "], ["ΓÂ", ""]
+  ];
 
-    // Common UTF-8-as-Win1252 "â€.." family
-    const map2 = [
-      ["â€”", "—"], ["â€“", "–"],
-      ["â€œ", "“"], ["â€", "”"],
-      ["â€˜", "‘"], ["â€™", "’"],
-      ["â€¦", "…"]
-    ];
+  // Common UTF-8-as-Win1252 "â€.." family
+  const map2 = [
+    ["â€”", "—"], ["â€“", "–"],
+    ["â€œ", "“"], ["â€", "”"],
+    ["â€˜", "‘"], ["â€™", "’"],
+    ["â€¦", "…"]
+  ];
 
-    // Common double-encoded "Γâ.." family
-    const map3 = [
-      ["Γâ€”", "—"], ["Γâ€“", "–"],
-      ["Γâ€œ", "“"], ["Γâ€", "”"],
-      ["Γâ€˜", "‘"], ["Γâ€™", "’"],
-      ["Γâ€¦", "…"]
-    ];
+  // Common double-encoded "Γâ.." family
+  const map3 = [
+    ["Γâ€”", "—"], ["Γâ€“", "–"],
+    ["Γâ€œ", "“"], ["Γâ€", "”"],
+    ["Γâ€˜", "‘"], ["Γâ€™", "’"],
+    ["Γâ€¦", "…"]
+  ];
 
-    const applyMap = (str, map) => {
-      let out = str;
-      for (const [bad, good] of map) out = out.split(bad).join(good);
-      return out;
-    };
+  const applyMap = (str, map) => {
+    let out = str;
+    for (const [bad, good] of map) {
+      out = out.split(bad).join(good);
+    }
+    return out;
+  };
 
-    // Two passes catches many "double mangled" strings
-    s = applyMap(s, map1);
-    s = applyMap(s, map2);
-    s = applyMap(s, map3);
+  // Two passes catches many "double mangled" strings
+  s = applyMap(s, map1);
+  s = applyMap(s, map2);
+  s = applyMap(s, map3);
 
-    s = applyMap(s, map1);
-    s = applyMap(s, map2);
-    s = applyMap(s, map3);
+  s = applyMap(s, map1);
+  s = applyMap(s, map2);
+  s = applyMap(s, map3);
 
-    // Tidy spacing
-    s = s.replace(/[ \t]{2,}/g, " ");
+  // Tidy spacing
+  s = s.replace(/[ \t]{2,}/g, " ");
 
-    return s;
-  }
+  return s;
+}
+
 
   // ==========================================
   // WORD STUDY MARKERS (CHAPTER EXPLANATION)

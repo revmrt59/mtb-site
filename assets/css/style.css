@@ -572,6 +572,21 @@ body[data-doc-type] .doc-shell {
   line-height: 1.35;
 }
 
+.ws {
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  user-select: none;
+  cursor: pointer;
+}
+
+.ws {
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  user-select: none;
+  touch-action: manipulation;
+}
+
+
 /* =========================================================
    WORD STUDY MODAL (single source of truth)
 ========================================================= */
@@ -997,8 +1012,27 @@ table.mtb-scripture-table thead th:nth-child(3) {
   white-space: nowrap;
 }
 
-@media (pointer: coarse) {
-  .ws-tooltip {
-    display: none !important;
-  }
+.ws-modal {
+  position: fixed;
+  inset: 0;
+  z-index: 99999;
+  display: none;
 }
+
+.ws-modal[style*="display: block"] {
+  display: block;
+}
+
+.ws-modal-backdrop {
+  position: absolute;
+  inset: 0;
+}
+
+.ws-modal-panel {
+  position: relative;
+  z-index: 100000;
+  max-height: 90vh;
+  overflow: auto;
+  -webkit-overflow-scrolling: touch;
+}
+

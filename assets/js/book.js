@@ -120,6 +120,36 @@
     return (book || "").toLowerCase().replace(/\s+/g, "-");
   }
 
+  function parseBookChapterFromDoc(doc) {
+    const d = String(doc || "");
+    const m = d.match(/^([a-z0-9-]+)-(\d+)-/i);
+    if (!m) return { book: "", chapter: "" };
+    return { book: m[1].toLowerCase(), chapter: m[2] };
+  }
+
+  // This is the critical robustness change:
+  // If book/chapter are missing (often after deep resource topic navigation),
+  // fall back to inferring them from doc=... (e.g., titus-1-resources-xyz.html).
+  function getEffectiveBookChapter() {
+    const params = getParams();
+    const book = normalizeBookSlug(params.book);
+    const chapter = (params.chapter || "1").trim();
+
+    if (book) return { book, chapter };
+
+    if (params.doc) {
+      const inferred = parseBookChapterFromDoc(params.doc);
+      if (inferred.book) return { book: inferred.book, chapter: inferred.chapter || "1" };
+    }
+
+    // Final fallback: try body data attributes (set by load-doc.js)
+    const bodyBook = (document.body.dataset.book || "").trim();
+    const bodyChapter = (document.body.dataset.chapter || "").trim();
+    if (bodyBook) return { book: normalizeBookSlug(bodyBook), chapter: bodyChapter || "1" };
+
+    return { book: "", chapter: "1" };
+  }
+
   function tabToSuffix(tabKey) {
     const map = {
       chapter_scripture: "chapter-scripture",
@@ -148,7 +178,7 @@
     const m = docName.match(/^([a-z0-9-]+)-/);
     const book = m ? m[1] : "";
     const testament = BOOK_TESTAMENT[book] || "new-testament";
-    return `/books/${testament}/${book}/generated/${docName}`;
+    return `/books/${testament}/${book}/${docName}`;
   }
 
   function prettyTitleFromSlug(slug) {
@@ -172,8 +202,6 @@
     if (!tabsEl) return;
 
     const params = getParams();
-    const book = normalizeBookSlug(params.book);
-    const chapter = params.chapter || "1";
     const activeTab = params.tab || "chapter_scripture";
 
     tabsEl.innerHTML = "";
@@ -191,11 +219,13 @@
       }
 
       btn.addEventListener("click", () => {
-        // Let load-doc.js decide the doc from book/chapter/tab.
-        // Clearing doc avoids stale doc values overriding tab intent.
+        // Always compute effective book/chapter at click time (do NOT rely on captured values).
+        const eff = getEffectiveBookChapter();
+
+        // Clearing doc avoids stale resource-topic doc values overriding tab intent.
         setParams({
-          book: book,
-          chapter: chapter,
+          book: eff.book,
+          chapter: eff.chapter,
           tab: t.key,
           doc: ""
         });
@@ -241,6 +271,8 @@
   init();
 
   window.addEventListener("popstate", () => {
+    // If book/doc changes, rerender so click handlers always use current context
+    renderTabs();
     syncActiveTab();
 
     const params = getParams();

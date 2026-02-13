@@ -274,6 +274,28 @@ function Canonicalize-WordStudyNames($outDir, $bookSlug) {
     Rename-Item -Path $_.FullName -NewName $canonical
   }
 }
+function Clear-BookOutput($bookOutDir) {
+  if (-not (Test-Path $bookOutDir)) { return }
+
+  Write-Host ("Cleaning HTML under: " + $bookOutDir) -ForegroundColor Yellow
+
+  $htmlFiles = Get-ChildItem $bookOutDir -Recurse -File -Filter "*.html" -ErrorAction SilentlyContinue
+  Write-Host ("Found HTML files to delete: " + $htmlFiles.Count) -ForegroundColor Yellow
+
+  foreach ($f in $htmlFiles) {
+    try {
+      Remove-Item -LiteralPath $f.FullName -Force -ErrorAction Stop
+    } catch {
+      Write-Host ("Could not delete: " + $f.FullName) -ForegroundColor Red
+      Write-Host ($_.Exception.Message) -ForegroundColor Red
+    }
+  }
+
+  # Verify cleanup
+  $remaining = Get-ChildItem $bookOutDir -Recurse -File -Filter "*.html" -ErrorAction SilentlyContinue
+  Write-Host ("Remaining HTML after cleanup: " + $remaining.Count) -ForegroundColor Yellow
+}
+
 
 # -----------------------------
 # MAIN
@@ -298,8 +320,10 @@ if ($Mode -eq "BOOK") {
   $bookSource = Resolve-BookSource $BOOK_SLUG ([ref]$testament)
   if ($null -eq $bookSource) { Fail "Book source folder not found for '$rawBook' (slug '$BOOK_SLUG'). Expected under: $DEFAULT_BOOKS_SRC" }
 
-  $outDir = Join-Path $SITE_ROOT ("books\" + $testament + "\" + $BOOK_SLUG + "\generated")
+$outDir = Join-Path $SITE_ROOT ("books\" + $testament + "\" + $BOOK_SLUG)
   Ensure-Path $outDir
+
+  Clear-BookOutput $outDir
 
   # Print resolved output dir
   $resolvedOut = (Resolve-Path $outDir).Path
@@ -320,7 +344,24 @@ if ($Mode -eq "BOOK") {
 
       $base = [System.IO.Path]::GetFileNameWithoutExtension($docx.Name)
       $outName = (Slugify $base) + ".html"
-      $outPath = Join-Path $outDir $outName
+      # Route output based on slugged filename:
+      # - <book>-0-*              -> 000-book
+      # - <book>-<n>-* (n > 0)    -> <n as 3 digits> (001, 002, ...)
+      # - otherwise               -> book root
+      $targetSub = ""
+      if ($outName -match '^[a-z0-9-]+-0-') {
+        $targetSub = "000-book"
+      }
+      elseif ($outName -match '^[a-z0-9-]+-(\d+)-') {
+        $n = [int]$Matches[1]
+        if ($n -gt 0) { $targetSub = ("{0:D3}" -f $n) }
+      }
+
+      $targetDir = if ($targetSub) { Join-Path $outDir $targetSub } else { $outDir }
+      Ensure-Path $targetDir
+
+      $outPath = Join-Path $targetDir $outName
+
 
       Set-Content -Path $outPath -Value $html -Encoding UTF8 -Force
 
@@ -338,6 +379,61 @@ if ($Mode -eq "BOOK") {
   }
 
   Canonicalize-WordStudyNames $outDir $BOOK_SLUG
+
+  # ----------------------------
+  # Build chapter resources index pages
+  # Creates: <book>-<ch>-chapter-resources.html
+  # Links all: <book>-<ch>-resources-*.html
+  # Output location: same chapter folder (e.g., 001)
+  # ----------------------------
+  try {
+    $chapterResourcePages = Get-ChildItem $outDir -Recurse -File -Filter "*-resources-*.html" -ErrorAction SilentlyContinue
+
+    # Group by "<book>-<ch>" extracted from basename "<book>-<ch>-resources-<topic>"
+    $groups = $chapterResourcePages | Group-Object {
+      if ($_.BaseName -match "^(?<book>[a-z0-9-]+)-(?<ch>\d+)-resources-") {
+        "$($Matches.book)-$($Matches.ch)"
+      } else {
+        ""
+      }
+    }
+
+    foreach ($g in $groups) {
+      if ([string]::IsNullOrWhiteSpace($g.Name)) { continue }
+
+      if ($g.Name -notmatch "^(?<book>[a-z0-9-]+)-(?<ch>\d+)$") { continue }
+      $book = $Matches.book
+      $ch = [int]$Matches.ch
+
+      $folder = "{0:D3}" -f $ch
+      $targetDir = Join-Path $outDir $folder
+      Ensure-Path $targetDir
+
+      $indexName = "$book-$ch-chapter-resources.html"
+      $indexPath = Join-Path $targetDir $indexName
+
+$links = $g.Group | Sort-Object Name | ForEach-Object {
+    $file = $_.Name
+    $title = $_.BaseName -replace "^[a-z0-9-]+-\d+-resources-", "" -replace "-", " "
+    '  <li><a href="book.html?doc=' + $file + '">' + $title + '</a></li>'
+}
+
+
+      $html = @"
+<h2>Chapter Resources</h2>
+<ul>
+$($links -join "`n")
+</ul>
+"@
+
+      Set-Content -Path $indexPath -Value $html -Encoding UTF8 -Force
+      Write-Host ("WROTE: " + $indexName) -ForegroundColor Cyan
+    }
+  }
+  catch {
+    Write-Host "WARN: Failed to build chapter resources indexes." -ForegroundColor Yellow
+    Write-Host ($_.Exception.Message) -ForegroundColor Yellow
+  }
 
   $count = (Get-ChildItem $outDir -Filter "*.html" -ErrorAction SilentlyContinue | Measure-Object).Count
   Write-Host ""

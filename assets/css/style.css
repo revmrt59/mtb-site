@@ -1036,3 +1036,20 @@ table.mtb-scripture-table thead th:nth-child(3) {
   -webkit-overflow-scrolling: touch;
 }
 
+/* MTB Word Style Mappings */
+
+.mtb-blue-bold {
+  font-weight: 700;
+  color: #1e5aa8;
+}
+
+.mtb-scripture-block {
+  padding: 10px 12px;
+  border-left: 4px solid #1e5aa8;
+  background: rgba(30, 90, 168, 0.08);
+  border-radius: 8px;
+}
+.mtb-blue-bold {
+  color: #1e5aa8 !important;
+  font-weight: 700;
+}

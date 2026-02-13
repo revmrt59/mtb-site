@@ -11,7 +11,7 @@
 
   // Prevent path traversal and weird inputs.
   // Allow site-relative paths like:
-  //   books/old-testament/obadiah/generated/obadiah-1-resources-xyz.html
+  //   books/old-testament/obadiah/obadiah-1-resources-xyz.html
   function sanitizeDocParam(doc) {
     const s = String(doc || "").trim().replace(/\\/g, "/");
     if (!s) return "";

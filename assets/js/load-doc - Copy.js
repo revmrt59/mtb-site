@@ -125,101 +125,97 @@
   // LINK WIRING (resource topic links etc.)
   // ==========================================
 
-  function wireDocLinks(container) {
-    if (!container) return;
+function wireDocLinks(container) {
+  if (!container) return;
 
-    container.querySelectorAll('a[data-doc]').forEach(a => {
-      a.addEventListener('click', (e) => {
-        e.preventDefault();
+  container.querySelectorAll('a[data-doc]').forEach(a => {
+    a.addEventListener('click', (e) => {
+      e.preventDefault();
 
-        const file = a.getAttribute('data-doc');
-        if (!file) return;
+      const file = a.getAttribute('data-doc');
+      if (!file) return;
 
-        const doc = safeDocName(file) || file;
-        const inferred = parseDocName(doc);
+      // Derive book and chapter from the file name if possible.
+      const inferred = parseDocName(file);
 
-        const url = new URL(window.location.href);
+      const url = new URL(window.location.href);
 
-        const currentBook = url.searchParams.get("book") || document.body.dataset.book || "";
-        const currentChapter = url.searchParams.get("chapter") || document.body.dataset.chapter || "";
+      // CRITICAL: keep chapter identity in the URL so the top buttons never lose context
+      const currentBook = url.searchParams.get("book") || document.body.dataset.book || "";
+      const currentChapter = url.searchParams.get("chapter") || document.body.dataset.chapter || "";
 
-        const book = inferred.book || currentBook;
-        const chapter = (inferred.chapter != null ? String(inferred.chapter) : String(currentChapter || ""));
+      const book = inferred.book || currentBook;
+      const chapter = (inferred.chapter != null ? String(inferred.chapter) : String(currentChapter || ""));
 
-        if (book) url.searchParams.set("book", book);
-        if (chapter) url.searchParams.set("chapter", chapter);
+      if (book) url.searchParams.set("book", book);
+      if (chapter) url.searchParams.set("chapter", chapter);
 
-        url.searchParams.set("tab", RESOURCES_TAB);
-        url.searchParams.set("doc", doc);
+      // We ARE pinning doc here because this is a resource topic page
+      url.searchParams.set("tab", "resources");
+      url.searchParams.set("doc", file);
 
-        window.history.pushState({}, "", url.toString());
-        loadCurrentDocFromUrl();
-      });
+      window.history.pushState({}, "", url.toString());
+
+      // Always load through the canonical loader so state stays unified
+      loadCurrentDoc();
     });
-  }
+  });
+}
 
 
 
 
-  
   // ==========================================
-  // TAB NORMALIZATION
-  // ==========================================
-  const DEFAULT_TAB = "chapter_scripture";
-  const RESOURCES_TAB = "chapter_resources";
-
-  function normalizeTab(tab) {
-    const t = String(tab || "").toLowerCase().trim();
-
-    if (t === "resources" || t === "chapter_resources" || t === "chapter-resources") return RESOURCES_TAB;
-    if (t === "scripture" || t === "chapter_scripture" || t === "chapter-scripture") return "chapter_scripture";
-    if (t === "explanation" || t === "chapter_explanation" || t === "chapter-explanation") return "chapter_explanation";
-    if (t === "orientation" || t === "chapter_orientation" || t === "chapter-orientation") return "chapter_orientation";
-    if (t === "insights" || t === "chapter_insights" || t === "chapter-insights") return "chapter_insights";
-    if (t === "eg_culture" || t === "eg-culture" || t === "egculture" || t === "chapter_eg_culture" || t === "chapter-eg-culture") return "eg_culture";
-    if (t === "book_intro" || t === "book-intro" || t === "bookintroduction" || t === "book_introduction" || t === "book-introduction") return "book_introduction";
-
-    return DEFAULT_TAB;
-  }
-
-
-// ==========================================
   // TAB -> DOC SUFFIX
   // ==========================================
-  
   function tabToDocSuffix(tab) {
-    switch (normalizeTab(tab)) {
-      case "chapter_scripture": return "chapter-scripture";
-      case "chapter_explanation": return "chapter-explanation";
-      case "chapter_orientation": return "chapter-orientation";
-      case "chapter_insights": return "chapter-insights";
-      case "eg_culture": return "chapter-eg-culture";
-      case "chapter_resources": return "chapter-resources";
-      default: return "chapter-scripture";
+    const t = String(tab || "").toLowerCase();
+
+    switch (t) {
+      case "scripture":
+      case "chapter_scripture":
+      case "chapter-scripture":
+        return "chapter-scripture";
+
+      case "explanation":
+      case "chapter_explanation":
+      case "chapter-explanation":
+        return "chapter-explanation";
+
+      case "orientation":
+      case "chapter_orientation":
+      case "chapter-orientation":
+        return "chapter-orientation";
+
+      case "insights":
+      case "chapter_insights":
+      case "chapter-insights":
+        return "chapter-insights";
+
+      case "eg_culture":
+      case "eg-culture":
+      case "egculture":
+        return "chapter-eg-culture";
+
+      case "resources":
+      case "chapter_resources":
+      case "chapter-resources":
+        return "chapter-resources";
+
+      default:
+        return "chapter-scripture";
     }
   }
 
-
-  
   function buildDocNameFromParams(book, chapter, tab) {
     const b = String(book || "").toLowerCase();
-    const ch = String(chapter ?? "1").replace(/[^\d]/g, "") || "1";
-    const t = normalizeTab(tab);
-
-    // Safe default if something is missing
+    const ch = String(chapter || "1").replace(/[^\d]/g, "") || "1";
+    const t = String(tab || "chapter_scripture");
     if (!b) return "titus-0-book-introduction.html";
-
-    // Book-level view (chapter=0) never points at chapter-* docs.
-    // If tab is missing/unrecognized, we still treat it as book introduction.
-    if (ch === "0") return `${b}-0-book-introduction.html`;
-
-    // Explicit book intro tab (also used as a safe fallback)
     if (t === "book_introduction") return `${b}-0-book-introduction.html`;
-
     const suffix = tabToDocSuffix(t);
     return `${b}-${ch}-${suffix}.html`;
   }
-
 
   // Allow things like:
   // - titus-1-chapter-explanation.html
@@ -566,24 +562,16 @@ function loadCurrentDocFromUrl() {
   // If a resources doc is provided but tab is missing, assume Resources.
   // This prevents falling back to chapter_scripture and then deleting doc=.
   const docLooksLikeResources = safeDoc && safeDoc.includes("-resources-");
-  // =====================
-// BOOK HERO PAGE (book-level landing)
-// If chapter=0 and tab=book_home, do not load a doc.
-// =====================
-if (String(chapterParamRaw) === "0" && String(tabParamRaw) === "book_home") {
-  const target = document.getElementById("doc-target");
-  if (target) target.innerHTML = "";
-  return;
-}
 
-
-  let tabParam = tabParamRaw || (docLooksLikeResources ? RESOURCES_TAB : DEFAULT_TAB);
-
-  tabParam = normalizeTab(tabParam);
+  let tabParam = tabParamRaw || (docLooksLikeResources ? "chapter_resources" : "chapter_scripture");
   const tabLower = String(tabParam).toLowerCase();
 
   // Honor doc= when Resources is active OR when the doc itself is a resources page.
-  const shouldUseDoc = docLooksLikeResources || normalizeTab(tabParam) === RESOURCES_TAB;
+  const shouldUseDoc =
+    docLooksLikeResources ||
+    tabLower === "resources" ||
+    tabLower === "chapter_resources" ||
+    tabLower === "chapter-resources";
 
   // Determine the chapter we should use for chapter-based docs.
   // If chapter is missing/0, but the doc implies a real chapter, use that.
@@ -620,7 +608,7 @@ if (String(chapterParamRaw) === "0" && String(tabParamRaw) === "book_home") {
     }
 
     if (docLooksLikeResources) {
-      url.searchParams.set("tab", RESOURCES_TAB);
+      url.searchParams.set("tab", "chapter_resources");
       // Keep doc= as-is (canonical safeDoc)
       if (safeDoc) url.searchParams.set("doc", safeDoc);
     }
@@ -638,70 +626,13 @@ if (String(chapterParamRaw) === "0" && String(tabParamRaw) === "book_home") {
 
 
 
-  // Global delegated handler for doc links.
-  // Resource pages are injected dynamically, so direct listeners are fragile.
-  document.addEventListener("click", (e) => {
-    const a = e.target && e.target.closest ? e.target.closest("a") : null;
-    if (!a) return;
-
-    // Prefer explicit data-doc
-    const dataDoc = a.getAttribute("data-doc");
-    if (dataDoc) {
-      e.preventDefault();
-      const doc = safeDocName(dataDoc) || dataDoc;
-
-      const url = new URL(window.location.href);
-      url.searchParams.set("tab", RESOURCES_TAB);
-      url.searchParams.set("doc", doc);
-
-      const inferred = parseDocName(doc);
-      if (inferred.book) url.searchParams.set("book", inferred.book);
-      if (inferred.chapter != null) url.searchParams.set("chapter", String(inferred.chapter));
-
-      window.history.pushState({}, "", url.toString());
-      loadCurrentDocFromUrl();
-      return;
-    }
-
-    // Intercept href links that specify ?doc=...
-    const href = a.getAttribute("href") || "";
-    if (!href || href.startsWith("#") || href.startsWith("mailto:") || href.startsWith("tel:")) return;
-
-    try {
-      const u = new URL(href, window.location.href);
-      if (u.origin !== window.location.origin) return;
-
-      const doc = u.searchParams.get("doc");
-      if (!doc) return;
-
-      e.preventDefault();
-
-      const safe = safeDocName(doc) || doc;
-
-      const url = new URL(window.location.href);
-      url.searchParams.set("tab", RESOURCES_TAB);
-      url.searchParams.set("doc", safe);
-
-      const inferred = parseDocName(safe);
-      if (inferred.book) url.searchParams.set("book", inferred.book);
-      if (inferred.chapter != null) url.searchParams.set("chapter", String(inferred.chapter));
-
-      window.history.pushState({}, "", url.toString());
-      loadCurrentDocFromUrl();
-    } catch (_) {
-      // ignore malformed URLs
-    }
-  }, true);
-
-
-
   // Boot
   loadCurrentDocFromUrl();
   window.addEventListener("popstate", loadCurrentDocFromUrl);
 
   // Expose for debugging / other scripts
   window.MTBLoadDoc = {
-    loadCurrentDocFromUrl,
+    loadCurrentDoc: loadCurrentDocFromUrl,
     loadDoc,
   };
 })();

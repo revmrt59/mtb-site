@@ -306,6 +306,18 @@ body[data-doc-type] .doc-shell {
 }
 
 
+/* Book landing page hero */
+.book-hero-banner {
+  width: 100%;
+  height: 260px;            /* adjust height if desired */
+
+  border-radius: 0;         /* match home hero look */
+  margin: 0 0 14px 0;       /* no auto centering */
+
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+}
 
 
 /* Chapter push buttons row */
@@ -1112,64 +1124,116 @@ table.mtb-scripture-table thead th:nth-child(3) {
   color: #1e5aa8 !important;
   font-weight: 700;
 }
-/* ================================
-   BOOK HERO — FINAL CLEAN VERSION
-================================ */
+/* =========================================================
+   BOOK LANDING HERO - FULL WIDTH REFINEMENT
+========================================================= */
 
+/* 1. Force the container to ignore page margins and span 100% width */
 .book-hero {
-  background: transparent;
-  padding: 20px 0 0;
-}
-
-/* Full-width image */
-.book-hero-banner {
   position: relative;
   width: 100vw;
-  max-width: 100vw;
-  height: 420px;
-  margin-left: calc(50% - 50vw);
-  margin-right: calc(50% - 50vw);
-  margin-top: 20px;   /* white space between buttons and image */
+  left: 50%;
+  right: 50%;
+  margin-left: -50vw;
+  margin-right: -50vw;
+  height: 320px; /* Adjust height to match Home Hero */
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
   overflow: hidden;
+  border-bottom: 0;
+  padding: 0;
 }
 
-.book-hero-banner img {
+/* =========================================================
+   BOOK LANDING HERO - FULL SCREEN WIDTH + BUTTON OVERLAY
+========================================================= */
+
+/* 1. Force the container to ignore its parent's width and fill the screen */
+.book-hero {
+  position: relative;
+  width: 100vw;
+  left: 50%;
+  right: 50%;
+  margin-left: -50vw;
+  margin-right: -50vw;
+  
+  height: 300px; /* Adjust to match the height of your Home Hero */
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  overflow: hidden;
+  border-bottom: 0;
+  padding: 0;
+  background: #333; /* Fallback color while image loads */
+}
+
+/* 2. Dark overlay to match Home Hero contrast and make buttons pop */
+.book-hero::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.4); 
+  z-index: 2;
+}
+
+/* 3. The Image: Fills the entire 100vw area with no rounded corners */
+.book-hero-banner,
+.book-hero img {
+  position: absolute;
+  top: 0;
+  left: 0;
   width: 100%;
   height: 100%;
   object-fit: cover;
-  display: block;
+  z-index: 1;
+  border-radius: 0 !important; 
+  margin: 0 !important;
+  max-width: none !important;
 }
 
-/* Book buttons (above image) */
-.book-hero-controls {
+/* 4. Center both button rows on top of the image */
+.book-hero-controls,
+.book-hero-chapters {
+  position: relative;
+  z-index: 10;
   display: flex;
   justify-content: center;
-  gap: 12px;
-  margin-bottom: 10px;
+  gap: 15px;
+  width: 100%;
 }
 
-/* Chapter overlay inside image */
-.book-hero-overlay {
-  position: absolute;
-  bottom: 70px;
-  left: 0;
-  right: 0;
+/* 5. Button styling to match the Home page actions exactly */
+.book-hero button,
+.book-hero-chapters button {
+  appearance: none;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 200px;
+  padding: 14px 18px;
+  border-radius: 10px;
+  background: rgba(255, 255, 255, 0.92) !important;
+  color: #222 !important;
+  font-weight: 600;
+  box-shadow: 0 10px 22px rgba(0, 0, 0, 0.12);
+  border: 1px solid rgba(255, 255, 255, 0.35);
+  cursor: pointer;
+}
+
+/* Chapter buttons stay as small squares */
+.book-hero-chapters button {
+  min-width: 44px;
+}
+
+/* Fix "Select Chapter" text color and placement for the dark background */
+.book-hero-chapters::before {
+  color: #ffffff;
+  text-shadow: 1px 1px 3px rgba(0,0,0,0.6);
+  font-size: 16px;
+  margin: 15px 0 5px 0;
+  width: 100%;
   text-align: center;
 }
-
-.book-hero-overlay-label {
-  font-weight: 700;
-  margin-bottom: 10px;
-  bottom: 70px;
-  color: #222;
-}
-
-.book-hero-chapters {
-  display: flex;
-  justify-content: center;
-  gap: 10px;
-}
-.doc-header {
-  margin-top: -25px;
-}
-

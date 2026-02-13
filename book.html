@@ -5,17 +5,57 @@
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>Mastering the Bible - Book</title>
   <link rel="stylesheet" href="assets/css/style.css" />
+  <style>
+    /* Book landing hero (safe even if style.css already has these) */
+
+    
+    .book-hero.hidden { display: none; }
+    .book-hero-controls {
+      display: flex;
+      justify-content: center;
+      gap: 12px;
+      flex-wrap: wrap;
+      margin-top: 10px;
+    }
+    .book-hero-chapters {
+      display: flex;
+      gap: 10px;
+      justify-content: center;
+      flex-wrap: wrap;
+      margin-top: 14px;
+    }
+    .book-hero-chapters button { min-width: 44px; padding: 8px 12px; }
+  </style>
 </head>
 
 <body>
   <header class="site-header">
     <nav class="main-nav">
-
-        <a href="index.html">Home</a>
-    <a href="/about.html">About</a>
-    <a href="/resources/index.html">Resources</a>
+      <a href="index.html">Home</a>
+      <a href="/about.html">About</a>
+      <a href="/resources/index.html">Resources</a>
     </nav>
   </header>
+  <!-- BOOK HERO (Landing Page) -->
+<section id="book-hero" class="book-hero hidden">
+
+  <div class="book-hero-controls">
+    <button id="book-hero-intro" type="button">Book Introduction</button>
+    <button id="book-hero-resources" type="button">Book Resources</button>
+  </div>
+
+  <div class="book-hero-banner">
+    <img id="book-hero-banner-img" alt="Book landing banner" />
+
+    <!-- CHAPTER OVERLAY (sits on the image) -->
+    <div class="book-hero-overlay">
+      <div class="book-hero-overlay-label">Select Chapter</div>
+      <div id="book-hero-chapters" class="book-hero-chapters"></div>
+    </div>
+  </div>
+
+</section>
+
 
   <main class="doc-shell">
     <section class="doc-header">
@@ -23,12 +63,14 @@
       <p id="book-subtitle" class="muted"></p>
     </section>
 
-    <section class="tabs-shell">
+  
+
+    <section class="tabs-shell" id="tabs-shell">
       <div class="tabs" id="tabs"></div>
       <!-- Deeper Dive dropdown is injected here by book.js -->
     </section>
 
-    <section class="doc-layout">
+    <section class="doc-layout" id="doc-layout">
       <article class="doc-main">
         <div id="doc-target" class="doc-content"></div>
       </article>
@@ -38,19 +80,99 @@
   <!-- TAB CONTROLLER (includes Deeper Dive dropdown logic) -->
   <script src="assets/js/book.js"></script>
 
+  <script src="/assets/js/scripture-controls.js"></script>
+  <script src="/assets/js/load-doc.js"></script>
+  <script src="assets/js/wordstudy-hover.js"></script>
 
-<!-- CORE DOC LOADER -->
-<!--<script src="assets/js/load-doc.js"></script>-->
+  <script>
+  document.addEventListener("DOMContentLoaded", function () {
+    const params = new URLSearchParams(window.location.search);
+    const book = params.get("book") || "";
+    const chapter = params.get("chapter") || "";
+    const tab = params.get("tab") || "";
 
+    const hero = document.getElementById("book-hero");
+    const tabsShell = document.getElementById("tabs-shell");
+    const docLayout = document.getElementById("doc-layout");
 
-<script src="/assets/js/scripture-controls.js"></script>
-<script src="/assets/js/load-doc.js"></script>
-<script src="assets/js/wordstudy-hover.js"></script>
-<!--if (window.MTBWordStudyHover) window.MTBWordStudyHover.bind(target);-->
+    const chapterWrap = document.getElementById("book-hero-chapters");
+    const introBtn = document.getElementById("book-hero-intro");
+    const resourcesBtn = document.getElementById("book-hero-resources");
+    const bannerImg = document.getElementById("book-hero-banner-img");
 
+    if (!hero || !book) return;
 
+    // Only show hero on true book landing page
+    const isBookHome = (chapter === "0" && tab === "book_home");
 
+    if (!isBookHome) {
+      hero.classList.add("hidden");
+      return;
+    }
 
+    // Hide tabs and doc area on landing
+    if (tabsShell) tabsShell.style.display = "none";
+    if (docLayout) docLayout.style.display = "none";
 
+    hero.classList.remove("hidden");
+
+    // Robust banner loading across different server roots / base paths
+    // Try several candidate URLs; first one that loads wins.
+    const bannerCandidates = [
+      "/assets/images/book_page_landing.jpg",
+      "assets/images/book_page_landing.jpg",
+      "./assets/images/book_page_landing.jpg",
+      "../assets/images/book_page_landing.jpg"
+    ];
+
+    if (bannerImg) {
+      let i = 0;
+      const tryNext = () => {
+        if (i >= bannerCandidates.length) return;
+        bannerImg.src = bannerCandidates[i++];
+      };
+      bannerImg.addEventListener("error", tryNext);
+      tryNext();
+    }
+
+    const chapterMap = {
+      "titus": [1, 2, 3],
+      "3-john": [1],
+      "obadiah": [1]
+    };
+
+    if (introBtn) {
+      introBtn.onclick = function () {
+        window.location.href =
+          "/book.html?book=" + encodeURIComponent(book) +
+          "&chapter=0&tab=book_intro";
+      };
+    }
+
+    if (resourcesBtn) {
+      resourcesBtn.onclick = function () {
+        window.location.href =
+          "/book.html?book=" + encodeURIComponent(book) +
+          "&chapter=0&tab=book_resources";
+      };
+    }
+
+    if (chapterWrap) {
+      chapterWrap.innerHTML = "";
+      (chapterMap[book] || []).forEach(function (ch) {
+        const btn = document.createElement("button");
+        btn.type = "button";
+        btn.textContent = String(ch);
+        btn.addEventListener("click", function () {
+          window.location.href =
+            "/book.html?book=" + encodeURIComponent(book) +
+            "&chapter=" + encodeURIComponent(String(ch)) +
+            "&tab=chapter_scripture";
+        });
+        chapterWrap.appendChild(btn);
+      });
+    }
+  });
+  </script>
 </body>
 </html>

@@ -262,6 +262,77 @@ body[data-doc-type] .doc-shell {
     min-width: 92vw;
   }
 }
+/* =========================
+   BOOK LEVEL HERO
+========================= */
+
+.book-hero {
+  padding: 32px 0 24px;
+  text-align: center;
+  border-bottom: 1px solid #eee;
+}
+
+.book-hero.hidden {
+  display: none;
+}
+
+.book-hero-controls {
+  display: flex;
+  justify-content: center;
+  gap: 12px;
+  flex-wrap: wrap;
+  margin-top: 16px;
+}
+
+/* Chapter dropdown */
+#book-hero-chapter {
+  padding: 8px 12px;
+  font-size: 16px;
+  min-width: 160px;
+}
+
+/* Buttons */
+.book-hero button {
+  padding: 8px 14px;
+  font-size: 15px;
+  cursor: pointer;
+  border: 1px solid #ccc;
+  background: #f8f8f8;
+  border-radius: 4px;
+}
+
+.book-hero button:hover {
+  background: #eaeaea;
+}
+
+
+/* Book landing page hero */
+.book-hero-banner {
+  width: 100%;
+  height: 260px;            /* adjust height if desired */
+
+  border-radius: 0;         /* match home hero look */
+  margin: 0 0 14px 0;       /* no auto centering */
+
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+}
+
+
+/* Chapter push buttons row */
+.book-hero-chapters {
+  display: flex;
+  gap: 10px;
+  justify-content: center;
+  flex-wrap: wrap;
+  margin-top: 14px;
+}
+
+.book-hero-chapters button {
+  min-width: 44px;
+  padding: 8px 12px;
+}
 
 /* =========================================================
    DOCUMENT SHELL
@@ -572,6 +643,21 @@ body[data-doc-type] .doc-shell {
   line-height: 1.35;
 }
 
+.ws {
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  user-select: none;
+  cursor: pointer;
+}
+
+.ws {
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  user-select: none;
+  touch-action: manipulation;
+}
+
+
 /* =========================================================
    WORD STUDY MODAL (single source of truth)
 ========================================================= */
@@ -727,4 +813,427 @@ body:has(#about-tabs) main {
 body:has(.about-nav) main {
   margin-top: 36px;
   margin-bottom: 64px;
+}
+/* =========================================================
+   CHAPTER SCRIPTURE PAGE – LAYOUT (WIDE COLUMNS + BLUE GUTTERS)
+   Scope: only pages that render the scripture toggle controls.
+   Safe: does not affect About, Resources, or other doc tabs.
+========================================================= */
+
+/* Make the scripture view full-width by removing the sidebar only on scripture pages */
+body:has(.scripture-controls) .doc-layout {
+  grid-template-columns: 1fr;
+}
+
+/* Give the whole scripture page the “blue gutter” look */
+body:has(.scripture-controls) {
+  background: #f3f6fb;
+}
+
+/* Keep the main content in a centered white card */
+body:has(.scripture-controls) .doc-shell {
+  background: #ffffff;
+  border-radius: 10px;
+  box-shadow: 0 10px 24px rgba(0,0,0,0.08);
+}
+
+/* Add a soft blue “pad” around the scripture table area (inside the white card) */
+body:has(.scripture-controls) #doc-target {
+  background: #f3f6fb;
+  border-radius: 10px;
+  padding: 18px;
+}
+
+/* Scripture table sizing + column spacing */
+body:has(.scripture-controls) #doc-target table.mtb-scripture-table,
+body:has(.scripture-controls) #doc-target table[data-mode] {
+  width: 100%;
+  table-layout: fixed;          /* forces usable column widths */
+  border-collapse: separate;
+  border-spacing: 16px 0;       /* space between NKJV and NLT columns */
+  background: transparent;
+}
+
+/* Default text size (adjust to taste) */
+body:has(.scripture-controls) #doc-target table.mtb-scripture-table td,
+body:has(.scripture-controls) #doc-target table.mtb-scripture-table th {
+  font-size: 17px;
+  line-height: 1.55;
+}
+
+/* Verse-number column: narrow and right-aligned */
+body:has(.scripture-controls) #doc-target table.mtb-scripture-table th:first-child,
+body:has(.scripture-controls) #doc-target table.mtb-scripture-table td:first-child {
+  width: 64px;
+  text-align: right;
+  color: #666;
+  padding-right: 10px;
+  font-size: 15px;
+}
+
+/* Translation cells: white “cards” */
+body:has(.scripture-controls) #doc-target table.mtb-scripture-table th:nth-child(2),
+body:has(.scripture-controls) #doc-target table.mtb-scripture-table td:nth-child(2),
+body:has(.scripture-controls) #doc-target table.mtb-scripture-table th:nth-child(3),
+body:has(.scripture-controls) #doc-target table.mtb-scripture-table td:nth-child(3) {
+  background: #ffffff;
+  border: 1px solid #e3e7ef;
+  border-radius: 10px;
+  padding: 10px 14px;
+  vertical-align: top;
+}
+
+/* Visible divider / separation when BOTH translations are shown */
+body:has(.scripture-controls) #doc-target table[data-mode="both"] th:nth-child(2),
+body:has(.scripture-controls) #doc-target table[data-mode="both"] td:nth-child(2) {
+  box-shadow: 6px 0 0 0 #f3f6fb; /* creates a clean gutter edge */
+}
+
+/* When only one translation is visible, let it “feel” full width */
+body:has(.scripture-controls) #doc-target table[data-mode="nkjv"] td:nth-child(2),
+body:has(.scripture-controls) #doc-target table[data-mode="nlt"] td:nth-child(3) {
+  padding-left: 16px;
+  padding-right: 16px;
+}
+
+/* Scripture controls bar spacing */
+body:has(.scripture-controls) .scripture-controls {
+  margin-bottom: 14px;
+}
+/* =========================================================
+   CHAPTER SCRIPTURE – GAP + FULL-WIDTH SINGLE TRANSLATION
+   (Overrides earlier scripture table rules)
+========================================================= */
+
+/* In Both mode: create a real gutter + divider */
+body:has(.scripture-controls) #doc-target table.mtb-scripture-table[data-mode="both"] td:nth-child(2),
+body:has(.scripture-controls) #doc-target table.mtb-scripture-table[data-mode="both"] th:nth-child(2) {
+  padding-right: 26px !important;          /* space on right of NKJV */
+  border-right: 2px solid #e0e6f2 !important; /* visible divider */
+}
+
+body:has(.scripture-controls) #doc-target table.mtb-scripture-table[data-mode="both"] td:nth-child(3),
+body:has(.scripture-controls) #doc-target table.mtb-scripture-table[data-mode="both"] th:nth-child(3) {
+  padding-left: 26px !important;           /* space on left of NLT */
+}
+
+/* Make sure the table can actually expand */
+body:has(.scripture-controls) #doc-target table.mtb-scripture-table {
+  width: 100% !important;
+  table-layout: auto !important;  /* lets colspan work naturally */
+  border-collapse: separate !important;
+}
+/* =========================================================
+   CHAPTER SCRIPTURE – WIDER + BLUE GUTTERS + REAL GAP
+   Triggers only when the scripture controls bar exists.
+========================================================= */
+
+/* Full-width scripture view (no sidebar squeeze) */
+body:has(.scripture-controls) .doc-layout {
+  grid-template-columns: 1fr;
+}
+
+/* Blue/gray gutters outside */
+body:has(.scripture-controls) {
+  background: #f3f6fb;
+}
+
+/* Blue pad around the table (inside the white shell) */
+body:has(.scripture-controls) #doc-target {
+  background: #f3f6fb;
+  border-radius: 10px;
+  padding: 18px;
+}
+
+/* Let the table reflow (so colspan expands to full combined width) */
+body:has(.scripture-controls) #doc-target table {
+  width: 100% !important;
+  table-layout: auto !important;
+  border-collapse: separate !important;
+  border-spacing: 0 !important;
+}
+
+/* Both-mode: create real gap + divider */
+body:has(.scripture-controls) #doc-target table[data-mode="both"] td:nth-child(2),
+body:has(.scripture-controls) #doc-target table[data-mode="both"] th:nth-child(2) {
+  padding-right: 28px !important;
+  border-right: 2px solid #d6deee !important;
+}
+
+body:has(.scripture-controls) #doc-target table[data-mode="both"] td:nth-child(3),
+body:has(.scripture-controls) #doc-target table[data-mode="both"] th:nth-child(3) {
+  padding-left: 28px !important;
+}
+/* =========================================================
+   CHAPTER SCRIPTURE – WIDE LAYOUT + BLUE GUTTERS + COLUMN GAP
+   Trigger: body.mtb-has-scripture-controls (set by scripture-controls.js)
+========================================================= */
+
+body.mtb-has-scripture-controls {
+  background: #f3f6fb;
+}
+
+body.mtb-has-scripture-controls .doc-layout {
+  grid-template-columns: 1fr;
+}
+
+body.mtb-has-scripture-controls #doc-target {
+  background: #f3f6fb;
+  border-radius: 10px;
+  padding: 18px;
+}
+
+/* Table must be allowed to reflow for colspan to work */
+body.mtb-has-scripture-controls #doc-target table.mtb-scripture-table {
+  width: 100% !important;
+  table-layout: auto !important;
+  border-collapse: separate !important;
+  border-spacing: 0 !important;
+}
+
+/* Make translation columns feel like separate panels */
+body.mtb-has-scripture-controls #doc-target table.mtb-scripture-table th:nth-child(2),
+body.mtb-has-scripture-controls #doc-target table.mtb-scripture-table td:nth-child(2),
+body.mtb-has-scripture-controls #doc-target table.mtb-scripture-table th:nth-child(3),
+body.mtb-has-scripture-controls #doc-target table.mtb-scripture-table td:nth-child(3) {
+  background: #ffffff;
+  border: 1px solid #e3e7ef;
+  border-radius: 10px;
+  padding: 10px 14px;
+  vertical-align: top;
+}
+
+/* Gap + divider when both columns are present */
+body.mtb-has-scripture-controls #doc-target table.mtb-scripture-table[data-mode="both"] th:nth-child(2),
+body.mtb-has-scripture-controls #doc-target table.mtb-scripture-table[data-mode="both"] td:nth-child(2) {
+  padding-right: 28px !important;
+  border-right: 2px solid #d6deee !important;
+}
+
+body.mtb-has-scripture-controls #doc-target table.mtb-scripture-table[data-mode="both"] th:nth-child(3),
+body.mtb-has-scripture-controls #doc-target table.mtb-scripture-table[data-mode="both"] td:nth-child(3) {
+  padding-left: 28px !important;
+}
+
+/* Verse number column */
+body.mtb-has-scripture-controls #doc-target table.mtb-scripture-table th:first-child,
+body.mtb-has-scripture-controls #doc-target table.mtb-scripture-table td:first-child {
+  width: 64px;
+  text-align: right;
+  color: #666;
+  padding-right: 10px;
+  font-size: 15px;
+}
+
+/* Slightly larger scripture text */
+body.mtb-has-scripture-controls #doc-target table.mtb-scripture-table td,
+body.mtb-has-scripture-controls #doc-target table.mtb-scripture-table th {
+  font-size: 17px;
+  line-height: 1.55;
+}
+/* =========================================================
+   CHAPTER SCRIPTURE – TIGHTER HEADER ROW (NKJV / NLT)
+========================================================= */
+
+body.mtb-has-scripture-controls
+#doc-target
+table.mtb-scripture-table thead th {
+  padding-top: 1px !important;
+  padding-bottom: 1px !important;
+  font-size: 12px;          /* slightly smaller than body text */
+  line-height: 0.1;
+}
+
+/* Reduce visual height caused by rounded cards on header only */
+body.mtb-has-scripture-controls
+#doc-target
+table.mtb-scripture-table thead th:nth-child(2),
+body.mtb-has-scripture-controls
+#doc-target
+table.mtb-scripture-table thead th:nth-child(3) {
+  border-radius: 8px;
+}
+/* =========================================================
+   CHAPTER HEADER – INLINE BOOK + CHAPTER
+   (applies to all chapter-level pages)
+========================================================= */
+
+.doc-header {
+  display: flex;
+  align-items: baseline;
+  gap: 14px;
+  margin-bottom: 14px;
+
+  --chapter-title-size: 30px; /* match your current .doc-header h1 size */
+}
+
+.doc-header h1 {
+  margin: 0;
+  line-height: 1.1;
+  font-size: var(--chapter-title-size);
+}
+
+/* Chapter label (e.g. "Chapter 1") */
+.doc-header .muted,
+.doc-header p {
+  margin: 0;
+  font-size: var(--chapter-title-size) !important; /* override earlier .muted 15px */
+  font-weight: 700;
+  color: #666;
+  white-space: nowrap;
+}
+
+.ws-modal {
+  position: fixed;
+  inset: 0;
+  z-index: 99999;
+  display: none;
+}
+
+.ws-modal[style*="display: block"] {
+  display: block;
+}
+
+.ws-modal-backdrop {
+  position: absolute;
+  inset: 0;
+}
+
+.ws-modal-panel {
+  position: relative;
+  z-index: 100000;
+  max-height: 90vh;
+  overflow: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+/* MTB Word Style Mappings */
+
+.mtb-blue-bold {
+  font-weight: 700;
+  color: #1e5aa8;
+}
+
+.mtb-scripture-block {
+  padding: 10px 12px;
+  border-left: 4px solid #1e5aa8;
+  background: rgba(30, 90, 168, 0.08);
+  border-radius: 8px;
+}
+.mtb-blue-bold {
+  color: #1e5aa8 !important;
+  font-weight: 700;
+}
+/* =========================================================
+   BOOK LANDING HERO - FULL WIDTH REFINEMENT
+========================================================= */
+
+/* 1. Force the container to ignore page margins and span 100% width */
+.book-hero {
+  position: relative;
+  width: 100vw;
+  left: 50%;
+  right: 50%;
+  margin-left: -50vw;
+  margin-right: -50vw;
+  height: 320px; /* Adjust height to match Home Hero */
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  overflow: hidden;
+  border-bottom: 0;
+  padding: 0;
+}
+
+/* =========================================================
+   BOOK LANDING HERO - FULL SCREEN WIDTH + BUTTON OVERLAY
+========================================================= */
+
+/* 1. Force the container to ignore its parent's width and fill the screen */
+.book-hero {
+  position: relative;
+  width: 100vw;
+  left: 50%;
+  right: 50%;
+  margin-left: -50vw;
+  margin-right: -50vw;
+  
+  height: 300px; /* Adjust to match the height of your Home Hero */
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  overflow: hidden;
+  border-bottom: 0;
+  padding: 0;
+  background: #333; /* Fallback color while image loads */
+}
+
+/* 2. Dark overlay to match Home Hero contrast and make buttons pop */
+.book-hero::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.4); 
+  z-index: 2;
+}
+
+/* 3. The Image: Fills the entire 100vw area with no rounded corners */
+.book-hero-banner,
+.book-hero img {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  z-index: 1;
+  border-radius: 0 !important; 
+  margin: 0 !important;
+  max-width: none !important;
+}
+
+/* 4. Center both button rows on top of the image */
+.book-hero-controls,
+.book-hero-chapters {
+  position: relative;
+  z-index: 10;
+  display: flex;
+  justify-content: center;
+  gap: 15px;
+  width: 100%;
+}
+
+/* 5. Button styling to match the Home page actions exactly */
+.book-hero button,
+.book-hero-chapters button {
+  appearance: none;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 200px;
+  padding: 14px 18px;
+  border-radius: 10px;
+  background: rgba(255, 255, 255, 0.92) !important;
+  color: #222 !important;
+  font-weight: 600;
+  box-shadow: 0 10px 22px rgba(0, 0, 0, 0.12);
+  border: 1px solid rgba(255, 255, 255, 0.35);
+  cursor: pointer;
+}
+
+/* Chapter buttons stay as small squares */
+.book-hero-chapters button {
+  min-width: 44px;
+}
+
+/* Fix "Select Chapter" text color and placement for the dark background */
+.book-hero-chapters::before {
+  color: #ffffff;
+  text-shadow: 1px 1px 3px rgba(0,0,0,0.6);
+  font-size: 16px;
+  margin: 15px 0 5px 0;
+  width: 100%;
+  text-align: center;
 }

@@ -4,23 +4,21 @@
   // MTB CONTENT MANIFEST
   // =========================
   const MTB_CONTENT = [
-    // { name: "Titus", slug: "titus", chapters: [1, 2, 3] },
-    { name: "3 John", slug: "3-john", chapters: [1] },
-    { name: "Obadiah", slug: "obadiah", chapters: [1] },
-    { name: "Titus", slug: "titus", chapters: [1,2,3] }
+    { name: "3 John", slug: "3-john" },
+    { name: "Obadiah", slug: "obadiah" },
+    { name: "Titus", slug: "titus" }
   ];
 
   function el(id) {
     return document.getElementById(id);
   }
+function buildBookUrl(bookSlug) {
+  return "/book.html" +
+    "?book=" + encodeURIComponent(bookSlug) +
+    "&chapter=0" +
+    "&tab=book_home";
+}
 
-  // Always land on Chapter Scripture
-  function buildUrl(bookSlug, chapter) {
-    return "/book.html" +
-      "?book=" + encodeURIComponent(bookSlug) +
-      "&chapter=" + encodeURIComponent(String(chapter)) +
-      "&tab=chapter_scripture";
-  }
 
   function populateBooks(select) {
     select.innerHTML = "";
@@ -31,7 +29,6 @@
     select.appendChild(placeholder);
 
     MTB_CONTENT.forEach(book => {
-      if (!book.chapters || book.chapters.length === 0) return;
       const opt = document.createElement("option");
       opt.value = book.slug;
       opt.textContent = book.name;
@@ -41,67 +38,23 @@
     select.value = "";
   }
 
-  function resetChapters(select) {
-    select.innerHTML = "";
-    const blank = document.createElement("option");
-    blank.value = "";
-    blank.textContent = "";
-    select.appendChild(blank);
-    select.value = "";
-    select.disabled = true;
-  }
-
-  function populateChapters(select, chapterNums) {
-    resetChapters(select);
-    if (!chapterNums || chapterNums.length === 0) return;
-
-    chapterNums.forEach(n => {
-      const opt = document.createElement("option");
-      opt.value = String(n);
-      opt.textContent = String(n);
-      select.appendChild(opt);
-    });
-
-    select.disabled = false;
-  }
-
-  function selectedBook(bookSelect) {
-    return MTB_CONTENT.find(b => b.slug === bookSelect.value) || null;
-  }
-
   // =========================
   // INIT
   // =========================
   document.addEventListener("DOMContentLoaded", function () {
 
     const bookSelect = el("bookSelect");
-    const chapterSelect = el("chapterSelect");
     const goBtn = el("goBtn");
 
-    if (!bookSelect || !chapterSelect || !goBtn) return;
+    if (!bookSelect || !goBtn) return;
 
     populateBooks(bookSelect);
-    resetChapters(chapterSelect);
-
-    bookSelect.addEventListener("change", function () {
-      const book = selectedBook(bookSelect);
-      if (!book) {
-        resetChapters(chapterSelect);
-        return;
-      }
-      populateChapters(chapterSelect, book.chapters);
-    });
 
     goBtn.addEventListener("click", function () {
-      const book = selectedBook(bookSelect);
-      if (!book) return;
-
-      const chapter = chapterSelect.value
-        ? Number(chapterSelect.value)
-        : book.chapters[0];
-
-      window.location.href = buildUrl(book.slug, chapter);
+      if (!bookSelect.value) return;
+      window.location.href = buildBookUrl(bookSelect.value);
     });
+
   });
 
 })();

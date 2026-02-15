@@ -1,178 +1,602 @@
 <!doctype html>
 <html lang="en">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Mastering the Bible - Book</title>
-  <link rel="stylesheet" href="assets/css/style.css" />
-  <style>
-    /* Book landing hero (safe even if style.css already has these) */
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>Mastering the Bible - Book</title>
+<link rel="stylesheet" href="assets/css/style.css" />
 
-    
-    .book-hero.hidden { display: none; }
-    .book-hero-controls {
-      display: flex;
-      justify-content: center;
-      gap: 12px;
-      flex-wrap: wrap;
-      margin-top: 10px;
-    }
-    .book-hero-chapters {
-      display: flex;
-      gap: 10px;
-      justify-content: center;
-      flex-wrap: wrap;
-      margin-top: 14px;
-    }
-    .book-hero-chapters button { min-width: 44px; padding: 8px 12px; }
-  </style>
+<style>
+/* ================================
+   BOOK HERO (MATCHES HOME HERO)
+================================ */
+
+body { margin: 0; }
+
+.book-hero { margin: 0; padding: 0; }
+.book-hero.hidden { display: none; }
+
+/* Same structure as home hero */
+.book-hero-banner{
+  position: relative;
+  min-height: 80vh;
+  width: 100%;
+  background-image: url("/assets/images/book_page_landing.jpg");
+  background-size: cover;
+  background-position: center center;
+}
+
+/* Same overlay darkness as home */
+.book-hero-banner::after{
+  content:"";
+  position:absolute;
+  inset:0;
+  background: rgba(0,0,0,0.2);
+  z-index: 1;
+}
+
+/* Title + buttons */
+.book-hero-top{
+  position:absolute;
+  top: 120px;
+  left:0;
+  right:0;
+  text-align:center;
+  z-index: 5;     /* was 2 */
+}
+
+.book-hero-title{
+  margin:0;
+  font-size:44px;
+  font-weight:700;
+  color:#ffffff;
+  text-shadow: 0 2px 6px rgba(0,0,0,0.6);
+}
+
+.book-hero-controls{
+  margin-top:18px;
+  display:flex;
+  justify-content:center;
+  gap:12px;
+  flex-wrap:wrap;
+}
+.book-hero-controls button{
+  background:#ffffff;
+  border:1px solid rgba(0,0,0,0.25);
+  border-radius:8px;
+  padding:10px 16px;
+  font-weight:600;
+  cursor:pointer;
+  transition: all 0.15s ease;
+}
+
+/* Blue hover (matches chapter buttons) */
+.book-hero-controls button:hover{
+  background:#2563eb;
+  color:#ffffff;
+  border-color:#2563eb;
+  box-shadow: 0 0 0 3px rgba(37,99,235,0.35);
+  transform: translateY(-1px);
+}
+
+/* ===============================
+   Chapter selector (GRID FIXED)
+================================ */
+.book-hero-overlay{
+  position:absolute;
+  inset:0;
+  z-index:2;
+
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+
+  justify-content:flex-start;
+  padding-top:260px;
+
+  color:#ffffff;
+  text-shadow: 0 2px 6px rgba(0,0,0,0.6);
+
+  pointer-events: none;   /* this fixes the button issue */
+}
+.book-hero-chapters,
+.book-hero-chapters button{
+  pointer-events: auto;
+}
+
+
+/* GRID instead of flex */
+.book-hero-chapters{
+  display:grid;
+  grid-template-columns: repeat(auto-fit, 44px);
+  gap:10px;
+
+  /* THIS fixes the edge stretching */
+  max-width: 900px;      /* controls total width */
+  margin: 18px auto 0;   /* centers with equal side padding */
+
+  max-height:45vh;
+  overflow:auto;
+  padding: 6px 10px;     /* small inner padding */
+
+  justify-content:center;
+}
+
+
+
+/* Buttons */
+.book-hero-chapters button{
+  min-width:44px;
+  padding:6px 0;
+  font-size:14px;
+
+  background: rgba(255,255,255,0.92);
+  border: 1px solid rgba(0,0,0,0.25);
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+/* Disabled (chapter not yet available) */
+.book-hero-chapters button:disabled{
+  opacity: 0.45;
+  cursor: not-allowed;
+  box-shadow: none;
+  transform: none;
+}
+
+.book-hero-chapters button:hover{
+  background:#2563eb;
+  color:#fff;
+  border-color:#2563eb;
+  box-shadow: 0 0 0 3px rgba(37,99,235,0.35);
+  transform: translateY(-1px);
+}
+
+
+
+.book-hero-chapters button:focus,
+.book-hero-chapters button:focus-visible{
+  outline: 3px solid rgba(255,255,255,0.95);
+  outline-offset: 2px;
+}
+
+/* Selected/current chapter */
+.book-hero-chapters button.is-active{
+  background:#111;
+  color:#fff;
+  border-color:#fff;
+  box-shadow: 0 0 0 3px rgba(255,255,255,0.5);
+  transform:none;
+}
+
+@media (max-width:1100px){
+  .book-hero-chapters{
+    grid-template-columns: repeat(10, minmax(44px, 1fr));
+  }
+}
+
+@media (max-width:700px){
+  .book-hero-chapters{
+    grid-template-columns: repeat(6, minmax(44px, 1fr));
+  }
+}
+
+@media (max-width:480px){
+  .book-hero-chapters{
+    grid-template-columns: repeat(4, minmax(44px, 1fr));
+  }
+}
+
+/* ===============================
+   Book modal (Intro / Resources)
+================================ */
+.book-modal.hidden { display: none; }
+
+.book-modal{
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+}
+
+.book-modal-backdrop{
+  position: absolute;
+  inset: 0;
+  background: rgba(0,0,0,0.45);
+}
+
+.book-modal-panel{
+  position: relative;
+  width: min(1100px, 92vw);
+  max-height: 88vh;
+  margin: 6vh auto 0;
+  background: #ffffff;
+  border-radius: 10px;
+  overflow: auto;
+  padding: 18px 18px 26px;
+}
+
+.book-modal-close{
+  position: sticky;
+  top: 0;
+  float: right;
+  z-index: 1;
+  background: #2563eb;
+  color: #fff;
+  border: 1px solid #2563eb;
+  border-radius: 8px;
+  padding: 8px 12px;
+  cursor: pointer;
+}
+
+.book-modal-content{
+  padding-top: 12px;
+}
+
+</style>
 </head>
 
 <body>
-  <header class="site-header">
-    <nav class="main-nav">
-      <a href="index.html">Home</a>
-      <a href="/about.html">About</a>
-      <a href="/resources/index.html">Resources</a>
-    </nav>
-  </header>
-  <!-- BOOK HERO (Landing Page) -->
+
+<header class="site-header">
+  <nav class="main-nav">
+    <a href="index.html">Home</a>
+    <a href="/about.html">About</a>
+    <a href="/resources/index.html">Resources</a>
+  </nav>
+</header>
+
 <section id="book-hero" class="book-hero hidden">
-
-  <div class="book-hero-controls">
-    <button id="book-hero-intro" type="button">Book Introduction</button>
-    <button id="book-hero-resources" type="button">Book Resources</button>
-  </div>
-
   <div class="book-hero-banner">
-    <img id="book-hero-banner-img" alt="Book landing banner" />
 
-    <!-- CHAPTER OVERLAY (sits on the image) -->
+    <div class="book-hero-top">
+      <div id="book-hero-title" class="book-hero-title"></div>
+
+      <div class="book-hero-controls">
+        <button id="book-hero-intro" type="button">Book Introduction</button>
+        <button id="book-hero-resources" type="button">Book Resources</button>
+      </div>
+    </div>
+
     <div class="book-hero-overlay">
-      <div class="book-hero-overlay-label">Select Chapter</div>
+      <div>Select Chapter</div>
       <div id="book-hero-chapters" class="book-hero-chapters"></div>
     </div>
-  </div>
 
+  </div>
 </section>
 
 
-  <main class="doc-shell">
-    <section class="doc-header">
-      <h1 id="book-title"></h1>
-      <p id="book-subtitle" class="muted"></p>
-    </section>
 
-  
+<!-- Book modal (Intro / Resources) -->
+<div id="book-modal" class="book-modal hidden" aria-hidden="true">
+  <div class="book-modal-backdrop" data-close="1"></div>
 
-    <section class="tabs-shell" id="tabs-shell">
-      <div class="tabs" id="tabs"></div>
-      <!-- Deeper Dive dropdown is injected here by book.js -->
-    </section>
+  <div class="book-modal-panel" role="dialog" aria-modal="true" aria-label="Book content">
+    <button id="book-modal-close" class="book-modal-close" type="button">Close</button>
+    <div id="book-modal-content" class="book-modal-content"></div>
+  </div>
+</div>
 
-    <section class="doc-layout" id="doc-layout">
-      <article class="doc-main">
-        <div id="doc-target" class="doc-content"></div>
-      </article>
-    </section>
-  </main>
+<main class="doc-shell">
+  <section class="doc-header">
+    <h1 id="book-title"></h1>
+    <p id="book-subtitle" class="muted"></p>
+  </section>
 
-  <!-- TAB CONTROLLER (includes Deeper Dive dropdown logic) -->
-  <script src="assets/js/book.js"></script>
+  <section class="tabs-shell" id="tabs-shell">
+    <div class="tabs" id="tabs"></div>
+  </section>
 
-  <script src="/assets/js/scripture-controls.js"></script>
-  <script src="/assets/js/load-doc.js"></script>
-  <script src="assets/js/wordstudy-hover.js"></script>
+  <section class="doc-layout" id="doc-layout">
+    <article class="doc-main">
+      <div id="doc-target" class="doc-content"></div>
+    </article>
+  </section>
+</main>
+<script src="assets/js/jshero-jump.js"></script>
+<script src="assets/js/book.js"></script>
+<script src="/assets/js/scripture-controls.js"></script>
+<script src="/assets/js/load-doc.js"></script>
+<script src="assets/js/wordstudy-hover.js"></script>
 
-  <script>
-  document.addEventListener("DOMContentLoaded", function () {
-    const params = new URLSearchParams(window.location.search);
-    const book = params.get("book") || "";
-    const chapter = params.get("chapter") || "";
-    const tab = params.get("tab") || "";
+<script>
+document.addEventListener("DOMContentLoaded", function () {
 
-    const hero = document.getElementById("book-hero");
-    const tabsShell = document.getElementById("tabs-shell");
-    const docLayout = document.getElementById("doc-layout");
+  const params = new URLSearchParams(window.location.search);
+  const book = params.get("book") || "";
+  const chapter = params.get("chapter") || "";
+  const tab = params.get("tab") || "";
 
-    const chapterWrap = document.getElementById("book-hero-chapters");
-    const introBtn = document.getElementById("book-hero-intro");
-    const resourcesBtn = document.getElementById("book-hero-resources");
-    const bannerImg = document.getElementById("book-hero-banner-img");
+  const hero = document.getElementById("book-hero");
+  const tabsShell = document.getElementById("tabs-shell");
+  const docLayout = document.getElementById("doc-layout");
+  const chapterWrap = document.getElementById("book-hero-chapters");
+  const introBtn = document.getElementById("book-hero-intro");
+  const resourcesBtn = document.getElementById("book-hero-resources");
+  const heroTitle = document.getElementById("book-hero-title");
+  const docHeader = document.querySelector(".doc-header");
 
-    if (!hero || !book) return;
+  if (!hero || !book) return;
 
-    // Only show hero on true book landing page
-    const isBookHome = (chapter === "0" && tab === "book_home");
+  const isBookHome = (chapter === "0" && tab === "book_home");
 
-    if (!isBookHome) {
-      hero.classList.add("hidden");
-      return;
+  if (!isBookHome) {
+    hero.classList.add("hidden");
+    return;
+  }
+
+  if (tabsShell) tabsShell.style.display = "none";
+  if (docLayout) docLayout.style.display = "none";
+  if (docHeader) docHeader.style.display = "none";
+
+  hero.classList.remove("hidden");
+
+  function toDisplayName(slug) {
+    return slug.split("-").map(function(part){
+      if (/^\d+$/.test(part)) return part;
+      return part.charAt(0).toUpperCase() + part.slice(1);
+    }).join(" ");
+  }
+
+  if (heroTitle) {
+    const bookName = toDisplayName(book);
+    const gospels = new Set(["matthew","mark","luke","john"]);
+    heroTitle.textContent = gospels.has(book)
+      ? "Gospel of " + bookName
+      : "Book of " + bookName;
+  }
+
+  /* =========================================================
+     CHAPTER COUNTS (single source for auto chapter buttons)
+     Add books here once, and chapter buttons will just work.
+  ========================================================= */
+  const CHAPTER_COUNTS = {
+    "titus": 3,
+    "3-john": 1,
+    "obadiah": 1,
+    "isaiah": 66
+    // later: "psalms": 150
+  };
+
+  const currentChapter = parseInt(params.get("chapter") || "0", 10);
+
+  // -------------------------------
+  // Book modal loader (Intro/Resources)
+  // -------------------------------
+  async function fetchFirstOk(urls) {
+    for (const u of urls) {
+      try {
+        const res = await fetch(u, { cache: "no-store" });
+        if (res.ok) return { url: u, html: await res.text() };
+      } catch (_) {}
     }
+    return null;
+  }
 
-    // Hide tabs and doc area on landing
-    if (tabsShell) tabsShell.style.display = "none";
-    if (docLayout) docLayout.style.display = "none";
+  function setUrlParam(key, value) {
+    const u = new URL(window.location.href);
+    if (value == null) u.searchParams.delete(key);
+    else u.searchParams.set(key, value);
+    history.replaceState(null, "", u.toString());
+  }
+function wireModalLinks(modalContentEl) {
+  if (!modalContentEl) return;
 
-    hero.classList.remove("hidden");
+  // prevent double-wiring if called multiple times
+  if (modalContentEl.dataset.wired === "1") return;
+  modalContentEl.dataset.wired = "1";
 
-    // Robust banner loading across different server roots / base paths
-    // Try several candidate URLs; first one that loads wins.
-    const bannerCandidates = [
-      "/assets/images/book_page_landing.jpg",
-      "assets/images/book_page_landing.jpg",
-      "./assets/images/book_page_landing.jpg",
-      "../assets/images/book_page_landing.jpg"
+  modalContentEl.addEventListener("click", async function (e) {
+    const a = e.target.closest("a");
+    if (!a) return;
+
+    const href = a.getAttribute("href");
+    if (!href) return;
+
+    // Only hijack internal book HTML links
+    if (href.includes("/books/") && href.endsWith(".html")) {
+      e.preventDefault();
+
+      modalContentEl.innerHTML = "Loading...";
+
+      try {
+        const res = await fetch(href, { cache: "no-store" });
+        if (!res.ok) throw new Error(`HTTP ${res.status}`);
+        const html = await res.text();
+
+        modalContentEl.innerHTML = html;
+
+        // re-wire links for the newly loaded HTML
+        modalContentEl.dataset.wired = "0";
+        wireModalLinks(modalContentEl);
+
+      } catch (err) {
+        modalContentEl.innerHTML =
+          `<p><strong>Could not load:</strong> ${href}</p>`;
+      }
+    }
+  });
+}
+
+  async function openBookModal(kind) {
+    const modal = document.getElementById("book-modal");
+    const content = document.getElementById("book-modal-content");
+    const closeBtn = document.getElementById("book-modal-close");
+    if (!modal || !content || !closeBtn) return;
+
+    // Keep user on book_home, but remember modal state for refresh/back
+    setUrlParam("chapter", "0");
+    setUrlParam("tab", "book_home");
+    setUrlParam("modal", kind);
+
+    modal.classList.remove("hidden");
+    modal.setAttribute("aria-hidden", "false");
+    content.innerHTML = "Loading...";
+
+    const docFile = (kind === "book_resources")
+      ? `${book}-0-book-resources.html`
+      : `${book}-0-book-introduction.html`;
+     // : `${book}-0-book-introduction.html`;
+
+    // Try both testaments to avoid hardcoding
+    const candidates = [
+      `/books/new-testament/${book}/000-book/${docFile}`,
+      `/books/old-testament/${book}/000-book/${docFile}`
     ];
 
-    if (bannerImg) {
-      let i = 0;
-      const tryNext = () => {
-        if (i >= bannerCandidates.length) return;
-        bannerImg.src = bannerCandidates[i++];
-      };
-      bannerImg.addEventListener("error", tryNext);
-      tryNext();
+  const loaded = await fetchFirstOk(candidates);
+  if (loaded) {
+    content.innerHTML = loaded.html;
+
+    // ✅ ADD THIS LINE
+    wireModalLinks(content);
+
+  } else {
+    content.innerHTML =
+      `<p><strong>Could not load:</strong> ${docFile}</p>` +
+      `<p>Expected one of these paths:</p>` +
+      `<ul>` +
+      candidates.map(u => `<li><code>${u}</code></li>`).join("") +
+      `</ul>` +
+      `<p>If this is Book Resources, make sure you generate <code>${docFile}</code> into <code>000-book</code>.</p>`;
+  }
+
+
+    function closeModal() {
+      modal.classList.add("hidden");
+      modal.setAttribute("aria-hidden", "true");
+      setUrlParam("modal", null);
     }
 
-    const chapterMap = {
-      "titus": [1, 2, 3],
-      "3-john": [1],
-      "obadiah": [1]
-    };
+    closeBtn.onclick = closeModal;
+
+    modal.querySelectorAll("[data-close='1']").forEach(el => {
+      el.onclick = closeModal;
+    });
+
+    window.addEventListener("keydown", function escClose(ev){
+      if (ev.key === "Escape") {
+        closeModal();
+        window.removeEventListener("keydown", escClose);
+      }
+    });
+  }
+// --------------------------------------------------
+// Allow links inside modal to load inside modal
+// --------------------------------------------------
+function wireModalLinks_DUPLICATE_1(modalContentEl) {
+  if (!modalContentEl) return;
+
+  modalContentEl.addEventListener("click", async function (e) {
+    const a = e.target.closest("a");
+    if (!a) return;
+
+    const href = a.getAttribute("href");
+    if (!href) return;
+
+    // Only intercept internal book HTML links
+    if (href.endsWith(".html") && href.includes("/books/")) {
+      e.preventDefault();
+
+      try {
+        const res = await fetch(href, { cache: "no-store" });
+        if (!res.ok) throw new Error();
+        const html = await res.text();
+        modalContentEl.innerHTML = html;
+
+        // Re-wire links for nested navigation
+        wireModalLinks(modalContentEl);
+
+      } catch {
+        modalContentEl.innerHTML =
+          `<p><strong>Could not load:</strong> ${href}</p>`;
+      }
+    }
+  });
+}
+
 
     if (introBtn) {
-      introBtn.onclick = function () {
-        window.location.href =
-          "/book.html?book=" + encodeURIComponent(book) +
-          "&chapter=0&tab=book_intro";
-      };
-    }
+    introBtn.onclick = function(){
+      openBookModal("book_intro");
+    };
+  }
 
-    if (resourcesBtn) {
-      resourcesBtn.onclick = function () {
-        window.location.href =
-          "/book.html?book=" + encodeURIComponent(book) +
-          "&chapter=0&tab=book_resources";
-      };
-    }
+  if (resourcesBtn) {
+    resourcesBtn.onclick = function(){
+      openBookModal("book_resources");
+    };
+  }
 
-    if (chapterWrap) {
-      chapterWrap.innerHTML = "";
-      (chapterMap[book] || []).forEach(function (ch) {
+if (chapterWrap) {
+    chapterWrap.innerHTML = "";
+
+    // Total chapters from MTB_CONTENT (preferred), fallback to CHAPTER_COUNTS
+    let total = 0;
+    if (window.MTB_CONTENT && Array.isArray(window.MTB_CONTENT)) {
+      const entry = window.MTB_CONTENT.find(b => b.slug === book);
+      if (entry && entry.chapters) total = parseInt(entry.chapters, 10) || 0;
+    }
+    if (!total) total = CHAPTER_COUNTS[book] || 0;
+
+    // Load availability manifest generated by the build
+    (async function () {
+      let availableSet = null;
+
+      try {
+        const res = await fetch("/assets/data/chapter-availability.json", { cache: "no-store" });
+        if (res.ok) {
+          const data = await res.json();
+          const arr = (data && data[book]) ? data[book] : [];
+          availableSet = new Set((arr || []).map(n => parseInt(n, 10)).filter(n => Number.isFinite(n)));
+        }
+      } catch (_) {}
+
+      for (let ch = 1; ch <= total; ch++) {
         const btn = document.createElement("button");
         btn.type = "button";
         btn.textContent = String(ch);
-        btn.addEventListener("click", function () {
-          window.location.href =
-            "/book.html?book=" + encodeURIComponent(book) +
-            "&chapter=" + encodeURIComponent(String(ch)) +
-            "&tab=chapter_scripture";
-        });
+
+        // highlight current chapter (won't show on chapter=0, which is correct)
+        if (ch === currentChapter) btn.classList.add("is-active");
+
+        const isAvailable = !availableSet || availableSet.has(ch);
+
+        if (!isAvailable) {
+          btn.disabled = true;
+          btn.title = "Not yet available";
+        } else {
+          btn.addEventListener("click", function(){
+            window.location.href =
+              "/book.html?book=" + encodeURIComponent(book) +
+              "&chapter=" + ch +
+              "&tab=chapter_scripture";
+          });
+        }
+
         chapterWrap.appendChild(btn);
-      });
-    }
-  });
-  </script>
+      }
+    })();
+  }
+// --------------------------------------------------
+// Remove Book Introduction tab on chapter pages
+// --------------------------------------------------
+(function(){
+  const chapterNum = parseInt(params.get("chapter") || "0", 10);
+
+  if (chapterNum >= 1) {
+    const interval = setInterval(function(){
+      const introTab = document.querySelector('#tabs [data-tab="book_introduction"]');
+      if (introTab) {
+        introTab.remove();
+        clearInterval(interval);
+      }
+    }, 50);
+  }
+})();
+
+});
+</script>
+
 </body>
 </html>

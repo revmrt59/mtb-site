@@ -285,3 +285,236 @@
   });
 
 })();
+
+
+
+// --------------------------------------------------
+// MTB patch: hide Book Introduction tab on chapter pages (chapter >= 1)
+// Keeps book-level hero modal buttons intact.
+// --------------------------------------------------
+document.addEventListener("DOMContentLoaded", function () {
+  try {
+    const params = new URLSearchParams(window.location.search);
+    const chapterNum = parseInt(params.get("chapter") || "0", 10);
+    if (chapterNum >= 1) {
+      // Try common selectors used across MTB tab renderers
+      const candidates = [
+        '#tabs [data-tab="book_introduction"]',
+        '#tabs [data-tab="book_intro"]',
+        '#tabs [data-tab="book_introduction"]',
+        '[data-tab="book_introduction"]',
+        '[data-tab="book_intro"]'
+      ];
+      for (const sel of candidates) {
+        const el = document.querySelector(sel);
+        if (el) { el.remove(); break; }
+      }
+      // Also remove by visible text if needed
+      document.querySelectorAll("#tabs button, #tabs a").forEach((btn) => {
+        const t = (btn.textContent || "").trim().toLowerCase();
+        if (t === "book introduction" || t === "book intro") {
+          btn.remove();
+        }
+      });
+    }
+  } catch (_) {}
+});
+// =========================================================
+// MTB: Always hide "Book Introduction" tab on chapter pages
+// Works even when tabs re-render dynamically.
+// =========================================================
+(function () {
+  function chapterNumFromUrl() {
+    try {
+      const p = new URLSearchParams(window.location.search);
+      return parseInt(p.get("chapter") || "0", 10);
+    } catch {
+      return 0;
+    }
+  }
+
+  function removeBookIntroTabIfNeeded() {
+    const ch = chapterNumFromUrl();
+    if (ch < 1) return; // only hide on chapter pages
+
+    // Remove by data-tab if present
+    const selectors = [
+      '#tabs [data-tab="book_introduction"]',
+      '#tabs [data-tab="book_intro"]',
+      '[data-tab="book_introduction"]',
+      '[data-tab="book_intro"]'
+    ];
+
+    for (const sel of selectors) {
+      const el = document.querySelector(sel);
+      if (el) el.remove();
+    }
+
+    // Fallback: remove by visible text
+    document.querySelectorAll("#tabs button, #tabs a").forEach((btn) => {
+      const t = (btn.textContent || "").trim().toLowerCase();
+      if (t === "book introduction" || t === "book intro") {
+        btn.remove();
+      }
+    });
+  }
+
+  function startWatchingTabs() {
+    // Run once now
+    removeBookIntroTabIfNeeded();
+
+    const tabs = document.getElementById("tabs");
+    if (!tabs) return;
+
+    // Watch for re-renders
+    const obs = new MutationObserver(() => {
+      removeBookIntroTabIfNeeded();
+    });
+    obs.observe(tabs, { childList: true, subtree: true });
+  }
+
+  document.addEventListener("DOMContentLoaded", startWatchingTabs);
+
+  // In case your app changes URL via history without reload
+  window.addEventListener("popstate", removeBookIntroTabIfNeeded);
+})();
+// =========================================================
+// Chapter Prev/Next buttons (wrap across books)
+// - Prev on chapter 1 => last chapter of previous book
+// - Next on last chapter => chapter 1 of next book
+// Requires window.MTB_CONTENT (loaded via jshero-jump.js)
+// =========================================================
+(function () {
+  function getParams() {
+    const p = new URLSearchParams(window.location.search);
+    return {
+      book: p.get("book") || "",
+      chapter: parseInt(p.get("chapter") || "0", 10),
+      tab: p.get("tab") || "chapter_scripture"
+    };
+  }
+
+  function buildUrl(bookSlug, chapterNum) {
+    const u = new URL(window.location.href);
+    u.searchParams.set("book", bookSlug);
+    u.searchParams.set("chapter", String(chapterNum));
+
+    let tab = u.searchParams.get("tab") || "chapter_scripture";
+    if (tab === "book_home") tab = "chapter_scripture";
+    u.searchParams.set("tab", tab);
+
+    // close any modal state
+    u.searchParams.delete("modal");
+
+    return u.pathname + "?" + u.searchParams.toString();
+  }
+function prettyBook(slug) {
+  if (!slug) return "";
+  return slug
+    .split("-")
+    .map(w => w ? (w[0].toUpperCase() + w.slice(1)) : w)
+    .join(" ");
+}
+
+  function computePrevNext(bookSlug, chapterNum) {
+    const list = window.MTB_CONTENT || [];
+    const idx = list.findIndex(b => b.slug === bookSlug);
+    if (idx < 0) return null;
+
+    const currentChCount = parseInt(list[idx].chapters || 1, 10);
+
+    // prev
+    let prevBook = bookSlug;
+    let prevCh = chapterNum - 1;
+    if (chapterNum <= 1) {
+      const pidx = (idx - 1 + list.length) % list.length;
+      prevBook = list[pidx].slug;
+      prevCh = parseInt(list[pidx].chapters || 1, 10);
+    }
+
+    // next
+    let nextBook = bookSlug;
+    let nextCh = chapterNum + 1;
+    if (chapterNum >= currentChCount) {
+      const nidx = (idx + 1) % list.length;
+      nextBook = list[nidx].slug;
+      nextCh = 1;
+    }
+
+    return { prev: { book: prevBook, ch: prevCh }, next: { book: nextBook, ch: nextCh } };
+  }
+
+  function disableChapterNav(navEl) {
+    if (!navEl) return;
+    navEl.classList.add("is-loading");
+    navEl.querySelectorAll("button").forEach(b => { b.disabled = true; });
+  }
+
+  function ensureChapterNav() {
+    const { book, chapter } = getParams();
+
+    // Only show on real chapter pages
+    if (!book || !Number.isFinite(chapter) || chapter < 1) return;
+
+    const tabs = document.getElementById("tabs");
+    if (!tabs) return;
+
+    // already present
+    if (tabs.querySelector(".chapter-nav")) return;
+
+    // Must have MTB_CONTENT for cross-book wrap
+    if (!window.MTB_CONTENT || !Array.isArray(window.MTB_CONTENT) || window.MTB_CONTENT.length === 0) return;
+
+    const plan = computePrevNext(book, chapter);
+    if (!plan) return;
+
+    const nav = document.createElement("div");
+    nav.className = "chapter-nav";
+    nav.innerHTML = `
+      <button type="button" class="chapter-nav-btn" id="chapter-prev" aria-label="Previous chapter">
+        <span aria-hidden="true">◀</span>
+      </button>
+      <button type="button" class="chapter-nav-btn" id="chapter-next" aria-label="Next chapter">
+        <span aria-hidden="true">▶</span>
+      </button>
+    `;
+
+    tabs.appendChild(nav);
+// Hover tooltips (show destination)
+const prevBtn = nav.querySelector("#chapter-prev");
+const nextBtn = nav.querySelector("#chapter-next");
+
+if (prevBtn) {
+  prevBtn.title = `${prettyBook(plan.prev.book)} ${plan.prev.ch}`;
+  prevBtn.setAttribute("aria-label", `Previous: ${prettyBook(plan.prev.book)} chapter ${plan.prev.ch}`);
+}
+
+if (nextBtn) {
+  nextBtn.title = `${prettyBook(plan.next.book)} ${plan.next.ch}`;
+  nextBtn.setAttribute("aria-label", `Next: ${prettyBook(plan.next.book)} chapter ${plan.next.ch}`);
+}
+
+    nav.querySelector("#chapter-prev").addEventListener("click", function () {
+      disableChapterNav(nav);
+      window.location.href = buildUrl(plan.prev.book, plan.prev.ch);
+    });
+
+    nav.querySelector("#chapter-next").addEventListener("click", function () {
+      disableChapterNav(nav);
+      window.location.href = buildUrl(plan.next.book, plan.next.ch);
+    });
+  }
+
+  document.addEventListener("DOMContentLoaded", function () {
+    ensureChapterNav();
+
+    // If tabs are re-rendered dynamically, re-attach
+    const tabs = document.getElementById("tabs");
+    if (tabs) {
+      const obs = new MutationObserver(() => ensureChapterNav());
+      obs.observe(tabs, { childList: true, subtree: true });
+    }
+
+    window.addEventListener("popstate", ensureChapterNav);
+  });
+})();

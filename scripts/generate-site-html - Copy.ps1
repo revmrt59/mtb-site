@@ -307,51 +307,6 @@ function Clear-BookOutput($bookOutDir) {
   Write-Host ("Remaining HTML after cleanup: " + $remaining.Count) -ForegroundColor Yellow
 }
 
-function Write-ChapterAvailabilityManifest([string]$SiteRoot) {
-  if ([string]::IsNullOrWhiteSpace($SiteRoot)) { return }
-
-  $booksRoot = Join-Path $SiteRoot "books"
-  if (-not (Test-Path $booksRoot)) { return }
-
-  $dataDir = Join-Path $SiteRoot "assets\data"
-  Ensure-Path $dataDir
-
-  $manifest = @{}  # bookSlug -> HashSet[int]
-
-  $rx = [regex]::new(
-  "^(?<book>.+?)-(?<ch>\d+)-chapter-scripture\.html$",
-  [System.Text.RegularExpressions.RegexOptions]::IgnoreCase
-)
-
-
-  Get-ChildItem $booksRoot -Recurse -Filter "*-chapter-scripture.html" -File -ErrorAction SilentlyContinue | ForEach-Object {
-    $name = $_.Name
-    $m = $rx.Match($name)
-    if ($m.Success) {
-      $b = $m.Groups["book"].Value
-      $c = [int]$m.Groups["ch"].Value
-
-      if (-not $manifest.ContainsKey($b)) {
-        $manifest[$b] = New-Object "System.Collections.Generic.HashSet[int]"
-      }
-      $null = $manifest[$b].Add($c)
-    }
-  }
-
-  # Build ordered output object (stable JSON)
-  $outObj = [ordered]@{}
-  foreach ($k in ($manifest.Keys | Sort-Object)) {
-    $outObj[$k] = @($manifest[$k] | Sort-Object)
-  }
-
-  $json = $outObj | ConvertTo-Json -Depth 5
-  $outPath = Join-Path $dataDir "chapter-availability.json"
-  Set-Content -Path $outPath -Value $json -Encoding UTF8 -Force
-  Write-Host ("WROTE: assets/data/chapter-availability.json") -ForegroundColor Cyan
-}
-
-
-
 
 # -----------------------------
 # MAIN
@@ -574,20 +529,7 @@ $itemsHtml
 
 
 
-  
-# ----------------------------
-# Write chapter availability manifest (for non-sequential rollout)
-# assets/data/chapter-availability.json
-# ----------------------------
-try {
-  Write-ChapterAvailabilityManifest -SiteRoot $SITE_ROOT
-}
-catch {
-  Write-Host "WARN: Failed to write chapter availability manifest." -ForegroundColor Yellow
-  Write-Host ($_.Exception.Message) -ForegroundColor Yellow
-}
-
-$count = (Get-ChildItem $outDir -Filter "*.html" -ErrorAction SilentlyContinue | Measure-Object).Count
+  $count = (Get-ChildItem $outDir -Filter "*.html" -ErrorAction SilentlyContinue | Measure-Object).Count
   Write-Host ""
   Write-Host ("BOOK generation complete. HTML files in output: " + $count) -ForegroundColor Green
   exit 0

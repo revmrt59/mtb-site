@@ -79,7 +79,7 @@ body[data-doc-type] .doc-shell {
 .hero-overlay {
   position: absolute;
   inset: 0;
-  background: rgba(0, 0, 0, 0.45);
+  background: rgba(0, 0, 0, 0.2);
 }
 
 .hero-content {
@@ -1172,4 +1172,53 @@ table.mtb-scripture-table thead th:nth-child(3) {
 .doc-header {
   margin-top: -25px;
 }
+/* =========================================================
+   CHAPTER NAVIGATION (Prev / Next buttons in tab row)
+========================================================= */
 
+/* Make space on the right side of the tab row */
+#tabs {
+  position: relative;
+  padding-right: 110px;
+}
+
+/* Container */
+.chapter-nav {
+  position: absolute;
+  right: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  display: flex;
+  gap: 8px;
+}
+
+/* Buttons */
+.chapter-nav-btn {
+  width: 38px;
+  height: 38px;
+  border-radius: 8px;
+  background: rgba(255,255,255,0.95);
+  border: 1px solid rgba(0,0,0,0.25);
+  cursor: pointer;
+  font-weight: 700;
+  font-size: 16px;
+  line-height: 1;
+  transition: all 0.15s ease;
+}
+
+/* Hover = SAME BLUE as your other buttons */
+.chapter-nav-btn:hover {
+  background: #3b6fb6 !important;
+  color: #ffffff !important;
+  border-color: #3b6fb6 !important;
+  box-shadow: 0 0 0 3px rgba(59,111,182,0.35) !important;
+  transform: translateY(-1px);
+}
+
+
+/* Loading state */
+.chapter-nav.is-loading .chapter-nav-btn {
+  opacity: 0.55;
+  cursor: not-allowed;
+  transform: none;
+}

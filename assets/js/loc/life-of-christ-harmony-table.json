@@ -1,0 +1,2578 @@
+﻿[
+    {
+        "seq":  "001",
+        "seqNum":  1,
+        "rollup":  "Prologue",
+        "phase":  "Intro",
+        "approxDate":  "Oct 6 BC",
+        "title":  "Luke’s Preface",
+        "refs":  {
+                     "mark":  "",
+                     "luke":  "1:1-4",
+                     "john":  "",
+                     "matthew":  ""
+                 }
+    },
+    {
+        "seq":  "002",
+        "seqNum":  2,
+        "rollup":  "Prologue",
+        "phase":  "Intro",
+        "approxDate":  "Oct 6 BC",
+        "title":  "The Pre-existent Word",
+        "refs":  {
+                     "mark":  "",
+                     "luke":  "",
+                     "john":  "1:1-18",
+                     "matthew":  ""
+                 }
+    },
+    {
+        "seq":  "003",
+        "seqNum":  3,
+        "rollup":  "Childhood",
+        "phase":  "Early Years",
+        "approxDate":  "5 BC",
+        "title":  "Legal Genealogy",
+        "refs":  {
+                     "mark":  "",
+                     "luke":  "",
+                     "john":  "",
+                     "matthew":  "1:1-17"
+                 }
+    },
+    {
+        "seq":  "004",
+        "seqNum":  4,
+        "rollup":  "Childhood",
+        "phase":  "Early Years",
+        "approxDate":  "Oct 6 BC",
+        "title":  "Birth of John B. Foretold",
+        "refs":  {
+                     "mark":  "",
+                     "luke":  "1:5-25",
+                     "john":  "",
+                     "matthew":  ""
+                 }
+    },
+    {
+        "seq":  "005",
+        "seqNum":  5,
+        "rollup":  "Childhood",
+        "phase":  "Early Years",
+        "approxDate":  "Mar 5 BC",
+        "title":  "Annunciation to Mary",
+        "refs":  {
+                     "mark":  "",
+                     "luke":  "1:26-38",
+                     "john":  "",
+                     "matthew":  ""
+                 }
+    },
+    {
+        "seq":  "006",
+        "seqNum":  6,
+        "rollup":  "Childhood",
+        "phase":  "Early Years",
+        "approxDate":  "Apr 5 BC",
+        "title":  "Mary Visits Elizabeth",
+        "refs":  {
+                     "mark":  "",
+                     "luke":  "1:39-56",
+                     "john":  "",
+                     "matthew":  ""
+                 }
+    },
+    {
+        "seq":  "007",
+        "seqNum":  7,
+        "rollup":  "Childhood",
+        "phase":  "Early Years",
+        "approxDate":  "June 5 BC",
+        "title":  "Birth of John the Baptist",
+        "refs":  {
+                     "mark":  "",
+                     "luke":  "1:57-80",
+                     "john":  "",
+                     "matthew":  ""
+                 }
+    },
+    {
+        "seq":  "008",
+        "seqNum":  8,
+        "rollup":  "Childhood",
+        "phase":  "Early Years",
+        "approxDate":  "July 5 BC",
+        "title":  "Angel Appears to Joseph",
+        "refs":  {
+                     "mark":  "",
+                     "luke":  "",
+                     "john":  "",
+                     "matthew":  "1:18-25"
+                 }
+    },
+    {
+        "seq":  "009",
+        "seqNum":  9,
+        "rollup":  "Childhood",
+        "phase":  "Early Years",
+        "approxDate":  "Dec 5/4 BC",
+        "title":  "Birth of Jesus",
+        "refs":  {
+                     "mark":  "",
+                     "luke":  "2:1-7",
+                     "john":  "",
+                     "matthew":  "2:01"
+                 }
+    },
+    {
+        "seq":  "010",
+        "seqNum":  10,
+        "rollup":  "Childhood",
+        "phase":  "Early Years",
+        "approxDate":  "Dec 5/4 BC",
+        "title":  "Angels and Shepherds",
+        "refs":  {
+                     "mark":  "",
+                     "luke":  "2:8-20",
+                     "john":  "",
+                     "matthew":  ""
+                 }
+    },
+    {
+        "seq":  "011",
+        "seqNum":  11,
+        "rollup":  "Childhood",
+        "phase":  "Early Years",
+        "approxDate":  "Jan 4 BC",
+        "title":  "Circumcision and Naming",
+        "refs":  {
+                     "mark":  "",
+                     "luke":  "2:21",
+                     "john":  "",
+                     "matthew":  ""
+                 }
+    },
+    {
+        "seq":  "012",
+        "seqNum":  12,
+        "rollup":  "Childhood",
+        "phase":  "Early Years",
+        "approxDate":  "Feb 4 BC",
+        "title":  "Presentation in Temple",
+        "refs":  {
+                     "mark":  "",
+                     "luke":  "2:22-38",
+                     "john":  "",
+                     "matthew":  ""
+                 }
+    },
+    {
+        "seq":  "013",
+        "seqNum":  13,
+        "rollup":  "Childhood",
+        "phase":  "Early Years",
+        "approxDate":  "4 BC",
+        "title":  "Visit of the Magi",
+        "refs":  {
+                     "mark":  "",
+                     "luke":  "",
+                     "john":  "",
+                     "matthew":  "2:1-12"
+                 }
+    },
+    {
+        "seq":  "014",
+        "seqNum":  14,
+        "rollup":  "Childhood",
+        "phase":  "Early Years",
+        "approxDate":  "4 BC",
+        "title":  "Flight to Egypt / Massacre",
+        "refs":  {
+                     "mark":  "",
+                     "luke":  "",
+                     "john":  "",
+                     "matthew":  "2:13-18"
+                 }
+    },
+    {
+        "seq":  "015",
+        "seqNum":  15,
+        "rollup":  "Childhood",
+        "phase":  "Early Years",
+        "approxDate":  "4/3 BC",
+        "title":  "Return to Nazareth",
+        "refs":  {
+                     "mark":  "",
+                     "luke":  "2:39-40",
+                     "john":  "",
+                     "matthew":  "2:19-23"
+                 }
+    },
+    {
+        "seq":  "016",
+        "seqNum":  16,
+        "rollup":  "Childhood",
+        "phase":  "Early Years",
+        "approxDate":  "AD 8",
+        "title":  "Boy Jesus in the Temple",
+        "refs":  {
+                     "mark":  "",
+                     "luke":  "2:41-52",
+                     "john":  "",
+                     "matthew":  ""
+                 }
+    },
+    {
+        "seq":  "017",
+        "seqNum":  17,
+        "rollup":  "Prep",
+        "phase":  "Prep",
+        "approxDate":  "AD 26",
+        "title":  "Ministry of John B.",
+        "refs":  {
+                     "mark":  "1:1-8",
+                     "luke":  "3:1-18",
+                     "john":  "1:19-28",
+                     "matthew":  "3:1-12"
+                 }
+    },
+    {
+        "seq":  "018",
+        "seqNum":  18,
+        "rollup":  "Prep",
+        "phase":  "Prep",
+        "approxDate":  "AD 27",
+        "title":  "Baptism of Jesus",
+        "refs":  {
+                     "mark":  "1:9-11",
+                     "luke":  "3:21-22",
+                     "john":  "",
+                     "matthew":  "3:13-17"
+                 }
+    },
+    {
+        "seq":  "019",
+        "seqNum":  19,
+        "rollup":  "Prep",
+        "phase":  "Prep",
+        "approxDate":  "AD 27",
+        "title":  "Physical Genealogy",
+        "refs":  {
+                     "mark":  "",
+                     "luke":  "3:23-38",
+                     "john":  "",
+                     "matthew":  ""
+                 }
+    },
+    {
+        "seq":  "020",
+        "seqNum":  20,
+        "rollup":  "Prep",
+        "phase":  "Prep",
+        "approxDate":  "AD 27",
+        "title":  "Temptation of Jesus",
+        "refs":  {
+                     "mark":  "1:12-13",
+                     "luke":  "4:1-13",
+                     "john":  "",
+                     "matthew":  "4:1-11"
+                 }
+    },
+    {
+        "seq":  "021",
+        "seqNum":  21,
+        "rollup":  "Judean",
+        "phase":  "Early Judean",
+        "approxDate":  "AD 27",
+        "title":  "First Disciples",
+        "refs":  {
+                     "mark":  "",
+                     "luke":  "",
+                     "john":  "1:35-51",
+                     "matthew":  ""
+                 }
+    },
+    {
+        "seq":  "022",
+        "seqNum":  22,
+        "rollup":  "Judean",
+        "phase":  "Early Judean",
+        "approxDate":  "AD 27",
+        "title":  "First Miracle at Cana",
+        "refs":  {
+                     "mark":  "",
+                     "luke":  "",
+                     "john":  "2:1-11",
+                     "matthew":  ""
+                 }
+    },
+    {
+        "seq":  "023",
+        "seqNum":  23,
+        "rollup":  "Judean",
+        "phase":  "Early Judean",
+        "approxDate":  "AD 27 (Passover I)",
+        "title":  "Temple Cleansing I",
+        "refs":  {
+                     "mark":  "",
+                     "luke":  "",
+                     "john":  "2:13-25",
+                     "matthew":  ""
+                 }
+    },
+    {
+        "seq":  "024",
+        "seqNum":  24,
+        "rollup":  "Judean",
+        "phase":  "Early Judean",
+        "approxDate":  "AD 27",
+        "title":  "Jesus and Nicodemus",
+        "refs":  {
+                     "mark":  "",
+                     "luke":  "",
+                     "john":  "3:1-21",
+                     "matthew":  ""
+                 }
+    },
+    {
+        "seq":  "025",
+        "seqNum":  25,
+        "rollup":  "Judean",
+        "phase":  "Early Judean",
+        "approxDate":  "AD 27",
+        "title":  "Parallel Ministries",
+        "refs":  {
+                     "mark":  "",
+                     "luke":  "",
+                     "john":  "3:22-36",
+                     "matthew":  ""
+                 }
+    },
+    {
+        "seq":  "026",
+        "seqNum":  26,
+        "rollup":  "Samaritan",
+        "phase":  "Samaria",
+        "approxDate":  "AD 27 (Dec)",
+        "title":  "Woman at the Well",
+        "refs":  {
+                     "mark":  "",
+                     "luke":  "",
+                     "john":  "4:1-42",
+                     "matthew":  ""
+                 }
+    },
+    {
+        "seq":  "027",
+        "seqNum":  27,
+        "rollup":  "Galilean I",
+        "phase":  "Obscurity",
+        "approxDate":  "AD 27/28",
+        "title":  "Return to Galilee",
+        "refs":  {
+                     "mark":  "1:14-15",
+                     "luke":  "4:14-15",
+                     "john":  "4:43-45",
+                     "matthew":  "4:12"
+                 }
+    },
+    {
+        "seq":  "028",
+        "seqNum":  28,
+        "rollup":  "Galilean I",
+        "phase":  "Obscurity",
+        "approxDate":  "AD 28",
+        "title":  "Nobleman\u0027s Son Healed",
+        "refs":  {
+                     "mark":  "",
+                     "luke":  "",
+                     "john":  "4:46-54",
+                     "matthew":  ""
+                 }
+    },
+    {
+        "seq":  "029",
+        "seqNum":  29,
+        "rollup":  "Galilean I",
+        "phase":  "Obscurity",
+        "approxDate":  "AD 28",
+        "title":  "Rejection at Nazareth",
+        "refs":  {
+                     "mark":  "",
+                     "luke":  "4:16-30",
+                     "john":  "",
+                     "matthew":  ""
+                 }
+    },
+    {
+        "seq":  "030",
+        "seqNum":  30,
+        "rollup":  "Galilean I",
+        "phase":  "Obscurity",
+        "approxDate":  "AD 28",
+        "title":  "Call of the Four",
+        "refs":  {
+                     "mark":  "1:16-20",
+                     "luke":  "5:1-11",
+                     "john":  "",
+                     "matthew":  "4:18-22"
+                 }
+    },
+    {
+        "seq":  "031",
+        "seqNum":  31,
+        "rollup":  "Galilean I",
+        "phase":  "Obscurity",
+        "approxDate":  "AD 28",
+        "title":  "Capernaum Miracles",
+        "refs":  {
+                     "mark":  "1:21-34",
+                     "luke":  "4:31-41",
+                     "john":  "",
+                     "matthew":  "8:14-17"
+                 }
+    },
+    {
+        "seq":  "032",
+        "seqNum":  32,
+        "rollup":  "Galilean I",
+        "phase":  "Obscurity",
+        "approxDate":  "AD 28",
+        "title":  "First Healing Tour",
+        "refs":  {
+                     "mark":  "1:35-39",
+                     "luke":  "4:42-44",
+                     "john":  "",
+                     "matthew":  "4:23-25"
+                 }
+    },
+    {
+        "seq":  "033",
+        "seqNum":  33,
+        "rollup":  "Galilean I",
+        "phase":  "Obscurity",
+        "approxDate":  "AD 28",
+        "title":  "Healing of a Leper",
+        "refs":  {
+                     "mark":  "1:40-45",
+                     "luke":  "5:12-16",
+                     "john":  "",
+                     "matthew":  "8:1-4"
+                 }
+    },
+    {
+        "seq":  "034",
+        "seqNum":  34,
+        "rollup":  "Galilean I",
+        "phase":  "Obscurity",
+        "approxDate":  "AD 28",
+        "title":  "Healing of a Paralytic",
+        "refs":  {
+                     "mark":  "2:1-12",
+                     "luke":  "5:17-26",
+                     "john":  "",
+                     "matthew":  "9:1-8"
+                 }
+    },
+    {
+        "seq":  "035",
+        "seqNum":  35,
+        "rollup":  "Galilean I",
+        "phase":  "Obscurity",
+        "approxDate":  "AD 28",
+        "title":  "Call of Matthew",
+        "refs":  {
+                     "mark":  "2:13-17",
+                     "luke":  "5:27-32",
+                     "john":  "",
+                     "matthew":  "9:9-13"
+                 }
+    },
+    {
+        "seq":  "036",
+        "seqNum":  36,
+        "rollup":  "Galilean II",
+        "phase":  "Popularity",
+        "approxDate":  "AD 28 (Passover II)",
+        "title":  "Sabbath at Bethesda",
+        "refs":  {
+                     "mark":  "",
+                     "luke":  "",
+                     "john":  "5:1-47",
+                     "matthew":  ""
+                 }
+    },
+    {
+        "seq":  "037",
+        "seqNum":  37,
+        "rollup":  "Galilean II",
+        "phase":  "Popularity",
+        "approxDate":  "AD 28",
+        "title":  "Sabbath Controversies",
+        "refs":  {
+                     "mark":  "2:23-3:6",
+                     "luke":  "6:1-11",
+                     "john":  "",
+                     "matthew":  "12:1-14"
+                 }
+    },
+    {
+        "seq":  "038",
+        "seqNum":  38,
+        "rollup":  "Galilean II",
+        "phase":  "Popularity",
+        "approxDate":  "AD 28",
+        "title":  "General Healing Tour",
+        "refs":  {
+                     "mark":  "3:7-12",
+                     "luke":  "",
+                     "john":  "",
+                     "matthew":  "12:15-21"
+                 }
+    },
+    {
+        "seq":  "039",
+        "seqNum":  39,
+        "rollup":  "Galilean II",
+        "phase":  "Popularity",
+        "approxDate":  "AD 28",
+        "title":  "Choosing the Twelve",
+        "refs":  {
+                     "mark":  "3:13-19",
+                     "luke":  "6:12-16",
+                     "john":  "",
+                     "matthew":  "10:2-4"
+                 }
+    },
+    {
+        "seq":  "040",
+        "seqNum":  40,
+        "rollup":  "Galilean II",
+        "phase":  "Popularity",
+        "approxDate":  "AD 28",
+        "title":  "Sermon: Beatitudes",
+        "refs":  {
+                     "mark":  "",
+                     "luke":  "6:20-23",
+                     "john":  "",
+                     "matthew":  "5:1-12"
+                 }
+    },
+    {
+        "seq":  "041",
+        "seqNum":  41,
+        "rollup":  "Galilean II",
+        "phase":  "Popularity",
+        "approxDate":  "AD 28",
+        "title":  "Sermon: Salt and Light",
+        "refs":  {
+                     "mark":  "",
+                     "luke":  "",
+                     "john":  "",
+                     "matthew":  "5:13-16"
+                 }
+    },
+    {
+        "seq":  "042",
+        "seqNum":  42,
+        "rollup":  "Galilean II",
+        "phase":  "Popularity",
+        "approxDate":  "AD 28",
+        "title":  "Sermon: The Law",
+        "refs":  {
+                     "mark":  "",
+                     "luke":  "6:27-36",
+                     "john":  "",
+                     "matthew":  "5:17-48"
+                 }
+    },
+    {
+        "seq":  "043",
+        "seqNum":  43,
+        "rollup":  "Galilean II",
+        "phase":  "Popularity",
+        "approxDate":  "AD 28",
+        "title":  "Sermon: Religious Duty",
+        "refs":  {
+                     "mark":  "",
+                     "luke":  "",
+                     "john":  "",
+                     "matthew":  "6:1-18"
+                 }
+    },
+    {
+        "seq":  "044",
+        "seqNum":  44,
+        "rollup":  "Galilean II",
+        "phase":  "Popularity",
+        "approxDate":  "AD 28",
+        "title":  "Sermon: Anxiety",
+        "refs":  {
+                     "mark":  "",
+                     "luke":  "",
+                     "john":  "",
+                     "matthew":  "6:19-34"
+                 }
+    },
+    {
+        "seq":  "045",
+        "seqNum":  45,
+        "rollup":  "Galilean II",
+        "phase":  "Popularity",
+        "approxDate":  "AD 28",
+        "title":  "Sermon: Judgment",
+        "refs":  {
+                     "mark":  "",
+                     "luke":  "6:37-42",
+                     "john":  "",
+                     "matthew":  "7:1-12"
+                 }
+    },
+    {
+        "seq":  "046",
+        "seqNum":  46,
+        "rollup":  "Galilean II",
+        "phase":  "Popularity",
+        "approxDate":  "AD 28",
+        "title":  "Sermon: Two Ways",
+        "refs":  {
+                     "mark":  "",
+                     "luke":  "6:43-49",
+                     "john":  "",
+                     "matthew":  "7:13-29"
+                 }
+    },
+    {
+        "seq":  "047",
+        "seqNum":  47,
+        "rollup":  "Galilean II",
+        "phase":  "Popularity",
+        "approxDate":  "AD 28",
+        "title":  "Centurion’s Servant",
+        "refs":  {
+                     "mark":  "",
+                     "luke":  "7:1-10",
+                     "john":  "",
+                     "matthew":  "8:5-13"
+                 }
+    },
+    {
+        "seq":  "048",
+        "seqNum":  48,
+        "rollup":  "Galilean II",
+        "phase":  "Popularity",
+        "approxDate":  "AD 28",
+        "title":  "Raising Widow\u0027s Son",
+        "refs":  {
+                     "mark":  "",
+                     "luke":  "7:11-17",
+                     "john":  "",
+                     "matthew":  ""
+                 }
+    },
+    {
+        "seq":  "049",
+        "seqNum":  49,
+        "rollup":  "Galilean II",
+        "phase":  "Popularity",
+        "approxDate":  "AD 28",
+        "title":  "John B.\u0027s Messengers",
+        "refs":  {
+                     "mark":  "",
+                     "luke":  "7:18-35",
+                     "john":  "",
+                     "matthew":  "11:2-19"
+                 }
+    },
+    {
+        "seq":  "050",
+        "seqNum":  50,
+        "rollup":  "Galilean II",
+        "phase":  "Popularity",
+        "approxDate":  "AD 28",
+        "title":  "Anointed by Sinner",
+        "refs":  {
+                     "mark":  "",
+                     "luke":  "7:36-50",
+                     "john":  "",
+                     "matthew":  ""
+                 }
+    },
+    {
+        "seq":  "051",
+        "seqNum":  51,
+        "rollup":  "Galilean II",
+        "phase":  "Popularity",
+        "approxDate":  "AD 28",
+        "title":  "Women Following Jesus",
+        "refs":  {
+                     "mark":  "",
+                     "luke":  "8:1-3",
+                     "john":  "",
+                     "matthew":  ""
+                 }
+    },
+    {
+        "seq":  "052",
+        "seqNum":  52,
+        "rollup":  "Galilean II",
+        "phase":  "Popularity",
+        "approxDate":  "AD 28",
+        "title":  "Beelzebub Charge",
+        "refs":  {
+                     "mark":  "3:20-30",
+                     "luke":  "11:14-23",
+                     "john":  "",
+                     "matthew":  "12:22-37"
+                 }
+    },
+    {
+        "seq":  "053",
+        "seqNum":  53,
+        "rollup":  "Galilean II",
+        "phase":  "Popularity",
+        "approxDate":  "AD 28",
+        "title":  "Sign of Jonah",
+        "refs":  {
+                     "mark":  "",
+                     "luke":  "11:24-32",
+                     "john":  "",
+                     "matthew":  "12:38-45"
+                 }
+    },
+    {
+        "seq":  "054",
+        "seqNum":  54,
+        "rollup":  "Galilean II",
+        "phase":  "Popularity",
+        "approxDate":  "AD 28",
+        "title":  "True Kindred",
+        "refs":  {
+                     "mark":  "3:31-35",
+                     "luke":  "8:19-21",
+                     "john":  "",
+                     "matthew":  "12:46-50"
+                 }
+    },
+    {
+        "seq":  "055",
+        "seqNum":  55,
+        "rollup":  "Galilean II",
+        "phase":  "Popularity",
+        "approxDate":  "AD 28",
+        "title":  "Parable: Sower",
+        "refs":  {
+                     "mark":  "4:1-20",
+                     "luke":  "8:4-18",
+                     "john":  "",
+                     "matthew":  "13:1-23"
+                 }
+    },
+    {
+        "seq":  "056",
+        "seqNum":  56,
+        "rollup":  "Galilean II",
+        "phase":  "Popularity",
+        "approxDate":  "AD 28",
+        "title":  "Parable: Wheat/Tares",
+        "refs":  {
+                     "mark":  "",
+                     "luke":  "",
+                     "john":  "",
+                     "matthew":  "13:24-30"
+                 }
+    },
+    {
+        "seq":  "057",
+        "seqNum":  57,
+        "rollup":  "Galilean II",
+        "phase":  "Popularity",
+        "approxDate":  "AD 28",
+        "title":  "Parable: Mustard Seed",
+        "refs":  {
+                     "mark":  "4:30-34",
+                     "luke":  "13:18-21",
+                     "john":  "",
+                     "matthew":  "13:31-35"
+                 }
+    },
+    {
+        "seq":  "058",
+        "seqNum":  58,
+        "rollup":  "Galilean II",
+        "phase":  "Popularity",
+        "approxDate":  "AD 28",
+        "title":  "Tares Explained",
+        "refs":  {
+                     "mark":  "",
+                     "luke":  "",
+                     "john":  "",
+                     "matthew":  "13:36-43"
+                 }
+    },
+    {
+        "seq":  "059",
+        "seqNum":  59,
+        "rollup":  "Galilean II",
+        "phase":  "Popularity",
+        "approxDate":  "AD 28",
+        "title":  "Hidden Treasure/Pearl",
+        "refs":  {
+                     "mark":  "",
+                     "luke":  "",
+                     "john":  "",
+                     "matthew":  "13:44-53"
+                 }
+    },
+    {
+        "seq":  "060",
+        "seqNum":  60,
+        "rollup":  "Galilean II",
+        "phase":  "Popularity",
+        "approxDate":  "AD 28 (Autumn)",
+        "title":  "Stilling the Storm",
+        "refs":  {
+                     "mark":  "4:35-41",
+                     "luke":  "8:22-25",
+                     "john":  "",
+                     "matthew":  "8:18-27"
+                 }
+    },
+    {
+        "seq":  "061",
+        "seqNum":  61,
+        "rollup":  "Galilean II",
+        "phase":  "Popularity",
+        "approxDate":  "AD 28 (Autumn)",
+        "title":  "Gerasene Demoniac",
+        "refs":  {
+                     "mark":  "5:1-20",
+                     "luke":  "8:26-39",
+                     "john":  "",
+                     "matthew":  "8:28-34"
+                 }
+    },
+    {
+        "seq":  "062",
+        "seqNum":  62,
+        "rollup":  "Galilean II",
+        "phase":  "Popularity",
+        "approxDate":  "AD 28",
+        "title":  "Jairus’ Daughter",
+        "refs":  {
+                     "mark":  "5:21-43",
+                     "luke":  "8:40-56",
+                     "john":  "",
+                     "matthew":  "9:18-26"
+                 }
+    },
+    {
+        "seq":  "063",
+        "seqNum":  63,
+        "rollup":  "Galilean II",
+        "phase":  "Popularity",
+        "approxDate":  "AD 28",
+        "title":  "Two Blind Men/Mute",
+        "refs":  {
+                     "mark":  "",
+                     "luke":  "",
+                     "john":  "",
+                     "matthew":  "9:27-34"
+                 }
+    },
+    {
+        "seq":  "064",
+        "seqNum":  64,
+        "rollup":  "Galilean III",
+        "phase":  "Opposition",
+        "approxDate":  "AD 29 (Winter)",
+        "title":  "Last Nazareth Rejection",
+        "refs":  {
+                     "mark":  "6:1-6",
+                     "luke":  "",
+                     "john":  "",
+                     "matthew":  "13:54-58"
+                 }
+    },
+    {
+        "seq":  "065",
+        "seqNum":  65,
+        "rollup":  "Galilean III",
+        "phase":  "Opposition",
+        "approxDate":  "AD 29",
+        "title":  "Mission of the Twelve",
+        "refs":  {
+                     "mark":  "6:6-13",
+                     "luke":  "9:1-6",
+                     "john":  "",
+                     "matthew":  "9:35-11:1"
+                 }
+    },
+    {
+        "seq":  "066",
+        "seqNum":  66,
+        "rollup":  "Galilean III",
+        "phase":  "Opposition",
+        "approxDate":  "AD 29",
+        "title":  "John B.\u0027s Death",
+        "refs":  {
+                     "mark":  "6:14-29",
+                     "luke":  "9:7-9",
+                     "john":  "",
+                     "matthew":  "14:1-12"
+                 }
+    },
+    {
+        "seq":  "067",
+        "seqNum":  67,
+        "rollup":  "Galilean III",
+        "phase":  "Opposition",
+        "approxDate":  "AD 29 (Passover III)",
+        "title":  "Feeding of the 5,000",
+        "refs":  {
+                     "mark":  "6:30-44",
+                     "luke":  "9:10-17",
+                     "john":  "6:1-15",
+                     "matthew":  "14:13-21"
+                 }
+    },
+    {
+        "seq":  "068",
+        "seqNum":  68,
+        "rollup":  "Galilean III",
+        "phase":  "Opposition",
+        "approxDate":  "AD 29",
+        "title":  "Walking on Water",
+        "refs":  {
+                     "mark":  "6:45-52",
+                     "luke":  "",
+                     "john":  "6:16-21",
+                     "matthew":  "14:22-33"
+                 }
+    },
+    {
+        "seq":  "069",
+        "seqNum":  69,
+        "rollup":  "Galilean III",
+        "phase":  "Opposition",
+        "approxDate":  "AD 29",
+        "title":  "Bread of Life",
+        "refs":  {
+                     "mark":  "",
+                     "luke":  "",
+                     "john":  "6:22-71",
+                     "matthew":  ""
+                 }
+    },
+    {
+        "seq":  "070",
+        "seqNum":  70,
+        "rollup":  "Training",
+        "phase":  "Withdrawals",
+        "approxDate":  "AD 29",
+        "title":  "Tradition/Hands",
+        "refs":  {
+                     "mark":  "7:1-23",
+                     "luke":  "",
+                     "john":  "",
+                     "matthew":  "15:1-20"
+                 }
+    },
+    {
+        "seq":  "071",
+        "seqNum":  71,
+        "rollup":  "Training",
+        "phase":  "Withdrawals",
+        "approxDate":  "AD 29",
+        "title":  "Syro-Phoenician Girl",
+        "refs":  {
+                     "mark":  "7:24-30",
+                     "luke":  "",
+                     "john":  "",
+                     "matthew":  "15:21-28"
+                 }
+    },
+    {
+        "seq":  "072",
+        "seqNum":  72,
+        "rollup":  "Training",
+        "phase":  "Withdrawals",
+        "approxDate":  "AD 29",
+        "title":  "Deaf-Mute Healed",
+        "refs":  {
+                     "mark":  "7:31-37",
+                     "luke":  "",
+                     "john":  "",
+                     "matthew":  "15:29-31"
+                 }
+    },
+    {
+        "seq":  "073",
+        "seqNum":  73,
+        "rollup":  "Training",
+        "phase":  "Withdrawals",
+        "approxDate":  "AD 29",
+        "title":  "Feeding of the 4,000",
+        "refs":  {
+                     "mark":  "8:1-9",
+                     "luke":  "",
+                     "john":  "",
+                     "matthew":  "15:32-38"
+                 }
+    },
+    {
+        "seq":  "074",
+        "seqNum":  74,
+        "rollup":  "Training",
+        "phase":  "Withdrawals",
+        "approxDate":  "AD 29",
+        "title":  "Pharisees Seek Sign",
+        "refs":  {
+                     "mark":  "8:10-12",
+                     "luke":  "",
+                     "john":  "",
+                     "matthew":  "15:39-16:4"
+                 }
+    },
+    {
+        "seq":  "075",
+        "seqNum":  75,
+        "rollup":  "Training",
+        "phase":  "Withdrawals",
+        "approxDate":  "AD 29",
+        "title":  "Leaven of Pharisees",
+        "refs":  {
+                     "mark":  "8:13-21",
+                     "luke":  "",
+                     "john":  "",
+                     "matthew":  "16:5-12"
+                 }
+    },
+    {
+        "seq":  "076",
+        "seqNum":  76,
+        "rollup":  "Training",
+        "phase":  "Withdrawals",
+        "approxDate":  "AD 29",
+        "title":  "Blind Man (Bethsaida)",
+        "refs":  {
+                     "mark":  "8:22-26",
+                     "luke":  "",
+                     "john":  "",
+                     "matthew":  ""
+                 }
+    },
+    {
+        "seq":  "077",
+        "seqNum":  77,
+        "rollup":  "Training",
+        "phase":  "Withdrawals",
+        "approxDate":  "AD 29 (Summer)",
+        "title":  "Peter\u0027s Confession",
+        "refs":  {
+                     "mark":  "8:27-30",
+                     "luke":  "9:18-21",
+                     "john":  "",
+                     "matthew":  "16:13-20"
+                 }
+    },
+    {
+        "seq":  "078",
+        "seqNum":  78,
+        "rollup":  "Training",
+        "phase":  "Withdrawals",
+        "approxDate":  "AD 29",
+        "title":  "Death Predicted I",
+        "refs":  {
+                     "mark":  "8:31-9:1",
+                     "luke":  "9:22-27",
+                     "john":  "",
+                     "matthew":  "16:21-28"
+                 }
+    },
+    {
+        "seq":  "079",
+        "seqNum":  79,
+        "rollup":  "Training",
+        "phase":  "Withdrawals",
+        "approxDate":  "AD 29",
+        "title":  "The Transfiguration",
+        "refs":  {
+                     "mark":  "9:2-13",
+                     "luke":  "9:28-36",
+                     "john":  "",
+                     "matthew":  "17:1-13"
+                 }
+    },
+    {
+        "seq":  "080",
+        "seqNum":  80,
+        "rollup":  "Training",
+        "phase":  "Withdrawals",
+        "approxDate":  "AD 29",
+        "title":  "Demoniac Boy Healed",
+        "refs":  {
+                     "mark":  "9:14-29",
+                     "luke":  "9:37-43",
+                     "john":  "",
+                     "matthew":  "17:14-21"
+                 }
+    },
+    {
+        "seq":  "081",
+        "seqNum":  81,
+        "rollup":  "Training",
+        "phase":  "Withdrawals",
+        "approxDate":  "AD 29",
+        "title":  "Death Predicted II",
+        "refs":  {
+                     "mark":  "9:30-32",
+                     "luke":  "9:43-45",
+                     "john":  "",
+                     "matthew":  "17:22-23"
+                 }
+    },
+    {
+        "seq":  "082",
+        "seqNum":  82,
+        "rollup":  "Training",
+        "phase":  "Withdrawals",
+        "approxDate":  "AD 29",
+        "title":  "Temple Tax/Fish",
+        "refs":  {
+                     "mark":  "",
+                     "luke":  "",
+                     "john":  "",
+                     "matthew":  "17:24-27"
+                 }
+    },
+    {
+        "seq":  "083",
+        "seqNum":  83,
+        "rollup":  "Training",
+        "phase":  "Withdrawals",
+        "approxDate":  "AD 29",
+        "title":  "Ambition/Greatness",
+        "refs":  {
+                     "mark":  "9:33-50",
+                     "luke":  "9:46-50",
+                     "john":  "",
+                     "matthew":  "18:1-14"
+                 }
+    },
+    {
+        "seq":  "084",
+        "seqNum":  84,
+        "rollup":  "Training",
+        "phase":  "Withdrawals",
+        "approxDate":  "AD 29",
+        "title":  "Forgiveness/Debtor",
+        "refs":  {
+                     "mark":  "",
+                     "luke":  "",
+                     "john":  "",
+                     "matthew":  "18:15-35"
+                 }
+    },
+    {
+        "seq":  "085",
+        "seqNum":  85,
+        "rollup":  "Later Jud.",
+        "phase":  "Late Judean",
+        "approxDate":  "AD 29 (Oct)",
+        "title":  "Tabernacles (Jerus.)",
+        "refs":  {
+                     "mark":  "",
+                     "luke":  "",
+                     "john":  "7:1-52",
+                     "matthew":  ""
+                 }
+    },
+    {
+        "seq":  "086",
+        "seqNum":  86,
+        "rollup":  "Later Jud.",
+        "phase":  "Late Judean",
+        "approxDate":  "AD 29",
+        "title":  "Adulterous Woman",
+        "refs":  {
+                     "mark":  "",
+                     "luke":  "",
+                     "john":  "7:53-8:11",
+                     "matthew":  ""
+                 }
+    },
+    {
+        "seq":  "087",
+        "seqNum":  87,
+        "rollup":  "Later Jud.",
+        "phase":  "Late Judean",
+        "approxDate":  "AD 29",
+        "title":  "Light of the World",
+        "refs":  {
+                     "mark":  "",
+                     "luke":  "",
+                     "john":  "8:12-59",
+                     "matthew":  ""
+                 }
+    },
+    {
+        "seq":  "088",
+        "seqNum":  88,
+        "rollup":  "Later Jud.",
+        "phase":  "Late Judean",
+        "approxDate":  "AD 29 (Nov)",
+        "title":  "Mission of Seventy",
+        "refs":  {
+                     "mark":  "",
+                     "luke":  "10:1-24",
+                     "john":  "",
+                     "matthew":  ""
+                 }
+    },
+    {
+        "seq":  "089",
+        "seqNum":  89,
+        "rollup":  "Later Jud.",
+        "phase":  "Late Judean",
+        "approxDate":  "AD 29",
+        "title":  "Good Samaritan",
+        "refs":  {
+                     "mark":  "",
+                     "luke":  "10:25-37",
+                     "john":  "",
+                     "matthew":  ""
+                 }
+    },
+    {
+        "seq":  "090",
+        "seqNum":  90,
+        "rollup":  "Later Jud.",
+        "phase":  "Late Judean",
+        "approxDate":  "AD 29",
+        "title":  "Mary and Martha",
+        "refs":  {
+                     "mark":  "",
+                     "luke":  "10:38-42",
+                     "john":  "",
+                     "matthew":  ""
+                 }
+    },
+    {
+        "seq":  "091",
+        "seqNum":  91,
+        "rollup":  "Later Jud.",
+        "phase":  "Late Judean",
+        "approxDate":  "AD 29",
+        "title":  "Healing Man Blind",
+        "refs":  {
+                     "mark":  "",
+                     "luke":  "",
+                     "john":  "9:1-41",
+                     "matthew":  ""
+                 }
+    },
+    {
+        "seq":  "092",
+        "seqNum":  92,
+        "rollup":  "Later Jud.",
+        "phase":  "Late Judean",
+        "approxDate":  "AD 29",
+        "title":  "Good Shepherd",
+        "refs":  {
+                     "mark":  "",
+                     "luke":  "",
+                     "john":  "10:1-21",
+                     "matthew":  ""
+                 }
+    },
+    {
+        "seq":  "093",
+        "seqNum":  93,
+        "rollup":  "Later Jud.",
+        "phase":  "Late Judean",
+        "approxDate":  "AD 29 (Dec)",
+        "title":  "Feast of Dedication",
+        "refs":  {
+                     "mark":  "",
+                     "luke":  "",
+                     "john":  "10:22-39",
+                     "matthew":  ""
+                 }
+    },
+    {
+        "seq":  "094",
+        "seqNum":  94,
+        "rollup":  "Perean",
+        "phase":  "Perean",
+        "approxDate":  "AD 30 (Jan)",
+        "title":  "Beyond Jordan",
+        "refs":  {
+                     "mark":  "",
+                     "luke":  "",
+                     "john":  "10:40-42",
+                     "matthew":  ""
+                 }
+    },
+    {
+        "seq":  "095",
+        "seqNum":  95,
+        "rollup":  "Perean",
+        "phase":  "Perean",
+        "approxDate":  "AD 30 (Feb)",
+        "title":  "Raising of Lazarus",
+        "refs":  {
+                     "mark":  "",
+                     "luke":  "",
+                     "john":  "11:1-46",
+                     "matthew":  ""
+                 }
+    },
+    {
+        "seq":  "096",
+        "seqNum":  96,
+        "rollup":  "Perean",
+        "phase":  "Perean",
+        "approxDate":  "AD 30",
+        "title":  "Sanhedrin Plot",
+        "refs":  {
+                     "mark":  "",
+                     "luke":  "",
+                     "john":  "11:47-54",
+                     "matthew":  ""
+                 }
+    },
+    {
+        "seq":  "097",
+        "seqNum":  97,
+        "rollup":  "Perean",
+        "phase":  "Perean",
+        "approxDate":  "AD 30",
+        "title":  "Departure (Galilee)",
+        "refs":  {
+                     "mark":  "10:01",
+                     "luke":  "9:51-62",
+                     "john":  "",
+                     "matthew":  "19:1-2"
+                 }
+    },
+    {
+        "seq":  "098",
+        "seqNum":  98,
+        "rollup":  "Perean",
+        "phase":  "Perean",
+        "approxDate":  "AD 30",
+        "title":  "Ten Lepers Healed",
+        "refs":  {
+                     "mark":  "",
+                     "luke":  "17:11-19",
+                     "john":  "",
+                     "matthew":  ""
+                 }
+    },
+    {
+        "seq":  "099",
+        "seqNum":  99,
+        "rollup":  "Perean",
+        "phase":  "Perean",
+        "approxDate":  "AD 30",
+        "title":  "Teachings on Prayer",
+        "refs":  {
+                     "mark":  "",
+                     "luke":  "11:1-13",
+                     "john":  "",
+                     "matthew":  ""
+                 }
+    },
+    {
+        "seq":  "100",
+        "seqNum":  100,
+        "rollup":  "Perean",
+        "phase":  "Perean",
+        "approxDate":  "AD 30",
+        "title":  "Woe to Pharisees",
+        "refs":  {
+                     "mark":  "",
+                     "luke":  "11:37-54",
+                     "john":  "",
+                     "matthew":  ""
+                 }
+    },
+    {
+        "seq":  "101",
+        "seqNum":  101,
+        "rollup":  "Perean",
+        "phase":  "Perean",
+        "approxDate":  "AD 30",
+        "title":  "Hypocrisy/Covetousness",
+        "refs":  {
+                     "mark":  "",
+                     "luke":  "12:1-34",
+                     "john":  "",
+                     "matthew":  ""
+                 }
+    },
+    {
+        "seq":  "102",
+        "seqNum":  102,
+        "rollup":  "Perean",
+        "phase":  "Perean",
+        "approxDate":  "AD 30",
+        "title":  "Watchfulness",
+        "refs":  {
+                     "mark":  "",
+                     "luke":  "12:35-59",
+                     "john":  "",
+                     "matthew":  ""
+                 }
+    },
+    {
+        "seq":  "103",
+        "seqNum":  103,
+        "rollup":  "Perean",
+        "phase":  "Perean",
+        "approxDate":  "AD 30",
+        "title":  "Repent or Perish",
+        "refs":  {
+                     "mark":  "",
+                     "luke":  "13:1-9",
+                     "john":  "",
+                     "matthew":  ""
+                 }
+    },
+    {
+        "seq":  "104",
+        "seqNum":  104,
+        "rollup":  "Perean",
+        "phase":  "Perean",
+        "approxDate":  "AD 30",
+        "title":  "Crippled Woman",
+        "refs":  {
+                     "mark":  "",
+                     "luke":  "13:10-17",
+                     "john":  "",
+                     "matthew":  ""
+                 }
+    },
+    {
+        "seq":  "105",
+        "seqNum":  105,
+        "rollup":  "Perean",
+        "phase":  "Perean",
+        "approxDate":  "AD 30",
+        "title":  "The Narrow Door",
+        "refs":  {
+                     "mark":  "",
+                     "luke":  "13:22-35",
+                     "john":  "",
+                     "matthew":  ""
+                 }
+    },
+    {
+        "seq":  "106",
+        "seqNum":  106,
+        "rollup":  "Perean",
+        "phase":  "Perean",
+        "approxDate":  "AD 30",
+        "title":  "Dropsy/Banquet",
+        "refs":  {
+                     "mark":  "",
+                     "luke":  "14:1-24",
+                     "john":  "",
+                     "matthew":  ""
+                 }
+    },
+    {
+        "seq":  "107",
+        "seqNum":  107,
+        "rollup":  "Perean",
+        "phase":  "Perean",
+        "approxDate":  "AD 30",
+        "title":  "Cost of Discipleship",
+        "refs":  {
+                     "mark":  "",
+                     "luke":  "14:25-35",
+                     "john":  "",
+                     "matthew":  ""
+                 }
+    },
+    {
+        "seq":  "108",
+        "seqNum":  108,
+        "rollup":  "Perean",
+        "phase":  "Perean",
+        "approxDate":  "AD 30",
+        "title":  "Lost Sheep/Coin/Son",
+        "refs":  {
+                     "mark":  "",
+                     "luke":  "15:1-32",
+                     "john":  "",
+                     "matthew":  ""
+                 }
+    },
+    {
+        "seq":  "109",
+        "seqNum":  109,
+        "rollup":  "Perean",
+        "phase":  "Perean",
+        "approxDate":  "AD 30",
+        "title":  "Unjust Steward",
+        "refs":  {
+                     "mark":  "",
+                     "luke":  "16:1-13",
+                     "john":  "",
+                     "matthew":  ""
+                 }
+    },
+    {
+        "seq":  "110",
+        "seqNum":  110,
+        "rollup":  "Perean",
+        "phase":  "Perean",
+        "approxDate":  "AD 30",
+        "title":  "Rich Man and Lazarus",
+        "refs":  {
+                     "mark":  "",
+                     "luke":  "16:14-31",
+                     "john":  "",
+                     "matthew":  ""
+                 }
+    },
+    {
+        "seq":  "111",
+        "seqNum":  111,
+        "rollup":  "Perean",
+        "phase":  "Perean",
+        "approxDate":  "AD 30",
+        "title":  "Duty/Offenses",
+        "refs":  {
+                     "mark":  "",
+                     "luke":  "17:1-10",
+                     "john":  "",
+                     "matthew":  ""
+                 }
+    },
+    {
+        "seq":  "112",
+        "seqNum":  112,
+        "rollup":  "Perean",
+        "phase":  "Perean",
+        "approxDate":  "AD 30",
+        "title":  "Coming of Kingdom",
+        "refs":  {
+                     "mark":  "",
+                     "luke":  "17:20-37",
+                     "john":  "",
+                     "matthew":  ""
+                 }
+    },
+    {
+        "seq":  "113",
+        "seqNum":  113,
+        "rollup":  "Perean",
+        "phase":  "Perean",
+        "approxDate":  "AD 30",
+        "title":  "Persistent Widow",
+        "refs":  {
+                     "mark":  "",
+                     "luke":  "18:1-8",
+                     "john":  "",
+                     "matthew":  ""
+                 }
+    },
+    {
+        "seq":  "114",
+        "seqNum":  114,
+        "rollup":  "Perean",
+        "phase":  "Perean",
+        "approxDate":  "AD 30",
+        "title":  "Pharisee/Tax Collector",
+        "refs":  {
+                     "mark":  "",
+                     "luke":  "18:9-14",
+                     "john":  "",
+                     "matthew":  ""
+                 }
+    },
+    {
+        "seq":  "115",
+        "seqNum":  115,
+        "rollup":  "Perean",
+        "phase":  "Perean",
+        "approxDate":  "AD 30 (Mar)",
+        "title":  "Divorce Question",
+        "refs":  {
+                     "mark":  "10:2-12",
+                     "luke":  "",
+                     "john":  "",
+                     "matthew":  "19:3-12"
+                 }
+    },
+    {
+        "seq":  "116",
+        "seqNum":  116,
+        "rollup":  "Perean",
+        "phase":  "Perean",
+        "approxDate":  "AD 30",
+        "title":  "Blessing Children",
+        "refs":  {
+                     "mark":  "10:13-16",
+                     "luke":  "18:15-17",
+                     "john":  "",
+                     "matthew":  "19:13-15"
+                 }
+    },
+    {
+        "seq":  "117",
+        "seqNum":  117,
+        "rollup":  "Perean",
+        "phase":  "Perean",
+        "approxDate":  "AD 30",
+        "title":  "Rich Young Ruler",
+        "refs":  {
+                     "mark":  "10:17-31",
+                     "luke":  "18:18-30",
+                     "john":  "",
+                     "matthew":  "19:16-30"
+                 }
+    },
+    {
+        "seq":  "118",
+        "seqNum":  118,
+        "rollup":  "Perean",
+        "phase":  "Perean",
+        "approxDate":  "AD 30",
+        "title":  "Vineyard Laborers",
+        "refs":  {
+                     "mark":  "",
+                     "luke":  "",
+                     "john":  "",
+                     "matthew":  "20:1-16"
+                 }
+    },
+    {
+        "seq":  "119",
+        "seqNum":  119,
+        "rollup":  "Perean",
+        "phase":  "Perean",
+        "approxDate":  "AD 30",
+        "title":  "Death Predicted III",
+        "refs":  {
+                     "mark":  "10:32-34",
+                     "luke":  "18:31-34",
+                     "john":  "",
+                     "matthew":  "20:17-19"
+                 }
+    },
+    {
+        "seq":  "120",
+        "seqNum":  120,
+        "rollup":  "Perean",
+        "phase":  "Perean",
+        "approxDate":  "AD 30",
+        "title":  "James and John",
+        "refs":  {
+                     "mark":  "10:35-45",
+                     "luke":  "",
+                     "john":  "",
+                     "matthew":  "20:20-28"
+                 }
+    },
+    {
+        "seq":  "121",
+        "seqNum":  121,
+        "rollup":  "Perean",
+        "phase":  "Perean",
+        "approxDate":  "AD 30",
+        "title":  "Blind Bartimaeus",
+        "refs":  {
+                     "mark":  "10:46-52",
+                     "luke":  "18:35-43",
+                     "john":  "",
+                     "matthew":  "20:29-34"
+                 }
+    },
+    {
+        "seq":  "122",
+        "seqNum":  122,
+        "rollup":  "Perean",
+        "phase":  "Perean",
+        "approxDate":  "AD 30",
+        "title":  "Zacchaeus (Jericho)",
+        "refs":  {
+                     "mark":  "",
+                     "luke":  "19:1-10",
+                     "john":  "",
+                     "matthew":  ""
+                 }
+    },
+    {
+        "seq":  "123",
+        "seqNum":  123,
+        "rollup":  "Perean",
+        "phase":  "Perean",
+        "approxDate":  "AD 30",
+        "title":  "Parable of Minas",
+        "refs":  {
+                     "mark":  "",
+                     "luke":  "19:11-27",
+                     "john":  "",
+                     "matthew":  ""
+                 }
+    },
+    {
+        "seq":  "124",
+        "seqNum":  124,
+        "rollup":  "Passion",
+        "phase":  "Last Week",
+        "approxDate":  "AD 30 (Fri)",
+        "title":  "Bethany Arrival",
+        "refs":  {
+                     "mark":  "",
+                     "luke":  "",
+                     "john":  "11:55-12:1",
+                     "matthew":  ""
+                 }
+    },
+    {
+        "seq":  "125",
+        "seqNum":  125,
+        "rollup":  "Passion",
+        "phase":  "Last Week",
+        "approxDate":  "AD 30 (Sat)",
+        "title":  "Anointing (Mary)",
+        "refs":  {
+                     "mark":  "14:3-9",
+                     "luke":  "",
+                     "john":  "12:2-11",
+                     "matthew":  "26:6-13"
+                 }
+    },
+    {
+        "seq":  "126",
+        "seqNum":  126,
+        "rollup":  "Passion",
+        "phase":  "Last Week",
+        "approxDate":  "AD 30 (Sun)",
+        "title":  "Triumphal Entry",
+        "refs":  {
+                     "mark":  "11:1-11",
+                     "luke":  "19:28-44",
+                     "john":  "12:12-19",
+                     "matthew":  "21:1-11"
+                 }
+    },
+    {
+        "seq":  "127",
+        "seqNum":  127,
+        "rollup":  "Passion",
+        "phase":  "Last Week",
+        "approxDate":  "AD 30 (Mon)",
+        "title":  "Fig Tree Cursed",
+        "refs":  {
+                     "mark":  "11:12-14",
+                     "luke":  "",
+                     "john":  "",
+                     "matthew":  "21:18-19"
+                 }
+    },
+    {
+        "seq":  "128",
+        "seqNum":  128,
+        "rollup":  "Passion",
+        "phase":  "Last Week",
+        "approxDate":  "AD 30 (Mon)",
+        "title":  "Temple Cleansing II",
+        "refs":  {
+                     "mark":  "11:15-19",
+                     "luke":  "19:45-48",
+                     "john":  "",
+                     "matthew":  "21:12-17"
+                 }
+    },
+    {
+        "seq":  "129",
+        "seqNum":  129,
+        "rollup":  "Passion",
+        "phase":  "Last Week",
+        "approxDate":  "AD 30 (Tue)",
+        "title":  "Fig Tree Withered",
+        "refs":  {
+                     "mark":  "11:20-25",
+                     "luke":  "",
+                     "john":  "",
+                     "matthew":  "21:20-22"
+                 }
+    },
+    {
+        "seq":  "130",
+        "seqNum":  130,
+        "rollup":  "Passion",
+        "phase":  "Last Week",
+        "approxDate":  "AD 30 (Tue)",
+        "title":  "Challenge/Authority",
+        "refs":  {
+                     "mark":  "11:27-33",
+                     "luke":  "20:1-8",
+                     "john":  "",
+                     "matthew":  "21:23-27"
+                 }
+    },
+    {
+        "seq":  "131",
+        "seqNum":  131,
+        "rollup":  "Passion",
+        "phase":  "Last Week",
+        "approxDate":  "AD 30",
+        "title":  "Two Sons/Tenants",
+        "refs":  {
+                     "mark":  "12:1-12",
+                     "luke":  "20:9-19",
+                     "john":  "",
+                     "matthew":  "21:28-46"
+                 }
+    },
+    {
+        "seq":  "132",
+        "seqNum":  132,
+        "rollup":  "Passion",
+        "phase":  "Last Week",
+        "approxDate":  "AD 30",
+        "title":  "Wedding Garment",
+        "refs":  {
+                     "mark":  "",
+                     "luke":  "",
+                     "john":  "",
+                     "matthew":  "22:1-14"
+                 }
+    },
+    {
+        "seq":  "133",
+        "seqNum":  133,
+        "rollup":  "Passion",
+        "phase":  "Last Week",
+        "approxDate":  "AD 30",
+        "title":  "Caesar/Resurrection",
+        "refs":  {
+                     "mark":  "12:13-27",
+                     "luke":  "20:20-40",
+                     "john":  "",
+                     "matthew":  "22:15-33"
+                 }
+    },
+    {
+        "seq":  "134",
+        "seqNum":  134,
+        "rollup":  "Passion",
+        "phase":  "Last Week",
+        "approxDate":  "AD 30",
+        "title":  "Great Commandment",
+        "refs":  {
+                     "mark":  "12:28-34",
+                     "luke":  "",
+                     "john":  "",
+                     "matthew":  "22:34-40"
+                 }
+    },
+    {
+        "seq":  "135",
+        "seqNum":  135,
+        "rollup":  "Passion",
+        "phase":  "Last Week",
+        "approxDate":  "AD 30",
+        "title":  "David’s Son",
+        "refs":  {
+                     "mark":  "12:35-37",
+                     "luke":  "20:41-44",
+                     "john":  "",
+                     "matthew":  "22:41-46"
+                 }
+    },
+    {
+        "seq":  "136",
+        "seqNum":  136,
+        "rollup":  "Passion",
+        "phase":  "Last Week",
+        "approxDate":  "AD 30",
+        "title":  "Woe to Pharisees",
+        "refs":  {
+                     "mark":  "12:38-40",
+                     "luke":  "20:45-47",
+                     "john":  "",
+                     "matthew":  "23:1-39"
+                 }
+    },
+    {
+        "seq":  "137",
+        "seqNum":  137,
+        "rollup":  "Passion",
+        "phase":  "Last Week",
+        "approxDate":  "AD 30",
+        "title":  "Widow\u0027s Mite",
+        "refs":  {
+                     "mark":  "12:41-44",
+                     "luke":  "21:1-4",
+                     "john":  "",
+                     "matthew":  ""
+                 }
+    },
+    {
+        "seq":  "138",
+        "seqNum":  138,
+        "rollup":  "Passion",
+        "phase":  "Last Week",
+        "approxDate":  "AD 30",
+        "title":  "Gentiles Seek Jesus",
+        "refs":  {
+                     "mark":  "",
+                     "luke":  "",
+                     "john":  "12:20-50",
+                     "matthew":  ""
+                 }
+    },
+    {
+        "seq":  "139",
+        "seqNum":  139,
+        "rollup":  "Passion",
+        "phase":  "Last Week",
+        "approxDate":  "AD 30 (Tue Night)",
+        "title":  "Olivet Discourse",
+        "refs":  {
+                     "mark":  "13:1-37",
+                     "luke":  "21:5-36",
+                     "john":  "",
+                     "matthew":  "24:1-25:46"
+                 }
+    },
+    {
+        "seq":  "140",
+        "seqNum":  140,
+        "rollup":  "Passion",
+        "phase":  "Last Week",
+        "approxDate":  "AD 30 (Wed)",
+        "title":  "Plot/Judas\u0027 Pact",
+        "refs":  {
+                     "mark":  "14:1-2,10-11",
+                     "luke":  "22:1-6",
+                     "john":  "",
+                     "matthew":  "26:1-5,14-16"
+                 }
+    },
+    {
+        "seq":  "141",
+        "seqNum":  141,
+        "rollup":  "Passion",
+        "phase":  "Last Week",
+        "approxDate":  "AD 30 (Thu)",
+        "title":  "Preparation/Supper",
+        "refs":  {
+                     "mark":  "14:12-17",
+                     "luke":  "22:7-18",
+                     "john":  "",
+                     "matthew":  "26:17-20"
+                 }
+    },
+    {
+        "seq":  "142",
+        "seqNum":  142,
+        "rollup":  "Passion",
+        "phase":  "Final Hours",
+        "approxDate":  "AD 30 (Thu)",
+        "title":  "Feet Washing",
+        "refs":  {
+                     "mark":  "",
+                     "luke":  "",
+                     "john":  "13:1-20",
+                     "matthew":  ""
+                 }
+    },
+    {
+        "seq":  "143",
+        "seqNum":  143,
+        "rollup":  "Passion",
+        "phase":  "Final Hours",
+        "approxDate":  "AD 30",
+        "title":  "Betrayer Identified",
+        "refs":  {
+                     "mark":  "14:18-21",
+                     "luke":  "22:21-23",
+                     "john":  "13:21-30",
+                     "matthew":  "26:21-25"
+                 }
+    },
+    {
+        "seq":  "144",
+        "seqNum":  144,
+        "rollup":  "Passion",
+        "phase":  "Final Hours",
+        "approxDate":  "AD 30",
+        "title":  "Lord\u0027s Supper",
+        "refs":  {
+                     "mark":  "14:22-25",
+                     "luke":  "22:19-20",
+                     "john":  "",
+                     "matthew":  "26:26-29"
+                 }
+    },
+    {
+        "seq":  "145",
+        "seqNum":  145,
+        "rollup":  "Passion",
+        "phase":  "Final Hours",
+        "approxDate":  "AD 30",
+        "title":  "New Commandment",
+        "refs":  {
+                     "mark":  "14:26-31",
+                     "luke":  "22:31-38",
+                     "john":  "13:31-38",
+                     "matthew":  "26:30-35"
+                 }
+    },
+    {
+        "seq":  "146",
+        "seqNum":  146,
+        "rollup":  "Passion",
+        "phase":  "Final Hours",
+        "approxDate":  "AD 30",
+        "title":  "Farewell I (Way/Truth)",
+        "refs":  {
+                     "mark":  "",
+                     "luke":  "",
+                     "john":  "14:1-31",
+                     "matthew":  ""
+                 }
+    },
+    {
+        "seq":  "147",
+        "seqNum":  147,
+        "rollup":  "Passion",
+        "phase":  "Final Hours",
+        "approxDate":  "AD 30",
+        "title":  "Farewell II (Vine)",
+        "refs":  {
+                     "mark":  "",
+                     "luke":  "",
+                     "john":  "15:1-27",
+                     "matthew":  ""
+                 }
+    },
+    {
+        "seq":  "148",
+        "seqNum":  148,
+        "rollup":  "Passion",
+        "phase":  "Final Hours",
+        "approxDate":  "AD 30",
+        "title":  "Farewell III (Comforter)",
+        "refs":  {
+                     "mark":  "",
+                     "luke":  "",
+                     "john":  "16:1-33",
+                     "matthew":  ""
+                 }
+    },
+    {
+        "seq":  "149",
+        "seqNum":  149,
+        "rollup":  "Passion",
+        "phase":  "Final Hours",
+        "approxDate":  "AD 30",
+        "title":  "Intercessory Prayer",
+        "refs":  {
+                     "mark":  "",
+                     "luke":  "",
+                     "john":  "17:1-26",
+                     "matthew":  ""
+                 }
+    },
+    {
+        "seq":  "150",
+        "seqNum":  150,
+        "rollup":  "Passion",
+        "phase":  "Final Hours",
+        "approxDate":  "AD 30 (Thu Night)",
+        "title":  "Gethsemane",
+        "refs":  {
+                     "mark":  "14:32-42",
+                     "luke":  "22:39-46",
+                     "john":  "18:01",
+                     "matthew":  "26:36-46"
+                 }
+    },
+    {
+        "seq":  "151",
+        "seqNum":  151,
+        "rollup":  "Passion",
+        "phase":  "Final Hours",
+        "approxDate":  "AD 30",
+        "title":  "Betrayal/Arrest",
+        "refs":  {
+                     "mark":  "14:43-52",
+                     "luke":  "22:47-53",
+                     "john":  "18:2-12",
+                     "matthew":  "26:47-56"
+                 }
+    },
+    {
+        "seq":  "152",
+        "seqNum":  152,
+        "rollup":  "Passion",
+        "phase":  "Trials",
+        "approxDate":  "AD 30 (Fri Early)",
+        "title":  "Trial: Annas",
+        "refs":  {
+                     "mark":  "",
+                     "luke":  "",
+                     "john":  "18:13-24",
+                     "matthew":  ""
+                 }
+    },
+    {
+        "seq":  "153",
+        "seqNum":  153,
+        "rollup":  "Passion",
+        "phase":  "Trials",
+        "approxDate":  "AD 30",
+        "title":  "Trial: Caiaphas",
+        "refs":  {
+                     "mark":  "14:53-65",
+                     "luke":  "22:54,63-65",
+                     "john":  "",
+                     "matthew":  "26:57-68"
+                 }
+    },
+    {
+        "seq":  "154",
+        "seqNum":  154,
+        "rollup":  "Passion",
+        "phase":  "Trials",
+        "approxDate":  "AD 30",
+        "title":  "Peter’s Denials",
+        "refs":  {
+                     "mark":  "14:66-72",
+                     "luke":  "22:55-62",
+                     "john":  "18:15-27",
+                     "matthew":  "26:69-75"
+                 }
+    },
+    {
+        "seq":  "155",
+        "seqNum":  155,
+        "rollup":  "Passion",
+        "phase":  "Trials",
+        "approxDate":  "AD 30 (Fri Morning)",
+        "title":  "Morning Sanhedrin",
+        "refs":  {
+                     "mark":  "15:01",
+                     "luke":  "22:66-71",
+                     "john":  "",
+                     "matthew":  "27:01:00"
+                 }
+    },
+    {
+        "seq":  "156",
+        "seqNum":  156,
+        "rollup":  "Passion",
+        "phase":  "Trials",
+        "approxDate":  "AD 30",
+        "title":  "Judas\u0027 End",
+        "refs":  {
+                     "mark":  "",
+                     "luke":  "",
+                     "john":  "",
+                     "matthew":  "27:3-10"
+                 }
+    },
+    {
+        "seq":  "157",
+        "seqNum":  157,
+        "rollup":  "Passion",
+        "phase":  "Trials",
+        "approxDate":  "AD 30",
+        "title":  "Trial: Pilate I",
+        "refs":  {
+                     "mark":  "15:1-5",
+                     "luke":  "23:1-5",
+                     "john":  "18:28-38",
+                     "matthew":  "27:2,11-14"
+                 }
+    },
+    {
+        "seq":  "158",
+        "seqNum":  158,
+        "rollup":  "Passion",
+        "phase":  "Trials",
+        "approxDate":  "AD 30",
+        "title":  "Trial: Herod",
+        "refs":  {
+                     "mark":  "",
+                     "luke":  "23:6-12",
+                     "john":  "",
+                     "matthew":  ""
+                 }
+    },
+    {
+        "seq":  "159",
+        "seqNum":  159,
+        "rollup":  "Passion",
+        "phase":  "Trials",
+        "approxDate":  "AD 30",
+        "title":  "Trial: Pilate II",
+        "refs":  {
+                     "mark":  "15:6-15",
+                     "luke":  "23:13-25",
+                     "john":  "18:39-19:16",
+                     "matthew":  "27:15-26"
+                 }
+    },
+    {
+        "seq":  "160",
+        "seqNum":  160,
+        "rollup":  "Passion",
+        "phase":  "Trials",
+        "approxDate":  "AD 30",
+        "title":  "Mockery/Soldiers",
+        "refs":  {
+                     "mark":  "15:16-19",
+                     "luke":  "",
+                     "john":  "19:2-3",
+                     "matthew":  "27:27-30"
+                 }
+    },
+    {
+        "seq":  "161",
+        "seqNum":  161,
+        "rollup":  "Passion",
+        "phase":  "Trials",
+        "approxDate":  "AD 30",
+        "title":  "Way to the Cross",
+        "refs":  {
+                     "mark":  "15:20-21",
+                     "luke":  "23:26-32",
+                     "john":  "19:16-17",
+                     "matthew":  "27:31-32"
+                 }
+    },
+    {
+        "seq":  "162",
+        "seqNum":  162,
+        "rollup":  "Passion",
+        "phase":  "Crucifixion",
+        "approxDate":  "AD 30 (9 AM - Noon)",
+        "title":  "Crucifixion (Start)",
+        "refs":  {
+                     "mark":  "15:22-32",
+                     "luke":  "23:33-43",
+                     "john":  "19:18-27",
+                     "matthew":  "27:33-44"
+                 }
+    },
+    {
+        "seq":  "163",
+        "seqNum":  163,
+        "rollup":  "Passion",
+        "phase":  "Crucifixion",
+        "approxDate":  "AD 30 (Noon - 3 PM)",
+        "title":  "Crucifixion (Death)",
+        "refs":  {
+                     "mark":  "15:33-37",
+                     "luke":  "23:44-46",
+                     "john":  "19:28-30",
+                     "matthew":  "27:45-50"
+                 }
+    },
+    {
+        "seq":  "164",
+        "seqNum":  164,
+        "rollup":  "Passion",
+        "phase":  "Crucifixion",
+        "approxDate":  "AD 30",
+        "title":  "Signs at Death",
+        "refs":  {
+                     "mark":  "15:38-41",
+                     "luke":  "23:47-49",
+                     "john":  "19:31-37",
+                     "matthew":  "27:51-56"
+                 }
+    },
+    {
+        "seq":  "165",
+        "seqNum":  165,
+        "rollup":  "Passion",
+        "phase":  "Crucifixion",
+        "approxDate":  "AD 30",
+        "title":  "Burial",
+        "refs":  {
+                     "mark":  "15:42-47",
+                     "luke":  "23:50-56",
+                     "john":  "19:38-42",
+                     "matthew":  "27:57-61"
+                 }
+    },
+    {
+        "seq":  "166",
+        "seqNum":  166,
+        "rollup":  "Passion",
+        "phase":  "Crucifixion",
+        "approxDate":  "AD 30 (Sat)",
+        "title":  "Guard at Tomb",
+        "refs":  {
+                     "mark":  "",
+                     "luke":  "",
+                     "john":  "",
+                     "matthew":  "27:62-66"
+                 }
+    },
+    {
+        "seq":  "167",
+        "seqNum":  167,
+        "rollup":  "Res.",
+        "phase":  "Res.",
+        "approxDate":  "AD 30 (Sun)",
+        "title":  "Earthquake/Stone",
+        "refs":  {
+                     "mark":  "",
+                     "luke":  "",
+                     "john":  "",
+                     "matthew":  "28:2-4"
+                 }
+    },
+    {
+        "seq":  "168",
+        "seqNum":  168,
+        "rollup":  "Res.",
+        "phase":  "Res.",
+        "approxDate":  "AD 30",
+        "title":  "Visit of Women",
+        "refs":  {
+                     "mark":  "16:1-4",
+                     "luke":  "24:1-3",
+                     "john":  "20:01",
+                     "matthew":  "28:01:00"
+                 }
+    },
+    {
+        "seq":  "169",
+        "seqNum":  169,
+        "rollup":  "Res.",
+        "phase":  "Res.",
+        "approxDate":  "AD 30",
+        "title":  "Magdalene Reports",
+        "refs":  {
+                     "mark":  "",
+                     "luke":  "",
+                     "john":  "20:02",
+                     "matthew":  ""
+                 }
+    },
+    {
+        "seq":  "170",
+        "seqNum":  170,
+        "rollup":  "Res.",
+        "phase":  "Res.",
+        "approxDate":  "AD 30",
+        "title":  "Angels to Women",
+        "refs":  {
+                     "mark":  "16:5-7",
+                     "luke":  "24:4-8",
+                     "john":  "",
+                     "matthew":  "28:5-7"
+                 }
+    },
+    {
+        "seq":  "171",
+        "seqNum":  171,
+        "rollup":  "Res.",
+        "phase":  "Res.",
+        "approxDate":  "AD 30",
+        "title":  "Peter/John at Tomb",
+        "refs":  {
+                     "mark":  "",
+                     "luke":  "24:12:00",
+                     "john":  "20:3-10",
+                     "matthew":  ""
+                 }
+    },
+    {
+        "seq":  "172",
+        "seqNum":  172,
+        "rollup":  "Res.",
+        "phase":  "Res.",
+        "approxDate":  "AD 30",
+        "title":  "Appearance: Mary M.",
+        "refs":  {
+                     "mark":  "16:9-11",
+                     "luke":  "",
+                     "john":  "20:11-18",
+                     "matthew":  ""
+                 }
+    },
+    {
+        "seq":  "173",
+        "seqNum":  173,
+        "rollup":  "Res.",
+        "phase":  "Res.",
+        "approxDate":  "AD 30",
+        "title":  "Appearance: Women",
+        "refs":  {
+                     "mark":  "",
+                     "luke":  "",
+                     "john":  "",
+                     "matthew":  "28:8-10"
+                 }
+    },
+    {
+        "seq":  "174",
+        "seqNum":  174,
+        "rollup":  "Res.",
+        "phase":  "Res.",
+        "approxDate":  "AD 30",
+        "title":  "Watchers Report",
+        "refs":  {
+                     "mark":  "",
+                     "luke":  "",
+                     "john":  "",
+                     "matthew":  "28:11-15"
+                 }
+    },
+    {
+        "seq":  "175",
+        "seqNum":  175,
+        "rollup":  "Res.",
+        "phase":  "Res.",
+        "approxDate":  "AD 30",
+        "title":  "Appearance: Emmaus",
+        "refs":  {
+                     "mark":  "16:12-13",
+                     "luke":  "24:13-32",
+                     "john":  "",
+                     "matthew":  ""
+                 }
+    },
+    {
+        "seq":  "176",
+        "seqNum":  176,
+        "rollup":  "Res.",
+        "phase":  "Res.",
+        "approxDate":  "AD 30",
+        "title":  "Emmaus Disciples",
+        "refs":  {
+                     "mark":  "",
+                     "luke":  "24:33-35",
+                     "john":  "",
+                     "matthew":  ""
+                 }
+    },
+    {
+        "seq":  "177",
+        "seqNum":  177,
+        "rollup":  "Res.",
+        "phase":  "Res.",
+        "approxDate":  "AD 30",
+        "title":  "Appearance: Peter",
+        "refs":  {
+                     "mark":  "",
+                     "luke":  "24:34:00",
+                     "john":  "",
+                     "matthew":  ""
+                 }
+    },
+    {
+        "seq":  "178",
+        "seqNum":  178,
+        "rollup":  "Res.",
+        "phase":  "Res.",
+        "approxDate":  "AD 30",
+        "title":  "Appearance: The Ten",
+        "refs":  {
+                     "mark":  "16:14",
+                     "luke":  "24:36-43",
+                     "john":  "20:19-25",
+                     "matthew":  ""
+                 }
+    },
+    {
+        "seq":  "179",
+        "seqNum":  179,
+        "rollup":  "Res.",
+        "phase":  "Res.",
+        "approxDate":  "AD 30 (Sun after)",
+        "title":  "Appearance: Eleven",
+        "refs":  {
+                     "mark":  "",
+                     "luke":  "",
+                     "john":  "20:26-29",
+                     "matthew":  ""
+                 }
+    },
+    {
+        "seq":  "180",
+        "seqNum":  180,
+        "rollup":  "Res.",
+        "phase":  "Res.",
+        "approxDate":  "AD 30",
+        "title":  "Appearance: Tiberias",
+        "refs":  {
+                     "mark":  "",
+                     "luke":  "",
+                     "john":  "21:1-24",
+                     "matthew":  ""
+                 }
+    },
+    {
+        "seq":  "181",
+        "seqNum":  181,
+        "rollup":  "Res.",
+        "phase":  "Res.",
+        "approxDate":  "AD 30",
+        "title":  "Great Commission",
+        "refs":  {
+                     "mark":  "16:15-18",
+                     "luke":  "",
+                     "john":  "",
+                     "matthew":  "28:16-20"
+                 }
+    },
+    {
+        "seq":  "182",
+        "seqNum":  182,
+        "rollup":  "Res.",
+        "phase":  "Res.",
+        "approxDate":  "AD 30",
+        "title":  "Appearance: James",
+        "refs":  {
+                     "mark":  "",
+                     "luke":  "",
+                     "john":  "",
+                     "matthew":  ""
+                 }
+    },
+    {
+        "seq":  "183",
+        "seqNum":  183,
+        "rollup":  "Res.",
+        "phase":  "Res.",
+        "approxDate":  "AD 30",
+        "title":  "Further Teachings",
+        "refs":  {
+                     "mark":  "",
+                     "luke":  "24:44-49",
+                     "john":  "",
+                     "matthew":  ""
+                 }
+    },
+    {
+        "seq":  "184",
+        "seqNum":  184,
+        "rollup":  "Res.",
+        "phase":  "Res.",
+        "approxDate":  "AD 30 (May)",
+        "title":  "The Ascension",
+        "refs":  {
+                     "mark":  "16:19-20",
+                     "luke":  "24:50-53",
+                     "john":  "",
+                     "matthew":  ""
+                 }
+    }
+]

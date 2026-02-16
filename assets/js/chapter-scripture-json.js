@@ -118,7 +118,7 @@
 
     const translationKeys = Array.isArray(options.translationKeys) && options.translationKeys.length
       ? options.translationKeys
-      : ["nkjv", "nlt"]; // You can expand later
+      : ["nkjv", "nlt", "esv", "niv", "nasb", "amp", "kjv", "tlv", "ylt"];
 
     const defaultMode = prefs.mode || "two";
     const defaultV1 = prefs.v1 && translationKeys.includes(prefs.v1) ? prefs.v1 : (translationKeys.includes("nkjv") ? "nkjv" : translationKeys[0]);

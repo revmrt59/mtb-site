@@ -302,13 +302,17 @@ function Resolve-BookSource($bookSlug, [ref]$testamentOut) {
 }
 
 function Canonicalize-WordStudyNames($outDir, $bookSlug) {
+  # Canonical word study filename format:
+  #   {bookSlug}-{chapter}-{g|h}{number}.html
+  # This intentionally strips the English gloss portion to avoid multi-word / punctuation issues.
+  # Applies recursively under the book output directory.
   $rx = [regex]('^(?<book>' + [regex]::Escape($bookSlug) + ')-(?<ch>\d+)-(?<strong>[gh]\d+)(?:-.+)?\.html$')
 
-  Get-ChildItem -Path $outDir -Filter "*.html" | ForEach-Object {
-    $name = $_.Name.ToLowerInvariant()
-    if (-not $rx.IsMatch($name)) { return }
+  Get-ChildItem -Path $outDir -Recurse -File -Filter "*.html" | ForEach-Object {
+    $nameLower = $_.Name.ToLowerInvariant()
+    if (-not $rx.IsMatch($nameLower)) { return }
 
-    $m = $rx.Match($name)
+    $m = $rx.Match($nameLower)
     $ch = $m.Groups["ch"].Value
     $strong = $m.Groups["strong"].Value
 
@@ -317,16 +321,16 @@ function Canonicalize-WordStudyNames($outDir, $bookSlug) {
     $n = [int]$digits
 
     $canonical = "$bookSlug-$ch-$letter$n.html"
-    $destPath = Join-Path $outDir $canonical
+    $destPath = Join-Path $_.Directory.FullName $canonical
 
     if ($_.FullName -ieq $destPath) { return }
 
     if (Test-Path $destPath) {
-      Write-Host "WARN: canonical exists, keeping '$($_.Name)' (collision on $canonical)" -ForegroundColor Yellow
+      Write-Host "WARN: canonical exists, keeping '$($_.FullName)' (collision on $canonical)" -ForegroundColor Yellow
       return
     }
 
-    Rename-Item -Path $_.FullName -NewName $canonical
+    Rename-Item -LiteralPath $_.FullName -NewName $canonical
   }
 }
 function Clear-BookOutput($bookOutDir) {
@@ -485,6 +489,42 @@ $outDir = Join-Path $SITE_ROOT ("books\" + $testament + "\" + $BOOK_SLUG)
   }
 
   Canonicalize-WordStudyNames $outDir $BOOK_SLUG
+# ---------------------------------------------------------
+# Ensure chapter scripture stub exists for EVERY chapter
+# (even if no DOCX was authored for that chapter)
+# Source of truth: NKJV JSON chapter list (if present)
+# ---------------------------------------------------------
+try {
+  $nkjvJsonPath = Join-Path $SITE_ROOT ("assets\js\bibles-json\nkjv\" + $BOOK_SLUG + ".json")
+
+  if (Test-Path $nkjvJsonPath) {
+    $j = Get-Content -Path $nkjvJsonPath -Raw -Encoding UTF8 | ConvertFrom-Json
+
+    $chapNums = @()
+    if ($j -and $j.chapters) {
+      $chapNums = $j.chapters.PSObject.Properties.Name | ForEach-Object { [int]$_ } | Sort-Object
+    }
+
+    foreach ($ch in $chapNums) {
+      $folder = "{0:D3}" -f $ch
+      $chDir  = Join-Path $outDir $folder
+      Ensure-Path $chDir
+
+      $stubPath = Join-Path $chDir ("{0}-{1}-chapter-scripture.html" -f $BOOK_SLUG, $ch)
+      if (-not (Test-Path $stubPath)) {
+        Write-MtbChapterScriptureStubFile -OutDir $chDir -BookSlug $BOOK_SLUG -Chapter $ch
+        Write-Host ("WROTE STUB: " + (Resolve-Path $stubPath).Path) -ForegroundColor Cyan
+      }
+    }
+  }
+  else {
+    Write-Host ("WARN: NKJV JSON not found for stub generation: " + $nkjvJsonPath) -ForegroundColor Yellow
+  }
+}
+catch {
+  Write-Host "WARN: Failed to auto-generate chapter scripture stubs." -ForegroundColor Yellow
+  Write-Host ($_.Exception.Message) -ForegroundColor Yellow
+}
 
   # ----------------------------
   # Build chapter resources index pages

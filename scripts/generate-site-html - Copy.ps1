@@ -96,6 +96,41 @@ function Convert-DocxToHtmlFragment($docxPath) {
   }
 }
 
+function New-MtbChapterScriptureStubHtml {
+  param(
+    [Parameter(Mandatory)] [string] $BookSlug,
+    [Parameter(Mandatory)] [int]    $Chapter
+  )
+
+@"
+<section class="mtb-doc mtb-chapter-scripture">
+  <div class="scripture-controls"></div>
+
+  <div
+    class="mtb-scripture-root"
+    data-book="$BookSlug"
+    data-chapter="$Chapter"
+    data-left="nkjv"
+    data-right="nlt"
+  ></div>
+</section>
+"@
+}
+
+function Write-MtbChapterScriptureStubFile {
+  param(
+    [Parameter(Mandatory)] [string] $OutDir,
+    [Parameter(Mandatory)] [string] $BookSlug,
+    [Parameter(Mandatory)] [int]    $Chapter
+  )
+
+  $fileName = "{0}-{1}-chapter-scripture.html" -f $BookSlug, $Chapter
+  $outFile  = Join-Path $OutDir $fileName
+
+  $html = New-MtbChapterScriptureStubHtml -BookSlug $BookSlug -Chapter $Chapter
+
+  Set-Content -Path $outFile -Value $html -Encoding UTF8
+}
 
 # ---------------------------------------------------------
 # Mojibake cleanup BEFORE saving HTML (no non-ASCII literals)
@@ -426,6 +461,12 @@ $outDir = Join-Path $SITE_ROOT ("books\" + $testament + "\" + $BOOK_SLUG)
       Ensure-Path $targetDir
 
       $outPath = Join-Path $targetDir $outName
+      # If this is a chapter scripture page, override Pandoc output with the JSON stub
+      if ($outName -match '^(?<book>[a-z0-9-]+)-(?<ch>\d+)-chapter-scripture\.html$') {
+        $b  = $Matches['book']
+        $ch = [int]$Matches['ch']
+        $html = New-MtbChapterScriptureStubHtml -BookSlug $b -Chapter $ch
+      }
 
 
       Set-Content -Path $outPath -Value $html -Encoding UTF8 -Force
@@ -444,6 +485,42 @@ $outDir = Join-Path $SITE_ROOT ("books\" + $testament + "\" + $BOOK_SLUG)
   }
 
   Canonicalize-WordStudyNames $outDir $BOOK_SLUG
+# ---------------------------------------------------------
+# Ensure chapter scripture stub exists for EVERY chapter
+# (even if no DOCX was authored for that chapter)
+# Source of truth: NKJV JSON chapter list (if present)
+# ---------------------------------------------------------
+try {
+  $nkjvJsonPath = Join-Path $SITE_ROOT ("assets\js\bibles-json\nkjv\" + $BOOK_SLUG + ".json")
+
+  if (Test-Path $nkjvJsonPath) {
+    $j = Get-Content -Path $nkjvJsonPath -Raw -Encoding UTF8 | ConvertFrom-Json
+
+    $chapNums = @()
+    if ($j -and $j.chapters) {
+      $chapNums = $j.chapters.PSObject.Properties.Name | ForEach-Object { [int]$_ } | Sort-Object
+    }
+
+    foreach ($ch in $chapNums) {
+      $folder = "{0:D3}" -f $ch
+      $chDir  = Join-Path $outDir $folder
+      Ensure-Path $chDir
+
+      $stubPath = Join-Path $chDir ("{0}-{1}-chapter-scripture.html" -f $BOOK_SLUG, $ch)
+      if (-not (Test-Path $stubPath)) {
+        Write-MtbChapterScriptureStubFile -OutDir $chDir -BookSlug $BOOK_SLUG -Chapter $ch
+        Write-Host ("WROTE STUB: " + (Resolve-Path $stubPath).Path) -ForegroundColor Cyan
+      }
+    }
+  }
+  else {
+    Write-Host ("WARN: NKJV JSON not found for stub generation: " + $nkjvJsonPath) -ForegroundColor Yellow
+  }
+}
+catch {
+  Write-Host "WARN: Failed to auto-generate chapter scripture stubs." -ForegroundColor Yellow
+  Write-Host ($_.Exception.Message) -ForegroundColor Yellow
+}
 
   # ----------------------------
   # Build chapter resources index pages

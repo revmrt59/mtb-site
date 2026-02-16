@@ -802,245 +802,9 @@ body:has(.about-nav) main {
   margin-top: 36px;
   margin-bottom: 64px;
 }
-/* =========================================================
-   CHAPTER SCRIPTURE PAGE – LAYOUT (WIDE COLUMNS + BLUE GUTTERS)
-   Scope: only pages that render the scripture toggle controls.
-   Safe: does not affect About, Resources, or other doc tabs.
-========================================================= */
 
-/* Make the scripture view full-width by removing the sidebar only on scripture pages */
-body:has(.scripture-controls) .doc-layout {
-  grid-template-columns: 1fr;
-}
 
-/* Give the whole scripture page the “blue gutter” look */
-body:has(.scripture-controls) {
-  background: #f3f6fb;
-}
 
-/* Keep the main content in a centered white card */
-body:has(.scripture-controls) .doc-shell {
-  background: #ffffff;
-  border-radius: 10px;
-  box-shadow: 0 10px 24px rgba(0,0,0,0.08);
-}
-
-/* Add a soft blue “pad” around the scripture table area (inside the white card) */
-body:has(.scripture-controls) #doc-target {
-  background: #f3f6fb;
-  border-radius: 10px;
-  padding: 18px;
-}
-
-/* Scripture table sizing + column spacing */
-body:has(.scripture-controls) #doc-target table.mtb-scripture-table,
-body:has(.scripture-controls) #doc-target table[data-mode] {
-  width: 100%;
-  table-layout: fixed;          /* forces usable column widths */
-  border-collapse: separate;
-  border-spacing: 16px 0;       /* space between NKJV and NLT columns */
-  background: transparent;
-}
-
-/* Default text size (adjust to taste) */
-body:has(.scripture-controls) #doc-target table.mtb-scripture-table td,
-body:has(.scripture-controls) #doc-target table.mtb-scripture-table th {
-  font-size: 17px;
-  line-height: 1.55;
-}
-
-/* Verse-number column: narrow and right-aligned */
-body:has(.scripture-controls) #doc-target table.mtb-scripture-table th:first-child,
-body:has(.scripture-controls) #doc-target table.mtb-scripture-table td:first-child {
-  width: 64px;
-  text-align: right;
-  color: #666;
-  padding-right: 10px;
-  font-size: 15px;
-}
-
-/* Translation cells: white “cards” */
-body:has(.scripture-controls) #doc-target table.mtb-scripture-table th:nth-child(2),
-body:has(.scripture-controls) #doc-target table.mtb-scripture-table td:nth-child(2),
-body:has(.scripture-controls) #doc-target table.mtb-scripture-table th:nth-child(3),
-body:has(.scripture-controls) #doc-target table.mtb-scripture-table td:nth-child(3) {
-  background: #ffffff;
-  border: 1px solid #e3e7ef;
-  border-radius: 10px;
-  padding: 10px 14px;
-  vertical-align: top;
-}
-
-/* Visible divider / separation when BOTH translations are shown */
-body:has(.scripture-controls) #doc-target table[data-mode="both"] th:nth-child(2),
-body:has(.scripture-controls) #doc-target table[data-mode="both"] td:nth-child(2) {
-  box-shadow: 6px 0 0 0 #f3f6fb; /* creates a clean gutter edge */
-}
-
-/* When only one translation is visible, let it “feel” full width */
-body:has(.scripture-controls) #doc-target table[data-mode="nkjv"] td:nth-child(2),
-body:has(.scripture-controls) #doc-target table[data-mode="nlt"] td:nth-child(3) {
-  padding-left: 16px;
-  padding-right: 16px;
-}
-
-/* Scripture controls bar spacing */
-body:has(.scripture-controls) .scripture-controls {
-  margin-bottom: 14px;
-}
-/* =========================================================
-   CHAPTER SCRIPTURE – GAP + FULL-WIDTH SINGLE TRANSLATION
-   (Overrides earlier scripture table rules)
-========================================================= */
-
-/* In Both mode: create a real gutter + divider */
-body:has(.scripture-controls) #doc-target table.mtb-scripture-table[data-mode="both"] td:nth-child(2),
-body:has(.scripture-controls) #doc-target table.mtb-scripture-table[data-mode="both"] th:nth-child(2) {
-  padding-right: 26px !important;          /* space on right of NKJV */
-  border-right: 2px solid #e0e6f2 !important; /* visible divider */
-}
-
-body:has(.scripture-controls) #doc-target table.mtb-scripture-table[data-mode="both"] td:nth-child(3),
-body:has(.scripture-controls) #doc-target table.mtb-scripture-table[data-mode="both"] th:nth-child(3) {
-  padding-left: 26px !important;           /* space on left of NLT */
-}
-
-/* Make sure the table can actually expand */
-body:has(.scripture-controls) #doc-target table.mtb-scripture-table {
-  width: 100% !important;
-  table-layout: auto !important;  /* lets colspan work naturally */
-  border-collapse: separate !important;
-}
-/* =========================================================
-   CHAPTER SCRIPTURE – WIDER + BLUE GUTTERS + REAL GAP
-   Triggers only when the scripture controls bar exists.
-========================================================= */
-
-/* Full-width scripture view (no sidebar squeeze) */
-body:has(.scripture-controls) .doc-layout {
-  grid-template-columns: 1fr;
-}
-
-/* Blue/gray gutters outside */
-body:has(.scripture-controls) {
-  background: #f3f6fb;
-}
-
-/* Blue pad around the table (inside the white shell) */
-body:has(.scripture-controls) #doc-target {
-  background: #f3f6fb;
-  border-radius: 10px;
-  padding: 18px;
-}
-
-/* Let the table reflow (so colspan expands to full combined width) */
-body:has(.scripture-controls) #doc-target table {
-  width: 100% !important;
-  table-layout: auto !important;
-  border-collapse: separate !important;
-  border-spacing: 0 !important;
-}
-
-/* Both-mode: create real gap + divider */
-body:has(.scripture-controls) #doc-target table[data-mode="both"] td:nth-child(2),
-body:has(.scripture-controls) #doc-target table[data-mode="both"] th:nth-child(2) {
-  padding-right: 28px !important;
-  border-right: 2px solid #d6deee !important;
-}
-
-body:has(.scripture-controls) #doc-target table[data-mode="both"] td:nth-child(3),
-body:has(.scripture-controls) #doc-target table[data-mode="both"] th:nth-child(3) {
-  padding-left: 28px !important;
-}
-/* =========================================================
-   CHAPTER SCRIPTURE – WIDE LAYOUT + BLUE GUTTERS + COLUMN GAP
-   Trigger: body.mtb-has-scripture-controls (set by scripture-controls.js)
-========================================================= */
-
-body.mtb-has-scripture-controls {
-  background: #f3f6fb;
-}
-
-body.mtb-has-scripture-controls .doc-layout {
-  grid-template-columns: 1fr;
-}
-
-body.mtb-has-scripture-controls #doc-target {
-  background: #f3f6fb;
-  border-radius: 10px;
-  padding: 18px;
-}
-
-/* Table must be allowed to reflow for colspan to work */
-body.mtb-has-scripture-controls #doc-target table.mtb-scripture-table {
-  width: 100% !important;
-  table-layout: auto !important;
-  border-collapse: separate !important;
-  border-spacing: 0 !important;
-}
-
-/* Make translation columns feel like separate panels */
-body.mtb-has-scripture-controls #doc-target table.mtb-scripture-table th:nth-child(2),
-body.mtb-has-scripture-controls #doc-target table.mtb-scripture-table td:nth-child(2),
-body.mtb-has-scripture-controls #doc-target table.mtb-scripture-table th:nth-child(3),
-body.mtb-has-scripture-controls #doc-target table.mtb-scripture-table td:nth-child(3) {
-  background: #ffffff;
-  border: 1px solid #e3e7ef;
-  border-radius: 10px;
-  padding: 10px 14px;
-  vertical-align: top;
-}
-
-/* Gap + divider when both columns are present */
-body.mtb-has-scripture-controls #doc-target table.mtb-scripture-table[data-mode="both"] th:nth-child(2),
-body.mtb-has-scripture-controls #doc-target table.mtb-scripture-table[data-mode="both"] td:nth-child(2) {
-  padding-right: 28px !important;
-  border-right: 2px solid #d6deee !important;
-}
-
-body.mtb-has-scripture-controls #doc-target table.mtb-scripture-table[data-mode="both"] th:nth-child(3),
-body.mtb-has-scripture-controls #doc-target table.mtb-scripture-table[data-mode="both"] td:nth-child(3) {
-  padding-left: 28px !important;
-}
-
-/* Verse number column */
-body.mtb-has-scripture-controls #doc-target table.mtb-scripture-table th:first-child,
-body.mtb-has-scripture-controls #doc-target table.mtb-scripture-table td:first-child {
-  width: 64px;
-  text-align: right;
-  color: #666;
-  padding-right: 10px;
-  font-size: 15px;
-}
-
-/* Slightly larger scripture text */
-body.mtb-has-scripture-controls #doc-target table.mtb-scripture-table td,
-body.mtb-has-scripture-controls #doc-target table.mtb-scripture-table th {
-  font-size: 17px;
-  line-height: 1.55;
-}
-/* =========================================================
-   CHAPTER SCRIPTURE – TIGHTER HEADER ROW (NKJV / NLT)
-========================================================= */
-
-body.mtb-has-scripture-controls
-#doc-target
-table.mtb-scripture-table thead th {
-  padding-top: 1px !important;
-  padding-bottom: 1px !important;
-  font-size: 12px;          /* slightly smaller than body text */
-  line-height: 0.1;
-}
-
-/* Reduce visual height caused by rounded cards on header only */
-body.mtb-has-scripture-controls
-#doc-target
-table.mtb-scripture-table thead th:nth-child(2),
-body.mtb-has-scripture-controls
-#doc-target
-table.mtb-scripture-table thead th:nth-child(3) {
-  border-radius: 8px;
-}
 /* =========================================================
    CHAPTER HEADER – INLINE BOOK + CHAPTER
    (applies to all chapter-level pages)
@@ -1221,4 +985,318 @@ table.mtb-scripture-table thead th:nth-child(3) {
   opacity: 0.55;
   cursor: not-allowed;
   transform: none;
+}
+/* =========================================================
+   MTB Chapter Explanation Toggle System (SCOPED)
+   Scope: only content injected into #doc-target
+   ========================================================= */
+
+/* READ ONLY MODE */
+body.mode-read #doc-target .MTB-Explain,
+body.mode-read #doc-target .MTB-Dwell,
+body.mode-read #doc-target h1.MTB-Explain,
+body.mode-read #doc-target h1.MTB-Dwell {
+  display: none;
+}
+
+/* READ + EXPLAIN MODE */
+body.mode-explain #doc-target .MTB-Dwell,
+body.mode-explain #doc-target h1.MTB-Dwell {
+  display: none;
+}
+
+/* DWELL MODE shows everything */
+
+
+/* =========================================================
+   MTB Professional Cards (Read / Explain / Dwell)
+   Scope: only inside #doc-target
+   ========================================================= */
+
+#doc-target {
+  max-width: 900px;
+  margin: 0 auto;
+  line-height: 1.65;
+  font-size: 16px;
+}
+
+/* Your CSS currently has a generic #doc-target h1 rule.
+   These override it for MTB blocks specifically. */
+#doc-target h1.MTB-Read,
+#doc-target h1.MTB-Explain,
+#doc-target h1.MTB-Dwell {
+  font-size: 1rem;
+  margin: 0;
+}
+
+/* READ — gray scripture card */
+#doc-target .MTB-Read,
+#doc-target h1.MTB-Read {
+  display: block;
+  background: #f2f4f7;
+  border: 1px solid #e3e7ef;
+  border-left: 5px solid #6b7280;
+  border-radius: 14px;
+  padding: 14px 16px;
+  margin: 0rem 0;
+  line-height: 1.55;
+  font-weight: 650;
+}
+
+/* EXPLAIN — normal black text */
+#doc-target .MTB-Explain,
+#doc-target h1.MTB-Explain {
+  color: #111111;
+  margin: 0 0 0.9rem 0;
+  line-height: 1.7;
+  font-weight: 400;
+}
+
+/* =========================================================
+   DWELL — green callout card (LOCKED)
+   ========================================================= */
+
+#doc-target .MTB-Dwell {
+  display: block;
+  background: #eaf6ea;
+  border: 1px solid #d6ead6;
+  border-left: 5px solid #2e7d32;
+  border-radius: 14px;
+  padding: 14px 16px;
+  margin: 0;
+  color: #111111;
+  line-height: 1.7;
+  font-weight: 600;
+}
+
+/* Remove internal paragraph spacing */
+#doc-target .MTB-Dwell > p {
+  margin: 0;
+}
+
+/* Merge consecutive Dwell blocks */
+#doc-target .MTB-Dwell + .MTB-Dwell {
+  margin-top: -1px;          /* overlap border seam */
+  border-top: 0;             /* remove seam line */
+  border-top-left-radius: 0;
+  border-top-right-radius: 0;
+  padding-top: 6px;
+}
+
+/* Remove bottom rounding/padding on the first dwell when another follows */
+#doc-target .MTB-Dwell:has(+ .MTB-Dwell) {
+  border-bottom-left-radius: 0;
+  border-bottom-right-radius: 0;
+  padding-bottom: 6px;
+}
+
+
+/* =========================================================
+   INLINE EMPHASIS (character-level)
+   ========================================================= */
+
+#doc-target .MTB-Text-Highlight,
+#doc-target .MTB-Blue-Bold,
+#doc-target .mtb-blue-bold {
+  color: #1e5bd8;
+  font-weight: 700;
+}
+/* =========================================================
+   MTB FINAL OVERRIDES (put at very bottom of style.css)
+   Purpose: force Read/Dwell to visually merge with NO seams/gaps
+   ========================================================= */
+
+/* READ card base */
+#doc-target .MTB-Read {
+  margin: 0 !important;
+  border: 1px solid #e3e7ef !important;
+  border-left: 5px solid #6b7280 !important;
+  border-radius: 14px !important;
+  background: #f2f4f7 !important;
+  padding: 14px 16px !important;
+}
+#doc-target .MTB-Read > p { margin: 0 !important; }
+
+/* merge read stacks */
+#doc-target .MTB-Read + .MTB-Read {
+  margin-top: -1px !important;
+  border-top: 0 !important;
+  border-top-left-radius: 0 !important;
+  border-top-right-radius: 0 !important;
+  padding-top: 6px !important;
+}
+#doc-target .MTB-Read:has(+ .MTB-Read) {
+  border-bottom: 0 !important;               /* kills the hairline seam */
+  border-bottom-left-radius: 0 !important;
+  border-bottom-right-radius: 0 !important;
+  padding-bottom: 6px !important;
+}
+
+/* DWELL card base */
+#doc-target .MTB-Dwell {
+  margin: 0 !important;
+  border: 1px solid #d6ead6 !important;
+  border-left: 5px solid #2e7d32 !important;
+  border-radius: 14px !important;
+  background: #eaf6ea !important;
+  padding: 14px 16px !important;
+  color: #111111 !important;
+  line-height: 1.7 !important;
+  font-weight: 600 !important;
+}
+#doc-target .MTB-Dwell > p { margin: 0 !important; }
+
+/* merge dwell stacks */
+#doc-target .MTB-Dwell + .MTB-Dwell {
+  margin-top: -1px !important;
+  border-top: 0 !important;
+  border-top-left-radius: 0 !important;
+  border-top-right-radius: 0 !important;
+  padding-top: 6px !important;
+}
+#doc-target .MTB-Dwell:has(+ .MTB-Dwell) {
+  border-bottom: 0 !important;               /* kills any seam */
+  border-bottom-left-radius: 0 !important;
+  border-bottom-right-radius: 0 !important;
+  padding-bottom: 6px !important;
+}
+/* =========================================================
+   MTB FINAL OVERRIDES (put at very bottom of style.css)
+   Purpose: force Read/Dwell to visually merge with NO seams/gaps
+   ========================================================= */
+
+/* READ card base */
+#doc-target .MTB-Read {
+  margin: 0 !important;
+  border: 1px solid #e3e7ef !important;
+  border-left: 5px solid #6b7280 !important;
+  border-radius: 14px !important;
+  background: #f2f4f7 !important;
+  padding: 14px 16px !important;
+}
+#doc-target .MTB-Read > p { margin: 0 !important; }
+
+/* merge read stacks */
+#doc-target .MTB-Read + .MTB-Read {
+  margin-top: -1px !important;
+  border-top: 0 !important;
+  border-top-left-radius: 0 !important;
+  border-top-right-radius: 0 !important;
+  padding-top: 6px !important;
+}
+#doc-target .MTB-Read:has(+ .MTB-Read) {
+  border-bottom: 0 !important;               /* kills the hairline seam */
+  border-bottom-left-radius: 0 !important;
+  border-bottom-right-radius: 0 !important;
+  padding-bottom: 6px !important;
+}
+
+/* DWELL card base */
+#doc-target .MTB-Dwell {
+  margin: 0 !important;
+  border: 1px solid #d6ead6 !important;
+  border-left: 5px solid #2e7d32 !important;
+  border-radius: 14px !important;
+  background: #eaf6ea !important;
+  padding: 14px 16px !important;
+  color: #111111 !important;
+  line-height: 1.7 !important;
+  font-weight: 600 !important;
+}
+#doc-target .MTB-Dwell > p { margin: 0 !important; }
+
+/* merge dwell stacks */
+#doc-target .MTB-Dwell + .MTB-Dwell {
+  margin-top: -1px !important;
+  border-top: 0 !important;
+  border-top-left-radius: 0 !important;
+  border-top-right-radius: 0 !important;
+  padding-top: 6px !important;
+}
+#doc-target .MTB-Dwell:has(+ .MTB-Dwell) {
+  border-bottom: 0 !important;               /* kills any seam */
+  border-bottom-left-radius: 0 !important;
+  border-bottom-right-radius: 0 !important;
+  padding-bottom: 6px !important;
+}
+/* =========================================================
+   Chapter Explanation Mode Bar + Visibility
+   ========================================================= */
+
+#ce-modebar {
+  display: none;                /* hidden until Chapter Explanation is active */
+  gap: 10px;
+  align-items: center;
+  margin: 10px 0 18px 0;
+}
+
+#ce-modebar .ce-modebtn {
+  border: 1px solid #d1d5db;
+  background: #ffffff;
+  border-radius: 999px;
+  padding: 8px 14px;
+  font-weight: 650;
+  cursor: pointer;
+}
+
+#ce-modebar .ce-modebtn.active {
+  background: #1e5bd8;
+  color: #ffffff;
+  border-color: #1e5bd8;
+}
+
+
+
+/* Visibility rules based on body class */
+body.ce-mode-read #doc-target .MTB-Explain,
+body.ce-mode-read #doc-target .MTB-Dwell {
+  display: none !important;
+}
+
+body.ce-mode-understand #doc-target .MTB-Dwell {
+  display: none !important;
+}
+
+/* ce-mode-dwell shows everything (default) */
+/* =========================================================
+   MTB Chapter Scripture – JSON Table Renderer
+========================================================= */
+
+#doc-target .mtb-chapter-scripture-wrap {
+  max-width: 1100px;
+  margin: 0 auto;
+}
+
+#doc-target .mtb-chapter-scripture-controls {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  align-items: center;
+  margin: 12px 0 14px 0;
+}
+
+#doc-target table.mtb-chapter-scripture {
+  width: 100%;
+  border-collapse: collapse;
+  table-layout: fixed;
+}
+
+#doc-target table.mtb-chapter-scripture th,
+#doc-target table.mtb-chapter-scripture td {
+  border: 1px solid rgba(0,0,0,0.12);
+  padding: 10px 12px;
+  vertical-align: top;
+  overflow-wrap: anywhere;
+}
+
+#doc-target table.mtb-chapter-scripture th {
+  background: rgba(0,0,0,0.04);
+  font-weight: 600;
+}
+
+#doc-target table.mtb-chapter-scripture th.mtb-verse-num,
+#doc-target table.mtb-chapter-scripture td.mtb-verse-num {
+  width: 60px;
+  text-align: center;
+  white-space: nowrap;
 }

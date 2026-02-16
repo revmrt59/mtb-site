@@ -70,6 +70,46 @@ body { margin: 0; }
   transition: all 0.15s ease;
 }
 
+
+
+    /* Book navigation (Prev / Next book) */
+    .book-nav{
+      position:absolute;
+      right:16px;
+      top:0;
+      display:flex;
+      gap:8px;
+      pointer-events:auto; /* book-hero-top is pointer-events:none */
+      z-index:8;
+    }
+
+    .book-nav-btn{
+      width:38px;
+      height:38px;
+      border-radius:8px;
+      background: rgba(255,255,255,0.95);
+      border: 1px solid rgba(0,0,0,0.25);
+      cursor:pointer;
+      font-weight:700;
+      font-size:18px;
+      line-height:1;
+      transition: all 0.15s ease;
+    }
+
+    .book-nav-btn:hover{
+      background:#3b6fb6;
+      color:#ffffff;
+      border-color:#3b6fb6;
+      box-shadow: 0 0 0 3px rgba(59,111,182,0.35);
+      transform: translateY(-1px);
+    }
+
+    .book-nav.is-loading .book-nav-btn{
+      opacity:0.55;
+      cursor:not-allowed;
+      transform:none;
+    }
+
 /* Blue hover (matches chapter buttons) */
 .book-hero-controls button:hover{
   background:#2563eb;
@@ -134,14 +174,6 @@ body { margin: 0; }
   border: 1px solid rgba(0,0,0,0.25);
   border-radius: 6px;
   cursor: pointer;
-}
-
-/* Disabled (chapter not yet available) */
-.book-hero-chapters button:disabled{
-  opacity: 0.45;
-  cursor: not-allowed;
-  box-shadow: none;
-  transform: none;
 }
 
 .book-hero-chapters button:hover{
@@ -232,6 +264,22 @@ body { margin: 0; }
   padding-top: 12px;
 }
 
+
+/* --- BOOK NAV (Prev/Next book) ensure clickable + blue hover --- */
+.book-hero-top{ pointer-events: auto; }
+#book-nav, #book-nav *{ pointer-events: auto; }
+
+#book-nav .book-nav-btn:hover{
+  background: #3b6fb6;
+  color: #ffffff;
+  border-color: #3b6fb6;
+  box-shadow: 0 0 0 3px rgba(59,111,182,0.35);
+  transform: translateY(-1px);
+}
+
+/* Chapter buttons must remain clickable even though overlay is pointer-events:none */
+.book-hero-chapters, .book-hero-chapters *{ pointer-events: auto; }
+
 </style>
 </head>
 
@@ -249,7 +297,12 @@ body { margin: 0; }
   <div class="book-hero-banner">
 
     <div class="book-hero-top">
-      <div id="book-hero-title" class="book-hero-title"></div>
+      
+      <div id="book-nav" class="book-nav" aria-label="Book navigation">
+        <button id="book-prev" class="book-nav-btn" type="button" aria-label="Previous book">‹</button>
+        <button id="book-next" class="book-nav-btn" type="button" aria-label="Next book">›</button>
+      </div>
+<div id="book-hero-title" class="book-hero-title"></div>
 
       <div class="book-hero-controls">
         <button id="book-hero-intro" type="button">Book Introduction</button>
@@ -295,8 +348,9 @@ body { margin: 0; }
 </main>
 <script src="assets/js/jshero-jump.js"></script>
 <script src="assets/js/book.js"></script>
-<script src="/assets/js/scripture-controls.js"></script>
+<!---- <script src="/assets/js/scripture-controls.js"></script> -->
 <script src="/assets/js/load-doc.js"></script>
+<script src="assets/js/chapter-scripture-json.js"></script>
 <script src="assets/js/wordstudy-hover.js"></script>
 
 <script>
@@ -344,7 +398,11 @@ document.addEventListener("DOMContentLoaded", function () {
     heroTitle.textContent = gospels.has(book)
       ? "Gospel of " + bookName
       : "Book of " + bookName;
-  }
+  
+
+    // Wire Prev/Next book buttons
+    wireBookNav(book);
+}
 
   /* =========================================================
      CHAPTER COUNTS (single source for auto chapter buttons)
@@ -357,6 +415,70 @@ document.addEventListener("DOMContentLoaded", function () {
     "isaiah": 66
     // later: "psalms": 150
   };
+
+  // Fetch the canonical book order so Prev/Next book matches your site order
+  let __BOOK_INDEX = null;
+  async function getBookSlugsInOrder() {
+    if (__BOOK_INDEX) return __BOOK_INDEX;
+    try {
+      const res = await fetch("/assets/data/books-index.json", { cache: "no-cache" });
+      if (!res.ok) throw new Error("books-index.json not found");
+      const raw = await res.text();
+      const cleaned = raw.replace(/^\uFEFF/, ""); // strip UTF-8 BOM if present
+      const data = JSON.parse(cleaned);
+      const arr = Array.isArray(data) ? data : (Array.isArray(data.books) ? data.books : []);
+      const slugs = arr.map(x => (x && x.slug) ? String(x.slug) : null).filter(Boolean);
+      if (slugs.length) {
+        __BOOK_INDEX = slugs;
+        return __BOOK_INDEX;
+      }
+    } catch (e) { /* fallback below */ }
+
+    // Fallback: use whatever we have (may not be canonical order)
+    __BOOK_INDEX = Object.keys(CHAPTER_COUNTS);
+    return __BOOK_INDEX;
+  }
+
+  function buildBookUrl(bookSlug){
+    return `book.html?book=${encodeURIComponent(bookSlug)}&chapter=0&tab=book_home`;
+  }
+
+  function disableBookNav(navEl) {
+    if (!navEl) return;
+    navEl.classList.add("is-loading");
+    navEl.querySelectorAll("button").forEach(b => { b.disabled = true; });
+  }
+
+  async function wireBookNav(currentBookSlug) {
+    const nav = document.getElementById("book-nav");
+    const prevBtn = document.getElementById("book-prev");
+    const nextBtn = document.getElementById("book-next");
+    if (!nav || !prevBtn || !nextBtn) return;
+
+    const slugs = await getBookSlugsInOrder();
+    if (!slugs || !slugs.length) return;
+
+    let i = slugs.indexOf(currentBookSlug);
+    if (i < 0) {
+      // If the current book is not in the index (e.g., JSON load failed), still enable nav
+      slugs.push(currentBookSlug);
+      i = slugs.length - 1;
+    }
+
+    const prevSlug = slugs[(i - 1 + slugs.length) % slugs.length];
+    const nextSlug = slugs[(i + 1) % slugs.length];
+
+    prevBtn.addEventListener("click", function () {
+      disableBookNav(nav);
+      window.location.href = buildBookUrl(prevSlug);
+    });
+
+    nextBtn.addEventListener("click", function () {
+      disableBookNav(nav);
+      window.location.href = buildBookUrl(nextSlug);
+    });
+  }
+
 
   const currentChapter = parseInt(params.get("chapter") || "0", 10);
 
@@ -531,52 +653,25 @@ function wireModalLinks_DUPLICATE_1(modalContentEl) {
 if (chapterWrap) {
     chapterWrap.innerHTML = "";
 
-    // Total chapters from MTB_CONTENT (preferred), fallback to CHAPTER_COUNTS
-    let total = 0;
-    if (window.MTB_CONTENT && Array.isArray(window.MTB_CONTENT)) {
-      const entry = window.MTB_CONTENT.find(b => b.slug === book);
-      if (entry && entry.chapters) total = parseInt(entry.chapters, 10) || 0;
+    const total = CHAPTER_COUNTS[book] || 0;
+
+    for (let ch = 1; ch <= total; ch++) {
+      const btn = document.createElement("button");
+      btn.type = "button";
+      btn.textContent = String(ch);
+
+      // highlight current chapter (won't show on chapter=0, which is correct)
+      if (ch === currentChapter) btn.classList.add("is-active");
+
+      btn.addEventListener("click", function(){
+        window.location.href =
+          "/book.html?book=" + encodeURIComponent(book) +
+          "&chapter=" + ch +
+          "&tab=chapter_scripture";
+      });
+
+      chapterWrap.appendChild(btn);
     }
-    if (!total) total = CHAPTER_COUNTS[book] || 0;
-
-    // Load availability manifest generated by the build
-    (async function () {
-      let availableSet = null;
-
-      try {
-        const res = await fetch("/assets/data/chapter-availability.json", { cache: "no-store" });
-        if (res.ok) {
-          const data = await res.json();
-          const arr = (data && data[book]) ? data[book] : [];
-          availableSet = new Set((arr || []).map(n => parseInt(n, 10)).filter(n => Number.isFinite(n)));
-        }
-      } catch (_) {}
-
-      for (let ch = 1; ch <= total; ch++) {
-        const btn = document.createElement("button");
-        btn.type = "button";
-        btn.textContent = String(ch);
-
-        // highlight current chapter (won't show on chapter=0, which is correct)
-        if (ch === currentChapter) btn.classList.add("is-active");
-
-        const isAvailable = !availableSet || availableSet.has(ch);
-
-        if (!isAvailable) {
-          btn.disabled = true;
-          btn.title = "Not yet available";
-        } else {
-          btn.addEventListener("click", function(){
-            window.location.href =
-              "/book.html?book=" + encodeURIComponent(book) +
-              "&chapter=" + ch +
-              "&tab=chapter_scripture";
-          });
-        }
-
-        chapterWrap.appendChild(btn);
-      }
-    })();
   }
 // --------------------------------------------------
 // Remove Book Introduction tab on chapter pages

@@ -480,7 +480,7 @@
 
     target.innerHTML = fixMojibake(content);
     wireDocLinks(target);
-
+    document.dispatchEvent(new CustomEvent("mtb:doc-injected"));
     const isExplanation =
       meta.type === "chapter-explanation" || /chapter[-_]?explanation\.html$/i.test(docName);
 
@@ -704,4 +704,120 @@ if (String(chapterParamRaw) === "0" && String(tabParamRaw) === "book_home") {
     loadCurrentDocFromUrl,
     loadDoc,
   };
+})();
+(function () {
+  const MODE_KEY = "mtb_ce_mode"; // remembers last mode
+
+  function isChapterExplanationActive() {
+    // 1) URL param check (adjust values if your tab names differ)
+    const params = new URLSearchParams(window.location.search);
+    const tab = (params.get("tab") || "").toLowerCase();
+    if (tab.includes("chapter_explanation") || tab.includes("chapter-explanation")) return true;
+
+    // 2) If your system loads docs by filename in ?doc=
+    const doc = (params.get("doc") || "").toLowerCase();
+    if (doc.includes("chapter-explanation")) return true;
+
+    // 3) Fallback: active tab button text
+    const activeBtn =
+      document.querySelector(".tab-button.active") ||
+      document.querySelector(".tabs button.active") ||
+      document.querySelector("button.active");
+    if (activeBtn && /chapter explanation/i.test(activeBtn.textContent || "")) return true;
+
+    // 4) Fallback: the loaded content heading
+    const h1 = document.querySelector("#doc-target h1");
+    if (h1 && /explanation/i.test(h1.textContent || "")) return true;
+
+    return false;
+  }
+
+  function ensureModeBar() {
+    let bar = document.getElementById("ce-modebar");
+    if (bar) return bar;
+
+    bar = document.createElement("div");
+    bar.id = "ce-modebar";
+
+    bar.innerHTML = `
+      <button type="button" class="ce-modebtn" data-mode="read">READ</button>
+      <button type="button" class="ce-modebtn" data-mode="understand">UNDERSTAND</button>
+      <button type="button" class="ce-modebtn" data-mode="dwell">DWELL</button>
+    `;
+
+    // Put it right above the doc content
+    const target = document.getElementById("doc-target");
+    if (target && target.parentNode) {
+      target.parentNode.insertBefore(bar, target);
+    } else {
+      document.body.appendChild(bar);
+    }
+
+    bar.addEventListener("click", (e) => {
+      const btn = e.target.closest(".ce-modebtn");
+      if (!btn) return;
+      setMode(btn.getAttribute("data-mode"));
+    });
+
+    return bar;
+  }
+
+  function setMode(mode) {
+    const body = document.body;
+    body.classList.remove("ce-mode-read", "ce-mode-understand", "ce-mode-dwell");
+
+    if (mode === "read") body.classList.add("ce-mode-read");
+    else if (mode === "understand") body.classList.add("ce-mode-understand");
+    else body.classList.add("ce-mode-dwell");
+
+    try { localStorage.setItem(MODE_KEY, mode); } catch {}
+    updateModeButtons(mode);
+  }
+
+  function updateModeButtons(mode) {
+    const bar = document.getElementById("ce-modebar");
+    if (!bar) return;
+    bar.querySelectorAll(".ce-modebtn").forEach((b) => {
+      b.classList.toggle("active", b.getAttribute("data-mode") === mode);
+    });
+  }
+
+  function showHideModeBar() {
+    const bar = ensureModeBar();
+    const on = isChapterExplanationActive();
+
+    bar.style.display = on ? "flex" : "none";
+
+    // If not in chapter explanation, remove mode classes
+    if (!on) {
+      document.body.classList.remove("ce-mode-read", "ce-mode-understand", "ce-mode-dwell");
+      return;
+    }
+
+    // Apply last saved mode (default dwell)
+    let mode = "dwell";
+    try { mode = localStorage.getItem(MODE_KEY) || "dwell"; } catch {}
+    setMode(mode);
+  }
+
+  // Run on page load
+  document.addEventListener("DOMContentLoaded", showHideModeBar);
+
+  // If your page swaps docs/tabs without full reload, call this after a doc is injected:
+  // window.mtbAfterDocLoad?.push(showHideModeBar)
+  // For now we also watch for changes in #doc-target (safe + simple)
+  const target = document.getElementById("doc-target");
+  if (target) {
+    const obs = new MutationObserver(() => showHideModeBar());
+    obs.observe(target, { childList: true, subtree: true });
+  }
+
+  // Also watch for tab clicks (covers most setups)
+  document.addEventListener("click", (e) => {
+    const btn = e.target.closest("button");
+    if (!btn) return;
+    if (/chapter explanation/i.test(btn.textContent || "") || btn.id?.toLowerCase().includes("explanation")) {
+      setTimeout(showHideModeBar, 0);
+    }
+  });
 })();

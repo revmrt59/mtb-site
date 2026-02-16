@@ -57,17 +57,25 @@ function Slugify($s) {
   $t = $t.Trim("-")
   return $t
 }
-
 function Convert-DocxToHtmlFragment($docxPath) {
   if (-not (Test-Path $docxPath)) { throw "DOCX not found: $docxPath" }
 
-  # Intentionally NOT using --extract-media to avoid permission/lock issues.
+  # Lua filter path (expects mtb-custom-styles.lua in the same folder as this script)
+  $LUA_FILTER = Join-Path $PSScriptRoot "mtb-custom-styles.lua"
+  if (-not (Test-Path $LUA_FILTER)) {
+    throw "Lua filter not found: $LUA_FILTER"
+  }
+
+  # IMPORTANT:
+  # - docx+styles is required for Pandoc to emit the `custom-style` attribute
+  # - lua filter converts those custom styles into HTML classes
   $args = @(
-    "--from=docx",
+    "--from=docx+styles",
     "--to=html",
     "--standalone=false",
     "--wrap=none",
     "--quiet",
+    ("--lua-filter=" + $LUA_FILTER),
     $docxPath
   )
 
@@ -86,6 +94,42 @@ function Convert-DocxToHtmlFragment($docxPath) {
   finally {
     if (Test-Path $errFile) { Remove-Item $errFile -Force -ErrorAction SilentlyContinue }
   }
+}
+
+function New-MtbChapterScriptureStubHtml {
+  param(
+    [Parameter(Mandatory)] [string] $BookSlug,
+    [Parameter(Mandatory)] [int]    $Chapter
+  )
+
+@"
+<section class="mtb-doc mtb-chapter-scripture">
+  <div class="scripture-controls"></div>
+
+  <div
+    class="mtb-scripture-root"
+    data-book="$BookSlug"
+    data-chapter="$Chapter"
+    data-left="nkjv"
+    data-right="nlt"
+  ></div>
+</section>
+"@
+}
+
+function Write-MtbChapterScriptureStubFile {
+  param(
+    [Parameter(Mandatory)] [string] $OutDir,
+    [Parameter(Mandatory)] [string] $BookSlug,
+    [Parameter(Mandatory)] [int]    $Chapter
+  )
+
+  $fileName = "{0}-{1}-chapter-scripture.html" -f $BookSlug, $Chapter
+  $outFile  = Join-Path $OutDir $fileName
+
+  $html = New-MtbChapterScriptureStubHtml -BookSlug $BookSlug -Chapter $Chapter
+
+  Set-Content -Path $outFile -Value $html -Encoding UTF8
 }
 
 # ---------------------------------------------------------
@@ -417,6 +461,12 @@ $outDir = Join-Path $SITE_ROOT ("books\" + $testament + "\" + $BOOK_SLUG)
       Ensure-Path $targetDir
 
       $outPath = Join-Path $targetDir $outName
+      # If this is a chapter scripture page, override Pandoc output with the JSON stub
+      if ($outName -match '^(?<book>[a-z0-9-]+)-(?<ch>\d+)-chapter-scripture\.html$') {
+        $b  = $Matches['book']
+        $ch = [int]$Matches['ch']
+        $html = New-MtbChapterScriptureStubHtml -BookSlug $b -Chapter $ch
+      }
 
 
       Set-Content -Path $outPath -Value $html -Encoding UTF8 -Force

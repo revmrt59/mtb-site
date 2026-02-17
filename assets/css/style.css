@@ -1300,3 +1300,558 @@ body.ce-mode-understand #doc-target .MTB-Dwell {
   text-align: center;
   white-space: nowrap;
 }
+
+/* =========================================================
+   LOC (Life of Christ) — SINGLE SOURCE OF TRUTH
+   Applies to:
+   - loc index table:  table.mtb-loc-head-table
+   - loc detail page:  body.loc-page + table.mtb-loc-harmony-table
+========================================================= */
+
+/* ---------- Shared: keep LOC pages from looking edge-to-edge ---------- */
+body.loc-page #doc-target,
+body:has(.loc-head) #doc-target {
+  max-width: none !important;              /* overrides global 900px cap */
+  width: 100% !important;
+  margin: 0 !important;
+  padding-left: 18px !important;
+  padding-right: 18px !important;
+  box-sizing: border-box;
+}
+
+/* =========================================================
+   LOC INDEX PAGE (the big list)
+========================================================= */
+
+.loc-head {
+  display: flex;
+  flex-direction: column;
+  height: calc(100vh - 140px);
+}
+
+.loc-sticky-header {
+  position: sticky;
+  top: 0;
+  z-index: 50;
+  background: #fff;
+  padding: 16px 0 12px;
+  border-bottom: 1px solid #eee;
+}
+
+.loc-head-controls {
+  margin-top: 8px;
+  margin-bottom: 18px;
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+.loc-scroll-area {
+  flex: 1;
+  overflow: auto;
+  scrollbar-gutter: stable;
+  padding: 0 0 12px;
+}
+
+/* index table */
+table.mtb-loc-head-table {
+  width: 100% !important;
+  table-layout: fixed;
+  border-collapse: separate;
+  border-spacing: 10px 0;
+}
+
+table.mtb-loc-head-table thead th {
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  background: #fff;
+  padding: 10px 6px;
+  text-align: left;
+  border-bottom: 1px solid #ddd;
+}
+
+table.mtb-loc-head-table td {
+  padding: 8px 6px;
+  text-align: left;
+  vertical-align: top;
+  border-bottom: 1px solid #f0f0f0;
+  overflow-wrap: anywhere;
+}
+
+a.loc-link {
+  color: #0645ad;
+  text-decoration: underline;
+}
+a.loc-link:visited { color: #0b0080; }
+
+/* =========================================================
+   LOC DETAIL PAGE (loc.html?loc=005&tab=scripture_harmony)
+========================================================= */
+
+body.loc-page {
+  height: 100vh;
+  overflow: hidden;                 /* page does not scroll */
+}
+
+/* The site nav stays above everything */
+body.loc-page .site-header,
+body.loc-page .main-nav {
+  position: sticky;
+  top: 0;
+  z-index: 10000;
+  background: #fff;
+}
+
+/* LOC header stays pinned under nav */
+body.loc-page .loc-header {
+  position: sticky;
+  top: 0;
+  z-index: 9000;
+  background: #fff;
+  padding: 12px 16px;
+  border-bottom: 1px solid #eee;
+
+  /* toolbar behavior: keeps buttons from squishing */
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  flex-wrap: wrap;
+}
+
+body.loc-page .loc-header a,
+body.loc-page .loc-header button {
+  white-space: nowrap;
+}
+
+/* The ONLY scroll container */
+body.loc-page .loc-scroll-body {
+  height: calc(100vh - 140px);      /* simple, stable default */
+  overflow: auto;
+  scrollbar-gutter: stable;
+  padding: 10px 0 14px;
+  position: relative;
+  z-index: 1;
+}
+
+/* Translation bar is sticky inside scroll */
+body.loc-page .loc-scroll-body .loc-harmony-controls,
+body.loc-page .loc-scroll-body .translation-controls,
+body.loc-page .loc-scroll-body .loc-translation {
+  position: sticky;
+  top: 0;
+  z-index: 60;
+  background: #fff;
+  padding: 8px 0;
+  border-bottom: 1px solid #f0f0f0;
+
+  /* set this once if needed */
+  min-height: 56px;
+}
+
+/* Harmony table sizing */
+body.loc-page table.mtb-loc-harmony-table {
+  width: 100% !important;
+  table-layout: fixed;
+  border-collapse: collapse;
+}
+
+body.loc-page table.mtb-loc-harmony-table th,
+body.loc-page table.mtb-loc-harmony-table td {
+  width: 25%;
+  vertical-align: top;
+  padding: 10px 14px;
+}
+
+/* Gospel headings sticky under Translation bar */
+body.loc-page .loc-scroll-body table.mtb-loc-harmony-table thead th {
+  position: sticky;
+  top: 56px;               /* must match min-height above */
+  z-index: 50;
+  background: #fff;
+  border-bottom: 1px solid #ddd;
+}
+
+/* Scripture Harmony button: stable width + moved right (requires class added in HTML/JS) */
+body.loc-page .scripture-harmony-btn {
+  min-width: 170px;
+  padding: 8px 12px;
+  margin-left: 18px;
+}
+
+/* Right-side seq nav buttons */
+#seq-nav {
+  position: fixed;
+  right: 16px;
+  top: 140px;
+  z-index: 2000;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+#seq-nav button {
+  padding: 10px 12px;
+  font-size: 14px;
+  cursor: pointer;
+}
+/* =========================================================
+   LOC INDEX TABLE FIX — stop vertical letter wrapping
+========================================================= */
+
+table.mtb-loc-head-table {
+  width: 100% !important;
+  table-layout: fixed;          /* keep stable column widths */
+}
+
+/* Set practical widths by column */
+table.mtb-loc-head-table th:nth-child(1),
+table.mtb-loc-head-table td:nth-child(1) { width: 6%; }   /* Seq */
+
+table.mtb-loc-head-table th:nth-child(2),
+table.mtb-loc-head-table td:nth-child(2) { width: 14%; }  /* Rollup */
+
+table.mtb-loc-head-table th:nth-child(3),
+table.mtb-loc-head-table td:nth-child(3) { width: 12%; }  /* Phase */
+
+table.mtb-loc-head-table th:nth-child(4),
+table.mtb-loc-head-table td:nth-child(4) { width: 12%; }  /* Approx Date */
+
+table.mtb-loc-head-table th:nth-child(5),
+table.mtb-loc-head-table td:nth-child(5),
+table.mtb-loc-head-table th:nth-child(6),
+table.mtb-loc-head-table td:nth-child(6),
+table.mtb-loc-head-table th:nth-child(7),
+table.mtb-loc-head-table td:nth-child(7),
+table.mtb-loc-head-table th:nth-child(8),
+table.mtb-loc-head-table td:nth-child(8) { width: 14%; }  /* Matthew/Mark/Luke/John */
+
+/* Prevent links from breaking into vertical letters */
+table.mtb-loc-head-table a.loc-link {
+  white-space: nowrap;
+  word-break: normal;
+  overflow-wrap: normal;
+  display: inline-block;
+}
+
+/* Keep ref cells readable */
+table.mtb-loc-head-table td {
+  vertical-align: top;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+/* =========================================================
+   LOC DETAIL — force event title to display
+========================================================= */
+
+/* Make header stack like:
+   Line 1: title/meta
+   Line 2: buttons (back + harmony)
+*/
+body.loc-page .loc-header {
+  display: flex;
+  flex-direction: column;     /* key change */
+  align-items: stretch;
+  gap: 8px;
+}
+
+/* Force the title block to show and take full width */
+body.loc-page #loc-title,
+body.loc-page .loc-title,
+body.loc-page .loc-title-block {
+  display: block !important;
+  width: 100% !important;
+  white-space: normal !important;
+}
+
+/* Put header buttons on a separate row */
+body.loc-page .loc-header .loc-header-actions {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+/* Keep buttons from squishing */
+body.loc-page .loc-header .loc-header-actions button,
+body.loc-page .loc-header .loc-header-actions a {
+  white-space: nowrap;
+}
+
+/* Harmony button: move right a bit */
+body.loc-page .scripture-harmony-btn {
+  margin-left: 18px !important;
+  min-width: 170px;
+}
+table.mtb-loc-head-table { width:100% !important; table-layout: fixed; }
+
+table.mtb-loc-head-table .col-seq   { width: 70px; }
+table.mtb-loc-head-table .col-rollup{ width: 140px; }
+table.mtb-loc-head-table .col-phase { width: 160px; }
+table.mtb-loc-head-table .col-date  { width: 140px; }
+/* Make the LOC index table intentionally wide */
+table.mtb-loc-head-table {
+  width: 1800px;      /* adjust if needed */
+  min-width: 1600px;
+  table-layout: fixed;
+}
+
+
+
+table.mtb-loc-head-table .col-matt,
+table.mtb-loc-head-table .col-mark,
+table.mtb-loc-head-table .col-luke,
+table.mtb-loc-head-table .col-john  { width: 140px; }
+
+table.mtb-loc-head-table a.loc-link {
+  white-space: nowrap;
+  overflow-wrap: normal;
+  word-break: normal;
+  display: inline-block;
+}
+/* Allow LOC index table to expand beyond container width */
+table.mtb-loc-head-table {
+  width: 1400px;       /* increase this number if needed */
+  min-width: 1200px;
+}
+/* =========================================================
+   LIFE OF JESUS INDEX — wide grid + grey-blue canvas
+   (page: /loc/life-of-jesus.html)
+========================================================= */
+
+/* Grey-blue canvas around the whole grid area */
+section.loc-head {
+            /* grey-blue */
+  padding: 18px;                  /* space outside table */
+  border-radius: 12px;
+}
+
+/* Make the scroll area feel like a panel */
+.loc-scroll-area {
+  background: #f7f9fc;
+  padding: 14px;
+  border-radius: 10px;
+  overflow: auto;
+  scrollbar-gutter: stable;
+}
+
+/* Make the table intentionally wide */
+table.mtb-loc-head-table {
+  width: 2200px;                  /* wider table */
+  min-width: 2000px;
+  table-layout: fixed;
+  background: #fff;
+  border-collapse: collapse;
+}
+
+/* Column widths */
+table.mtb-loc-head-table .col-seq    { width: 70px; }
+table.mtb-loc-head-table .col-rollup { width: 160px; }
+table.mtb-loc-head-table .col-phase  { width: 170px; }
+table.mtb-loc-head-table .col-date   { width: 150px; }
+
+/* Event Title: wider than 600 */
+table.mtb-loc-head-table .col-title  { width: 900px; }  /* bump to 1000 if you want */
+
+/* Gospel columns */
+table.mtb-loc-head-table .col-matt,
+table.mtb-loc-head-table .col-mark,
+table.mtb-loc-head-table .col-luke,
+table.mtb-loc-head-table .col-john   { width: 170px; }
+
+/* Cell polish */
+table.mtb-loc-head-table th,
+table.mtb-loc-head-table td {
+  padding: 10px 10px;
+  border-bottom: 1px solid #e6e6e6;
+  vertical-align: top;
+}
+
+/* Keep links from breaking into vertical letters */
+table.mtb-loc-head-table a.loc-link {
+  white-space: nowrap;
+  overflow-wrap: normal;
+  word-break: normal;
+  display: inline-block;
+}
+body {
+  background: #e9eff6;
+}
+section.loc-head > .loc-sticky-header {
+  background: #ffffff;
+  border-radius: 10px 10px 0 0;
+  padding: 20px;
+}
+/* =========================================================
+   LIFE OF JESUS INDEX — FINAL (single source of truth)
+   Keep this at the VERY BOTTOM of style.css
+========================================================= */
+
+/* Grey-blue outside everything */
+body {
+  background: #e9eff6;
+}
+
+/* Keep header white */
+.loc-sticky-header {
+  background: #ffffff;
+  padding: 20px;
+  border-radius: 10px 10px 0 0;
+}
+
+/* Grey-blue frame around the whole grid area */
+section.loc-head {
+  padding: 18px;
+  border-radius: 12px;
+}
+
+/* Scroll panel around the table */
+.loc-scroll-area {
+  background: #f7f9fc;
+  padding: 14px;
+  border-radius: 10px;
+  overflow: auto;
+  scrollbar-gutter: stable;
+}
+
+/* Wide table + fixed layout MRT */
+table.mtb-loc-head-table {
+  width: 3000px !important;     /* table wider */
+  min-width: 3000px !important;
+  table-layout: fixed !important;
+  border-collapse: collapse !important;
+  background: #ffffff;
+}
+
+/* Column widths *  MRT */
+table.mtb-loc-head-table .col-seq    { width: 25px; }
+table.mtb-loc-head-table .col-rollup { width: 50px; }
+table.mtb-loc-head-table .col-phase  { width: 50px; }
+table.mtb-loc-head-table .col-date   { width: 100px; }
+
+
+/* Event Title: wider than 600 */
+table.mtb-loc-head-table .col-title  { width: 1000px; }
+
+
+
+/* Gospel columns */
+table.mtb-loc-head-table .col-matt,
+table.mtb-loc-head-table .col-mark,
+table.mtb-loc-head-table .col-luke,
+table.mtb-loc-head-table .col-john   { width: 100px; }
+
+/* Cells */
+table.mtb-loc-head-table th,
+table.mtb-loc-head-table td {
+  padding: 10px 10px;
+  border-bottom: 1px solid #e6e6e6;
+  vertical-align: top;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* Prevent vertical letters */
+table.mtb-loc-head-table a.loc-link {
+  white-space: nowrap;
+  word-break: normal;
+  overflow-wrap: normal;
+  display: inline-block;
+}
+/* =========================================================
+   LIFE OF JESUS INDEX — COLUMN SIZING (FINAL)
+   Paste at VERY bottom of style.css
+========================================================= */
+
+table.mtb-loc-head-table {
+  table-layout: fixed !important;
+  width: 2400px !important;     /* overall grid width */
+  min-width: 2200px !important;
+}
+
+/* Force widths on BOTH th and td */
+table.mtb-loc-head-table th.col-seq,
+table.mtb-loc-head-table td.col-seq { width: 55px !important; }
+
+table.mtb-loc-head-table th.col-rollup,
+table.mtb-loc-head-table td.col-rollup { width: 120px !important; }
+
+table.mtb-loc-head-table th.col-phase,
+table.mtb-loc-head-table td.col-phase { width: 130px !important; }
+
+table.mtb-loc-head-table th.col-date,
+table.mtb-loc-head-table td.col-date { width: 120px !important; }
+
+table.mtb-loc-head-table th.col-title,
+table.mtb-loc-head-table td.col-title { width: 1000px !important; }
+
+table.mtb-loc-head-table th.col-matt,
+table.mtb-loc-head-table td.col-matt,
+table.mtb-loc-head-table th.col-mark,
+table.mtb-loc-head-table td.col-mark,
+table.mtb-loc-head-table th.col-luke,
+table.mtb-loc-head-table td.col-luke,
+table.mtb-loc-head-table th.col-john,
+table.mtb-loc-head-table td.col-john { width: 170px !important; }
+
+/* Make sure content doesn’t force columns wider */
+table.mtb-loc-head-table th,
+table.mtb-loc-head-table td {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+/* LIFE OF JESUS index: let the page use the full width */
+body:has(#loc-head-table) main.doc-shell {
+  max-width: 100% !important;
+  width: 100% !important;
+  margin: 0 !important;
+  padding-left: 18px !important;
+  padding-right: 18px !important;
+}
+
+/* Remove the big centered “card” feel */
+body:has(#loc-head-table) section.loc-head {
+  padding: 0 !important;
+  margin: 0 !important;
+  background: transparent !important;
+}
+
+/* Keep a little breathing room but let it span wide */
+body:has(#loc-head-table) .loc-scroll-area {
+  padding: 10px !important;
+  border-radius: 10px;
+}
+/* Make the table fit the available width */
+body:has(#loc-head-table) table.mtb-loc-head-table {
+  width: 100% !important;
+  min-width: 0 !important;
+  table-layout: fixed !important;
+}
+
+/* Tighten first columns + shrink Event Title */
+body:has(#loc-head-table) table.mtb-loc-head-table th.col-seq,
+body:has(#loc-head-table) table.mtb-loc-head-table td.col-seq { width: 55px !important; }
+
+body:has(#loc-head-table) table.mtb-loc-head-table th.col-rollup,
+body:has(#loc-head-table) table.mtb-loc-head-table td.col-rollup { width: 130px !important; }
+
+body:has(#loc-head-table) table.mtb-loc-head-table th.col-phase,
+body:has(#loc-head-table) table.mtb-loc-head-table td.col-phase { width: 140px !important; }
+
+body:has(#loc-head-table) table.mtb-loc-head-table th.col-date,
+body:has(#loc-head-table) table.mtb-loc-head-table td.col-date { width: 130px !important; }
+
+/* Event Title smaller */
+body:has(#loc-head-table) table.mtb-loc-head-table th.col-title,
+body:has(#loc-head-table) table.mtb-loc-head-table td.col-title { width: 325px !important; }
+
+/* Gospel columns smaller so it can fit */
+body:has(#loc-head-table) table.mtb-loc-head-table th.col-matt,
+body:has(#loc-head-table) table.mtb-loc-head-table td.col-matt,
+body:has(#loc-head-table) table.mtb-loc-head-table th.col-mark,
+body:has(#loc-head-table) table.mtb-loc-head-table td.col-mark,
+body:has(#loc-head-table) table.mtb-loc-head-table th.col-luke,
+body:has(#loc-head-table) table.mtb-loc-head-table td.col-luke,
+body:has(#loc-head-table) table.mtb-loc-head-table th.col-john,
+body:has(#loc-head-table) table.mtb-loc-head-table td.col-john { width: 125px !important; }

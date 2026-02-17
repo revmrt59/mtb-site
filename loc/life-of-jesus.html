@@ -1,18 +1,51 @@
-<section class="loc-head">
-  <h1 class="mtb-page-title">The Life of Jesus</h1>
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>The Life of Jesus</title>
 
-  <div class="loc-head-controls">
-    <label for="loc-search">Search</label>
-    <input id="loc-search" type="text" placeholder="Search event title, date, phase, rollup..." />
+  <!-- IMPORTANT: load your site stylesheet -->
+  <link rel="stylesheet" href="/assets/css/style.css">
+</head>
 
-    <label for="loc-rollup">Rollup</label>
-    <select id="loc-rollup"></select>
+<body>
 
-    <label for="loc-phase">Phase</label>
-    <select id="loc-phase"></select>
-  </div>
+  <!-- Optional: top nav if you want it on this page -->
+  <header class="site-header">
+    <nav class="main-nav">
+      <a href="/index.html">Home</a>
+      <a href="/about.html">About</a>
+      <a href="/resources/index.html">Resources</a>
+      <a href="/loc/life-of-jesus.html">The Life of Jesus</a>
+    </nav>
+  </header>
 
-  <div id="loc-head-table"></div>
-</section>
+  <main class="doc-shell">
+    <section class="loc-head">
 
-<script src="/assets/js/loc/loc-head.js"></script>
+      <div class="loc-sticky-header">
+        <h1 class="mtb-page-title">The Life of Jesus</h1>
+
+        <div class="loc-head-controls">
+          <label for="loc-search">Search</label>
+          <input id="loc-search" type="text" placeholder="Search event title, date, phase, rollup..." />
+
+          <label for="loc-rollup">Rollup</label>
+          <select id="loc-rollup"></select>
+
+          <label for="loc-phase">Phase</label>
+          <select id="loc-phase"></select>
+        </div>
+      </div>
+
+      <div class="loc-scroll-area">
+        <div id="loc-head-table"></div>
+      </div>
+
+    </section>
+  </main>
+
+  <script src="/assets/js/loc/loc-head.js"></script>
+</body>
+</html>

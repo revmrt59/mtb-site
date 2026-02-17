@@ -76,37 +76,37 @@
     const html = [];
     html.push(`<table class="mtb-loc-head-table">`);
     html.push(`<thead>
-      <tr>
-        <th style="width:70px;">Seq</th>
-        <th style="width:140px;">Rollup</th>
-        <th style="width:160px;">Phase</th>
-        <th style="width:140px;">Approx Date</th>
-        <th style="min-width:260px;">Event Title</th>
-        <th style="width:140px;">Matthew</th>
-        <th style="width:140px;">Mark</th>
-        <th style="width:140px;">Luke</th>
-        <th style="width:140px;">John</th>
-      </tr>
+    <tr>
+        <th class="col-seq">Seq</th>
+        <th class="col-rollup">Rollup</th>
+        <th class="col-phase">Phase</th>
+        <th class="col-date">Approx Date</th>
+        <th class="col-title">Event Title</th>
+        <th class="col-matt">Matthew</th>
+        <th class="col-mark">Mark</th>
+        <th class="col-luke">Luke</th>
+        <th class="col-john">John</th>
+    </tr>
     </thead>`);
+
     html.push(`<tbody>`);
 
     for (const r of filtered) {
       const link = makeLocUrl(r.seq);
       const refs = r.refs || {};
 
-      html.push(`<tr>
-        <td><a class="loc-link" href="${link}">${escapeHtml(r.seq)}</a></td>
-        <td>${escapeHtml(r.rollup)}</td>
-        <td>${escapeHtml(r.phase)}</td>
-        <td>${escapeHtml(r.approxDate)}</td>
-        <td><a class="loc-link" href="${link}">${escapeHtml(r.title)}</a></td>
+html.push(`<tr>
+  <td class="col-seq"><a class="loc-link" href="${link}">${escapeHtml(r.seq)}</a></td>
+  <td class="col-rollup">${escapeHtml(r.rollup)}</td>
+  <td class="col-phase">${escapeHtml(r.phase)}</td>
+  <td class="col-date">${escapeHtml(r.approxDate)}</td>
+  <td class="col-title"><a class="loc-link" href="${link}">${escapeHtml(r.title)}</a></td>
+  <td class="col-matt">${escapeHtml(refs.matthew)}</td>
+  <td class="col-mark">${escapeHtml(refs.mark)}</td>
+  <td class="col-luke">${escapeHtml(refs.luke)}</td>
+  <td class="col-john">${escapeHtml(refs.john)}</td>
+</tr>`);
 
-        <!-- Plain text only (no links) -->
-        <td>${escapeHtml(refs.matthew)}</td>
-        <td>${escapeHtml(refs.mark)}</td>
-        <td>${escapeHtml(refs.luke)}</td>
-        <td>${escapeHtml(refs.john)}</td>
-      </tr>`);
     }
 
     html.push(`</tbody></table>`);
@@ -116,6 +116,6 @@
   if (searchEl) searchEl.addEventListener("input", render);
   if (rollupEl) rollupEl.addEventListener("change", render);
   if (phaseEl)  phaseEl.addEventListener("change", render);
-
+console.log("LOC-HEAD JS VERSION: 2026-02-16 A");
   render();
 })();

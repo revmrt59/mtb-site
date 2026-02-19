@@ -4,29 +4,39 @@
   <meta charset="utf-8" />
   <title>The Life of Jesus</title>
    <link rel="stylesheet" href="/assets/css/style.css">
+    <link rel="stylesheet" href="/assets/css/mtb-ui.css">
 </head>
 
-<body class="loc-page">
-  <nav class="main-nav">
-    <a href="/index.html">Home</a>
-    <a href="/about.html">About</a>
-    <a href="/resources/index.html">Resources</a>
-    <a href="/loc/life-of-jesus.html">The Life of Jesus</a>
-  </nav>
 
-  <header class="loc-header">
+<body class="loc-page mtb-no-gap">
+  <header class="site-header mtb-primary-header">
+    <nav class="main-nav">
+      <a href="/index.html">Home</a>
+      <a href="/about.html">About</a>
+      <a href="/resources/index.html">Resources</a>
+      <a href="/loc/life-of-jesus.html">The Life of Jesus</a>
+    </nav>
+
     <div class="loc-header-left">
       <a href="/loc/life-of-jesus.html" id="loc-back">Back to The Life of Jesus</a>
     </div>
+
     <div class="loc-header-right">
       <button id="loc-tab-scripture" type="button">Scripture Harmony</button>
     </div>
   </header>
 
-  <main class="loc-main">
+<main class="loc-main mtb-paper wide">
     <div id="loc-title" class="loc-title"></div>
-    <div id="doc-target" class="loc-scroll-body"></div>
-  </main>
+    <div class="loc-scroll-area">
+        <div id="doc-target" class="loc-scroll-body"></div>
+    </div>
+</main>
+
+
+
+
+
 
   <script src="/assets/js/loc/loc-page.js"></script>
   

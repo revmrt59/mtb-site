@@ -1,21 +1,22 @@
 (async function () {
-  
+
   // Only run on LOC DETAIL pages that have a loc= param
-const params = new URLSearchParams(window.location.search);
-if (!params.get("loc")) return;
+  const params = new URLSearchParams(window.location.search);
+  if (!params.get("loc")) return;
+
   const loc = (params.get("loc") || "").trim();
   const tab = (params.get("tab") || "scripture_harmony").trim();
 
   const target = document.getElementById("doc-target");
   if (!target) return;
 
-  // Turn on LOC detail page CSS (sticky header + scroll body)
+  // Turn on LOC detail page CSS
   document.body.classList.add("loc-page");
 
   // Ensure we HAVE a title host (create if missing)
   const titleHost = ensureLocTitleHost();
 
-  // Ensure structure exists so the CSS can work: .loc-header and .loc-scroll-body
+  // Ensure #doc-target behaves like scroll body (without creating a second sticky header wrapper)
   ensureLocLayout(titleHost, target);
 
   // Always show something so blank pages never happen silently
@@ -48,9 +49,6 @@ if (!params.get("loc")) return;
     <div style="opacity:.8;">${escapeHtml([row.rollup, row.phase].filter(Boolean).join(" | "))}</div>
   `;
 
-  // Nudge "Scripture Harmony" button right (CSS :contains does not work in real browsers)
-  nudgeHarmonyButton();
-
   // Add right-side prev/next buttons that page by harmony index using loc=
   initLocSequenceNav(harmony, loc, tab);
 
@@ -61,7 +59,7 @@ if (!params.get("loc")) return;
     target.innerHTML = `<div style="padding:12px;">Unknown tab: ${escapeHtml(tab)}</div>`;
   }
 
-  // Run header controls patch after layout exists
+  // Patch header controls after DOM exists
   patchHeaderControls();
 
   function renderScriptureHarmony(row) {
@@ -211,7 +209,7 @@ if (!params.get("loc")) return;
     }[c]));
   }
 
-  // NEW: create title host if missing
+  // Create title host if missing
   function ensureLocTitleHost() {
     let host = document.getElementById("loc-title");
     if (host) return host;
@@ -227,27 +225,15 @@ if (!params.get("loc")) return;
   }
 
   function ensureLocLayout(titleHost, target) {
-    // Ensure .loc-header exists and contains titleHost
-    if (!titleHost.closest(".loc-header")) {
-      const wrap = document.createElement("div");
-      wrap.className = "loc-header";
-      titleHost.parentNode.insertBefore(wrap, titleHost);
-      wrap.appendChild(titleHost);
-    }
+    // DO NOT create .loc-header (it becomes a second sticky header via style.css)
+    // Instead: ensure title host is directly under main content container.
+    // If it ended up inside some other wrapper, we leave it alone, but we do not wrap it.
 
-    // Wrap #doc-target in .loc-scroll-body (if not already)
-    if (!target.closest(".loc-scroll-body")) {
-      const wrap = document.createElement("div");
-      wrap.className = "loc-scroll-body";
-      target.parentNode.insertBefore(wrap, target);
-      wrap.appendChild(target);
+    // Ensure #doc-target behaves like the scroll body without wrapping it in another header.
+    // If loc.html already sets class="loc-scroll-body" on #doc-target, keep it.
+    if (!target.classList.contains("loc-scroll-body")) {
+      target.classList.add("loc-scroll-body");
     }
-  }
-
-  function nudgeHarmonyButton() {
-    const btns = Array.from(document.querySelectorAll("button"));
-    const b = btns.find(x => (x.textContent || "").trim().toLowerCase() === "scripture harmony");
-    if (b) b.style.marginLeft = "32px";
   }
 
   function initLocSequenceNav(harmony, loc, tab) {
@@ -300,20 +286,8 @@ if (!params.get("loc")) return;
     wrap.appendChild(nextBtn);
   }
 
-  // NEW: reliable back button + harmony class, runs after layout exists
   function patchHeaderControls() {
-    const header = document.querySelector(".loc-header");
-    if (!header) return;
-
-    if (!header.querySelector(".loc-back-btn")) {
-      const back = document.createElement("button");
-      back.type = "button";
-      back.className = "loc-back-btn";
-      back.textContent = "Back";
-      back.addEventListener("click", () => window.history.back());
-      header.prepend(back);
-    }
-
+    // Add a class to the Scripture Harmony button so CSS can position it cleanly.
     const harmonyBtn = [...document.querySelectorAll("button")].find(
       b => (b.textContent || "").trim() === "Scripture Harmony"
     );

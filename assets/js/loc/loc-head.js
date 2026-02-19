@@ -1,4 +1,6 @@
 (async function () {
+    document.body.classList.add("loc-index");
+
   const tableHost = document.getElementById("loc-head-table");
   if (!tableHost) return;
 

@@ -1,0 +1,505 @@
+/* =========================================================
+   MTB UI (Design Layer)
+   Purpose: A small, readable CSS layer that standardizes
+   site aesthetics without patch-on-patch edits in style.css.
+   ========================================================= */
+
+/* -----------------------------
+   Design tokens
+----------------------------- */
+:root{
+  /* header */
+  --mtb-header-h: 72px;
+
+  /* colors */
+  --mtb-border: #d7dde5;
+  --mtb-paper: #ffffff;
+  --mtb-bg: #eef2f6;
+
+  /* layout */
+  --mtb-maxw: 1100px;
+  --mtb-maxw-wide: 1250px;
+  --mtb-radius: 14px;
+  --mtb-pad: 18px;
+  --mtb-gap: 16px;
+
+  /* LOC detail */
+  --mtb-harmony-controls-h: 56px;
+}
+
+/* -----------------------------
+   Global background
+----------------------------- */
+body{
+  background: var(--mtb-bg);
+}
+
+/* -----------------------------
+   Primary nav styling (safe global)
+----------------------------- */
+.main-nav{
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  margin: 0;
+}
+
+/* -----------------------------
+   Universal primary header
+----------------------------- */
+header.mtb-primary-header{
+  position: sticky;
+  top: 0;
+  z-index: 5000;
+  height: var(--mtb-header-h);
+  background: var(--mtb-paper);
+  border-bottom: 1px solid var(--mtb-border);
+  display: flex;
+  align-items: center;
+}
+
+/* -----------------------------
+   Global content panel
+----------------------------- */
+.mtb-paper{
+  max-width: var(--mtb-maxw);
+  margin: 18px auto;
+  background: var(--mtb-paper);
+  border: 1px solid var(--mtb-border);
+  border-radius: var(--mtb-radius);
+  padding: var(--mtb-pad);
+
+  /* Soft depth */
+  box-shadow: 0 6px 18px rgba(0,0,0,0.06);
+}
+
+.mtb-paper.wide{
+  max-width: var(--mtb-maxw-wide);
+}
+
+/* Pages that should tuck the panel directly under the sticky header */
+body.mtb-no-gap .mtb-paper{
+  margin-top: 0;
+  border-top-left-radius: 0;
+  border-top-right-radius: 0;
+}
+
+/* =========================================================
+   LOC INDEX (loc/life-of-jesus.html)
+   Body class used: loc-index
+   Goal:
+   - Title + filters never move
+   - Only the table area scrolls
+   ========================================================= */
+body.loc-index main.doc-shell{
+  max-width: 1700px;
+  margin: 0 auto;
+}
+
+body.loc-index main.doc-shell.mtb-paper{
+  padding: 18px;
+}
+
+body.loc-index .loc-head{
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+/* Title + controls are NOT sticky on this page */
+body.loc-index .loc-sticky-header{
+  position: relative;
+  background: transparent;
+  border: 0;
+  padding: 0;
+  margin: 0;
+}
+
+/* The only scroller */
+body.loc-index .loc-scroll-area{
+  overflow: auto;
+  max-height: calc(100vh - 260px);
+  background: transparent;
+  border: 1px solid var(--mtb-border);
+  border-radius: 12px;
+}
+
+/* Table */
+body.loc-index table.mtb-loc-head-table{
+  width: 100%;
+  table-layout: fixed;
+  border-collapse: collapse;
+  background: #fff;
+}
+
+/* Sticky table header inside scroller */
+body.loc-index table.mtb-loc-head-table thead th{
+  position: sticky;
+  top: 0;
+  z-index: 5;
+  background: #fff;
+  border-bottom: 1px solid var(--mtb-border);
+  text-align: left;
+}
+
+/* Cells */
+body.loc-index table.mtb-loc-head-table th,
+body.loc-index table.mtb-loc-head-table td{
+  padding: 10px 10px;
+  border-bottom: 1px solid rgba(0,0,0,0.06);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* Make Event Title column wider (5th column) */
+body.loc-index table.mtb-loc-head-table th:nth-child(5),
+body.loc-index table.mtb-loc-head-table td:nth-child(5){
+  width: 30%;
+}
+
+/* Restore standard blue links in LOC index */
+body.loc-index table.mtb-loc-head-table a{
+  color: #1a5fd1;
+  text-decoration: underline;
+}
+body.loc-index table.mtb-loc-head-table a:hover{
+  color: #0f3ea8;
+}
+
+/* =========================================================
+   LIFE OF JESUS LIST PAGE (optional extra class)
+   If you keep body class loj-index, support it too.
+   ========================================================= */
+body.loj-index main.doc-shell.mtb-paper{
+  height: calc(100vh - var(--mtb-header-h));
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  margin-top: 0;
+}
+
+body.loj-index .loc-sticky-header{
+  position: static !important;
+}
+
+body.loj-index .loc-scroll-area{
+  flex: 1;
+  min-height: 0;
+  overflow: auto;
+}
+
+/* =========================================================
+   LOC DETAIL (loc.html)
+   Body class used: loc-page
+   Goal:
+   - Site header fixed
+   - Event title fixed
+   - Translation bar sticky
+   - Matthew/Mark/Luke/John row sticky beneath translation bar
+   - Verses scroll within the panel
+   ========================================================= */
+
+/* Prevent the browser window from scrolling on loc detail */
+body.loc-page{
+  height: 100vh;
+  overflow: hidden;
+}
+
+/* Main is a fixed-height flex column under the site header */
+body.loc-page main.loc-main{
+  height: calc(100vh - var(--mtb-header-h));
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+/* Event title stays fixed because it is outside the scroller */
+body.loc-page .loc-title{
+  flex: 0 0 auto;
+  padding: 24px 32px 16px 32px;
+}
+
+/* Only this area scrolls */
+body.loc-page .loc-scroll-area{
+  flex: 1 1 auto;
+  min-height: 0;
+
+  /* Always reserve scrollbar space so nothing "jumps" on first scroll */
+  overflow-y: scroll;
+  overflow-x: auto;
+  scrollbar-gutter: stable;
+
+  padding: 0 32px 32px 32px;
+}
+
+
+/* Translation controls: sticky at top of the scroller */
+body.loc-page .loc-harmony-controls{
+  position: sticky;
+  top: 0;
+  z-index: 30;
+  background: var(--mtb-paper);
+  min-height: var(--mtb-harmony-controls-h);
+  display: flex;
+  align-items: center;
+  gap: 10px;
+
+  /* neutralize injected margins that cause jumping */
+ margin: 0 !important;
+padding: 12px 0 12px 0;
+  border-bottom: 1px solid var(--mtb-border);
+}
+
+/* Column headers: make the whole THEAD sticky (stable bottom line) */
+body.loc-page .mtb-loc-harmony-table{
+  border-collapse: separate;
+  border-spacing: 0;
+}
+
+body.loc-page .mtb-loc-harmony-table thead th{
+  position: sticky;
+  top: var(--mtb-harmony-controls-h);
+  z-index: 50;
+  background: var(--mtb-paper) !important;
+  box-shadow: 0 2px 0 var(--mtb-border);
+}
+
+body.loc-page .mtb-loc-harmony-table tbody td{
+  position: relative;
+  z-index: 1;
+  background: #fff;
+}
+
+
+
+/* =========================================================
+   WORD STUDY MODAL (single source of truth)
+========================================================= */
+
+.ws-modal {
+  position: fixed;
+  inset: 0;
+  z-index: 9998;
+}
+
+.ws-modal-backdrop {
+  position: absolute;
+  inset: 0;
+  background: rgba(0,0,0,.40);
+}
+
+.ws-modal-panel {
+  position: relative;
+  margin: 6vh auto;
+  width: min(920px, calc(100vw - 24px));
+  max-height: 88vh;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  background: #ffffff;
+  border-radius: 14px;
+  box-shadow: 0 16px 50px rgba(0,0,0,.30);
+}
+
+.ws-modal-header {
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  padding: 12px 12px;
+  background: #f5f5f5;
+  border-bottom: 1px solid #ddd;
+}
+
+.ws-modal-close {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 8px 12px;
+  margin: 0;
+  font-size: 14px;
+  line-height: 1.2;
+  background: #ffffff;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+.ws-modal-body {
+  overflow-y: auto;
+  padding: 16px;
+}
+
+
+/* =========================================================
+   POPUP BOX POLISH — Word Study / Chapter Explanation
+   Scope: modal only
+   ========================================================= */
+
+/* Bible text box */
+.ws-modal-body .MTB-Read{
+  border-left: 0 !important;
+  border: 1px solid rgba(30, 90, 168, 0.25) !important;
+  background: rgba(30, 90, 168, 0.08) !important;
+  border-radius: 12px;
+}
+
+/* Dwell box spacing */
+.ws-modal-body .MTB-Read + .MTB-Dwell{
+  margin-top: 16px !important;
+}
+
+.ws-modal-body .MTB-Dwell + .MTB-Read{
+  margin-top: 16px !important;
+}
+
+/* Ensure all popup blocks match shape */
+.ws-modal-body .MTB-Read,
+.ws-modal-body .MTB-Explain,
+.ws-modal-body .MTB-Dwell{
+  border-radius: 12px;
+}
+
+/* =========================================================
+   POPUP OVERRIDES — force Bible (Read) box styling in modal
+   Reason: global #doc-target MTB cards use !important and win.
+   ========================================================= */
+
+/* Bible text box inside modal */
+.ws-modal-body #doc-target .MTB-Read{
+  border-left: 0 !important; /* remove dark left edge */
+  border: 1px solid rgba(30, 90, 168, 0.25) !important;
+  background: rgba(30, 90, 168, 0.08) !important;
+  border-radius: 12px !important;
+
+  /* spacing below Read in popups */
+  margin: 0 0 16px 0 !important;
+}
+
+/* Dwell spacing from Read in modal */
+.ws-modal-body #doc-target .MTB-Dwell{
+  margin: 0 0 16px 0 !important;
+  border-radius: 12px !important;
+}
+
+/* Prevent your “merge consecutive blocks” rules from removing spacing inside modal */
+.ws-modal-body #doc-target .MTB-Read + .MTB-Read,
+.ws-modal-body #doc-target .MTB-Dwell + .MTB-Dwell{
+  margin-top: 16px !important;
+  border-top: 1px solid rgba(0,0,0,0.06) !important;
+}
+/* =========================================================
+   POPUP: Bible text box polish (mtb-scripture-block)
+   Goals:
+   1) Remove dark left edge
+   2) Add a touch more color (softer, cleaner)
+   3) Add space between Bible text box and Dwell boxes
+   Scope: popup only
+   ========================================================= */
+
+/* Bible text box in popup */
+.ws-modal-body .mtb-scripture-block{
+  border-left: 0 !important;                 /* remove dark left bar */
+  border: 1px solid rgba(30, 90, 168, 0.25) !important;
+  background: rgba(30, 90, 168, 0.06) !important;
+  border-radius: 12px !important;
+  padding: 12px 14px !important;
+  margin: 0 0 16px 0 !important;             /* creates space below */
+}
+
+/* Ensure space between Bible text and Dwell blocks in popup */
+.ws-modal-body .mtb-scripture-block + .MTB-Dwell,
+.ws-modal-body .mtb-scripture-block + .MTB-Dwell-Group{
+  margin-top: 16px !important;
+}
+
+/* If Dwell comes first then Bible text */
+.ws-modal-body .MTB-Dwell + .mtb-scripture-block,
+.ws-modal-body .MTB-Dwell-Group + .mtb-scripture-block{
+  margin-top: 16px !important;
+}
+/* =========================================================
+   POPUP: Bible text (MTB-Read) color + spacing
+   Goal: override style.css (#doc-target .MTB-Read { ... !important })
+   ========================================================= */
+
+.ws-modal-body #doc-target .MTB-Read,
+.ws-modal-panel #doc-target .MTB-Read{
+  background: rgba(30, 90, 168, 0.07) !important;  /* gentle blue tint */
+  border: 1px solid rgba(30, 90, 168, 0.22) !important;
+  border-radius: 12px !important;
+}
+
+/* Space between Bible text and Dwell inside popup */
+.ws-modal-body #doc-target .MTB-Read + .MTB-Dwell,
+.ws-modal-panel #doc-target .MTB-Read + .MTB-Dwell{
+  margin-top: 14px !important;
+}
+/* =========================================================
+   Chapter-Explanation pages: MTB-Read color (Bible text box)
+   ========================================================= */
+
+body[data-doc-type="chapter-explanation"] #doc-target .MTB-Read,
+body[data-doc-type="chapter-explanation"] #doc-target h1.MTB-Read{
+  background: rgba(30, 90, 168, 0.08) !important;
+  border: 1px solid rgba(30, 90, 168, 0.22) !important;
+  border-radius: 12px !important;
+}
+/* =========================================================
+   DWELL (single source of truth)
+   JS wraps consecutive dwell nodes into: <div class="MTB-Dwell-Group">...</div>
+   Goal: ONE green card, no inner panels.
+   ========================================================= */
+
+#doc-target .MTB-Dwell-Group{
+  background: rgba(46, 125, 50, 0.10) !important;
+  border: 1px solid rgba(46, 125, 50, 0.18) !important;
+  border-radius: 14px !important;
+  padding: 16px 18px !important;
+  margin: 16px 0 !important;
+}
+
+/* Kill any inner “card/panel” styling inside the group */
+#doc-target .MTB-Dwell-Group .MTB-Dwell,
+#doc-target .MTB-Dwell-Group ul,
+#doc-target .MTB-Dwell-Group ol,
+#doc-target .MTB-Dwell-Group li,
+#doc-target .MTB-Dwell-Group div,
+#doc-target .MTB-Dwell-Group p{
+  background: transparent !important;
+  border: 0 !important;
+  border-left: 0 !important;
+  box-shadow: none !important;
+  border-radius: 0 !important;
+}
+
+/* Keep readable spacing inside the ONE box */
+#doc-target .MTB-Dwell-Group .MTB-Dwell{
+  margin: 0 0 10px 0 !important;
+  padding: 0 !important;
+}
+
+/* Lists inside dwell group: keep bullets, but never become their own box */
+#doc-target .MTB-Dwell-Group ul,
+#doc-target .MTB-Dwell-Group ol{
+  margin: 8px 0 10px 22px !important;
+  padding: 0 !important;
+  list-style-position: outside !important;
+}
+
+#doc-target .MTB-Dwell-Group li{
+  margin: 6px 0 !important;
+  padding: 0 !important;
+}
+/* Subtle depth and better tone */
+#doc-target .MTB-Dwell-Group{
+  box-shadow: 0 2px 6px rgba(0,0,0,0.04) !important;
+}
+
+/* Slightly soften text inside dwell */
+#doc-target .MTB-Dwell-Group{
+  color: #1c2b1f;
+}

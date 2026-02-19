@@ -463,6 +463,31 @@
     target.parentNode.insertBefore(bar, target);
     applyMode("both");
   }
+// ==========================================
+// DWELL GROUPING (one green box per verse)
+// Wrap consecutive .MTB-Dwell blocks in .MTB-Dwell-Group
+// ==========================================
+function groupVerseDwellBlocks(root) {
+  if (!root) return;
+
+  const children = Array.from(root.children);
+  let currentGroup = null;
+
+  for (const el of children) {
+    const isDwell = el.classList && el.classList.contains("MTB-Dwell");
+
+    if (isDwell) {
+      if (!currentGroup) {
+        currentGroup = document.createElement("div");
+        currentGroup.className = "MTB-Dwell-Group";
+        root.insertBefore(currentGroup, el);
+      }
+      currentGroup.appendChild(el);
+    } else {
+      currentGroup = null;
+    }
+  }
+}
 
   // ==========================================
   // LOADING CORE
@@ -479,8 +504,18 @@
     if (!target) return;
 
     target.innerHTML = fixMojibake(content);
+    groupDwellBlocks(target);
     wireDocLinks(target);
-    document.dispatchEvent(new CustomEvent("mtb:doc-injected"));
+
+
+/* ==========================================
+   GROUP DWELL BLOCKS INTO ONE BOX PER VERSE
+   ========================================== */
+      groupVerseDwellBlocks(target);
+
+      document.dispatchEvent(new CustomEvent("mtb:doc-injected"));
+
+   
     const isExplanation =
       meta.type === "chapter-explanation" || /chapter[-_]?explanation\.html$/i.test(docName);
 
@@ -550,6 +585,64 @@
     fetchAndLoadDoc(safe);
   }
 
+
+  function groupDwellBlocks(docTarget) {
+  if (!docTarget) return;
+  const kids = Array.from(docTarget.querySelectorAll(":scope > *"));
+  
+
+  // A node "counts" as Dwell if:
+  // - it is a .MTB-Dwell block
+  // - OR it is a UL/OL that contains .MTB-Dwell (common when Word bullets are used)
+  function isDwellNode(node) {
+    if (!node || node.nodeType !== 1) return false;
+
+    if (node.classList.contains("MTB-Dwell")) return true;
+
+    const tag = node.tagName;
+    if (tag === "UL" || tag === "OL") {
+      // If any li contains an element with MTB-Dwell, treat the list as dwell content
+      if (node.querySelector(".MTB-Dwell")) return true;
+
+      // If the list itself was tagged dwell (some pipelines do this)
+      if (node.classList.contains("MTB-Dwell")) return true;
+    }
+
+    return false;
+  }
+
+  let i = 0;
+  while (i < kids.length) {
+    const start = kids[i];
+
+    if (!isDwellNode(start)) {
+      i++;
+      continue;
+    }
+
+    // Create a wrapper and collect consecutive dwell nodes
+    const wrap = document.createElement("div");
+    wrap.className = "MTB-Dwell-Group";
+
+    let j = i;
+    while (j < kids.length && isDwellNode(kids[j])) {
+      wrap.appendChild(kids[j]);
+      j++;
+    }
+
+    // Insert wrapper where the first dwell node was
+    docTarget.insertBefore(wrap, kids[j] || null);
+
+    // Rebuild kids list because we modified DOM
+    const newKids = Array.from(docTarget.children);
+    kids.length = 0;
+    kids.push(...newKids);
+
+    // Continue after the wrapper
+    i = kids.indexOf(wrap) + 1;
+  }
+}
+
   // Load from URL params (normal navigation)
 // Load from URL params (normal navigation)
 function loadCurrentDocFromUrl() {
@@ -572,6 +665,7 @@ function loadCurrentDocFromUrl() {
 // =====================
 if (String(chapterParamRaw) === "0" && String(tabParamRaw) === "book_home") {
   const target = document.getElementById("doc-target");
+  
   if (target) target.innerHTML = "";
   return;
 }

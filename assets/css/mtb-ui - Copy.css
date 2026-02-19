@@ -1,0 +1,420 @@
+:root{
+  --mtb-header-h: 72px;
+  --mtb-border: #d7dde5;
+  --mtb-paper: #ffffff;
+  --mtb-bg: #eef2f6;
+}
+:root{
+  --mtb-header-h: 72px;
+
+  /* colors */
+  --mtb-border: #d7dde5;
+  --mtb-paper: #ffffff;
+  --mtb-bg: #eef2f6;
+
+  /* layout */
+  --mtb-maxw: 1100px;
+  --mtb-maxw-wide: 1250px;
+  --mtb-radius: 14px;
+  --mtb-pad: 18px;
+  --mtb-gap: 16px;
+}
+
+body{
+  background: var(--mtb-bg);
+  /* REMOVE any padding-top you added earlier */
+}
+
+/* Universal primary header */
+header.mtb-primary-header{
+  position: sticky;   /* IMPORTANT */
+  top: 0;
+  z-index: 5000;
+  height: var(--mtb-header-h);
+  background: var(--mtb-paper);
+  border-bottom: 1px solid var(--mtb-border);
+  display: flex;
+  align-items: center;
+}
+/* =========================================================
+   GLOBAL CONTENT PANEL
+   ========================================================= */
+
+.mtb-paper{
+  max-width: var(--mtb-maxw);
+  margin: 18px auto;
+  background: var(--mtb-paper);
+  border: 1px solid var(--mtb-border);
+  border-radius: var(--mtb-radius);
+  padding: var(--mtb-pad);
+
+  /* Soft depth */
+  box-shadow: 0 6px 18px rgba(0,0,0,0.06);
+}
+
+.mtb-paper.wide{
+  max-width: var(--mtb-maxw-wide);
+}
+
+/* Loc header layout: keep nav + left + right aligned in one row */
+body.loc-page header.mtb-primary-header{
+  gap: 16px;
+  padding: 0 16px;
+}
+
+/* Keep the nav links in one line */
+body.loc-page header.mtb-primary-header .main-nav{
+  display: flex;
+  gap: 16px;
+  align-items: center;
+  margin: 0;
+}
+
+/* Push left/right controls to the right */
+body.loc-page header.mtb-primary-header .loc-header-left{
+  margin-left: auto;
+}
+
+body.loc-page header.mtb-primary-header .loc-header-right{
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+/* LOC: avoid double dividers under the main header */
+body.loc-page .loc-main{
+  margin-top: 0 !important;
+  border-top: 0 !important;
+  padding-top: 0 !important;
+}
+
+body.loc-page #loc-title{
+  margin-top: 0 !important;
+}
+/* LOC: prevent double boxing inside mtb-paper */
+body.loc-page .loc-scroll-body{
+  background: transparent !important;
+  border: 0 !important;
+  padding: 0 !important;
+}
+/* =========================================================
+   LIFE OF JESUS (loc-life-of-jesus.html)
+   Goal: one clean mtb-paper panel, no inner boxing
+   ========================================================= */
+
+body.loc-page .doc-shell.mtb-paper{
+  padding: var(--mtb-pad);
+}
+
+body.loc-page .doc-shell.mtb-paper .loc-head{
+  padding: 0;
+}
+
+/* Title + controls area */
+body.loc-page .doc-shell.mtb-paper .loc-sticky-header{
+  background: transparent;
+  border: 0;
+  box-shadow: none;
+  padding: 0 0 16px 0;
+}
+
+/* Scroll/table area */
+body.loc-page .doc-shell.mtb-paper .loc-scroll-area{
+  background: transparent;
+  border: 0;
+  padding: 0;
+}
+/* LIFE OF JESUS: sticky controls should cover scrolling content (no bleed, no extra gap) */
+body.loc-page .doc-shell .loc-sticky-header{
+  position: sticky;
+  top: 0;
+  z-index: 3000;
+  background: var(--mtb-paper);
+}
+
+/* Ensure scroll area sits under the sticky controls */
+body.loc-page .doc-shell .loc-scroll-area{
+  position: relative;
+  z-index: 1;
+}
+/* LOC pages: panel should tuck under the primary header (no floating gap) */
+body.loc-page .mtb-paper{
+  margin-top: 0;
+  border-top-left-radius: 0;
+  border-top-right-radius: 0;
+}
+/* LOC Life of Jesus: remove any top spacing under the primary header */
+body.loc-page main.doc-shell.mtb-paper{
+  margin-top: 0 !important;
+  padding-top: var(--mtb-pad) !important; /* keep inner breathing */
+}
+
+/* If any older CSS adds spacing to doc-shell itself, kill it */
+body.loc-page main.doc-shell{
+  margin-top: 0 !important;
+}
+body.loc-page{
+  padding-top: 0 !important;
+}
+
+body.loc-page main{
+  padding-top: 0 !important;
+}
+/* =========================================================
+   LOC PAGES: remove legacy top offsets that create a gap
+   ========================================================= */
+
+/* Some older CSS adds padding-top to the body to account for a header */
+body.loc-page{
+  padding-top: 0 !important;
+}
+
+/* Some older CSS offsets the main container */
+body.loc-page main,
+body.loc-page main.doc-shell{
+  margin-top: 0 !important;
+  padding-top: 0 !important;
+  top: 0 !important;
+}
+/* Force LOJ panel to sit directly under the header */
+body.loc-page header.mtb-primary-header + main.doc-shell.mtb-paper{
+  margin-top: 0 !important;
+}
+/* Pages that should tuck the panel directly under the sticky header */
+body.mtb-no-gap .mtb-paper{
+  margin-top: 0;
+  border-top-left-radius: 0;
+  border-top-right-radius: 0;
+}
+/* LIFE OF JESUS: keep title/controls always visible under the primary header */
+body.loc-page.mtb-no-gap .doc-shell .loc-sticky-header{
+  position: sticky;
+  top: var(--mtb-header-h);
+  z-index: 3000;
+  background: var(--mtb-paper);
+}
+/* Make room inside the panel so content doesn't start behind the sticky controls */
+body.loc-page.mtb-no-gap main.doc-shell.mtb-paper{
+  padding-top: calc(var(--mtb-pad) + 44px);
+}
+/* =========================================================
+   LIFE OF JESUS LIST PAGE (loj-index)
+   Fix: title stays visible, only table scrolls
+   ========================================================= */
+
+body.loj-index main.doc-shell.mtb-paper{
+  height: calc(100vh - var(--mtb-header-h));
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  margin-top: 0;
+}
+
+body.loj-index .loc-sticky-header{
+  position: static !important;
+}
+
+body.loj-index .loc-scroll-area{
+  flex: 1;
+  overflow: auto;
+}
+/* =========================================================
+   LOJ title not visible until scroll: force visible on load
+   ========================================================= */
+
+body.loj-index .loc-sticky-header{
+  display: block !important;
+  visibility: visible !important;
+  opacity: 1 !important;
+  transform: none !important;
+  position: relative !important;
+  top: 0 !important;
+}
+
+body.loj-index .mtb-page-title{
+  display: block !important;
+  visibility: visible !important;
+  opacity: 1 !important;
+}
+/* =========================================================
+   LOJ index page: prevent title being hidden under header
+   Scope: ONLY life-of-jesus.html (loj-index)
+   ========================================================= */
+
+/* This guarantees the content starts below the top header
+   even if some older CSS still makes the header fixed. */
+body.loj-index{
+  padding-top: var(--mtb-header-h);
+}
+
+/* Keep the panel flush (no extra gap) */
+body.loj-index main.doc-shell.mtb-paper{
+  margin-top: 0;
+}
+/* =========================================================
+   LOC INDEX (life-of-jesus.html) — SINGLE SOURCE OF TRUTH
+   Goal:
+   - Header stays visible (site header)
+   - Title + filters NEVER move
+   - Only the table area scrolls
+   - No gray “gap” bleed, no text behind header
+========================================================= */
+
+body.loc-index {
+  background: var(--mtb-bg);
+}
+
+/* Keep your main shell normal */
+body.loc-index main.doc-shell {
+  max-width: 1700px;
+  margin: 0 auto;
+}
+
+/* The white panel */
+body.loc-index main.doc-shell.mtb-paper {
+  background: var(--mtb-paper);
+  border: 1px solid var(--mtb-border);
+  border-radius: 14px;
+  padding: 18px;
+}
+
+/* Layout: header area fixed, table area scrolls */
+body.loc-index .loc-head {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+/* Title + controls: always visible */
+body.loc-index .loc-sticky-header {
+  position: relative;      /* NOT sticky */
+  background: transparent; /* panel already provides white */
+  border: 0;
+  padding: 0;
+  margin: 0;
+}
+
+/* The ONLY scroller */
+body.loc-index .loc-scroll-area {
+  overflow: auto;
+  max-height: calc(100vh - 260px); /* adjust later if you want */
+  background: transparent;
+  border: 1px solid var(--mtb-border);
+  border-radius: 12px;
+}
+
+/* Table fills the scroller */
+body.loc-index table.mtb-loc-head-table {
+  width: 100%;
+  table-layout: fixed;
+  border-collapse: collapse;
+  background: #fff;
+}
+
+/* Sticky table header inside the scroller */
+body.loc-index table.mtb-loc-head-table thead th {
+  position: sticky;
+  top: 0;
+  z-index: 5;
+  background: #fff;
+  border-bottom: 1px solid var(--mtb-border);
+}
+
+/* Cells */
+body.loc-index table.mtb-loc-head-table th,
+body.loc-index table.mtb-loc-head-table td {
+  padding: 10px 10px;
+  border-bottom: 1px solid rgba(0,0,0,0.06);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+/* Make Event Title column wider */
+body.loc-index table.mtb-loc-head-table th:nth-child(5),
+body.loc-index table.mtb-loc-head-table td:nth-child(5){
+  width: 30%;
+}
+/* Left align all table headers */
+body.loc-index table.mtb-loc-head-table th{
+  text-align: left;
+}
+/* Restore standard blue links in LOC index */
+body.loc-index table.mtb-loc-head-table a{
+  color: #1a5fd1;
+  text-decoration: underline;
+}
+
+body.loc-index table.mtb-loc-head-table a:hover{
+  color: #0f3ea8;
+}
+/* =========================================================
+   LOC DETAIL (loc.html) — SINGLE SOURCE OF TRUTH
+   Goal:
+   - Page does NOT scroll
+   - Top site header stays fixed (already sticky)
+   - LOC title stays fixed
+   - Only the content area scrolls
+   - Translation control + Matthew/Mark/Luke/John stay fixed
+   ========================================================= */
+
+:root{
+  --mtb-harmony-controls-h: 56px;
+}
+
+html, body{
+  height: 100%;
+}
+
+/* LOC detail: do not kill scrolling */
+body.loc-page{
+  overflow-x: hidden;
+}
+
+
+/* loc.html main layout */
+body.loc-page main.loc-main{
+  height: calc(100vh - var(--mtb-header-h));
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+/* Title block stays fixed (it is outside the scroller) */
+body.loc-page .loc-header{
+  flex: 0 0 auto;
+  padding: 24px 32px 16px 32px;
+}
+
+/* ONLY scroller */
+body.loc-page .loc-scroll-body{
+  flex: 1 1 auto;
+  min-height: 0;
+  overflow: auto;
+  padding: 0 32px 32px 32px;
+}
+
+/* Make the Translation row sticky so it does NOT jump away */
+body.loc-page .loc-harmony-controls{
+  position: sticky;
+  top: 0;
+  z-index: 30;
+  background: var(--mtb-paper);
+  min-height: var(--mtb-harmony-controls-h);
+  display: flex;
+  align-items: center;
+
+  /* override inline margin from JS */
+  margin: 0 0 12px 0 !important;
+  padding: 12px 0;
+  border-bottom: 1px solid var(--mtb-border);
+}
+
+/* Sticky column headers: Matthew / Mark / Luke / John */
+body.loc-page .mtb-loc-harmony-table thead th{
+  position: sticky;
+  top: var(--mtb-harmony-controls-h);
+  z-index: 20;
+  background: var(--mtb-paper);
+
+  /* this prevents the “bottom line” from getting swallowed */
+  box-shadow: 0 1px 0 var(--mtb-border);
+}

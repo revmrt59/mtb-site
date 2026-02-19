@@ -1,0 +1,2087 @@
+/* =========================================================
+   GLOBAL RESET / BASE
+========================================================= */
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  font-family: Arial, Helvetica, sans-serif;
+  color: #222;
+  background: #ffffff;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+a:hover {
+  text-decoration: underline;
+}
+
+img {
+  max-width: 100%;
+  height: auto;
+  display: block;
+}
+
+/* =========================================================
+   DOC PAGES: restore gray gutters outside the content shell
+   (Home page remains unaffected because it has no data-doc-type)
+========================================================= */
+
+body[data-doc-type] {
+  background: #f3f3f3;
+}
+
+body[data-doc-type] .doc-shell {
+  background: #ffffff;
+  border-radius: 10px;
+  box-shadow: 0 10px 24px rgba(0,0,0,0.08);
+}
+
+/* =========================================================
+   SITE HEADER / MAIN NAV
+========================================================= */
+
+.site-header {
+  background: #ffffff;
+  padding: 20px 48px;
+  border-bottom: 1px solid #e5e5e5;
+}
+
+.main-nav a {
+  margin-right: 28px;
+  font-size: 16px;
+  color: #444;
+}
+
+.main-nav a:last-child {
+  margin-right: 0;
+}
+
+/* =========================================================
+   HERO SECTION (HOME ONLY)
+========================================================= */
+
+.hero {
+  position: relative;
+  min-height: 80vh;
+  width: 100%;
+  background-image: url("/assets/images/hero.jpg");
+  background-size: cover;
+  background-position: center center;
+}
+
+.hero-overlay {
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.2);
+}
+
+.hero-content {
+  position: relative;
+  z-index: 1;
+  color: #ffffff;
+  max-width: 720px;
+  padding: 120px 48px;
+  margin: 0 auto;
+  text-align: center;
+}
+
+.hero-content h1 {
+  font-size: 44px;
+  margin: 0 0 18px 0;
+}
+
+.hero-content p {
+  font-size: 20px;
+  line-height: 1.5;
+}
+
+.hero .hero-controls {
+  margin-top: 32px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 18px;
+  max-width: 980px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.hero .hero-controls label {
+  font-size: 18px;
+  color: #ffffff;
+}
+
+.hero .hero-controls select {
+  font-size: 16px;
+  padding: 8px 12px;
+  height: 40px;
+  min-width: 240px;
+  width: 280px;
+  max-width: 80vw;
+  border-radius: 6px;
+}
+
+.hero-tagline {
+  white-space: nowrap;
+  max-width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* If you have separate book/chapter selects by id or name */
+.hero .hero-controls #book-select,
+.hero .hero-controls #chapter-select,
+.hero .hero-controls select[name="book"],
+.hero .hero-controls select[name="chapter"] {
+  width: 320px;
+  max-width: 90vw;
+}
+
+.hero .hero-controls button {
+  font-size: 16px;
+  padding: 8px 18px;
+  height: 40px;
+  min-width: 90px;
+  border-radius: 6px;
+  font-weight: 600;
+}
+
+@media (max-width: 700px) {
+  .hero-controls {
+    flex-wrap: wrap;
+  }
+
+  .hero-controls select {
+    min-width: 260px;
+  }
+}
+
+/* =========================================================
+   HOME: BUTTON CENTERING + SPACING (safe, only if present)
+========================================================= */
+
+.home-actions,
+.hero-actions,
+.book-buttons,
+.book-grid {
+  max-width: 1100px;
+  margin: 28px auto 0;
+  padding: 0 24px;
+}
+
+.book-buttons,
+.home-actions {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 14px;
+}
+
+/* Works for <a> links styled as buttons and real <button> */
+.book-buttons a,
+.book-buttons button,
+.home-actions a,
+.home-actions button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 220px;
+  padding: 14px 18px;
+  border-radius: 10px;
+  background: rgba(255,255,255,0.92);
+  color: #222;
+  font-weight: 600;
+  box-shadow: 0 10px 22px rgba(0,0,0,0.12);
+  text-decoration: none;
+  border: 1px solid rgba(255,255,255,0.35);
+}
+
+.book-buttons a:hover,
+.book-buttons button:hover,
+.home-actions a:hover,
+.home-actions button:hover {
+  text-decoration: none;
+  transform: translateY(-1px);
+}
+
+/* Common alternate class patterns (if your HTML uses these) */
+.hero-content .buttons,
+.hero-content .button-row,
+.hero-content .cta-buttons {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 14px;
+  margin-top: 28px;
+}
+
+.hero-content p {
+  white-space: nowrap !important;
+  width: max-content;
+  max-width: 100%;
+}
+
+.hero-content .buttons a,
+.hero-content .button-row a,
+.hero-content .cta-buttons a,
+.hero-content .buttons button,
+.hero-content .button-row button,
+.hero-content .cta-buttons button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 220px;
+  padding: 14px 18px;
+  border-radius: 10px;
+  background: rgba(255,255,255,0.92);
+  color: #222;
+  font-weight: 600;
+  box-shadow: 0 10px 22px rgba(0,0,0,0.12);
+  text-decoration: none;
+  border: 1px solid rgba(255,255,255,0.35);
+}
+
+@media (max-width: 700px) {
+  .book-buttons a,
+  .book-buttons button,
+  .home-actions a,
+  .home-actions button,
+  .hero-content .buttons a,
+  .hero-content .button-row a,
+  .hero-content .cta-buttons a,
+  .hero-content .buttons button,
+  .hero-content .button-row button,
+  .hero-content .cta-buttons button {
+    min-width: 92vw;
+  }
+}
+/* =========================
+   BOOK LEVEL HERO
+========================= */
+
+.book-hero {
+  padding: 32px 0 24px;
+  text-align: center;
+  border-bottom: 1px solid #eee;
+}
+
+.book-hero.hidden {
+  display: none;
+}
+
+.book-hero-controls {
+  display: flex;
+  justify-content: center;
+  gap: 12px;
+  flex-wrap: wrap;
+  margin-top: 16px;
+}
+
+/* Chapter dropdown */
+#book-hero-chapter {
+  padding: 8px 12px;
+  font-size: 16px;
+  min-width: 160px;
+}
+
+/* Buttons */
+.book-hero button {
+  padding: 8px 14px;
+  font-size: 15px;
+  cursor: pointer;
+  border: 1px solid #ccc;
+  background: #f8f8f8;
+  border-radius: 4px;
+}
+
+.book-hero button:hover {
+  background: #eaeaea;
+}
+
+
+
+
+/* Chapter push buttons row */
+.book-hero-chapters {
+  display: flex;
+  gap: 10px;
+  justify-content: center;
+  flex-wrap: wrap;
+  margin-top: 14px;
+}
+
+.book-hero-chapters button {
+  min-width: 44px;
+  padding: 8px 12px;
+}
+
+/* =========================================================
+   DOCUMENT SHELL
+========================================================= */
+
+.doc-shell {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 36px 32px 64px;
+}
+
+.doc-header {
+  margin-bottom: 22px;
+}
+
+.doc-header h1 {
+  margin: 0 0 6px 0;
+  font-size: 30px;
+}
+
+.doc-header .muted {
+  color: #666;
+  font-size: 15px;
+}
+
+/* =========================================================
+   TABS
+========================================================= */
+
+.tabs-shell {
+  position: relative;
+  margin-bottom: 26px;
+}
+
+.tabs {
+  display: flex;
+  flex-wrap: nowrap;
+  gap: 6px;
+  overflow-x: auto;
+  padding-bottom: 8px;
+}
+
+/* Inactive tab buttons (default) */
+.tabs .tab-btn,
+.tabs button {
+  appearance: none;
+  border: 1px solid #dcdcdc;
+  background: #f5f5f5;
+  color: #444;
+  padding: 10px 14px;
+  border-radius: 10px;
+  font-size: 14px;
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+/* Hover ONLY for inactive tabs */
+.tabs .tab-btn:not(.active):hover,
+.tabs button:not(.active):hover {
+  background: #e9e9e9;
+  border-color: #cfcfcf;
+}
+
+/* Active tab */
+.tabs .tab-btn.active,
+.tabs button.active,
+.tabs .tab-btn.is-active,
+.tabs button.is-active {
+  background: #3b6fb6;
+  border-color: #3b6fb6;
+  color: #ffffff;
+}
+
+/* Ensure hover/focus doesn't make multiple tabs look active */
+.tabs .tab-btn.active:hover,
+.tabs button.active:hover,
+.tabs .tab-btn.active:focus,
+.tabs button.active:focus,
+.tabs .tab-btn.is-active:hover,
+.tabs button.is-active:hover,
+.tabs .tab-btn.is-active:focus,
+.tabs button.is-active:focus {
+  background: #3b6fb6;
+  border-color: #3b6fb6;
+  color: #ffffff;
+}
+
+/* =========================================================
+   Chapter Scripture – Translation Toggle Buttons (single source of truth)
+========================================================= */
+
+.scripture-controls {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 12px;
+}
+
+.scripture-controls .sc-btn.is-active {
+  border-color: #3b6fb6;
+  background: #3b6fb6;
+  color: #ffffff;
+}
+
+/* =========================================================
+   DOC LAYOUT (MAIN + RIGHT SIDEBAR)
+========================================================= */
+
+.doc-layout {
+  display: grid;
+  grid-template-columns: 1fr 320px;
+  gap: 28px;
+}
+
+@media (max-width: 980px) {
+  .doc-layout {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* Resources table links */
+.resource-table a {
+  text-decoration: underline;
+}
+
+/* =========================================================
+   MAIN CONTENT AREA
+========================================================= */
+
+.doc-main {
+  min-width: 0;
+}
+
+#doc-target {
+  line-height: 1.6;
+  font-size: 16px;
+}
+
+#doc-target h1 { font-size: 28px; margin-top: 0; }
+#doc-target h2 { font-size: 22px; margin-top: 32px; }
+#doc-target h3 { font-size: 19px; margin-top: 26px; }
+
+#doc-target p {
+  margin: 0.9em 0;
+}
+
+#doc-target ul,
+#doc-target ol {
+  margin: 0.9em 0 0.9em 1.2em;
+}
+
+/* =========================================================
+   RIGHT SIDEBAR
+========================================================= */
+
+.doc-side {
+  position: sticky;
+  top: 22px;
+  align-self: start;
+  background: #ffffff;
+  border: 1px solid #e6e6e6;
+  border-radius: 10px;
+  padding: 16px;
+}
+
+.doc-side h3 {
+  margin: 0 0 10px 0;
+  font-size: 16px;
+}
+
+.doc-side .side-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.doc-side .side-actions button {
+  appearance: none;
+  border: 1px solid #dcdcdc;
+  background: #ffffff;
+  color: #333;
+  padding: 10px 12px;
+  border-radius: 10px;
+  font-size: 14px;
+  cursor: pointer;
+}
+
+.doc-side .side-actions button:hover {
+  background: #f7f7f7;
+}
+
+/* =========================================================
+   MTB Scripture Block (Word → HTML)
+========================================================= */
+
+#doc-target .mtb-scripture-block {
+  margin: 1.5em 0;
+  padding: 1.25em 1.5em;
+  background: #f7f9fc;
+  border-left: 4px solid #3b6fb6;
+  border-radius: 6px;
+  font-size: 0.95rem;
+  line-height: 1.6;
+  color: #222;
+}
+
+#doc-target .mtb-scripture-block p {
+  margin: 0.5em 0;
+}
+
+#doc-target .mtb-scripture-block p:first-child {
+  margin-top: 0;
+}
+
+#doc-target .mtb-scripture-block p:last-child {
+  margin-bottom: 0;
+}
+
+#doc-target .mtb-scripture-block .verse-number {
+  font-weight: 600;
+  color: #555;
+}
+
+#doc-target .mtb-scripture-block .scripture-translation {
+  display: block;
+  margin-top: 0.75em;
+  font-size: 0.8rem;
+  color: #666;
+  text-align: right;
+  font-style: italic;
+}
+
+/* =========================================================
+   ABOUT PAGE BUTTON ROW
+========================================================= */
+
+.about-nav {
+  display: block;
+  margin: 14px auto;
+  padding: 0 16px;
+  max-width: 1100px;
+  position: relative;
+  z-index: 5;
+}
+
+.about-nav-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.about-nav a {
+  display: inline-block;
+  padding: 10px 12px;
+  border: 1px solid #c9cdd3;
+  border-radius: 8px;
+  text-decoration: none;
+  color: inherit;
+  background: #f5f6f8;
+  line-height: 1.2;
+}
+
+.about-nav a:hover {
+  border-color: #3b6fb6;
+}
+
+.about-nav a:focus {
+  outline: 2px solid #3b6fb6;
+  outline-offset: 2px;
+}
+
+/* About buttons active state */
+.about-action.active,
+.about-action[aria-current="page"] {
+  border-color: #3b6fb6;
+  background: #3b6fb6;
+  color: #ffffff;
+}
+
+/* === Resources table links: force visibility === */
+.resource-table a {
+  color: #3b6fb6;
+  text-decoration: underline;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+/* NOTE: Word Study Modal styles are consolidated below.
+   Do not add overrides elsewhere. */
+
+/* === hover for word studies === */
+.ws {
+  cursor: help;
+  text-decoration: underline;
+  text-decoration-style: dotted;
+  text-underline-offset: 3px;
+}
+
+.ws-tooltip {
+  position: fixed;
+  z-index: 9999;
+  max-width: 320px;
+  padding: 10px 12px;
+  border: 1px solid rgba(0,0,0,.12);
+  border-radius: 10px;
+  background: #ffffff;
+  box-shadow: 0 10px 28px rgba(0,0,0,.18);
+  font-size: 14px;
+  line-height: 1.35;
+}
+
+.ws {
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  user-select: none;
+  cursor: pointer;
+}
+
+.ws {
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  user-select: none;
+  touch-action: manipulation;
+}
+
+
+/* =========================================================
+   WORD STUDY MODAL (single source of truth)
+========================================================= */
+
+.ws-modal {
+  position: fixed;
+  inset: 0;
+  z-index: 9998;
+}
+
+.ws-modal-backdrop {
+  position: absolute;
+  inset: 0;
+  background: rgba(0,0,0,.40);
+}
+
+.ws-modal-panel {
+  position: relative;
+  margin: 6vh auto;
+  width: min(920px, calc(100vw - 24px));
+  max-height: 88vh;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  background: #ffffff;
+  border-radius: 14px;
+  box-shadow: 0 16px 50px rgba(0,0,0,.30);
+}
+
+.ws-modal-header {
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  padding: 12px 12px;
+  background: #f5f5f5;
+  border-bottom: 1px solid #ddd;
+}
+
+.ws-modal-close {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 8px 12px;
+  margin: 0;
+  font-size: 14px;
+  line-height: 1.2;
+  background: #ffffff;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+.ws-modal-body {
+  overflow-y: auto;
+  padding: 16px;
+}
+/* =========================================================
+   ABOUT PAGE – RESTORE CENTERING + BLUE GUTTER
+   (scoped so nothing else is affected)
+========================================================= */
+
+body[data-page="about"] {
+  background: #f3f6fb;
+}
+
+body[data-page="about"] .doc-shell {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding-left: 32px;
+  padding-right: 32px;
+  background: #ffffff;
+  border-radius: 10px;
+  box-shadow: 0 10px 24px rgba(0,0,0,0.08);
+}
+/* =========================================================
+   ABOUT PAGE – RESTORE CENTERING + BLUE/GRAY GUTTER
+   (detect About page by About UI elements)
+========================================================= */
+
+body:has(#about-tabs),
+body:has(.about-nav) {
+  background: #f3f6fb;
+}
+
+body:has(#about-tabs) .doc-shell,
+body:has(.about-nav) .doc-shell {
+  background: #ffffff;
+  border-radius: 10px;
+  box-shadow: 0 10px 24px rgba(0,0,0,0.08);
+  max-width: 1200px;
+  margin: 0 auto;
+  padding-left: 32px;
+  padding-right: 32px;
+}
+/* =========================================================
+   ABOUT PAGE – FORCE CENTERED CONTENT CONTAINER
+   (this fixes left-edge alignment issue)
+========================================================= */
+
+/* Detect About page */
+body:has(#about-tabs),
+body:has(.about-nav) {
+  background: #f3f6fb;
+}
+
+/* Center the actual About content */
+body:has(#about-tabs) main,
+body:has(.about-nav) main {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding-left: 32px;
+  padding-right: 32px;
+}
+
+/* Give the white card look */
+body:has(#about-tabs) main > section,
+body:has(.about-nav) main > section {
+  background: #ffffff;
+  border-radius: 10px;
+  box-shadow: 0 10px 24px rgba(0,0,0,0.08);
+  padding: 32px;
+}
+/* =========================================================
+   ABOUT PAGE – WHITE CARD WRAP
+   (keeps gutters blue, content on white)
+========================================================= */
+
+body:has(#about-tabs) main,
+body:has(.about-nav) main {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 32px;
+}
+
+/* Make the MAIN itself the white card */
+body:has(#about-tabs) main,
+body:has(.about-nav) main {
+  background: #ffffff;
+  border-radius: 10px;
+  box-shadow: 0 10px 24px rgba(0,0,0,0.08);
+  padding: 32px;
+}
+
+/* Keep spacing consistent around the card */
+body:has(#about-tabs) main {
+  margin-top: 36px;
+  margin-bottom: 64px;
+}
+
+body:has(.about-nav) main {
+  margin-top: 36px;
+  margin-bottom: 64px;
+}
+
+
+
+/* =========================================================
+   CHAPTER HEADER – INLINE BOOK + CHAPTER
+   (applies to all chapter-level pages)
+========================================================= */
+
+.doc-header {
+  display: flex;
+  align-items: baseline;
+  gap: 14px;
+  margin-bottom: 14px;
+
+  --chapter-title-size: 30px; /* match your current .doc-header h1 size */
+}
+
+.doc-header h1 {
+  margin: 0;
+  line-height: 1.1;
+  font-size: var(--chapter-title-size);
+}
+
+/* Chapter label (e.g. "Chapter 1") */
+.doc-header .muted,
+.doc-header p {
+  margin: 0;
+  font-size: var(--chapter-title-size) !important; /* override earlier .muted 15px */
+  font-weight: 700;
+  color: #666;
+  white-space: nowrap;
+}
+
+.ws-modal {
+  position: fixed;
+  inset: 0;
+  z-index: 99999;
+  display: none;
+}
+
+.ws-modal[style*="display: block"] {
+  display: block;
+}
+
+.ws-modal-backdrop {
+  position: absolute;
+  inset: 0;
+}
+
+.ws-modal-panel {
+  position: relative;
+  z-index: 100000;
+  max-height: 90vh;
+  overflow: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+/* MTB Word Style Mappings */
+
+.mtb-blue-bold {
+  font-weight: 700;
+  color: #1e5aa8;
+}
+
+.mtb-scripture-block {
+  padding: 10px 12px;
+  border-left: 4px solid #1e5aa8;
+  background: rgba(30, 90, 168, 0.08);
+  border-radius: 8px;
+}
+.mtb-blue-bold {
+  color: #1e5aa8 !important;
+  font-weight: 700;
+}
+/* ================================
+   BOOK HERO — FINAL CLEAN VERSION
+================================ */
+
+.book-hero {
+  background: transparent;
+  padding: 20px 0 0;
+}
+
+/* Full-width image */
+.book-hero-banner {
+  position: relative;
+  width: 100vw;
+  max-width: 100vw;
+  height: 420px;
+  margin-left: calc(50% - 50vw);
+  margin-right: calc(50% - 50vw);
+  margin-top: 20px;   /* white space between buttons and image */
+  overflow: hidden;
+}
+
+.book-hero-banner img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+/* Book buttons (above image) */
+.book-hero-controls {
+  display: flex;
+  justify-content: center;
+  gap: 12px;
+  margin-bottom: 10px;
+}
+
+/* Chapter overlay inside image */
+.book-hero-overlay {
+  position: absolute;
+  bottom: 70px;
+  left: 0;
+  right: 0;
+  text-align: center;
+}
+
+.book-hero-overlay-label {
+  font-weight: 700;
+  margin-bottom: 10px;
+  bottom: 70px;
+  color: #222;
+}
+
+.book-hero-chapters {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+}
+.doc-header {
+  margin-top: -25px;
+}
+/* =========================================================
+   CHAPTER NAVIGATION (Prev / Next buttons in tab row)
+========================================================= */
+
+/* Make space on the right side of the tab row */
+#tabs {
+  position: relative;
+  padding-right: 110px;
+}
+
+/* Container */
+.chapter-nav {
+  position: absolute;
+  right: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  display: flex;
+  gap: 8px;
+}
+
+/* Buttons */
+.chapter-nav-btn {
+  width: 38px;
+  height: 38px;
+  border-radius: 8px;
+  background: rgba(255,255,255,0.95);
+  border: 1px solid rgba(0,0,0,0.25);
+  cursor: pointer;
+  font-weight: 700;
+  font-size: 16px;
+  line-height: 1;
+  transition: all 0.15s ease;
+}
+
+/* Hover = SAME BLUE as your other buttons */
+.chapter-nav-btn:hover {
+  background: #3b6fb6 !important;
+  color: #ffffff !important;
+  border-color: #3b6fb6 !important;
+  box-shadow: 0 0 0 3px rgba(59,111,182,0.35) !important;
+  transform: translateY(-1px);
+}
+
+
+/* Loading state */
+.chapter-nav.is-loading .chapter-nav-btn {
+  opacity: 0.55;
+  cursor: not-allowed;
+  transform: none;
+}
+/* =========================================================
+   MTB Chapter Explanation Toggle System (SCOPED)
+   Scope: only content injected into #doc-target
+   ========================================================= */
+
+/* READ ONLY MODE */
+body.mode-read #doc-target .MTB-Explain,
+body.mode-read #doc-target .MTB-Dwell,
+body.mode-read #doc-target h1.MTB-Explain,
+body.mode-read #doc-target h1.MTB-Dwell {
+  display: none;
+}
+
+/* READ + EXPLAIN MODE */
+body.mode-explain #doc-target .MTB-Dwell,
+body.mode-explain #doc-target h1.MTB-Dwell {
+  display: none;
+}
+
+/* DWELL MODE shows everything */
+
+
+/* =========================================================
+   MTB Professional Cards (Read / Explain / Dwell)
+   Scope: only inside #doc-target
+   ========================================================= */
+
+#doc-target {
+  max-width: 900px;
+  margin: 0 auto;
+  line-height: 1.65;
+  font-size: 16px;
+}
+
+/* Your CSS currently has a generic #doc-target h1 rule.
+   These override it for MTB blocks specifically. */
+#doc-target h1.MTB-Read,
+#doc-target h1.MTB-Explain,
+#doc-target h1.MTB-Dwell {
+  font-size: 1rem;
+  margin: 0;
+}
+
+/* READ — gray scripture card */
+#doc-target .MTB-Read,
+#doc-target h1.MTB-Read {
+  display: block;
+  background: #f2f4f7;
+  border: 1px solid #e3e7ef;
+  border-left: 5px solid #6b7280;
+  border-radius: 14px;
+  padding: 14px 16px;
+  margin: 0rem 0;
+  line-height: 1.55;
+  font-weight: 650;
+}
+
+/* EXPLAIN — normal black text */
+#doc-target .MTB-Explain,
+#doc-target h1.MTB-Explain {
+  color: #111111;
+  margin: 0 0 0.9rem 0;
+  line-height: 1.7;
+  font-weight: 400;
+}
+
+/* =========================================================
+   DWELL — green callout card (LOCKED)
+   ========================================================= */
+/* One green box per verse Dwell (group wrapper) */
+#doc-target .MTB-Dwell-Group {
+  display: block;
+  background: #eaf6ea;
+  border: 1px solid #d6ead6;
+  border-left: 5px solid #2e7d32;
+  border-radius: 14px;
+  padding: 14px 16px;
+  margin: 0;
+  color: #111111;
+  line-height: 1.7;
+  font-weight: 600;
+}
+
+/* Inside the group, do not create separate green boxes */
+#doc-target .MTB-Dwell-Group .MTB-Dwell {
+  background: transparent;
+  border: 0;
+  border-left: 0;
+  padding: 0;
+  margin: 0;
+  border-radius: 0;
+}
+
+#doc-target .MTB-Dwell {
+  display: block;
+  background: #eaf6ea;
+  border: 1px solid #d6ead6;
+  border-left: 5px solid #2e7d32;
+  border-radius: 14px;
+  padding: 14px 16px;
+  margin: 0;
+  color: #111111;
+  line-height: 1.7;
+  font-weight: 600;
+}
+
+/* Remove internal paragraph spacing */
+#doc-target .MTB-Dwell > p {
+  margin: 0;
+}
+
+/* Merge consecutive Dwell blocks */
+#doc-target .MTB-Dwell + .MTB-Dwell {
+  margin-top: -1px;          /* overlap border seam */
+  border-top: 0;             /* remove seam line */
+  border-top-left-radius: 0;
+  border-top-right-radius: 0;
+  padding-top: 6px;
+}
+
+/* Remove bottom rounding/padding on the first dwell when another follows */
+#doc-target .MTB-Dwell:has(+ .MTB-Dwell) {
+  border-bottom-left-radius: 0;
+  border-bottom-right-radius: 0;
+  padding-bottom: 6px;
+}
+
+/* If Pandoc outputs Dwell as <p class="MTB-Dwell"> (common),
+   this prevents paragraph margins from creating separate "boxes" */
+#doc-target p.MTB-Dwell {
+  margin: 0 !important;
+}
+
+/* If Dwell paragraphs are separated by normal paragraph spacing,
+   this collapses them visually into one continuous block */
+#doc-target p.MTB-Dwell + p.MTB-Dwell {
+  border-top: 0 !important;
+  border-top-left-radius: 0 !important;
+  border-top-right-radius: 0 !important;
+  margin-top: 0 !important;
+  padding-top: 6px !important;
+}
+
+#doc-target p.MTB-Dwell:has(+ p.MTB-Dwell) {
+  border-bottom: 0 !important;
+  border-bottom-left-radius: 0 !important;
+  border-bottom-right-radius: 0 !important;
+  padding-bottom: 6px !important;
+}
+
+/* =========================================================
+   INLINE EMPHASIS (character-level)
+   ========================================================= */
+
+#doc-target .MTB-Text-Highlight,
+#doc-target .MTB-Blue-Bold,
+#doc-target .mtb-blue-bold {
+  color: #1e5bd8;
+  font-weight: 700;
+}
+/* =========================================================
+   MTB FINAL OVERRIDES (put at very bottom of style.css)
+   Purpose: force Read/Dwell to visually merge with NO seams/gaps
+   ========================================================= */
+
+/* READ card base */
+#doc-target .MTB-Read {
+  margin: 0 !important;
+  border: 1px solid #e3e7ef !important;
+  border-left: 5px solid #6b7280 !important;
+  border-radius: 14px !important;
+  background: #f2f4f7 !important;
+  padding: 14px 16px !important;
+}
+#doc-target .MTB-Read > p { margin: 0 !important; }
+
+/* merge read stacks */
+#doc-target .MTB-Read + .MTB-Read {
+  margin-top: -1px !important;
+  border-top: 0 !important;
+  border-top-left-radius: 0 !important;
+  border-top-right-radius: 0 !important;
+  padding-top: 6px !important;
+}
+#doc-target .MTB-Read:has(+ .MTB-Read) {
+  border-bottom: 0 !important;               /* kills the hairline seam */
+  border-bottom-left-radius: 0 !important;
+  border-bottom-right-radius: 0 !important;
+  padding-bottom: 6px !important;
+}
+
+/* DWELL card base */
+#doc-target .MTB-Dwell {
+  margin: 0 !important;
+  border: 1px solid #d6ead6 !important;
+  border-left: 5px solid #2e7d32 !important;
+  border-radius: 14px !important;
+  background: #eaf6ea !important;
+  padding: 14px 16px !important;
+  color: #111111 !important;
+  line-height: 1.7 !important;
+  font-weight: 600 !important;
+}
+#doc-target .MTB-Dwell > p { margin: 0 !important; }
+
+/* merge dwell stacks */
+#doc-target .MTB-Dwell + .MTB-Dwell {
+  margin-top: -1px !important;
+  border-top: 0 !important;
+  border-top-left-radius: 0 !important;
+  border-top-right-radius: 0 !important;
+  padding-top: 6px !important;
+}
+#doc-target .MTB-Dwell:has(+ .MTB-Dwell) {
+  border-bottom: 0 !important;               /* kills any seam */
+  border-bottom-left-radius: 0 !important;
+  border-bottom-right-radius: 0 !important;
+  padding-bottom: 6px !important;
+}
+/* =========================================================
+   MTB FINAL OVERRIDES (put at very bottom of style.css)
+   Purpose: force Read/Dwell to visually merge with NO seams/gaps
+   ========================================================= */
+
+/* READ card base */
+#doc-target .MTB-Read {
+  margin: 0 !important;
+  border: 1px solid #e3e7ef !important;
+  border-left: 5px solid #6b7280 !important;
+  border-radius: 14px !important;
+  background: #f2f4f7 !important;
+  padding: 14px 16px !important;
+}
+#doc-target .MTB-Read > p { margin: 0 !important; }
+
+/* merge read stacks */
+#doc-target .MTB-Read + .MTB-Read {
+  margin-top: -1px !important;
+  border-top: 0 !important;
+  border-top-left-radius: 0 !important;
+  border-top-right-radius: 0 !important;
+  padding-top: 6px !important;
+}
+#doc-target .MTB-Read:has(+ .MTB-Read) {
+  border-bottom: 0 !important;               /* kills the hairline seam */
+  border-bottom-left-radius: 0 !important;
+  border-bottom-right-radius: 0 !important;
+  padding-bottom: 6px !important;
+}
+
+/* DWELL card base */
+#doc-target .MTB-Dwell {
+  margin: 0 !important;
+  border: 1px solid #d6ead6 !important;
+  border-left: 5px solid #2e7d32 !important;
+  border-radius: 14px !important;
+  background: #eaf6ea !important;
+  padding: 14px 16px !important;
+  color: #111111 !important;
+  line-height: 1.7 !important;
+  font-weight: 600 !important;
+}
+#doc-target .MTB-Dwell > p { margin: 0 !important; }
+
+/* merge dwell stacks */
+#doc-target .MTB-Dwell + .MTB-Dwell {
+  margin-top: -1px !important;
+  border-top: 0 !important;
+  border-top-left-radius: 0 !important;
+  border-top-right-radius: 0 !important;
+  padding-top: 6px !important;
+}
+#doc-target .MTB-Dwell:has(+ .MTB-Dwell) {
+  border-bottom: 0 !important;               /* kills any seam */
+  border-bottom-left-radius: 0 !important;
+  border-bottom-right-radius: 0 !important;
+  padding-bottom: 6px !important;
+}
+/* =========================================================
+   Chapter Explanation Mode Bar + Visibility
+   ========================================================= */
+
+#ce-modebar {
+  display: none;                /* hidden until Chapter Explanation is active */
+  gap: 10px;
+  align-items: center;
+  margin: 10px 0 18px 0;
+}
+
+#ce-modebar .ce-modebtn {
+  border: 1px solid #d1d5db;
+  background: #ffffff;
+  border-radius: 999px;
+  padding: 8px 14px;
+  font-weight: 650;
+  cursor: pointer;
+}
+
+#ce-modebar .ce-modebtn.active {
+  background: #1e5bd8;
+  color: #ffffff;
+  border-color: #1e5bd8;
+}
+
+
+
+/* Visibility rules based on body class */
+body.ce-mode-read #doc-target .MTB-Explain,
+body.ce-mode-read #doc-target .MTB-Dwell {
+  display: none !important;
+}
+
+body.ce-mode-understand #doc-target .MTB-Dwell {
+  display: none !important;
+}
+
+/* ce-mode-dwell shows everything (default) */
+/* =========================================================
+   MTB Chapter Scripture – JSON Table Renderer
+========================================================= */
+
+#doc-target .mtb-chapter-scripture-wrap {
+  max-width: 1100px;
+  margin: 0 auto;
+}
+
+#doc-target .mtb-chapter-scripture-controls {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  align-items: center;
+  margin: 12px 0 14px 0;
+}
+
+#doc-target table.mtb-chapter-scripture {
+  width: 100%;
+  border-collapse: collapse;
+  table-layout: fixed;
+}
+
+#doc-target table.mtb-chapter-scripture th,
+#doc-target table.mtb-chapter-scripture td {
+  border: 1px solid rgba(0,0,0,0.12);
+  padding: 10px 12px;
+  vertical-align: top;
+  overflow-wrap: anywhere;
+}
+
+#doc-target table.mtb-chapter-scripture th {
+  background: rgba(0,0,0,0.04);
+  font-weight: 600;
+}
+
+#doc-target table.mtb-chapter-scripture th.mtb-verse-num,
+#doc-target table.mtb-chapter-scripture td.mtb-verse-num {
+  width: 60px;
+  text-align: center;
+  white-space: nowrap;
+}
+
+/* =========================================================
+   LOC (Life of Christ) — SINGLE SOURCE OF TRUTH
+   Applies to:
+   - loc index table:  table.mtb-loc-head-table
+   - loc detail page:  body.loc-page + table.mtb-loc-harmony-table
+========================================================= */
+
+/* ---------- Shared: keep LOC pages from looking edge-to-edge ---------- */
+body.loc-page #doc-target,
+body:has(.loc-head) #doc-target {
+  max-width: none !important;              /* overrides global 900px cap */
+  width: 100% !important;
+  margin: 0 !important;
+  padding-left: 18px !important;
+  padding-right: 18px !important;
+  box-sizing: border-box;
+}
+
+/* =========================================================
+   LOC INDEX PAGE (the big list)
+========================================================= */
+
+.loc-head {
+  display: flex;
+  flex-direction: column;
+  height: calc(100vh - 140px);
+}
+
+
+
+.loc-head-controls {
+  margin-top: 8px;
+  margin-bottom: 18px;
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+.loc-scroll-area {
+  flex: 1;
+  overflow: auto;
+  scrollbar-gutter: stable;
+  padding: 0 0 12px;
+}
+
+/* index table */
+table.mtb-loc-head-table {
+  width: 100% !important;
+  table-layout: fixed;
+  border-collapse: separate;
+  border-spacing: 10px 0;
+}
+
+table.mtb-loc-head-table thead th {
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  background: #fff;
+  padding: 10px 6px;
+  text-align: left;
+  border-bottom: 1px solid #ddd;
+}
+
+table.mtb-loc-head-table td {
+  padding: 8px 6px;
+  text-align: left;
+  vertical-align: top;
+  border-bottom: 1px solid #f0f0f0;
+  overflow-wrap: anywhere;
+}
+
+a.loc-link {
+  color: #0645ad;
+  text-decoration: underline;
+}
+a.loc-link:visited { color: #0b0080; }
+
+/* =========================================================
+   LOC DETAIL PAGE (loc.html?loc=005&tab=scripture_harmony)
+========================================================= */
+
+body.loc-page {
+  height: 100vh;
+  overflow: hidden;                 /* page does not scroll */
+}
+
+/* The site nav stays above everything */
+body.loc-page .site-header,
+body.loc-page .main-nav {
+  position: sticky;
+  top: 0;
+  z-index: 10000;
+  background: #fff;
+}
+
+/* LOC header stays pinned under nav */
+body.loc-page .loc-header {
+  position: sticky;
+  top: 0;
+  z-index: 9000;
+  background: #fff;
+  padding: 12px 16px;
+  border-bottom: 1px solid #eee;
+
+  /* toolbar behavior: keeps buttons from squishing */
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  flex-wrap: wrap;
+}
+
+body.loc-page .loc-header a,
+body.loc-page .loc-header button {
+  white-space: nowrap;
+}
+
+/* The ONLY scroll container */
+body.loc-page .loc-scroll-body {
+  height: calc(100vh - 140px);      /* simple, stable default */
+  overflow: auto;
+  scrollbar-gutter: stable;
+  padding: 10px 0 14px;
+  position: relative;
+  z-index: 1;
+}
+
+/* Translation bar is sticky inside scroll */
+body.loc-page .loc-scroll-body .loc-harmony-controls,
+body.loc-page .loc-scroll-body .translation-controls,
+body.loc-page .loc-scroll-body .loc-translation {
+  position: sticky;
+  top: 0;
+  z-index: 60;
+  background: #fff;
+  padding: 8px 0;
+  border-bottom: 1px solid #f0f0f0;
+
+  /* set this once if needed */
+  min-height: 56px;
+}
+
+/* Harmony table sizing */
+body.loc-page table.mtb-loc-harmony-table {
+  width: 100% !important;
+  table-layout: fixed;
+  border-collapse: collapse;
+}
+
+body.loc-page table.mtb-loc-harmony-table th,
+body.loc-page table.mtb-loc-harmony-table td {
+  width: 25%;
+  vertical-align: top;
+  padding: 10px 14px;
+}
+
+/* Gospel headings sticky under Translation bar */
+body.loc-page .loc-scroll-body table.mtb-loc-harmony-table thead th {
+  position: sticky;
+  top: 56px;               /* must match min-height above */
+  z-index: 50;
+  background: #fff;
+  border-bottom: 1px solid #ddd;
+}
+
+/* Scripture Harmony button: stable width + moved right (requires class added in HTML/JS) */
+body.loc-page .scripture-harmony-btn {
+  min-width: 170px;
+  padding: 8px 12px;
+  margin-left: 18px;
+}
+
+/* Right-side seq nav buttons */
+#seq-nav {
+  position: fixed;
+  right: 16px;
+  top: 140px;
+  z-index: 2000;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+#seq-nav button {
+  padding: 10px 12px;
+  font-size: 14px;
+  cursor: pointer;
+}
+/* =========================================================
+   LOC INDEX TABLE FIX — stop vertical letter wrapping
+========================================================= */
+
+table.mtb-loc-head-table {
+  width: 100% !important;
+  table-layout: fixed;          /* keep stable column widths */
+}
+
+/* Set practical widths by column */
+table.mtb-loc-head-table th:nth-child(1),
+table.mtb-loc-head-table td:nth-child(1) { width: 6%; }   /* Seq */
+
+table.mtb-loc-head-table th:nth-child(2),
+table.mtb-loc-head-table td:nth-child(2) { width: 14%; }  /* Rollup */
+
+table.mtb-loc-head-table th:nth-child(3),
+table.mtb-loc-head-table td:nth-child(3) { width: 12%; }  /* Phase */
+
+table.mtb-loc-head-table th:nth-child(4),
+table.mtb-loc-head-table td:nth-child(4) { width: 12%; }  /* Approx Date */
+
+table.mtb-loc-head-table th:nth-child(5),
+table.mtb-loc-head-table td:nth-child(5),
+table.mtb-loc-head-table th:nth-child(6),
+table.mtb-loc-head-table td:nth-child(6),
+table.mtb-loc-head-table th:nth-child(7),
+table.mtb-loc-head-table td:nth-child(7),
+table.mtb-loc-head-table th:nth-child(8),
+table.mtb-loc-head-table td:nth-child(8) { width: 14%; }  /* Matthew/Mark/Luke/John */
+
+/* Prevent links from breaking into vertical letters */
+table.mtb-loc-head-table a.loc-link {
+  white-space: nowrap;
+  word-break: normal;
+  overflow-wrap: normal;
+  display: inline-block;
+}
+
+/* Keep ref cells readable */
+table.mtb-loc-head-table td {
+  vertical-align: top;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+/* =========================================================
+   LOC DETAIL — force event title to display
+========================================================= */
+
+/* Make header stack like:
+   Line 1: title/meta
+   Line 2: buttons (back + harmony)
+*/
+body.loc-page .loc-header {
+  display: flex;
+  flex-direction: column;     /* key change */
+  align-items: stretch;
+  gap: 8px;
+}
+
+/* Force the title block to show and take full width */
+body.loc-page #loc-title,
+body.loc-page .loc-title,
+body.loc-page .loc-title-block {
+  display: block !important;
+  width: 100% !important;
+  white-space: normal !important;
+}
+
+/* Put header buttons on a separate row */
+body.loc-page .loc-header .loc-header-actions {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+/* Keep buttons from squishing */
+body.loc-page .loc-header .loc-header-actions button,
+body.loc-page .loc-header .loc-header-actions a {
+  white-space: nowrap;
+}
+
+/* Harmony button: move right a bit */
+body.loc-page .scripture-harmony-btn {
+  margin-left: 18px !important;
+  min-width: 170px;
+}
+table.mtb-loc-head-table { width:100% !important; table-layout: fixed; }
+
+table.mtb-loc-head-table .col-seq   { width: 70px; }
+table.mtb-loc-head-table .col-rollup{ width: 140px; }
+table.mtb-loc-head-table .col-phase { width: 160px; }
+table.mtb-loc-head-table .col-date  { width: 140px; }
+/* Make the LOC index table intentionally wide */
+table.mtb-loc-head-table {
+  width: 1800px;      /* adjust if needed */
+  min-width: 1600px;
+  table-layout: fixed;
+}
+
+
+
+table.mtb-loc-head-table .col-matt,
+table.mtb-loc-head-table .col-mark,
+table.mtb-loc-head-table .col-luke,
+table.mtb-loc-head-table .col-john  { width: 140px; }
+
+table.mtb-loc-head-table a.loc-link {
+  white-space: nowrap;
+  overflow-wrap: normal;
+  word-break: normal;
+  display: inline-block;
+}
+/* Allow LOC index table to expand beyond container width */
+table.mtb-loc-head-table {
+  width: 1400px;       /* increase this number if needed */
+  min-width: 1200px;
+}
+/* =========================================================
+   LIFE OF JESUS INDEX — wide grid + grey-blue canvas
+   (page: /loc/life-of-jesus.html)
+========================================================= */
+
+/* Grey-blue canvas around the whole grid area */
+section.loc-head {
+            /* grey-blue */
+  padding: 18px;                  /* space outside table */
+  border-radius: 12px;
+}
+
+/* Make the scroll area feel like a panel */
+.loc-scroll-area {
+  background: #f7f9fc;
+  padding: 14px;
+  border-radius: 10px;
+  overflow: auto;
+  scrollbar-gutter: stable;
+}
+
+/* Make the table intentionally wide */
+table.mtb-loc-head-table {
+  width: 2200px;                  /* wider table */
+  min-width: 2000px;
+  table-layout: fixed;
+  background: #fff;
+  border-collapse: collapse;
+}
+
+/* Column widths */
+table.mtb-loc-head-table .col-seq    { width: 70px; }
+table.mtb-loc-head-table .col-rollup { width: 160px; }
+table.mtb-loc-head-table .col-phase  { width: 170px; }
+table.mtb-loc-head-table .col-date   { width: 150px; }
+
+/* Event Title: wider than 600 */
+table.mtb-loc-head-table .col-title  { width: 900px; }  /* bump to 1000 if you want */
+
+/* Gospel columns */
+table.mtb-loc-head-table .col-matt,
+table.mtb-loc-head-table .col-mark,
+table.mtb-loc-head-table .col-luke,
+table.mtb-loc-head-table .col-john   { width: 170px; }
+
+/* Cell polish */
+table.mtb-loc-head-table th,
+table.mtb-loc-head-table td {
+  padding: 10px 10px;
+  border-bottom: 1px solid #e6e6e6;
+  vertical-align: top;
+}
+
+/* Keep links from breaking into vertical letters */
+table.mtb-loc-head-table a.loc-link {
+  white-space: nowrap;
+  overflow-wrap: normal;
+  word-break: normal;
+  display: inline-block;
+}
+body {
+  background: #e9eff6;
+}
+section.loc-head > .loc-sticky-header {
+  background: #ffffff;
+  border-radius: 10px 10px 0 0;
+  padding: 20px;
+}
+/* =========================================================
+   LIFE OF JESUS INDEX — FINAL (single source of truth)
+   Keep this at the VERY BOTTOM of style.css
+========================================================= */
+
+/* Grey-blue outside everything */
+body {
+  background: #e9eff6;
+}
+
+/* Keep header white */
+.loc-sticky-header {
+  background: #ffffff;
+  padding: 20px;
+  border-radius: 10px 10px 0 0;
+}
+
+/* Grey-blue frame around the whole grid area */
+section.loc-head {
+  padding: 18px;
+  border-radius: 12px;
+}
+
+/* Scroll panel around the table */
+.loc-scroll-area {
+  background: #f7f9fc;
+  padding: 14px;
+  border-radius: 10px;
+  overflow: auto;
+  scrollbar-gutter: stable;
+}
+
+/* Wide table + fixed layout MRT */
+table.mtb-loc-head-table {
+  width: 3000px !important;     /* table wider */
+  min-width: 3000px !important;
+  table-layout: fixed !important;
+  border-collapse: collapse !important;
+  background: #ffffff;
+}
+
+/* Column widths *  MRT */
+table.mtb-loc-head-table .col-seq    { width: 25px; }
+table.mtb-loc-head-table .col-rollup { width: 50px; }
+table.mtb-loc-head-table .col-phase  { width: 50px; }
+table.mtb-loc-head-table .col-date   { width: 100px; }
+
+
+/* Event Title: wider than 600 */
+table.mtb-loc-head-table .col-title  { width: 1000px; }
+
+
+
+/* Gospel columns */
+table.mtb-loc-head-table .col-matt,
+table.mtb-loc-head-table .col-mark,
+table.mtb-loc-head-table .col-luke,
+table.mtb-loc-head-table .col-john   { width: 100px; }
+
+/* Cells */
+table.mtb-loc-head-table th,
+table.mtb-loc-head-table td {
+  padding: 10px 10px;
+  border-bottom: 1px solid #e6e6e6;
+  vertical-align: top;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* Prevent vertical letters */
+table.mtb-loc-head-table a.loc-link {
+  white-space: nowrap;
+  word-break: normal;
+  overflow-wrap: normal;
+  display: inline-block;
+}
+/* =========================================================
+   LIFE OF JESUS INDEX — COLUMN SIZING (FINAL)
+   Paste at VERY bottom of style.css
+========================================================= */
+
+table.mtb-loc-head-table {
+  table-layout: fixed !important;
+  width: 2400px !important;     /* overall grid width */
+  min-width: 2200px !important;
+}
+
+/* Force widths on BOTH th and td */
+table.mtb-loc-head-table th.col-seq,
+table.mtb-loc-head-table td.col-seq { width: 55px !important; }
+
+table.mtb-loc-head-table th.col-rollup,
+table.mtb-loc-head-table td.col-rollup { width: 120px !important; }
+
+table.mtb-loc-head-table th.col-phase,
+table.mtb-loc-head-table td.col-phase { width: 130px !important; }
+
+table.mtb-loc-head-table th.col-date,
+table.mtb-loc-head-table td.col-date { width: 120px !important; }
+
+table.mtb-loc-head-table th.col-title,
+table.mtb-loc-head-table td.col-title { width: 1000px !important; }
+
+table.mtb-loc-head-table th.col-matt,
+table.mtb-loc-head-table td.col-matt,
+table.mtb-loc-head-table th.col-mark,
+table.mtb-loc-head-table td.col-mark,
+table.mtb-loc-head-table th.col-luke,
+table.mtb-loc-head-table td.col-luke,
+table.mtb-loc-head-table th.col-john,
+table.mtb-loc-head-table td.col-john { width: 170px !important; }
+
+/* Make sure content doesn’t force columns wider */
+table.mtb-loc-head-table th,
+table.mtb-loc-head-table td {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+/* LIFE OF JESUS index: let the page use the full width */
+body:has(#loc-head-table) main.doc-shell {
+  max-width: 100% !important;
+  width: 100% !important;
+  margin: 0 !important;
+  padding-left: 18px !important;
+  padding-right: 18px !important;
+}
+
+/* Remove the big centered “card” feel */
+body:has(#loc-head-table) section.loc-head {
+  padding: 0 !important;
+  margin: 0 !important;
+  background: transparent !important;
+}
+
+
+/* Make the table fit the available width */
+body:has(#loc-head-table) table.mtb-loc-head-table {
+  width: 100% !important;
+  min-width: 0 !important;
+  table-layout: fixed !important;
+}
+
+/* Tighten first columns + shrink Event Title */
+body:has(#loc-head-table) table.mtb-loc-head-table th.col-seq,
+body:has(#loc-head-table) table.mtb-loc-head-table td.col-seq { width: 55px !important; }
+
+body:has(#loc-head-table) table.mtb-loc-head-table th.col-rollup,
+body:has(#loc-head-table) table.mtb-loc-head-table td.col-rollup { width: 130px !important; }
+
+body:has(#loc-head-table) table.mtb-loc-head-table th.col-phase,
+body:has(#loc-head-table) table.mtb-loc-head-table td.col-phase { width: 140px !important; }
+
+body:has(#loc-head-table) table.mtb-loc-head-table th.col-date,
+body:has(#loc-head-table) table.mtb-loc-head-table td.col-date { width: 130px !important; }
+
+/* Event Title smaller */
+body:has(#loc-head-table) table.mtb-loc-head-table th.col-title,
+body:has(#loc-head-table) table.mtb-loc-head-table td.col-title { width: 425px !important; }
+
+/* Gospel columns smaller so it can fit */
+body:has(#loc-head-table) table.mtb-loc-head-table th.col-matt,
+body:has(#loc-head-table) table.mtb-loc-head-table td.col-matt,
+body:has(#loc-head-table) table.mtb-loc-head-table th.col-mark,
+body:has(#loc-head-table) table.mtb-loc-head-table td.col-mark,
+body:has(#loc-head-table) table.mtb-loc-head-table th.col-luke,
+body:has(#loc-head-table) table.mtb-loc-head-table td.col-luke,
+body:has(#loc-head-table) table.mtb-loc-head-table th.col-john,
+body:has(#loc-head-table) table.mtb-loc-head-table td.col-john { width: 125px !important; }
+/* =========================================================
+   LIFE OF JESUS INDEX — stop rows from scrolling behind header
+========================================================= */
+
+/* Make the page not be the scroller */
+body:has(#loc-head-table) {
+  overflow: hidden;
+}
+
+/* Make the table panel be the only scroll area */
+body:has(#loc-head-table) .loc-scroll-area {
+  max-height: calc(100vh - 220px);  /* adjust if needed */
+  overflow: auto !important;
+  position: relative;
+}
+
+/* Keep the top header panel above everything */
+body:has(#loc-head-table) .loc-sticky-header {
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+  background: #ffffff;
+}
+
+/* Seal the table header row too */
+body:has(#loc-head-table) table.mtb-loc-head-table thead th {
+  position: sticky;
+  top: 0;                 /* sticks within loc-scroll-area */
+  z-index: 900;
+  background: #ffffff;
+}
+/* =========================================================
+   LIFE OF JESUS INDEX — SAFE scroll fix
+   Does NOT change body/main sizing
+========================================================= */
+
+/* Keep the header panel always above the table */
+body.loc-index .loc-sticky-header {
+  position: relative;
+  z-index: 50;
+  background: #fff;
+}
+
+/* Make sure the scroll area clips content (prevents bleed into header) */
+body.loc-index .loc-scroll-area {
+  position: relative;
+  z-index: 1;
+  overflow: auto;
+}
+
+/* Ensure table cannot paint outside its scroll container */
+body.loc-index .loc-scroll-area table {
+  position: relative;
+  z-index: 1;
+}
+
+/* Add a little top padding inside scroller so rows never touch header edge */
+body.loc-index .loc-scroll-area {
+  padding-top: 16px;
+}
+/* =========================================================
+   LIFE OF JESUS INDEX — prevent table content from showing above header
+========================================================= */
+
+/* Make sure the header panel is always a solid layer */
+body.loc-index .loc-sticky-header {
+  position: relative;
+  z-index: 200;
+  background: #fff;
+}
+
+/* Hard clip the scroll area so table content cannot paint outside it */
+body.loc-index .loc-scroll-area {
+  position: relative;
+  z-index: 1;
+  overflow: auto;
+  overflow-x: auto;
+  overflow-y: auto;
+
+  /* this is the key */
+  clip-path: inset(0 0 0 0);
+}
+
+/* Also force clipping in browsers that ignore clip-path edge cases */
+body.loc-index .loc-scroll-area {
+  contain: paint;
+}
+
+/* Give a tiny top padding inside the scroller so nothing touches the top edge */
+body.loc-index .loc-scroll-area {
+  padding-top: 14px;
+}
+/* LOC index: pull table up to remove the top gap */
+body.loc-index #loc-head-table {
+  margin-top: -35px;      /* adjust: -6 to -14 */
+}
+
+body.loc-index table.mtb-loc-head-table {
+  margin-top: 0 !important;
+}
+/* =========================================================
+   LOC INDEX — hard stop for “peek” bleed (no jitter)
+========================================================= */
+
+body.loc-index .loc-scroll-area {
+  position: relative !important;
+  overflow: auto !important;
+}
+
+/* Non-sticky mask strip that covers the top edge inside the scroll panel */
+body.loc-index .loc-scroll-area::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 26px;              /* adjust: 18–34 */
+  background: #f7f9fc;       /* MUST match your loc-scroll-area background */
+  z-index: 9999;
+  pointer-events: none;
+}
+/* LOC detail page: Back button should not stretch full width */
+body:has(.loc-header) button,
+body:has(.loc-header) .loc-back,
+body:has(.loc-header) #loc-back {
+  width: auto !important;
+  display: inline-block !important;
+}
+/* ===== LOC HEADER BACK BUTTON FIX ===== */
+
+.loc-header {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.loc-back-btn {
+  flex: 0 0 auto;        /* do NOT stretch */
+  width: auto !important;
+  display: inline-block !important;
+  padding: 6px 14px;
+  border-radius: 6px;
+  background: #f3f4f6;
+  border: 1px solid #ccc;
+  cursor: pointer;
+}
+/* =========================================================
+   LOC DETAIL PAGE — FORCE Back button to NOT be a full-width bar
+========================================================= */
+
+body.loc-page header.loc-header {
+  display: flex !important;
+  align-items: center !important;
+  gap: 14px !important;
+}
+
+body.loc-page header.loc-header > button.loc-back-btn {
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+
+  width: fit-content !important;
+  max-width: 140px !important;
+
+  flex: 0 0 auto !important;
+  align-self: flex-start !important;
+
+  padding: 6px 14px !important;
+  border: 1px solid #bbb !important;
+  background: #f3f4f6 !important;
+  border-radius: 6px !important;
+}
+/* =====================================================
+   LOC PAGE — FIX PREV / NEXT ICON VISIBILITY
+===================================================== */
+
+#seq-nav {
+  position: relative !important;
+  z-index: 2000 !important;
+  padding: 10px 0 !important;
+}
+
+/* If you have specific classes for the icons, adjust below */
+#seq-nav a,
+#seq-nav button {
+  position: relative !important;
+  z-index: 2001 !important;
+}
+
+/* Prevent clipping */
+.loc-main,
+.loc-header,
+.loc-head,
+.loc-scroll-area {
+  overflow: visible !important;
+}

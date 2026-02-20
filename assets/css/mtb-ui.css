@@ -503,3 +503,32 @@ body[data-doc-type="chapter-explanation"] #doc-target h1.MTB-Read{
 #doc-target .MTB-Dwell-Group{
   color: #1c2b1f;
 }
+/* LOC sequence header row (inside main) */
+body.loc-page .loc-seq-header{
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 18px 20px 10px 20px;
+}
+
+body.loc-page .loc-seq-left{
+  flex: 0 0 auto;
+}
+
+body.loc-page .loc-seq-center{
+  flex: 1 1 auto;
+  display: flex;
+  justify-content: center;   /* centers the title block */
+}
+
+body.loc-page .loc-seq-right{
+  flex: 0 0 auto;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+/* Put Scripture Harmony left of the arrows */
+body.loc-page #loc-tab-scripture{ order: 1; }
+body.loc-page #loc-prev{ order: 2; }
+body.loc-page #loc-next{ order: 3; }

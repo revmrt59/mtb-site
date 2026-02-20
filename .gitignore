@@ -4,3 +4,5 @@ pinegrow_*.json
 Thumbs.db
 .DS_Store
 about/headers.html
+scripts/MTB_STUDIO_OPEN.bat
+/about/archive

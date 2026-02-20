@@ -17,20 +17,37 @@
       <a href="/loc/life-of-jesus.html">The Life of Jesus</a>
     </nav>
 
-    <div class="loc-header-left">
-      <a href="/loc/life-of-jesus.html" id="loc-back">Back to The Life of Jesus</a>
-    </div>
 
-    <div class="loc-header-right">
-      <button id="loc-tab-scripture" type="button">Scripture Harmony</button>
-    </div>
   </header>
 
 <main class="loc-main mtb-paper wide">
-    <div id="loc-title" class="loc-title"></div>
-    <div class="loc-scroll-area">
-        <div id="doc-target" class="loc-scroll-body"></div>
+
+  <!-- Sequence header row (buttons belong here, not in the top nav) -->
+  <div class="loc-seq-header">
+    <div class="loc-seq-left">
+      <a href="/loc/life-of-jesus.html" id="loc-back" class="loc-back-btn">← Back</a>
     </div>
+
+    <div class="loc-seq-center">
+      <!-- JS already fills this -->
+      <div id="loc-title" class="loc-title"></div>
+    </div>
+
+    <div class="loc-seq-right">
+      <!-- Keep these IDs so your existing JS still works -->
+      <button id="loc-tab-scripture" type="button" class="loc-harmony-btn">Scripture Harmony</button>
+
+      <!-- If your JS already creates prev/next elsewhere, these can stay harmless.
+           If your JS uses these IDs, it will now land in the right place. -->
+      <button id="loc-prev" type="button" class="loc-seq-nav" title="Previous">‹</button>
+      <button id="loc-next" type="button" class="loc-seq-nav" title="Next">›</button>
+    </div>
+  </div>
+
+  <div class="loc-scroll-area">
+    <div id="doc-target" class="loc-scroll-body"></div>
+  </div>
+
 </main>
 
 

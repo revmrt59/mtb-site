@@ -532,3 +532,63 @@ body.loc-page .loc-seq-right{
 body.loc-page #loc-tab-scripture{ order: 1; }
 body.loc-page #loc-prev{ order: 2; }
 body.loc-page #loc-next{ order: 3; }
+
+
+/* =========================================================
+   LOC HEADER BUTTONS
+   Standardized to match Chapter Scripture behavior
+   ========================================================= */
+
+body.loc-page #loc-back,
+body.loc-page #loc-prev,
+body.loc-page #loc-next{
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  padding: 14px 18px;
+  border-radius: 10px;
+
+background: rgba(226, 232, 240, 0.95);
+  color: #222;
+  font-weight: 600;
+
+  border: 1px solid rgba(15, 23, 42, 0.18);
+  box-shadow: 0 10px 22px rgba(0,0,0,0.12);
+
+  text-decoration: none;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+/* Slightly tighter arrows */
+body.loc-page #loc-prev,
+body.loc-page #loc-next{
+  padding: 10px 12px;
+  min-width: 44px;
+}
+
+/* FULL BLUE hover (matches Chapter Scripture active blue) */
+body.loc-page #loc-back:hover,
+body.loc-page #loc-prev:hover,
+body.loc-page #loc-next:hover{
+  background: #3b6fb6 !important;
+  border-color: #3b6fb6 !important;
+  color: #ffffff !important;
+}
+
+/* Active press */
+body.loc-page #loc-back:active,
+body.loc-page #loc-prev:active,
+body.loc-page #loc-next:active{
+  background: #2f5f9f !important;
+  border-color: #2f5f9f !important;
+  color: #ffffff !important;
+}
+
+/* Disabled arrows */
+body.loc-page #loc-prev:disabled,
+body.loc-page #loc-next:disabled{
+  opacity: 0.45;
+  cursor: default;
+}

@@ -592,3 +592,17 @@ body.loc-page #loc-next:disabled{
   opacity: 0.45;
   cursor: default;
 }
+/* =========================================================
+   LOC SEQUENCE TITLE — Slightly Larger
+   ========================================================= */
+
+body.loc-page #loc-sequence-title{
+  font-size: 24px;
+  font-weight: 600;
+  line-height: 1.25;
+}
+/* Hide Scripture Harmony button in the LOC sequence header */
+
+body.loc-page .loc-seq-header .loc-seq-right > button:first-child{
+  display: none !important;
+}

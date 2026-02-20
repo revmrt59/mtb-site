@@ -606,3 +606,13 @@ body.loc-page #loc-sequence-title{
 body.loc-page .loc-seq-header .loc-seq-right > button:first-child{
   display: none !important;
 }
+/* Harmony table — evenly distributed columns */
+body.loc-page .mtb-loc-harmony-table{
+  width: 100%;
+  table-layout: fixed;
+}
+
+body.loc-page .mtb-loc-harmony-table th,
+body.loc-page .mtb-loc-harmony-table td{
+  padding: 20px 24px;
+}

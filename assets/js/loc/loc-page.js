@@ -235,56 +235,43 @@
       target.classList.add("loc-scroll-body");
     }
   }
+// Wire the existing header buttons (loc-prev / loc-next) to the harmony index
+function initLocSequenceNav(harmony, loc, tab) {
+  if (!Array.isArray(harmony) || harmony.length === 0) return;
 
-  function initLocSequenceNav(harmony, loc, tab) {
-    if (!Array.isArray(harmony) || harmony.length === 0) return;
+  const idx = harmony.findIndex(r => String(r.seq) === String(loc));
+  if (idx === -1) return;
 
-    const idx = harmony.findIndex(r => r.seq === loc);
-    if (idx === -1) return;
+  const prev = harmony[idx - 1]?.seq ?? null;
+  const next = harmony[idx + 1]?.seq ?? null;
 
-    const prev = harmony[idx - 1]?.seq || null;
-    const next = harmony[idx + 1]?.seq || null;
+  const prevBtn = document.getElementById("loc-prev");
+  const nextBtn = document.getElementById("loc-next");
 
-    let wrap = document.getElementById("seq-nav");
-    if (!wrap) {
-      wrap = document.createElement("div");
-      wrap.id = "seq-nav";
-      document.body.appendChild(wrap);
-    } else {
-      wrap.innerHTML = "";
-    }
-
-    const prevBtn = document.createElement("button");
-    prevBtn.type = "button";
-    prevBtn.id = "seq-prev";
-    prevBtn.textContent = "◀ Prev";
+  if (prevBtn) {
     prevBtn.disabled = !prev;
-
-    const nextBtn = document.createElement("button");
-    nextBtn.type = "button";
-    nextBtn.id = "seq-next";
-    nextBtn.textContent = "Next ▶";
-    nextBtn.disabled = !next;
-
-    prevBtn.addEventListener("click", () => {
+    prevBtn.classList.toggle("is-disabled", !prev);
+    prevBtn.onclick = () => {
       if (!prev) return;
       const url = new URL(window.location.href);
       url.searchParams.set("loc", prev);
       url.searchParams.set("tab", tab || "scripture_harmony");
       window.location.href = url.toString();
-    });
+    };
+  }
 
-    nextBtn.addEventListener("click", () => {
+  if (nextBtn) {
+    nextBtn.disabled = !next;
+    nextBtn.classList.toggle("is-disabled", !next);
+    nextBtn.onclick = () => {
       if (!next) return;
       const url = new URL(window.location.href);
       url.searchParams.set("loc", next);
       url.searchParams.set("tab", tab || "scripture_harmony");
       window.location.href = url.toString();
-    });
-
-    wrap.appendChild(prevBtn);
-    wrap.appendChild(nextBtn);
+    };
   }
+}
 
   function patchHeaderControls() {
     // Add a class to the Scripture Harmony button so CSS can position it cleanly.

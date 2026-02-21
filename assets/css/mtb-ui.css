@@ -799,3 +799,17 @@ body.mtb-has-scripture-controls #doc-target td{
   background: #ffffff !important;
   border: 1px solid #d7dde5 !important;
 }
+/* =========================================================
+   Chapter Nav (Prev/Next icons) — move LEFT
+   Source is in style.css: .chapter-nav { right: 12px; }
+   We override here (mtb-ui.css loads after style.css on book.html).
+   ========================================================= */
+
+/* Only when scripture-controls.js is active */
+body.mtb-has-scripture-controls #tabs{
+  padding-right: 240px !important;  /* ensures tabs text doesn’t collide */
+}
+
+body.mtb-has-scripture-controls #tabs .chapter-nav{
+  right: 150px !important;          /* increase = move LEFT */
+}

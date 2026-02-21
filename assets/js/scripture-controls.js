@@ -8,7 +8,23 @@
   function getTable() {
     return document.querySelector("#doc-target table");
   }
+function isChapterScriptureView() {
+  // Chapter Scripture JSON renderer uses these wrappers/classes
+  return !!(
+    document.querySelector("#doc-target .mtb-scripture-root") ||
+    document.querySelector("#doc-target .mtb-chapter-scripture-wrap") ||
+    document.querySelector("#doc-target table.mtb-chapter-scripture") ||
+    document.querySelector("#doc-target table.mtb-scripture-table")
+  );
+}
 
+function cleanupScriptureMode() {
+  document.body.classList.remove("mtb-has-scripture-controls");
+
+  // Remove obsolete bar if it exists
+  const bar = document.querySelector(".scripture-controls");
+  if (bar) bar.remove();
+}
   function normalizeTable(table) {
     if (!table) return;
 
@@ -83,6 +99,10 @@ function forceWide(target) {
 }
 
   function ensureControls() {
+    if (!isChapterScriptureView()) {
+  cleanupScriptureMode();
+  return false;
+}
     const target = getTarget();
     if (!target) return false;
 
@@ -116,9 +136,14 @@ if (existingBar) existingBar.remove();
   };
 
   // Auto-run after DOM is ready and after navigation/content injection
-  function boot() {
-    ensureControls();
+function boot() {
+  // If we are not on the chapter scripture view, remove scripture mode so normal docs stay white
+  if (!isChapterScriptureView()) {
+    cleanupScriptureMode();
+    return;
   }
+  ensureControls();
+}
 
   window.addEventListener("DOMContentLoaded", boot);
   window.addEventListener("popstate", () => setTimeout(boot, 50));

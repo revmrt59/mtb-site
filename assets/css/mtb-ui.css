@@ -712,3 +712,90 @@ main.doc-shell .MTB-Dwell-Group,
 #book-modal .MTB-Dwell-Group{
   border-left: 0 !important;
 }
+
+/* =========================================================
+   Chapter Scripture (single source of truth)
+   Hook: scripture-controls.js adds body.mtb-has-scripture-controls
+   Goals:
+   1) Make the panel wider
+   2) Keep the table interior white
+   3) Single grid lines (no double borders)
+   4) Table fills available width
+   ========================================================= */
+   /* =========================================================
+   Chapter Scripture — SINGLE CLEAN RULE
+   Hook: scripture-controls.js adds body.mtb-has-scripture-controls
+   Actual DOM:
+   main.doc-shell > section#doc-layout.doc-layout > article.doc-main > #doc-target.doc-content
+   ========================================================= */
+
+/* =========================================================
+   Chapter Scripture — SINGLE WIDTH CONTROLLER
+   Hook: scripture-controls.js adds body.mtb-has-scripture-controls
+   ========================================================= */
+
+/* 1) Remove the 1100px cap on the JSON wrapper */
+body.mtb-has-scripture-controls #doc-target .mtb-chapter-scripture-wrap{
+  max-width: none !important;
+  width: 100% !important;
+  margin: 0 !important;
+}
+
+/* 2) Control overall page width here (adjust this number only) */
+/* =========================================================
+   Chapter Scripture — Center + Width Control
+   ========================================================= */
+
+body.mtb-has-scripture-controls .doc-shell{
+  max-width: 2000px !important;   /* adjust width here */
+  margin-left: auto !important;
+  margin-right: auto !important;
+}
+
+/* =========================================================
+   Chapter Scripture — Center + Width (grid-safe)
+   Hook: scripture-controls.js adds body.mtb-has-scripture-controls
+   ========================================================= */
+
+/* 1) Stop doc-layout from reserving sidebar/extra columns */
+body.mtb-has-scripture-controls #doc-layout{
+  grid-template-columns: 1fr !important;
+  column-gap: 0 !important;
+  justify-content: stretch !important;
+}
+
+/* 2) Make the main content column centered and capped */
+body.mtb-has-scripture-controls article.doc-main{
+  max-width: 1600px !important;   /* adjust width here */
+  width: 100% !important;
+  margin-left: auto !important;
+  margin-right: auto !important;
+}
+
+/* 3) Ensure doc-target/table can fill that centered column */
+body.mtb-has-scripture-controls #doc-target{
+  max-width: none !important;
+  width: 100% !important;
+}
+
+body.mtb-has-scripture-controls #doc-target table{
+  width: 100% !important;
+}
+
+/* Make main content column use full shell width */
+body.mtb-has-scripture-controls article.doc-main{
+  width: 100% !important;
+}
+
+/* 3) Table fills the available space */
+body.mtb-has-scripture-controls #doc-target table{
+  width: 100% !important;
+  border-collapse: collapse !important;
+}
+
+/* 4) White interior + clean borders */
+body.mtb-has-scripture-controls #doc-target th,
+body.mtb-has-scripture-controls #doc-target td{
+  background: #ffffff !important;
+  border: 1px solid #d7dde5 !important;
+}

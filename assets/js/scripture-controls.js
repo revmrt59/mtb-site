@@ -1,6 +1,10 @@
 (function () {
   "use strict";
 
+  function getTarget() {
+    return document.getElementById("doc-target");
+  }
+
   function getTable() {
     return document.querySelector("#doc-target table");
   }
@@ -17,6 +21,7 @@
     table.style.borderCollapse = "separate";
   }
 
+  // Applies display mode ONLY for 3-column tables: Verse | NKJV | NLT
   function applyMode(mode) {
     const table = getTable();
     if (!table) return;
@@ -27,7 +32,7 @@
     const rows = Array.from(table.querySelectorAll("tr"));
     rows.forEach((r) => {
       const cells = Array.from(r.querySelectorAll("th, td"));
-      if (cells.length < 3) return;
+      if (cells.length < 3) return; // only meaningful when 2 translations exist
 
       const nkjv = cells[1];
       const nlt  = cells[2];
@@ -40,73 +45,67 @@
 
       if (mode === "nkjv") {
         nlt.style.display = "none";
-        nkjv.colSpan = 2; // take both translation columns
+        nkjv.colSpan = 2;
       } else if (mode === "nlt") {
         nkjv.style.display = "none";
-        nlt.colSpan = 2;  // take both translation columns
+        nlt.style.display = "";
+        nlt.colSpan = 2;
       }
+      // mode === "both" => leave as-is
     });
   }
 
+  function forceWhite(table) {
+    if (!table) return;
+    table.style.background = "#ffffff";
+    table.querySelectorAll("th, td").forEach(cell => {
+      cell.style.background = "#ffffff";
+    });
+  }
+function forceWide(target) {
+  // Marker to prove THIS file/version is the one running
+  document.documentElement.setAttribute("data-sc-version", "2026-02-21A");
+
+  // IMPORTANT: no inline widths. CSS must control shrink/grow.
+  const nodesToTag = new Set([
+    target,                    // #doc-target
+    target.closest("article"),  // article.doc-main
+    target.closest("main"),     // main.doc-shell
+    document.querySelector("main.doc-shell"),
+  ]);
+
+  nodesToTag.forEach(node => {
+    if (!node) return;
+    node.classList.add("wide");
+    node.style.maxWidth = "";  // clear any old inline constraints
+    node.style.width = "";
+  });
+}
+
   function ensureControls() {
-    const target = document.getElementById("doc-target");
+    const target = getTarget();
     if (!target) return false;
 
     const table = getTable();
     if (!table) return false;
 
-    // Only run if it looks like the scripture parallel table (3+ columns)
+    normalizeTable(table);
+
+    // Identify columns: allow Verse + 1 translation (2 cells) or Verse + 2 translations (3 cells)
     const firstRow = table.querySelector("tr");
     const firstCells = firstRow ? firstRow.querySelectorAll("th,td") : null;
-    if (!firstCells || firstCells.length < 3) return false;
+    if (!firstCells || firstCells.length < 2) return false;
 
-    // Add controls bar if missing
-    let bar = document.querySelector(".scripture-controls");
-    if (!bar) {
-      bar = document.createElement("div");
-      bar.className = "scripture-controls";
-
-      const makeBtn = (label, mode) => {
-        const b = document.createElement("button");
-        b.type = "button";
-        b.className = "sc-btn";
-        b.textContent = label;
-        b.addEventListener("click", (e) => {
-          e.preventDefault();
-          setActive(mode);
-          applyMode(mode);
-        });
-        return b;
-      };
-
-      const btnBoth = makeBtn("Both", "both");
-      const btnNKJV = makeBtn("NKJV Only", "nkjv");
-      const btnNLT  = makeBtn("NLT Only", "nlt");
-
-      function setActive(mode) {
-        [btnBoth, btnNKJV, btnNLT].forEach(x => x.classList.remove("is-active"));
-        if (mode === "both") btnBoth.classList.add("is-active");
-        if (mode === "nkjv") btnNKJV.classList.add("is-active");
-        if (mode === "nlt")  btnNLT.classList.add("is-active");
-      }
-
-      bar.append(btnBoth, btnNKJV, btnNLT);
-      target.parentNode.insertBefore(bar, target);
-
-      // Default state
-      setActive("both");
-      applyMode("both");
-    } else {
-      // If controls exist, just ensure table is tagged and mode applied
-      if (!table.getAttribute("data-mode")) {
-        applyMode("both");
-      } else {
-        applyMode(table.getAttribute("data-mode"));
-      }
-    }
-
-    // Signal for CSS scoping
+    // Always apply these when a chapter scripture table is detected
     document.body.classList.add("mtb-has-scripture-controls");
+    forceWhite(table);
+    forceWide(target);
+
+    const hasTwoTranslations = firstCells.length >= 3;
+
+// Remove obsolete scripture toggle bar (replaced by translation dropdown)
+const existingBar = document.querySelector(".scripture-controls");
+if (existingBar) existingBar.remove();
 
     return true;
   }
@@ -126,13 +125,12 @@
 
   // Observe #doc-target for injected HTML (load-doc.js replaces content)
   const obs = new MutationObserver(() => {
-    // debounce-ish
     clearTimeout(window.__mtb_sc_t);
     window.__mtb_sc_t = setTimeout(boot, 30);
   });
 
   function tryObserve() {
-    const target = document.getElementById("doc-target");
+    const target = getTarget();
     if (!target) return;
     obs.observe(target, { childList: true, subtree: true });
   }

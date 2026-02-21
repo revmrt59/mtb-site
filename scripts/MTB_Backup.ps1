@@ -13,4 +13,4 @@ Get-ChildItem -Path $SourceFolder -Filter "*.docx" | ForEach-Object {
 }
 
 Write-Host "Backup to Google Drive Complete!" -ForegroundColor Green
-Start-Sleep -Seconds 2
+Start-Sleep -Seconds 10

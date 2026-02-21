@@ -942,24 +942,25 @@ body:has(.about-nav) main {
 }
 /* =========================================================
    MTB Chapter Explanation Toggle System (SCOPED)
-   Scope: only content injected into #doc-target
+   Only apply to chapter-explanation documents
    ========================================================= */
 
-/* READ ONLY MODE */
-body.mode-read #doc-target .MTB-Explain,
-body.mode-read #doc-target .MTB-Dwell,
-body.mode-read #doc-target h1.MTB-Explain,
-body.mode-read #doc-target h1.MTB-Dwell {
+/* READ ONLY MODE (chapter explanation only) */
+body.mode-read #doc-target .mtb-doc--chapter-explanation .MTB-Explain,
+body.mode-read #doc-target .mtb-doc--chapter-explanation .MTB-Dwell,
+body.mode-read #doc-target .mtb-doc--chapter-explanation h1.MTB-Explain,
+body.mode-read #doc-target .mtb-doc--chapter-explanation h1.MTB-Dwell {
   display: none;
 }
 
-/* READ + EXPLAIN MODE */
-body.mode-explain #doc-target .MTB-Dwell,
-body.mode-explain #doc-target h1.MTB-Dwell {
+/* READ + EXPLAIN MODE (chapter explanation only) */
+body.mode-explain #doc-target .mtb-doc--chapter-explanation .MTB-Dwell,
+body.mode-explain #doc-target .mtb-doc--chapter-explanation h1.MTB-Dwell {
   display: none;
 }
 
-/* DWELL MODE shows everything */
+/* Dwell mode shows everything */
+
 
 
 /* =========================================================
@@ -1164,24 +1165,27 @@ body.mode-explain #doc-target h1.MTB-Dwell {
    ========================================================= */
 
 /* READ card base */
-#doc-target .MTB-Read {
+#doc-target .MTB-Read,
+#doc-target .mtb-doc--read {
   margin: 0 !important;
   border: 1px solid #e3e7ef !important;
-   border-radius: 14px !important;
+  border-radius: 14px !important;
   background: #f2f4f7 !important;
   padding: 14px 16px !important;
 }
 #doc-target .MTB-Read > p { margin: 0 !important; }
 
 /* merge read stacks */
-#doc-target .MTB-Read + .MTB-Read {
+#doc-target .MTB-Read + .MTB-Read,
+#doc-target .mtb-doc--read + .mtb-doc--read {
   margin-top: -1px !important;
   border-top: 0 !important;
   border-top-left-radius: 0 !important;
   border-top-right-radius: 0 !important;
   padding-top: 6px !important;
 }
-#doc-target .MTB-Read:has(+ .MTB-Read) {
+#doc-target .MTB-Read:has(+ .MTB-Read),
+#doc-target .mtb-doc--read:has(+ .mtb-doc--read) {
   border-bottom: 0 !important;               /* kills the hairline seam */
   border-bottom-left-radius: 0 !important;
   border-bottom-right-radius: 0 !important;
@@ -1296,4 +1300,18 @@ body.ce-mode-understand #doc-target .MTB-Dwell {
   text-align: center;
   white-space: nowrap;
 }
-
+/* =========================================================
+   MTB DOC-LEVEL READ SKIN (LOCKED)
+   Applies Read card styling to docs wrapped in .mtb-doc--read
+   ========================================================= */
+#doc-target .mtb-doc--read {
+  display: block;
+  background: rgba(30, 90, 168, 0.06);
+  border: 1px solid rgba(30, 90, 168, 0.22);
+  border-left: 0;
+  border-radius: 14px;
+  padding: 14px 16px;
+  margin: 0;
+  line-height: 1.55;
+  font-weight: 650;
+}

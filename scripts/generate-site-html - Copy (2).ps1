@@ -95,57 +95,7 @@ function Convert-DocxToHtmlFragment($docxPath) {
     if (Test-Path $errFile) { Remove-Item $errFile -Force -ErrorAction SilentlyContinue }
   }
 }
-function Get-MtbDocType([string]$outName) {
-  $n = ""
-if ($null -ne $outName) { $n = [string]$outName }
-$n = $n.ToLowerInvariant()
 
-  if ($n -match '-chapter-explanation\.html$') { return "chapter-explanation" }
-  if ($n -match '-chapter-orientation\.html$') { return "chapter-orientation" }
-  if ($n -match '-chapter-insights\.html$') { return "chapter-insights" }
-  if ($n -match '-chapter-introduction\.html$') { return "chapter-introduction" }
-  if ($n -match '-book-introduction\.html$') { return "book-introduction" }
-  if ($n -match '-chapter-eg-culture\.html$') { return "chapter-eg-culture" }
-
-  # keep these as-is (they already have their own structure)
-  if ($n -match '-chapter-scripture\.html$') { return "chapter-scripture" }
-
-  return "generic"
-}
-
-function Wrap-MtbDocHtml([string]$html, [string]$docType) {
-  if ([string]::IsNullOrWhiteSpace($html)) { return $html }
-
-  # do not double-wrap chapter scripture stubs (already wrapped)
-  if ($docType -eq "chapter-scripture") { return $html }
-
-  $classes = @("mtb-doc")
-
-  # marker used to scope Read/Explain/Dwell mode toggles
-  if ($docType -eq "chapter-explanation") {
-    $classes += "mtb-doc--chapter-explanation"
-  }
-
-  
-# apply Read skin by default to these teaching docs
-  if ($docType -in @(
-    "book-introduction",
-    "chapter-introduction",
-    "chapter-orientation",
-    "chapter-eg-culture",
-    "chapter-insights"
-  )) {
-  $classes += "mtb-doc--read"
-}
-
-  $classAttr = ($classes -join " ")
-
-@"
-<section class="$classAttr" data-doc-type="$docType">
-$html
-</section>
-"@
-}
 function New-MtbChapterScriptureStubHtml {
   param(
     [Parameter(Mandatory)] [string] $BookSlug,
@@ -383,57 +333,6 @@ function Canonicalize-WordStudyNames($outDir, $bookSlug) {
     Rename-Item -LiteralPath $_.FullName -NewName $canonical
   }
 }
-function Group-MtbDwellRuns([string]$html) {
-  if ([string]::IsNullOrWhiteSpace($html)) { return $html }
-
-  # First Dwell block
-  $rxFirstDwell = [regex]::new('(?is)<(?<tag>p|div)\b[^>]*\bclass\s*=\s*"[^"]*\bMTB-Dwell\b[^"]*"[^>]*>.*?</\k<tag>>')
-
-  # Next piece in a run: either another Dwell block OR a UL/OL that contains MTB-Dwell somewhere inside
-  $rxNextPiece = [regex]::new('(?is)^\s*(?:' +
-    '<(?<tag1>p|div)\b[^>]*\bclass\s*=\s*"[^"]*\bMTB-Dwell\b[^"]*"[^>]*>.*?</\k<tag1>>' +
-    '|' +
-    '<(?<tag2>ul|ol)\b[^>]*>.*?\bMTB-Dwell\b.*?</\k<tag2>>' +
-    ')')
-
-  $sb = New-Object System.Text.StringBuilder
-  $i = 0
-
-  while ($i -lt $html.Length) {
-    $m = $rxFirstDwell.Match($html, $i)
-    if (-not $m.Success) {
-      [void]$sb.Append($html.Substring($i))
-      break
-    }
-
-    # Append everything before the dwell run
-    if ($m.Index -gt $i) {
-      [void]$sb.Append($html.Substring($i, $m.Index - $i))
-    }
-
-    # Consume dwell run
-    $runPos = $m.Index
-    $runText = ""
-
-    while ($true) {
-      $segment = $html.Substring($runPos)
-      $m2 = $rxNextPiece.Match($segment)
-      if (-not $m2.Success) { break }
-
-      $runText += $m2.Value
-      $runPos += $m2.Value.Length
-    }
-
-    # Wrap
-    [void]$sb.Append("<div class=""MTB-Dwell-Group"">`n")
-    [void]$sb.Append($runText)
-    [void]$sb.Append("`n</div>")
-
-    $i = $runPos
-  }
-
-  return $sb.ToString()
-}
 function Clear-BookOutput($bookOutDir) {
   if (-not (Test-Path $bookOutDir)) { return }
 
@@ -565,27 +464,16 @@ $outDir = Join-Path $SITE_ROOT ("books\" + $testament + "\" + $BOOK_SLUG)
       $targetDir = if ($targetSub) { Join-Path $outDir $targetSub } else { $outDir }
       Ensure-Path $targetDir
 
-   $outPath = Join-Path $targetDir $outName
+      $outPath = Join-Path $targetDir $outName
+      # If this is a chapter scripture page, override Pandoc output with the JSON stub
+      if ($outName -match '^(?<book>[a-z0-9-]+)-(?<ch>\d+)-chapter-scripture\.html$') {
+        $b  = $Matches['book']
+        $ch = [int]$Matches['ch']
+        $html = New-MtbChapterScriptureStubHtml -BookSlug $b -Chapter $ch
+      }
 
-$docType = Get-MtbDocType $outName
 
-# If this is a chapter scripture page, override Pandoc output with the JSON stub
-if ($outName -match '^(?<book>[a-z0-9-]+)-(?<ch>\d+)-chapter-scripture\.html$') {
-  $b  = $Matches['book']
-  $ch = [int]$Matches['ch']
-  $html = New-MtbChapterScriptureStubHtml -BookSlug $b -Chapter $ch
-  $docType = "chapter-scripture"
-}
-
-# Wrap everything else in a consistent MTB doc root
-# Group consecutive MTB-Dwell blocks (chapter explanation only)
-if ($docType -eq "chapter-explanation") {
-  $html = Group-MtbDwellRuns $html
-}
-
-# Wrap everything else in a consistent MTB doc root
-$html = Wrap-MtbDocHtml $html $docType
-Set-Content -Path $outPath -Value $html -Encoding UTF8 -Force
+      Set-Content -Path $outPath -Value $html -Encoding UTF8 -Force
 
       if ($debugShown -lt 3) {
         Write-Host ("WROTE: " + (Resolve-Path $outPath).Path) -ForegroundColor Cyan

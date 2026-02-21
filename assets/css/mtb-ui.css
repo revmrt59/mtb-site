@@ -449,66 +449,45 @@ body[data-doc-type="chapter-explanation"] #doc-target h1.MTB-Read{
   border-radius: 12px !important;
 }
 /* =========================================================
-   DWELL (single source of truth)
-   JS wraps consecutive dwell nodes into: <div class="MTB-Dwell-Group">...</div>
-   Goal: ONE green card, no inner panels.
+   MTB DWELL GROUP (GLOBAL SAFE)
+   Applies to chapter explanation, book intro, and modal docs
    ========================================================= */
 
-#doc-target .MTB-Dwell-Group{
-  background: rgba(46, 125, 50, 0.10) !important;
-  border: 1px solid rgba(46, 125, 50, 0.18) !important;
-  border-radius: 14px !important;
-  padding: 16px 18px !important;
-  margin: 16px 0 !important;
+#doc-target .MTB-Dwell-Group,
+main.doc-shell .MTB-Dwell-Group,
+#book-modal .MTB-Dwell-Group{
+  background: #f4f8f3;
+  border: 1px solid #cddfca;
+  border-left: 6px solid #2e6b2e;
+  border-radius: 14px;
+  padding: 16px 18px;
+  margin: 18px 0;
 }
 
-/* Kill any inner “card/panel” styling inside the group */
+/* Remove spacing between grouped dwell blocks */
 #doc-target .MTB-Dwell-Group .MTB-Dwell,
+#doc-target .MTB-Dwell-Group p.MTB-Dwell,
+#doc-target .MTB-Dwell-Group div.MTB-Dwell,
 #doc-target .MTB-Dwell-Group ul,
 #doc-target .MTB-Dwell-Group ol,
-#doc-target .MTB-Dwell-Group li,
-#doc-target .MTB-Dwell-Group div,
-#doc-target .MTB-Dwell-Group p{
-  background: transparent !important;
-  border: 0 !important;
-  border-left: 0 !important;
-  box-shadow: none !important;
-  border-radius: 0 !important;
+main.doc-shell .MTB-Dwell-Group .MTB-Dwell,
+main.doc-shell .MTB-Dwell-Group p.MTB-Dwell,
+main.doc-shell .MTB-Dwell-Group div.MTB-Dwell,
+main.doc-shell .MTB-Dwell-Group ul,
+main.doc-shell .MTB-Dwell-Group ol,
+#book-modal .MTB-Dwell-Group .MTB-Dwell,
+#book-modal .MTB-Dwell-Group p.MTB-Dwell,
+#book-modal .MTB-Dwell-Group div.MTB-Dwell,
+#book-modal .MTB-Dwell-Group ul,
+#book-modal .MTB-Dwell-Group ol{
+  margin: 0 0 10px 0;
 }
 
-/* Keep readable spacing inside the ONE box */
-#doc-target .MTB-Dwell-Group .MTB-Dwell{
-  margin: 0 0 10px 0 !important;
-  padding: 0 !important;
-}
-
-/* Lists inside dwell group: keep bullets, but never become their own box */
-#doc-target .MTB-Dwell-Group ul,
-#doc-target .MTB-Dwell-Group ol{
-  margin: 8px 0 10px 22px !important;
-  padding: 0 !important;
-  list-style-position: outside !important;
-}
-
-#doc-target .MTB-Dwell-Group li{
-  margin: 6px 0 !important;
-  padding: 0 !important;
-}
-/* Subtle depth and better tone */
-#doc-target .MTB-Dwell-Group{
-  box-shadow: 0 2px 6px rgba(0,0,0,0.04) !important;
-}
-
-/* Slightly soften text inside dwell */
-#doc-target .MTB-Dwell-Group{
-  color: #1c2b1f;
-}
-/* LOC sequence header row (inside main) */
-body.loc-page .loc-seq-header{
-  display: flex;
-  align-items: center;
-  gap: 16px;
-  padding: 18px 20px 10px 20px;
+/* Remove bottom margin on last element inside group */
+#doc-target .MTB-Dwell-Group > *:last-child,
+main.doc-shell .MTB-Dwell-Group > *:last-child,
+#book-modal .MTB-Dwell-Group > *:last-child{
+  margin-bottom: 0;
 }
 
 body.loc-page .loc-seq-left{
@@ -615,4 +594,121 @@ body.loc-page .mtb-loc-harmony-table{
 body.loc-page .mtb-loc-harmony-table th,
 body.loc-page .mtb-loc-harmony-table td{
   padding: 20px 24px;
+}
+/* =========================================================
+   MTB DOC WRAPPER — Neutral (never becomes a card)
+   ========================================================= */
+
+#doc-target .mtb-doc--read,
+main.doc-shell .mtb-doc--read,
+#book-modal .mtb-doc--read{
+  background: transparent !important;
+  border: 0 !important;
+  box-shadow: none !important;
+  border-radius: 0 !important;
+  padding: 0 !important;
+  margin: 0 !important;
+  font-weight: inherit !important;
+}
+
+/* =========================================================
+   MTB-READ BLOCK (actual Bible/read box styling)
+   ========================================================= */
+
+#doc-target .MTB-Read,
+main.doc-shell .MTB-Read,
+#book-modal .MTB-Read{
+  display: block;
+  background: rgba(30, 90, 168, 0.06);
+  border: 1px solid rgba(30, 90, 168, 0.22);
+  border-left: 0;
+  border-radius: 14px;
+  padding: 14px 16px;
+  margin: 0 0 14px 0;
+  line-height: 1.55;
+  font-weight: 650;
+}
+/* =========================================================
+   GLOBAL CONTENT STYLE — MTB Blue Bold
+   Word style may emit as:
+   - MTB-Text-Highlight
+   - MTB-Blue-Bold
+   - mtb-blue-bold
+   This makes it work everywhere.
+   ========================================================= */
+
+.MTB-Text-Highlight,
+.MTB-Blue-Bold,
+.mtb-blue-bold{
+  color: #1e5bd8 !important;
+  font-weight: 700 !important;
+}
+/* =========================================================
+   CLEAN MTB DWELL GROUP (stable version)
+   ========================================================= */
+
+#doc-target .MTB-Dwell-Group,
+main.doc-shell .MTB-Dwell-Group,
+#book-modal .MTB-Dwell-Group{
+  background: #f4f8f3;
+  border: 1px solid #cddfca;
+  border-left: 6px solid #2e6b2e;
+  border-radius: 14px;
+  padding: 16px 18px;
+  margin: 18px 0;
+}
+
+/* Lists inside dwell */
+#doc-target .MTB-Dwell-Group ul,
+main.doc-shell .MTB-Dwell-Group ul,
+#book-modal .MTB-Dwell-Group ul{
+  margin: 6px 0 6px 22px;
+  padding: 0;
+}
+
+#doc-target .MTB-Dwell-Group li,
+main.doc-shell .MTB-Dwell-Group li,
+#book-modal .MTB-Dwell-Group li{
+  margin: 2px 0;
+  padding: 0;
+}
+
+/* Remove paragraph margins inside list items */
+#doc-target .MTB-Dwell-Group li > p,
+main.doc-shell .MTB-Dwell-Group li > p,
+#book-modal .MTB-Dwell-Group li > p{
+  margin: 0;
+}
+/* =========================================================
+   FIX: Split boxes inside MTB-Dwell-Group
+   Cause: bullet paragraphs still have class .MTB-Dwell, so each
+          bullet becomes its own card.
+   Solution: neutralize .MTB-Dwell styling INSIDE the group only.
+   ========================================================= */
+
+#doc-target .MTB-Dwell-Group .MTB-Dwell,
+main.doc-shell .MTB-Dwell-Group .MTB-Dwell,
+#book-modal .MTB-Dwell-Group .MTB-Dwell,
+#doc-target .MTB-Dwell-Group p.MTB-Dwell,
+main.doc-shell .MTB-Dwell-Group p.MTB-Dwell,
+#book-modal .MTB-Dwell-Group p.MTB-Dwell,
+#doc-target .MTB-Dwell-Group div.MTB-Dwell,
+main.doc-shell .MTB-Dwell-Group div.MTB-Dwell,
+#book-modal .MTB-Dwell-Group div.MTB-Dwell{
+  background: transparent !important;
+  border: 0 !important;
+  border-left: 0 !important;
+  box-shadow: none !important;
+  border-radius: 0 !important;
+  padding: 0 !important;
+  margin: 0 !important;
+}
+/* =========================================================
+   Remove thick left border from MTB-Dwell-Group
+   ========================================================= */
+
+#doc-target .MTB-Dwell-Group,
+main.doc-shell .MTB-Dwell-Group,
+#book-modal .MTB-Dwell-Group{
+  border-left: 0 !important;
 }

@@ -427,3 +427,21 @@ body.mtb-has-scripture-controls table.mtb-chapter-scripture-table td{
   overflow-wrap: anywhere !important;
   word-break: break-word !important;
 }
+/* =========================================================
+   FIX: Chapter header text slightly clipped (site-wide)
+   ========================================================= */
+.doc-header{
+  margin-top: 0 !important;     /* removes the negative pull-up that clips the title */
+  padding-top: 6px !important;  /* small breathing room */
+}
+
+.doc-header h1{
+  line-height: 1.15 !important; /* prevents tall glyphs from clipping */
+}
+/* =========================================================
+   FIX: Chapter Scripture nav arrows too far right
+   (scripture tab only: body gets mtb-has-scripture-controls)
+   ========================================================= */
+body.mtb-has-scripture-controls .chapter-nav{
+  right: 96px !important; /* ~1 inch left from the edge */
+}

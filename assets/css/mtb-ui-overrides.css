@@ -155,3 +155,117 @@ body:has(.about-nav) #doc-target{
   overflow-y: auto !important;
   overflow-x: hidden !important;
 }
+/* =========================================================
+   LOC HARMONY — VISUAL ONLY
+   - Keep existing scroll behavior
+   - Make LOC header + column headings blue-grey
+   - Force nav arrows to the right
+   ========================================================= */
+
+/* 1) Make the LOC “top band” blue-grey (Back / Title / Prev-Next) */
+body.loc-page .loc-seq-header{
+  background: #eef3f8 !important;
+  border-bottom: 1px solid rgba(0,0,0,0.10) !important;
+}
+
+/* If the header sits inside the white card, keep it visually clean */
+body.loc-page .loc-seq-header{
+  border-top-left-radius: 18px;
+  border-top-right-radius: 18px;
+}
+
+/* 2) Force the header row layout: left / centered title / right arrows */
+body.loc-page .loc-seq-header{
+  display: flex !important;
+  align-items: center !important;
+  justify-content: space-between !important;
+  gap: 16px !important;
+}
+
+body.loc-page .loc-seq-left{
+  flex: 0 0 auto !important;
+}
+
+body.loc-page .loc-seq-center{
+  flex: 1 1 auto !important;
+  text-align: center !important;
+}
+
+body.loc-page .loc-seq-right{
+  flex: 0 0 auto !important;
+  margin-left: auto !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: flex-end !important;
+  gap: 10px !important;
+}
+
+/* Safety: if #loc-prev/#loc-next get positioned weirdly elsewhere, reset them */
+body.loc-page #loc-prev,
+body.loc-page #loc-next{
+  position: static !important;
+}
+
+/* 3) Make the “Translation” band blue-grey too (optional but usually matches) */
+body.loc-page .loc-scroll-area,
+body.loc-page .loc-harmony-controls,
+body.loc-page .loc-scroll-head{
+  background: #eef3f8 !important;
+}
+
+/* 4) Matthew / Mark / Luke / John header row blue-grey */
+body.loc-page table.mtb-loc-harmony-table thead th{
+  background: #eef3f8 !important;
+  border-bottom: 1px solid rgba(0,0,0,0.10) !important;
+}
+
+/* Keep the table body as the white “sheet” */
+body.loc-page table.mtb-loc-harmony-table{
+  background: #ffffff !important;
+}
+/* =========================================================
+   LOC HARMONY — Remove white card border/frame
+   ========================================================= */
+
+body.loc-page main.loc-main.mtb-paper{
+  background: #eef3f8 !important;   /* match the blue-grey */
+  border: none !important;          /* remove white border */
+  box-shadow: none !important;      /* remove card shadow */
+}
+/* =========================================================
+   LOC HARMONY — Force arrows to the RIGHT (3-column header)
+   ========================================================= */
+
+body.loc-page .loc-seq-header{
+  display: flex !important;
+  align-items: center !important;
+}
+
+/* Left / Center / Right columns */
+body.loc-page .loc-seq-left{
+  flex: 0 0 170px !important;
+  display: flex !important;
+  align-items: center !important;
+}
+
+body.loc-page .loc-seq-center{
+  flex: 1 1 auto !important;
+  text-align: center !important;
+}
+
+body.loc-page .loc-seq-right{
+  flex: 0 0 170px !important;
+  display: flex !important;
+  justify-content: flex-end !important;
+  align-items: center !important;
+  gap: 10px !important;
+}
+
+/* If any earlier CSS made the buttons absolute/offset, neutralize it */
+body.loc-page #loc-prev,
+body.loc-page #loc-next{
+  position: static !important;
+  left: auto !important;
+  right: auto !important;
+  margin: 0 !important;
+}

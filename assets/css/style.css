@@ -60,6 +60,10 @@ body[data-doc-type] .doc-shell {
 ========================================================= */
 
 .site-header {
+  position: sticky;
+  top: 0;
+  z-index: 9999;
+
   background: #ffffff;
   padding: 20px 48px;
   border-bottom: 1px solid #e5e5e5;
@@ -1313,4 +1317,13 @@ body.ce-mode-understand #doc-target .MTB-Dwell {
   margin: 0;
   line-height: 1.55;
   font-weight: 650;
+}
+/* =========================================================
+   PRIMARY SITE HEADER (global sticky)
+   ========================================================= */
+
+header.site-header{
+  position: sticky;
+  top: 0;
+  z-index: 9999;
 }

@@ -1,149 +1,163 @@
 (function () {
   "use strict";
 
+  // =========================================================
+  // Helpers
+  // =========================================================
+  // =========================================================
+// MTB: scripture-controls.js is for the OLD 3-column HTML tables.
+// Your chapter scripture view is JSON-driven and already styled.
+// Running this script causes post-load reflow ("jump").
+// So we SKIP it on chapter scripture pages.
+// =========================================================
+if (document.body.classList.contains("mtb-has-scripture-controls")) {
+  // Optional: uncomment for verification
+  // console.log("scripture-controls.js skipped on mtb-has-scripture-controls page");
+  throw new Error("skip scripture-controls on mtb-has-scripture-controls");
+}
   function getTarget() {
     return document.getElementById("doc-target");
   }
 
   function getTable() {
+    // Chapter Scripture renderer should inject a table somewhere inside #doc-target
     return document.querySelector("#doc-target table");
   }
-function isChapterScriptureView() {
-  // Chapter Scripture JSON renderer uses these wrappers/classes
-  return !!(
-    document.querySelector("#doc-target .mtb-scripture-root") ||
-    document.querySelector("#doc-target .mtb-chapter-scripture-wrap") ||
-    document.querySelector("#doc-target table.mtb-chapter-scripture") ||
-    document.querySelector("#doc-target table.mtb-scripture-table")
-  );
-}
 
-function cleanupScriptureMode() {
-  document.body.classList.remove("mtb-has-scripture-controls");
+  function isChapterScriptureView() {
+    // Chapter Scripture JSON renderer uses one or more of these
+    return !!(
+      document.querySelector("#doc-target .mtb-scripture-root") ||
+      document.querySelector("#doc-target .mtb-chapter-scripture-wrap") ||
+      document.querySelector("#doc-target table.mtb-chapter-scripture") ||
+      document.querySelector("#doc-target table.mtb-scripture-table") ||
+      // fallback: any table inside doc-target AND the chapter scripture section marker
+      document.querySelector("#doc-target section.mtb-doc.mtb-chapter-scripture")
+    );
+  }
 
-  // Remove obsolete bar if it exists
-  const bar = document.querySelector(".scripture-controls");
-  if (bar) bar.remove();
-}
+  // =========================================================
+  // Cleanup (CRITICAL): revert normal pages back to normal
+  // =========================================================
+  function cleanupScriptureMode() {
+    document.body.classList.remove("mtb-has-scripture-controls");
+    document.documentElement.removeAttribute("data-sc-version");
+
+    // Remove obsolete bar if it exists (old system)
+    const bar = document.querySelector(".scripture-controls");
+    if (bar) bar.remove();
+
+    // Remove "wide" tags we apply during scripture view
+    const target = getTarget();
+    const nodesToUntag = new Set([
+      target,
+      target?.closest("article"),
+      target?.closest("main"),
+      document.querySelector("main.doc-shell"),
+      document.querySelector("article.doc-main"),
+    ]);
+
+    nodesToUntag.forEach((node) => {
+      if (!node) return;
+      node.classList.remove("wide");
+      // Clear any past inline sizing that may have been applied in earlier experiments
+      node.style.maxWidth = "";
+      node.style.width = "";
+      node.style.marginLeft = "";
+      node.style.marginRight = "";
+    });
+  }
+
+  // =========================================================
+  // Normalize + styling helpers
+  // =========================================================
   function normalizeTable(table) {
     if (!table) return;
 
     // Remove fixed-width colgroups (common reason widths won't expand)
-    table.querySelectorAll("colgroup").forEach(cg => cg.remove());
+    table.querySelectorAll("colgroup").forEach((cg) => cg.remove());
 
     table.classList.add("mtb-scripture-table");
-    table.style.width = "100%";
+
+    // Let CSS handle layout; these are safe defaults
+   
     table.style.tableLayout = "auto";
-    table.style.borderCollapse = "separate";
-  }
-
-  // Applies display mode ONLY for 3-column tables: Verse | NKJV | NLT
-  function applyMode(mode) {
-    const table = getTable();
-    if (!table) return;
-
-    normalizeTable(table);
-    table.setAttribute("data-mode", mode);
-
-    const rows = Array.from(table.querySelectorAll("tr"));
-    rows.forEach((r) => {
-      const cells = Array.from(r.querySelectorAll("th, td"));
-      if (cells.length < 3) return; // only meaningful when 2 translations exist
-
-      const nkjv = cells[1];
-      const nlt  = cells[2];
-
-      // Reset
-      nkjv.style.display = "";
-      nlt.style.display  = "";
-      nkjv.colSpan = 1;
-      nlt.colSpan  = 1;
-
-      if (mode === "nkjv") {
-        nlt.style.display = "none";
-        nkjv.colSpan = 2;
-      } else if (mode === "nlt") {
-        nkjv.style.display = "none";
-        nlt.style.display = "";
-        nlt.colSpan = 2;
-      }
-      // mode === "both" => leave as-is
-    });
+    table.style.borderCollapse = "collapse";
+    table.style.borderSpacing = "0";
   }
 
   function forceWhite(table) {
     if (!table) return;
+
     table.style.background = "#ffffff";
-    table.querySelectorAll("th, td").forEach(cell => {
+    table.querySelectorAll("th, td").forEach((cell) => {
       cell.style.background = "#ffffff";
     });
   }
-function forceWide(target) {
-  // Marker to prove THIS file/version is the one running
-  document.documentElement.setAttribute("data-sc-version", "2026-02-21A");
 
-  // IMPORTANT: no inline widths. CSS must control shrink/grow.
-  const nodesToTag = new Set([
-    target,                    // #doc-target
-    target.closest("article"),  // article.doc-main
-    target.closest("main"),     // main.doc-shell
-    document.querySelector("main.doc-shell"),
-  ]);
+  function tagWideNodes(target) {
+    // Marker to prove THIS file/version is running
+    document.documentElement.setAttribute("data-sc-version", "2026-02-21B");
 
-  nodesToTag.forEach(node => {
-    if (!node) return;
-    node.classList.add("wide");
-    node.style.maxWidth = "";  // clear any old inline constraints
-    node.style.width = "";
-  });
-}
+    const nodesToTag = new Set([
+      target,                       // #doc-target
+      target?.closest("article"),    // article.doc-main
+      target?.closest("main"),       // main.doc-shell
+      document.querySelector("main.doc-shell"),
+      document.querySelector("article.doc-main"),
+    ]);
 
+    nodesToTag.forEach((node) => {
+      if (!node) return;
+      node.classList.add("wide");
+      // Do NOT set inline widths; CSS should control final width
+      node.style.maxWidth = "";
+      node.style.width = "";
+    });
+  }
+
+  // =========================================================
+  // Main entry
+  // =========================================================
   function ensureControls() {
+    // If we are NOT on chapter scripture, make sure we fully revert any scripture-only state.
     if (!isChapterScriptureView()) {
-  cleanupScriptureMode();
-  return false;
-}
+      cleanupScriptureMode();
+      return false;
+    }
+
     const target = getTarget();
     if (!target) return false;
 
     const table = getTable();
     if (!table) return false;
 
-    normalizeTable(table);
-
-    // Identify columns: allow Verse + 1 translation (2 cells) or Verse + 2 translations (3 cells)
-    const firstRow = table.querySelector("tr");
-    const firstCells = firstRow ? firstRow.querySelectorAll("th,td") : null;
-    if (!firstCells || firstCells.length < 2) return false;
-
-    // Always apply these when a chapter scripture table is detected
+    // Turn on scripture-only mode
     document.body.classList.add("mtb-has-scripture-controls");
+
+    // Apply table fixes
+    normalizeTable(table);
     forceWhite(table);
-    forceWide(target);
 
-    const hasTwoTranslations = firstCells.length >= 3;
+    // Apply width tags (CSS will control the final width)
+    tagWideNodes(target);
 
-// Remove obsolete scripture toggle bar (replaced by translation dropdown)
-const existingBar = document.querySelector(".scripture-controls");
-if (existingBar) existingBar.remove();
+    // Remove obsolete toggle bar if any old HTML remains
+    const existingBar = document.querySelector(".scripture-controls");
+    if (existingBar) existingBar.remove();
 
     return true;
   }
 
-  // Public hook (keeps compatibility with your load-doc.js)
+  // Public hook (keeps compatibility with load-doc.js)
   window.addScriptureControls = function () {
     ensureControls();
   };
 
-  // Auto-run after DOM is ready and after navigation/content injection
-function boot() {
-  // If we are not on the chapter scripture view, remove scripture mode so normal docs stay white
-  if (!isChapterScriptureView()) {
-    cleanupScriptureMode();
-    return;
+  // Boot on load and whenever #doc-target gets replaced
+  function boot() {
+    ensureControls();
   }
-  ensureControls();
-}
 
   window.addEventListener("DOMContentLoaded", boot);
   window.addEventListener("popstate", () => setTimeout(boot, 50));

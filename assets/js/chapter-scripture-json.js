@@ -78,6 +78,24 @@
 
   function buildTable(verseNums, verseTextByTranslation, v1, v2, twoCols) {
     const table = el("table", { class: "mtb-chapter-scripture" });
+    // Force stable 3-column layout (Verse + 2 translations) with equal translation columns.
+    // This prevents the "right column clipped / uneven columns" behavior across browsers and CSS cascades.
+    table.style.width = "100%";
+    table.style.tableLayout = "fixed";
+    table.style.borderCollapse = "collapse";
+
+    const colgroup = document.createElement("colgroup");
+    const colVerse = document.createElement("col");
+    colVerse.style.width = "60px";
+
+    const colV1 = document.createElement("col");
+    colV1.style.width = "calc((100% - 60px) / 2)";
+
+    const colV2 = document.createElement("col");
+    colV2.style.width = "calc((100% - 60px) / 2)";
+
+    colgroup.append(colVerse, colV1, colV2);
+    table.appendChild(colgroup);
 
     const thead = el("thead");
     const hr = el("tr");

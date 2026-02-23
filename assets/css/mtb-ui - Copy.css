@@ -1,0 +1,1323 @@
+/* =========================================================
+   MTB UI (Design Layer)
+   Purpose: A small, readable CSS layer that standardizes
+   site aesthetics without patch-on-patch edits in style.css.
+   ========================================================= */
+
+/* -----------------------------
+   Design tokens
+----------------------------- */
+:root{
+  /* header */
+  --mtb-header-h: 72px;
+
+  /* colors */
+  --mtb-border: #d7dde5;
+  --mtb-paper: #ffffff;
+  --mtb-bg: #eef2f6;
+
+  /* layout */
+  --mtb-maxw: 1100px;
+  --mtb-maxw-wide: 1600px;
+  --mtb-radius: 14px;
+  --mtb-pad: 18px;
+  --mtb-gap: 16px;
+
+  /* LOC detail */
+  --mtb-harmony-controls-h: 56px;
+}
+
+/* -----------------------------
+   Global background
+----------------------------- */
+body{
+  background: var(--mtb-bg);
+}
+
+/* -----------------------------
+   Primary nav styling (safe global)
+----------------------------- */
+.main-nav{
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  margin: 0;
+}
+
+/* -----------------------------
+   Universal primary header
+----------------------------- */
+header.mtb-primary-header{
+  position: sticky;
+  top: 0;
+  z-index: 5000;
+  height: var(--mtb-header-h);
+  background: var(--mtb-paper);
+  border-bottom: 1px solid var(--mtb-border);
+  display: flex;
+  align-items: center;
+}
+
+/* -----------------------------
+   Global content panel
+----------------------------- */
+.mtb-paper{
+  max-width: var(--mtb-maxw);
+  margin: 18px auto;
+  background: var(--mtb-paper);
+  border: 1px solid var(--mtb-border);
+  border-radius: var(--mtb-radius);
+  padding: var(--mtb-pad);
+
+  /* Soft depth */
+  box-shadow: 0 6px 18px rgba(0,0,0,0.06);
+}
+
+.mtb-paper.wide{
+  max-width: var(--mtb-maxw-wide);
+}
+
+/* Pages that should tuck the panel directly under the sticky header */
+body.mtb-no-gap .mtb-paper{
+  margin-top: 0;
+  border-top-left-radius: 0;
+  border-top-right-radius: 0;
+}
+
+/* =========================================================
+   LOC INDEX (loc/life-of-jesus.html)
+   Body class used: loc-index
+   Goal:
+   - Title + filters never move
+   - Only the table area scrolls
+   ========================================================= */
+body.loc-index main.doc-shell{
+  max-width: 1700px;
+  margin: 0 auto;
+}
+
+body.loc-index main.doc-shell.mtb-paper{
+  padding: 18px;
+}
+
+body.loc-index .loc-head{
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+/* Title + controls are NOT sticky on this page */
+body.loc-index .loc-sticky-header{
+  position: relative;
+  background: transparent;
+  border: 0;
+  padding: 0;
+  margin: 0;
+}
+
+/* The only scroller */
+body.loc-index .loc-scroll-area{
+  overflow: auto;
+  max-height: calc(100vh - 260px);
+  background: transparent;
+  border: 1px solid var(--mtb-border);
+  border-radius: 12px;
+}
+
+/* Table */
+body.loc-index table.mtb-loc-head-table{
+  width: 100%;
+  table-layout: fixed;
+  border-collapse: collapse;
+  background: #fff;
+}
+
+/* Sticky table header inside scroller */
+body.loc-index table.mtb-loc-head-table thead th{
+  position: sticky;
+  top: 0;
+  z-index: 5;
+  background: #fff;
+  border-bottom: 1px solid var(--mtb-border);
+  text-align: left;
+}
+
+/* Cells */
+body.loc-index table.mtb-loc-head-table th,
+body.loc-index table.mtb-loc-head-table td{
+  padding: 10px 10px;
+  border-bottom: 1px solid rgba(0,0,0,0.06);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* Make Event Title column wider (5th column) */
+body.loc-index table.mtb-loc-head-table th:nth-child(5),
+body.loc-index table.mtb-loc-head-table td:nth-child(5){
+  width: 30%;
+}
+
+/* Restore standard blue links in LOC index */
+body.loc-index table.mtb-loc-head-table a{
+  color: #1a5fd1;
+  text-decoration: underline;
+}
+body.loc-index table.mtb-loc-head-table a:hover{
+  color: #0f3ea8;
+}
+
+/* =========================================================
+   LIFE OF JESUS LIST PAGE (optional extra class)
+   If you keep body class loj-index, support it too.
+   ========================================================= */
+body.loj-index main.doc-shell.mtb-paper{
+  height: calc(100vh - var(--mtb-header-h));
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  margin-top: 0;
+}
+
+body.loj-index .loc-sticky-header{
+  position: static !important;
+}
+
+body.loj-index .loc-scroll-area{
+  flex: 1;
+  min-height: 0;
+  overflow: auto;
+}
+
+/* =========================================================
+   LOC DETAIL (loc.html)
+   Body class used: loc-page
+   Goal:
+   - Site header fixed
+   - Event title fixed
+   - Translation bar sticky
+   - Matthew/Mark/Luke/John row sticky beneath translation bar
+   - Verses scroll within the panel
+   ========================================================= */
+
+/* Prevent the browser window from scrolling on loc detail */
+body.loc-page{
+  height: 100vh;
+  overflow: hidden;
+}
+
+/* Main is a fixed-height flex column under the site header */
+body.loc-page main.loc-main{
+  height: calc(100vh - var(--mtb-header-h));
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+/* Event title stays fixed because it is outside the scroller */
+body.loc-page .loc-title{
+  flex: 0 0 auto;
+  padding: 24px 32px 16px 32px;
+}
+
+/* Only this area scrolls */
+body.loc-page .loc-scroll-area{
+  flex: 1 1 auto;
+  min-height: 0;
+
+  /* Always reserve scrollbar space so nothing "jumps" on first scroll */
+  overflow-y: scroll;
+  overflow-x: auto;
+  scrollbar-gutter: stable;
+
+  padding: 0 32px 32px 32px;
+}
+
+
+/* Translation controls: sticky at top of the scroller */
+body.loc-page .loc-harmony-controls{
+  position: sticky;
+  top: 0;
+  z-index: 30;
+  background: var(--mtb-paper);
+  min-height: var(--mtb-harmony-controls-h);
+  display: flex;
+  align-items: center;
+  gap: 10px;
+
+  /* neutralize injected margins that cause jumping */
+ margin: 0 !important;
+padding: 12px 0 12px 0;
+  border-bottom: 1px solid var(--mtb-border);
+}
+
+/* Column headers: make the whole THEAD sticky (stable bottom line) */
+body.loc-page .mtb-loc-harmony-table{
+  border-collapse: separate;
+  border-spacing: 0;
+}
+
+body.loc-page .mtb-loc-harmony-table thead th{
+  position: sticky;
+  top: var(--mtb-harmony-controls-h);
+  z-index: 50;
+  background: var(--mtb-paper) !important;
+  box-shadow: 0 2px 0 var(--mtb-border);
+}
+
+body.loc-page .mtb-loc-harmony-table tbody td{
+  position: relative;
+  z-index: 1;
+  background: #fff;
+}
+
+
+
+/* =========================================================
+   WORD STUDY MODAL (single source of truth)
+========================================================= */
+
+.ws-modal {
+  position: fixed;
+  inset: 0;
+  z-index: 9998;
+}
+
+.ws-modal-backdrop {
+  position: absolute;
+  inset: 0;
+  background: rgba(0,0,0,.40);
+}
+
+.ws-modal-panel {
+  position: relative;
+  margin: 6vh auto;
+  width: min(920px, calc(100vw - 24px));
+  max-height: 88vh;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  background: #ffffff;
+  border-radius: 14px;
+  box-shadow: 0 16px 50px rgba(0,0,0,.30);
+}
+
+.ws-modal-header {
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  padding: 12px 12px;
+  background: #f5f5f5;
+  border-bottom: 1px solid #ddd;
+}
+
+.ws-modal-close {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 8px 12px;
+  margin: 0;
+  font-size: 14px;
+  line-height: 1.2;
+  background: #ffffff;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+.ws-modal-body {
+  overflow-y: auto;
+  padding: 16px;
+}
+
+
+/* =========================================================
+   POPUP BOX POLISH — Word Study / Chapter Explanation
+   Scope: modal only
+   ========================================================= */
+
+/* Bible text box */
+.ws-modal-body .MTB-Read{
+  border-left: 0 !important;
+  border: 1px solid rgba(30, 90, 168, 0.25) !important;
+  background: rgba(30, 90, 168, 0.08) !important;
+  border-radius: 12px;
+}
+
+/* Dwell box spacing */
+.ws-modal-body .MTB-Read + .MTB-Dwell{
+  margin-top: 16px !important;
+}
+
+.ws-modal-body .MTB-Dwell + .MTB-Read{
+  margin-top: 16px !important;
+}
+
+/* Ensure all popup blocks match shape */
+.ws-modal-body .MTB-Read,
+.ws-modal-body .MTB-Explain,
+.ws-modal-body .MTB-Dwell{
+  border-radius: 12px;
+}
+
+/* =========================================================
+   POPUP OVERRIDES — force Bible (Read) box styling in modal
+   Reason: global #doc-target MTB cards use !important and win.
+   ========================================================= */
+
+/* Bible text box inside modal */
+.ws-modal-body #doc-target .MTB-Read{
+  border-left: 0 !important; /* remove dark left edge */
+  border: 1px solid rgba(30, 90, 168, 0.25) !important;
+  background: rgba(30, 90, 168, 0.08) !important;
+  border-radius: 12px !important;
+
+  /* spacing below Read in popups */
+  margin: 0 0 16px 0 !important;
+}
+
+/* Dwell spacing from Read in modal */
+.ws-modal-body #doc-target .MTB-Dwell{
+  margin: 0 0 16px 0 !important;
+  border-radius: 12px !important;
+}
+
+/* Prevent your “merge consecutive blocks” rules from removing spacing inside modal */
+.ws-modal-body #doc-target .MTB-Read + .MTB-Read,
+.ws-modal-body #doc-target .MTB-Dwell + .MTB-Dwell{
+  margin-top: 16px !important;
+  border-top: 1px solid rgba(0,0,0,0.06) !important;
+}
+/* =========================================================
+   POPUP: Bible text box polish (mtb-scripture-block)
+   Goals:
+   1) Remove dark left edge
+   2) Add a touch more color (softer, cleaner)
+   3) Add space between Bible text box and Dwell boxes
+   Scope: popup only
+   ========================================================= */
+
+/* Bible text box in popup */
+.ws-modal-body .mtb-scripture-block{
+  border-left: 0 !important;                 /* remove dark left bar */
+  border: 1px solid rgba(30, 90, 168, 0.25) !important;
+  background: rgba(30, 90, 168, 0.06) !important;
+  border-radius: 12px !important;
+  padding: 12px 14px !important;
+  margin: 0 0 16px 0 !important;             /* creates space below */
+}
+
+/* Ensure space between Bible text and Dwell blocks in popup */
+.ws-modal-body .mtb-scripture-block + .MTB-Dwell,
+.ws-modal-body .mtb-scripture-block + .MTB-Dwell-Group{
+  margin-top: 16px !important;
+}
+
+/* If Dwell comes first then Bible text */
+.ws-modal-body .MTB-Dwell + .mtb-scripture-block,
+.ws-modal-body .MTB-Dwell-Group + .mtb-scripture-block{
+  margin-top: 16px !important;
+}
+/* =========================================================
+   POPUP: Bible text (MTB-Read) color + spacing
+   Goal: override style.css (#doc-target .MTB-Read { ... !important })
+   ========================================================= */
+
+.ws-modal-body #doc-target .MTB-Read,
+.ws-modal-panel #doc-target .MTB-Read{
+  background: rgba(30, 90, 168, 0.07) !important;  /* gentle blue tint */
+  border: 1px solid rgba(30, 90, 168, 0.22) !important;
+  border-radius: 12px !important;
+}
+
+/* Space between Bible text and Dwell inside popup */
+.ws-modal-body #doc-target .MTB-Read + .MTB-Dwell,
+.ws-modal-panel #doc-target .MTB-Read + .MTB-Dwell{
+  margin-top: 14px !important;
+}
+/* =========================================================
+   Chapter-Explanation pages: MTB-Read color (Bible text box)
+   ========================================================= */
+
+body[data-doc-type="chapter-explanation"] #doc-target .MTB-Read,
+body[data-doc-type="chapter-explanation"] #doc-target h1.MTB-Read{
+  background: rgba(30, 90, 168, 0.08) !important;
+  border: 1px solid rgba(30, 90, 168, 0.22) !important;
+  border-radius: 12px !important;
+}
+/* =========================================================
+   MTB DWELL GROUP (GLOBAL SAFE)
+   Applies to chapter explanation, book intro, and modal docs
+   ========================================================= */
+
+#doc-target .MTB-Dwell-Group,
+main.doc-shell .MTB-Dwell-Group,
+#book-modal .MTB-Dwell-Group{
+  background: #f4f8f3;
+  border: 1px solid #cddfca;
+  border-left: 6px solid #2e6b2e;
+  border-radius: 14px;
+  padding: 16px 18px;
+  margin: 18px 0;
+}
+
+/* Remove spacing between grouped dwell blocks */
+#doc-target .MTB-Dwell-Group .MTB-Dwell,
+#doc-target .MTB-Dwell-Group p.MTB-Dwell,
+#doc-target .MTB-Dwell-Group div.MTB-Dwell,
+#doc-target .MTB-Dwell-Group ul,
+#doc-target .MTB-Dwell-Group ol,
+main.doc-shell .MTB-Dwell-Group .MTB-Dwell,
+main.doc-shell .MTB-Dwell-Group p.MTB-Dwell,
+main.doc-shell .MTB-Dwell-Group div.MTB-Dwell,
+main.doc-shell .MTB-Dwell-Group ul,
+main.doc-shell .MTB-Dwell-Group ol,
+#book-modal .MTB-Dwell-Group .MTB-Dwell,
+#book-modal .MTB-Dwell-Group p.MTB-Dwell,
+#book-modal .MTB-Dwell-Group div.MTB-Dwell,
+#book-modal .MTB-Dwell-Group ul,
+#book-modal .MTB-Dwell-Group ol{
+  margin: 0 0 10px 0;
+}
+
+/* Remove bottom margin on last element inside group */
+#doc-target .MTB-Dwell-Group > *:last-child,
+main.doc-shell .MTB-Dwell-Group > *:last-child,
+#book-modal .MTB-Dwell-Group > *:last-child{
+  margin-bottom: 0;
+}
+
+body.loc-page .loc-seq-left{
+  flex: 0 0 auto;
+}
+
+body.loc-page .loc-seq-center{
+  flex: 1 1 auto;
+  display: flex;
+  justify-content: center;   /* centers the title block */
+}
+
+body.loc-page .loc-seq-right{
+  flex: 0 0 auto;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+/* Put Scripture Harmony left of the arrows */
+body.loc-page #loc-tab-scripture{ order: 1; }
+body.loc-page #loc-prev{ order: 2; }
+body.loc-page #loc-next{ order: 3; }
+
+
+/* =========================================================
+   LOC HEADER BUTTONS
+   Standardized to match Chapter Scripture behavior
+   ========================================================= */
+
+body.loc-page #loc-back,
+body.loc-page #loc-prev,
+body.loc-page #loc-next{
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  padding: 14px 18px;
+  border-radius: 10px;
+
+background: rgba(226, 232, 240, 0.95);
+  color: #222;
+  font-weight: 600;
+
+  border: 1px solid rgba(15, 23, 42, 0.18);
+  box-shadow: 0 10px 22px rgba(0,0,0,0.12);
+
+  text-decoration: none;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+/* Slightly tighter arrows */
+body.loc-page #loc-prev,
+body.loc-page #loc-next{
+  padding: 10px 12px;
+  min-width: 44px;
+}
+
+/* FULL BLUE hover (matches Chapter Scripture active blue) */
+body.loc-page #loc-back:hover,
+body.loc-page #loc-prev:hover,
+body.loc-page #loc-next:hover{
+  background: #3b6fb6 !important;
+  border-color: #3b6fb6 !important;
+  color: #ffffff !important;
+}
+
+/* Active press */
+body.loc-page #loc-back:active,
+body.loc-page #loc-prev:active,
+body.loc-page #loc-next:active{
+  background: #2f5f9f !important;
+  border-color: #2f5f9f !important;
+  color: #ffffff !important;
+}
+
+/* Disabled arrows */
+body.loc-page #loc-prev:disabled,
+body.loc-page #loc-next:disabled{
+  opacity: 0.45;
+  cursor: default;
+}
+/* =========================================================
+   LOC SEQUENCE TITLE — Slightly Larger
+   ========================================================= */
+
+body.loc-page #loc-sequence-title{
+  font-size: 24px;
+  font-weight: 600;
+  line-height: 1.25;
+}
+/* Hide Scripture Harmony button in the LOC sequence header */
+
+body.loc-page .loc-seq-header .loc-seq-right > button:first-child{
+  display: none !important;
+}
+/* Harmony table — evenly distributed columns */
+body.loc-page .mtb-loc-harmony-table{
+  width: 100%;
+  table-layout: fixed;
+}
+
+body.loc-page .mtb-loc-harmony-table th,
+body.loc-page .mtb-loc-harmony-table td{
+  padding: 20px 24px;
+}
+/* =========================================================
+   MTB DOC WRAPPER — Neutral (never becomes a card)
+   ========================================================= */
+
+#doc-target .mtb-doc--read,
+main.doc-shell .mtb-doc--read,
+#book-modal .mtb-doc--read{
+  background: transparent !important;
+  border: 0 !important;
+  box-shadow: none !important;
+  border-radius: 0 !important;
+  padding: 0 !important;
+  margin: 0 !important;
+  font-weight: inherit !important;
+}
+
+/* =========================================================
+   MTB-READ BLOCK (actual Bible/read box styling)
+   ========================================================= */
+
+#doc-target .MTB-Read,
+main.doc-shell .MTB-Read,
+#book-modal .MTB-Read{
+  display: block;
+  background: rgba(30, 90, 168, 0.06);
+  border: 1px solid rgba(30, 90, 168, 0.22);
+  border-left: 0;
+  border-radius: 14px;
+  padding: 14px 16px;
+  margin: 0 0 14px 0;
+  line-height: 1.55;
+  font-weight: 650;
+}
+/* =========================================================
+   GLOBAL CONTENT STYLE — MTB Blue Bold
+   Word style may emit as:
+   - MTB-Text-Highlight
+   - MTB-Blue-Bold
+   - mtb-blue-bold
+   This makes it work everywhere.
+   ========================================================= */
+
+.MTB-Text-Highlight,
+.MTB-Blue-Bold,
+.mtb-blue-bold{
+  color: #1e5bd8 !important;
+  font-weight: 700 !important;
+}
+/* =========================================================
+   CLEAN MTB DWELL GROUP (stable version)
+   ========================================================= */
+
+#doc-target .MTB-Dwell-Group,
+main.doc-shell .MTB-Dwell-Group,
+#book-modal .MTB-Dwell-Group{
+  background: #f4f8f3;
+  border: 1px solid #cddfca;
+  border-left: 6px solid #2e6b2e;
+  border-radius: 14px;
+  padding: 16px 18px;
+  margin: 18px 0;
+}
+
+/* Lists inside dwell */
+#doc-target .MTB-Dwell-Group ul,
+main.doc-shell .MTB-Dwell-Group ul,
+#book-modal .MTB-Dwell-Group ul{
+  margin: 6px 0 6px 22px;
+  padding: 0;
+}
+
+#doc-target .MTB-Dwell-Group li,
+main.doc-shell .MTB-Dwell-Group li,
+#book-modal .MTB-Dwell-Group li{
+  margin: 2px 0;
+  padding: 0;
+}
+
+/* Remove paragraph margins inside list items */
+#doc-target .MTB-Dwell-Group li > p,
+main.doc-shell .MTB-Dwell-Group li > p,
+#book-modal .MTB-Dwell-Group li > p{
+  margin: 0;
+}
+/* =========================================================
+   FIX: Split boxes inside MTB-Dwell-Group
+   Cause: bullet paragraphs still have class .MTB-Dwell, so each
+          bullet becomes its own card.
+   Solution: neutralize .MTB-Dwell styling INSIDE the group only.
+   ========================================================= */
+
+#doc-target .MTB-Dwell-Group .MTB-Dwell,
+main.doc-shell .MTB-Dwell-Group .MTB-Dwell,
+#book-modal .MTB-Dwell-Group .MTB-Dwell,
+#doc-target .MTB-Dwell-Group p.MTB-Dwell,
+main.doc-shell .MTB-Dwell-Group p.MTB-Dwell,
+#book-modal .MTB-Dwell-Group p.MTB-Dwell,
+#doc-target .MTB-Dwell-Group div.MTB-Dwell,
+main.doc-shell .MTB-Dwell-Group div.MTB-Dwell,
+#book-modal .MTB-Dwell-Group div.MTB-Dwell{
+  background: transparent !important;
+  border: 0 !important;
+  border-left: 0 !important;
+  box-shadow: none !important;
+  border-radius: 0 !important;
+  padding: 0 !important;
+  margin: 0 !important;
+}
+/* =========================================================
+   Remove thick left border from MTB-Dwell-Group
+   ========================================================= */
+
+#doc-target .MTB-Dwell-Group,
+main.doc-shell .MTB-Dwell-Group,
+#book-modal .MTB-Dwell-Group{
+  border-left: 0 !important;
+}
+
+
+/* ---------- C) Chapter Explanation ONLY: remove the inner wrapper panel box ---------- */
+/* This targets the doc-level wrapper that is currently acting like a second card */
+body[data-doc-type="chapter-explanation"] #doc-target .mtb-doc--read{
+  background: transparent !important;
+  border: 0 !important;
+  box-shadow: none !important;
+  border-radius: 0 !important;
+  padding: 0 !important;
+  margin: 0 !important;
+}
+
+/* =========================================================
+   MTB CHAPTER PAGES — SINGLE SOURCE OF TRUTH (RESET)
+   Applies to: book.html chapter tabs (scripture/orientation/explanation/insights/eg/resources)
+   ========================================================= */
+
+/* A) Base chapter page canvas */
+body[data-book][data-chapter]{
+  background: #eef2f6;
+}
+
+/* B) Overall chapter panel width (non-scripture tabs) */
+body[data-book][data-chapter] main.doc-shell{
+  max-width: 1500px;
+  margin-left: auto;
+  margin-right: auto;
+  padding-left: 22px;
+  padding-right: 22px;
+}
+
+/* C) Outer “paper” card */
+body[data-book][data-chapter] .mtb-paper{
+  background: #ffffff;
+  border: 1px solid var(--mtb-border);
+  border-radius: 18px;
+  box-shadow: 0 2px 12px rgba(0,0,0,0.06);
+  overflow: hidden; /* prevents odd top bands */
+}
+
+/* D) Header band (title + tabs sit on this blue-grey band) */
+body[data-book][data-chapter] .doc-header{
+  background: #eef2f6;
+  padding: 16px 22px 12px;
+}
+
+/* E) Tabs area should match the header band (no white strip) */
+body[data-book][data-chapter] #tabs-shell,
+body[data-book][data-chapter] .tabs-shell{
+  background: #eef2f6;
+  padding: 0 22px 14px;
+}
+
+/* F) Content area inside the outer card */
+body[data-book][data-chapter] .doc-content,
+body[data-book][data-chapter] #doc-target{
+  background: transparent;
+}
+
+/* G) Inner white “document” card for ALL NON-SCRIPTURE chapter tabs */
+body[data-book][data-chapter]:not([data-doc-type="chapter-scripture"]) #doc-target{
+  max-width: 1350px;
+  margin: 0 auto 22px;
+  background: #ffffff;
+  border: 1px solid var(--mtb-border);
+  border-radius: 14px;
+  padding: 28px 32px;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.06);
+}
+
+/* H) Prevent “box in a box” from injected mtb-doc wrappers */
+body[data-book][data-chapter]:not([data-doc-type="chapter-scripture"]) #doc-target .mtb-doc,
+body[data-book][data-chapter]:not([data-doc-type="chapter-scripture"]) #doc-target [class*="mtb-doc--"]{
+  background: transparent !important;
+  border: 0 !important;
+  box-shadow: none !important;
+  border-radius: 0 !important;
+  padding: 0 !important;
+  margin: 0 !important;
+}
+
+/* I) Chapter Scripture: make the whole page wider AND let the table span */
+body[data-book][data-chapter][data-doc-type="chapter-scripture"] main.doc-shell{
+  max-width: 1650px;
+  margin-left: auto;
+  margin-right: auto;
+  padding-left: 22px;
+  padding-right: 22px;
+}
+
+  
+body[data-book][data-chapter][data-doc-type="chapter-scripture"] #doc-target{
+  max-width: none !important;
+  margin: 0 0 22px;
+  background: #ffffff;
+  border: 1px solid var(--mtb-border);
+  border-radius: 14px;
+  padding: 18px 18px;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.06);
+  overflow-x: auto; /* protects on smaller screens */
+}
+body[data-book][data-chapter][data-doc-type="chapter-scripture"] #doc-target table{
+  width: 100%;
+  max-width: none !important;
+}
+body[data-book][data-chapter][data-doc-type="chapter-scripture"] main.doc-shell{
+  max-width: 1700px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+body[data-book][data-chapter][data-doc-type="chapter-scripture"] .mtb-paper{
+  max-width: none;
+}
+
+body[data-doc-type="chapter-scripture"] #doc-target .mtb-chapter-scripture-wrap{
+  max-width: none !important;
+  width: 100% !important;
+  margin: 0 !important;
+}
+
+body[data-doc-type="chapter-scripture"] #doc-target table{
+  width: 100% !important;
+  max-width: none !important;
+  table-layout: fixed;
+}
+
+/* Chapter Scripture: allow the whole panel to go wide */
+body[data-doc-type="chapter-scripture"] main.doc-shell{
+  max-width: 1650px !important;
+  margin-left: auto !important;
+  margin-right: auto !important;
+}
+
+body[data-doc-type="chapter-scripture"] .mtb-paper{
+  max-width: none !important;
+}
+body[data-doc-type="chapter-scripture"] #doc-target{
+  max-width: none !important;
+}
+/* J) Prev/Next arrows: consistent placement (not overlapping tabs) */
+body[data-book][data-chapter] .chapter-nav{
+  right: 200px; /* smaller = farther RIGHT, larger = farther LEFT */
+}
+/* =========================================================
+   MTB CHAPTER SYSTEM — CLEAN RESET (FINAL)
+   ========================================================= */
+
+/* 1) Page background */
+body[data-book][data-chapter]{
+  background: #eef2f6;
+}
+
+/* 2) Main centered shell */
+body[data-book][data-chapter] .doc-shell{
+  max-width: 1600px;
+  margin: 0 auto;
+}
+
+/* 3) Outer paper card */
+body[data-book][data-chapter] .mtb-paper{
+  background: #ffffff;
+  border: 1px solid var(--mtb-border);
+  border-radius: 18px;
+  box-shadow: 0 2px 12px rgba(0,0,0,0.06);
+  overflow: hidden;
+}
+
+/* 4) Header + tabs sit on blue-grey band */
+body[data-book][data-chapter] .doc-header,
+body[data-book][data-chapter] #tabs-shell{
+  background: #eef2f6;
+}
+
+/* 5) Content container */
+body[data-book][data-chapter] #doc-target{
+  margin: 22px auto;
+  max-width: 1350px;
+  background: #ffffff;
+  border: 1px solid var(--mtb-border);
+  border-radius: 14px;
+  padding: 28px 32px;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.06);
+}
+
+/* 6) Remove injected inner wrappers */
+body[data-book][data-chapter] #doc-target .mtb-doc,
+body[data-book][data-chapter] #doc-target [class*="mtb-doc--"]{
+  background: transparent;
+  border: 0;
+  box-shadow: none;
+  border-radius: 0;
+  padding: 0;
+  margin: 0;
+}
+
+/* 7) Chapter Scripture wider */
+body[data-doc-type="chapter-scripture"] .doc-shell{
+  max-width: 1750px;
+}
+body[data-doc-type="chapter-scripture"] #doc-target{
+  max-width: none;
+  padding: 18px;
+}
+body[data-doc-type="chapter-scripture"] #doc-target table{
+  width: 100%;
+}
+/* =========================================================
+   MTB Chapter Layout – FIX PACK (paste LAST)
+   Goal:
+   - Consistent page background (blue-grey)
+   - White “document” card for content
+   - No double-box on Chapter Explanation
+   - Scripture table fills available width and stays centered
+   - Prev/Next arrows sit in a consistent spot
+   ========================================================= */
+
+/* 1) Consistent outer page background */
+body[data-book][data-chapter]{
+  background: #eef2f6 !important; /* one source of truth */
+}
+
+/* 2) Let the chapter shell breathe wider */
+body[data-book][data-chapter] .doc-shell{
+  max-width: 1600px !important;
+  margin-left: auto !important;
+  margin-right: auto !important;
+}
+
+/* 3) IMPORTANT: #doc-target is a layout container, NOT a card (prevents “page inside page”) */
+body[data-book][data-chapter] #doc-target{
+  max-width: none !important;
+  margin: 18px auto 22px !important;
+  padding: 0 !important;
+  background: transparent !important;
+  border: 0 !important;
+  border-radius: 0 !important;
+  box-shadow: none !important;
+}
+
+/* 4) Make the injected document a single white card (Orientation / Insights / EG Culture / Resources) */
+body[data-doc-type="chapter-orientation"] #doc-target section.mtb-doc,
+body[data-doc-type="chapter-insights"] #doc-target section.mtb-doc,
+body[data-doc-type="chapter-eg-culture"] #doc-target section.mtb-doc,
+body[data-doc-type="chapter-resources"] #doc-target section.mtb-doc{
+  max-width: 1250px !important;   /* “a bit wider” but not huge */
+  margin: 0 auto !important;
+  background: #ffffff !important;
+  border: 1px solid var(--mtb-border) !important;
+  border-radius: 14px !important;
+  padding: 28px 32px !important;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.06) !important;
+}
+
+/* 5) Chapter Explanation: same single-card rule (NO outer card on #doc-target) */
+body[data-doc-type="chapter-explanation"] #doc-target section.mtb-doc{
+  max-width: 1400px !important;
+  margin: 0 auto !important;
+  background: #ffffff !important;
+  border: 1px solid var(--mtb-border) !important;
+  border-radius: 14px !important;
+  padding: 28px 32px !important;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.06) !important;
+}
+
+/* If any inner “wrap” is forcing the content narrow, let it expand */
+body[data-doc-type="chapter-explanation"] #doc-target .mtb-doc,
+body[data-doc-type="chapter-explanation"] #doc-target .doc-content,
+body[data-doc-type="chapter-explanation"] #doc-target section.mtb-doc *{
+  box-sizing: border-box;
+}
+
+/* 6) Chapter Scripture: #doc-target IS the card, and the table fills it */
+body[data-doc-type="chapter-scripture"] .doc-shell{
+  max-width: 1750px !important;
+}
+
+body[data-doc-type="chapter-scripture"] #doc-target{
+  background: #ffffff !important;
+  border: 1px solid var(--mtb-border) !important;
+  border-radius: 14px !important;
+  padding: 18px 18px !important;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.06) !important;
+  overflow-x: auto !important;
+}
+
+body[data-doc-type="chapter-scripture"] #doc-target .mtb-chapter-scripture-wrap{
+  width: 100% !important;
+  max-width: none !important;
+  margin: 0 auto !important;
+  display: block !important;
+}
+
+body[data-doc-type="chapter-scripture"] #doc-target table{
+  width: 100% !important;
+  max-width: none !important;
+  table-layout: auto !important;
+}
+
+/* 7) Prev/Next arrows: consistent positioning and room */
+body[data-book][data-chapter] .tabs-shell{
+  position: relative !important;
+}
+
+body[data-book][data-chapter] .chapter-nav{
+  position: absolute !important;
+  right: 90px !important;  /* move LEFT by increasing this */
+  top: 18px !important;
+}
+
+body[data-book][data-chapter] #tabs{
+  padding-right: 170px !important; /* keeps arrows from sitting on the last tab */
+}
+
+
+/* =========================================================
+   MTB CHAPTER PAGES — SINGLE SOURCE OF TRUTH (FIXPACK v2)
+   Paste LAST. This block intentionally overrides earlier rules.
+   Goals:
+   - Keep outer “band” blue-grey, content card white
+   - Orientation/Insights/EG/Resources: centered white card
+   - Explanation: centered white card (no “page inside page”)
+   - Explanation: tables never overflow the card
+   - Scripture: wide card + table fills width
+   - Prev/Next: consistent position, no overlap
+   ========================================================= */
+
+/* 0) One background token for all chapter pages */
+body[data-book][data-chapter]{
+  background: var(--mtb-bg) !important;
+}
+
+/* 1) Chapter shell width */
+body[data-book][data-chapter] main.doc-shell,
+body[data-book][data-chapter] .doc-shell{
+  max-width: 1650px !important;
+  margin-left: auto !important;
+  margin-right: auto !important;
+  padding-left: 22px !important;
+  padding-right: 22px !important;
+}
+
+/* 2) Outer paper card stays white */
+body[data-book][data-chapter] .mtb-paper{
+  background: var(--mtb-paper) !important;
+  border: 1px solid var(--mtb-border) !important;
+  border-radius: 18px !important;
+  box-shadow: 0 2px 12px rgba(0,0,0,0.06) !important;
+  overflow: hidden !important;
+}
+
+/* 3) Header + tabs band uses the SAME blue-grey everywhere */
+body[data-book][data-chapter] .doc-header,
+body[data-book][data-chapter] #tabs-shell,
+body[data-book][data-chapter] .tabs-shell{
+  background: var(--mtb-bg) !important;
+}
+
+/* 4) IMPORTANT: #doc-target is a layout container, NOT a card (prevents double-box) */
+body[data-book][data-chapter] #doc-target{
+  max-width: none !important;
+  margin: 18px 0 22px 0 !important;
+  padding: 0 !important;
+  background: transparent !important;
+  border: 0 !important;
+  border-radius: 0 !important;
+  box-shadow: none !important;
+}
+
+/* 5) Standard “document card” for non-scripture chapter tabs */
+body[data-book][data-chapter][data-doc-type="chapter-orientation"] #doc-target section.mtb-doc,
+body[data-book][data-chapter][data-doc-type="chapter-insights"]    #doc-target section.mtb-doc,
+body[data-book][data-chapter][data-doc-type="chapter-eg-culture"]  #doc-target section.mtb-doc,
+body[data-book][data-chapter][data-doc-type="chapter-resources"]   #doc-target section.mtb-doc{
+  width: 100% !important;
+  max-width: 1400px !important;      /* “a bit wider” but still readable */
+  margin: 0 auto !important;
+  background: #ffffff !important;
+  border: 1px solid var(--mtb-border) !important;
+  border-radius: 14px !important;
+  padding: 28px 32px !important;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.06) !important;
+}
+
+/* 6) Chapter Explanation: same single-card rule (no extra inner wrappers) */
+body[data-book][data-chapter][data-doc-type="chapter-explanation"] #doc-target section.mtb-doc{
+  width: 100% !important;
+  max-width: 1400px !important;
+  margin: 0 auto !important;
+  background: #ffffff !important;
+  border: 1px solid var(--mtb-border) !important;
+  border-radius: 14px !important;
+  padding: 28px 32px !important;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.06) !important;
+}
+
+/* 6a) Explanation: prevent any injected mtb-doc wrappers from becoming a second card */
+body[data-book][data-chapter][data-doc-type="chapter-explanation"] #doc-target section.mtb-doc .mtb-doc,
+body[data-book][data-chapter][data-doc-type="chapter-explanation"] #doc-target section.mtb-doc [class*="mtb-doc--"]{
+  background: transparent !important;
+  border: 0 !important;
+  box-shadow: none !important;
+  border-radius: 0 !important;
+  padding: 0 !important;
+  margin: 0 !important;
+}
+
+/* 6b) Explanation: tables should fit the card (no overflow) */
+body[data-book][data-chapter][data-doc-type="chapter-explanation"] #doc-target section.mtb-doc table{
+  width: 100% !important;
+  max-width: 100% !important;
+  table-layout: fixed !important;        /* forces wrapping instead of overflow */
+}
+body[data-book][data-chapter][data-doc-type="chapter-explanation"] #doc-target section.mtb-doc th,
+body[data-book][data-chapter][data-doc-type="chapter-explanation"] #doc-target section.mtb-doc td{
+  word-wrap: break-word !important;
+  overflow-wrap: anywhere !important;
+}
+body[data-book][data-chapter][data-doc-type="chapter-explanation"] #doc-target section.mtb-doc .mtb-chapter-scripture-wrap,
+body[data-book][data-chapter][data-doc-type="chapter-explanation"] #doc-target section.mtb-doc .mtb-chapter-scripture{
+  max-width: 100% !important;
+}
+
+/* 7) Chapter Scripture: wide card + table fills width and stays centered */
+body[data-book][data-chapter][data-doc-type="chapter-scripture"] main.doc-shell,
+body[data-book][data-chapter][data-doc-type="chapter-scripture"] .doc-shell{
+  max-width: 1750px !important;
+}
+
+body[data-book][data-chapter][data-doc-type="chapter-scripture"] #doc-target{
+  background: #ffffff !important;
+  border: 1px solid var(--mtb-border) !important;
+  border-radius: 14px !important;
+  padding: 18px 18px !important;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.06) !important;
+  overflow-x: auto !important;
+}
+
+body[data-book][data-chapter][data-doc-type="chapter-scripture"] #doc-target .mtb-chapter-scripture-wrap{
+  width: 100% !important;
+  max-width: none !important;
+  margin: 0 auto !important;
+  display: block !important;
+}
+
+body[data-book][data-chapter][data-doc-type="chapter-scripture"] #doc-target table{
+  width: 100% !important;
+  max-width: none !important;
+  table-layout: auto !important;
+}
+
+/* 8) Prev/Next arrows: consistent position, never overlap last tab */
+body[data-book][data-chapter] #tabs-shell,
+body[data-book][data-chapter] .tabs-shell{
+  position: relative !important;
+}
+
+body[data-book][data-chapter] .chapter-nav{
+  position: absolute !important;
+  right: 90px !important;   /* increase to move LEFT, decrease to move RIGHT */
+  top: 14px !important;
+  z-index: 20 !important;
+}
+
+body[data-book][data-chapter] #tabs{
+  padding-right: 180px !important;
+}
+/* =========================================================
+   FINAL CHAPTER CARD RULES — SINGLE SOURCE OF TRUTH
+   ========================================================= */
+
+/* 1) #doc-target is NEVER a card */
+body[data-book][data-chapter] #doc-target{
+  background: transparent !important;
+  border: 0 !important;
+  box-shadow: none !important;
+  padding: 0 !important;
+}
+
+/* 2) All MTB docs become the single white card */
+body[data-book][data-chapter] #doc-target .mtb-doc{
+  background: #ffffff !important;
+  border: 1px solid var(--mtb-border) !important;
+  border-radius: 14px !important;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.06) !important;
+  padding: 26px 30px !important;
+  margin: 0 auto 26px !important;
+  max-width: 1200px !important;
+}
+
+/* 3) Chapter Explanation slightly wider */
+body[data-doc-type="chapter-explanation"] #doc-target .mtb-doc{
+  max-width: 1350px !important;
+}
+
+/* 4) Tables inside explanation must never overflow */
+body[data-doc-type="chapter-explanation"] #doc-target table{
+  width: 100% !important;
+  max-width: 100% !important;
+  table-layout: fixed !important;
+}
+body[data-doc-type="chapter-explanation"] #doc-target th,
+body[data-doc-type="chapter-explanation"] #doc-target td{
+  word-break: break-word !important;
+}
+
+/* 5) Chapter Scripture is different — #doc-target IS the card */
+body[data-doc-type="chapter-scripture"] #doc-target{
+  background: #ffffff !important;
+  border: 1px solid var(--mtb-border) !important;
+  border-radius: 14px !important;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.06) !important;
+  padding: 20px !important;
+  margin: 0 auto 26px !important;
+  max-width: 1500px !important;
+}
+
+body[data-doc-type="chapter-scripture"] #doc-target .mtb-doc{
+  background: transparent !important;
+  border: 0 !important;
+  box-shadow: none !important;
+  padding: 0 !important;
+  margin: 0 !important;
+}
+
+body[data-doc-type="chapter-scripture"] #doc-target table{
+  width: 100% !important;
+  max-width: none !important;
+}
+/* =========================================================
+   MTB CHAPTER PAGES: single-surface layout (NO nested cards)
+   Fixes:
+   - Removes "page inside a page" on chapter explanation
+   - Keeps Orientation/Insights/EG Culture centered + consistent
+   - Forces Chapter Scripture table to actually use the width
+   ========================================================= */
+
+:root{
+  --mtb-chapter-bg: #eef3f7;   /* blue-grey page */
+  --mtb-doc-bg: #ffffff;       /* white document */
+  --mtb-doc-maxw: 1180px;      /* normal doc width */
+  --mtb-doc-maxw-wide: 1600px; /* scripture width */
+}
+
+/* 1) Make the OUTER shell transparent on chapter pages (kills the outer "page") */
+body[data-book][data-chapter] .mtb-paper{
+  background: transparent !important;
+  border: 0 !important;
+  box-shadow: none !important;
+}
+
+/* 2) Set consistent chapter page background */
+body[data-book][data-chapter]{
+  background: var(--mtb-chapter-bg) !important;
+}
+
+/* 3) #doc-target should NOT be a card on chapter pages (prevents nested card look) */
+body[data-book][data-chapter] #doc-target{
+  background: transparent !important;
+  border: 0 !important;
+  box-shadow: none !important;
+  padding: 0 !important;
+  margin: 0 auto 24px !important;
+  max-width: none !important;
+}
+
+/* 4) The injected mtb-doc section IS the single white document surface */
+body[data-book][data-chapter] #doc-target section.mtb-doc{
+  background: var(--mtb-doc-bg) !important;
+  border: 1px solid var(--mtb-border) !important;
+  border-radius: 14px !important;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.06) !important;
+  padding: 22px 22px !important;
+  margin: 0 auto !important;
+  max-width: var(--mtb-doc-maxw) !important;
+}
+
+/* 5) Chapter Scripture gets the wide document surface */
+body[data-doc-type="chapter-scripture"] #doc-target section.mtb-doc{
+  max-width: var(--mtb-doc-maxw-wide) !important;
+}
+
+/* 6) Force scripture wrapper + table to fill the wide surface (this is the missing piece) */
+body[data-doc-type="chapter-scripture"] #doc-target .mtb-chapter-scripture-wrap{
+  width: 100% !important;
+  max-width: none !important;
+  margin: 0 !important;
+}
+
+body[data-doc-type="chapter-scripture"] #doc-target table,
+body[data-doc-type="chapter-scripture"] #doc-target table.mtb-scripture-table,
+body[data-doc-type="chapter-scripture"] #doc-target table[data-mode]{
+  width: 100% !important;
+  max-width: none !important;
+  table-layout: auto !important;
+}
+
+/* 7) Make the header/tabs area match the same blue-grey */
+body[data-book][data-chapter] .doc-header,
+body[data-book][data-chapter] .tabs-shell{
+  background: var(--mtb-chapter-bg) !important;
+}
+
+/* 8) Keep the chapter nav arrows in a sane position (not hugging the edge) */
+body[data-book][data-chapter] .chapter-nav{
+  right: 32px !important;
+}
+/* MTB-LIVE-TEST-12345 */

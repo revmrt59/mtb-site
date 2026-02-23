@@ -714,159 +714,658 @@ main.doc-shell .MTB-Dwell-Group,
 }
 
 /* =========================================================
-   Chapter Scripture (single source of truth)
-   Hook: scripture-controls.js adds body.mtb-has-scripture-controls
-   Goals:
-   1) Make the panel wider
-   2) Keep the table interior white
-   3) Single grid lines (no double borders)
-   4) Table fills available width
+   MTB Chapter Tabs — SINGLE SOURCE OF TRUTH (FINAL)
+   Put this at the very bottom of mtb-ui.css
    ========================================================= */
-   /* =========================================================
-   Chapter Scripture — SINGLE CLEAN RULE
-   Hook: scripture-controls.js adds body.mtb-has-scripture-controls
-   Actual DOM:
-   main.doc-shell > section#doc-layout.doc-layout > article.doc-main > #doc-target.doc-content
-   ========================================================= */
+
+/* ---------- A) Default chapter tabs (Orientation / Insights / EG / Resources / Explanation) ---------- */
+body:not(.mtb-has-scripture-controls){
+  background: #eef2f6;
+}
+
+/* Center the whole panel */
+body:not(.mtb-has-scripture-controls) main.doc-shell{
+  max-width: 1500px;          /* adjust once here */
+  margin-left: auto;
+  margin-right: auto;
+}
+
+/* Outer panel stays white */
+body:not(.mtb-has-scripture-controls) .mtb-paper{
+  background: #ffffff;
+  border-radius: 18px;
+  box-shadow: 0 2px 12px rgba(0,0,0,0.06);
+}
+
+/* Header band (where the chapter title + tabs sit) stays blue-grey */
+body:not(.mtb-has-scripture-controls) .doc-header{
+  background: #eef2f6;
+  border-top-left-radius: 18px;
+  border-top-right-radius: 18px;
+}
+
+/* Content area should NOT be a second card */
+body:not(.mtb-has-scripture-controls) #doc-target{
+  background: transparent;
+  border: 0;
+  box-shadow: none;
+  max-width: none;
+  padding: 0;
+}
 
 /* =========================================================
-   Chapter Scripture — SINGLE centered layout
-   Hook: scripture-controls.js adds body.mtb-has-scripture-controls
+   Chapter tabs: single-card layout
+   - #doc-target becomes a neutral container (no card)
+   - injected .mtb-doc becomes the one consistent white card
    ========================================================= */
 
-body.mtb-has-scripture-controls #doc-target .mtb-chapter-scripture-wrap{
+/* Make #doc-target a neutral container on ALL chapter tabs */
+body[data-book][data-chapter] #doc-target{
+  background: transparent !important;
+  border: 0 !important;
+  box-shadow: none !important;
+  border-radius: 0 !important;
+  padding: 0 !important;
+  margin: 0 !important;
+}
+
+/* Give the injected MTB document the card styling (orientation/insights/culture/explanation/resources) */
+body[data-book][data-chapter]:not(.mtb-has-scripture-controls) #doc-target > .mtb-doc,
+body[data-book][data-chapter]:not(.mtb-has-scripture-controls) #doc-target section.mtb-doc{
+  background: #ffffff !important;
+  border: 1px solid var(--mtb-border) !important;
+  border-radius: 14px !important;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.06) !important;
+  padding: 22px 22px !important;
+  margin: 0 auto 22px auto !important;
+  max-width: var(--mtb-maxw-wide, 1200px) !important;
+}
+
+/* Keep chapter-explanation content comfortably wide, but inside the card */
+body[data-book][data-chapter][data-doc-type="chapter-explanation"] #doc-target section.mtb-doc{
+  max-width: var(--mtb-maxw-wide, 1200px) !important;
+}
+/* IMPORTANT: do NOT touch .MTB-Read (that is the verse read callout box) */
+/* =========================================================
+   MTB FIX PACK (cards + explanation + scripture width)
+   Paste at BOTTOM of mtb-ui.css
+   ========================================================= */
+
+/* 1) One consistent “blue-gray” site chrome */
+:root{
+  --mtb-chrome: #eef3f7;   /* page background */
+  --mtb-surface: #ffffff;  /* card/background surfaces */
+  --mtb-border: #d7dee7;
+}
+
+body{
+  background: var(--mtb-chrome);
+}
+
+/* 2) Make the injected doc sections render as WHITE cards again
+      (Orientation / Insights / EG Culture / Resources) */
+#doc-target section.mtb-doc{
+  background: var(--mtb-surface) !important;
+  border: 1px solid var(--mtb-border) !important;
+  border-radius: 14px !important;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.06) !important;
+}
+
+/* Keep those pages centered and a touch wider */
+body[data-doc-type="chapter-orientation"] #doc-target,
+body[data-doc-type="chapter-insights"] #doc-target,
+body[data-doc-type="chapter-eg-culture"] #doc-target,
+body[data-doc-type="chapter-resources"] #doc-target{
+  max-width: 1200px !important;
+  margin: 0 auto 22px !important;
+  padding: 0 22px 22px !important;
+  background: transparent !important;
+  border: 0 !important;
+  box-shadow: none !important;
+}
+
+/* 3) Chapter Explanation: remove the “outer page / inner page” look.
+      We keep the CONTENT, but remove the extra card container. */
+body[data-doc-type="chapter-explanation"] #doc-target{
+  max-width: 1200px !important;
+  margin: 0 auto 22px !important;
+  padding: 0 22px 22px !important;
+  background: transparent !important;
+  border: 0 !important;
+  box-shadow: none !important;
+}
+
+/* Kill the card styling ONLY for chapter explanation wrapper */
+body[data-doc-type="chapter-explanation"] #doc-target section.mtb-doc,
+body[data-doc-type="chapter-explanation"] #doc-target .mtb-doc--chapter-explanation{
+  background: transparent !important;
+  border: 0 !important;
+  box-shadow: none !important;
+  border-radius: 0 !important;
+  padding: 0 !important;
+  margin: 0 !important;
+}
+
+
+
+
+
+
+
+
+/* =========================================================
+   MTB CHAPTER LAYOUT FIX (matches current DOM)
+   ========================================================= */
+
+/* Site chrome */
+:root{
+  --mtb-chrome: #eef3f7;
+  --mtb-card: #ffffff;
+  --mtb-border: #d7dee7;
+}
+
+/* Page background */
+body[data-book][data-chapter]{
+  background: var(--mtb-chrome);
+}
+
+/* Remove card styling from outer containers */
+main.doc-shell,
+#doc-layout,
+article.doc-main,
+#doc-target{
+  background: transparent !important;
+  border: 0 !important;
+  box-shadow: none !important;
+}
+
+/* The injected document becomes the ONLY white card */
+#doc-target > section.mtb-doc{
+  background: var(--mtb-card) !important;
+  border: 1px solid var(--mtb-border) !important;
+  border-radius: 14px !important;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.06) !important;
+  padding: 22px !important;
+  margin: 0 auto 22px !important;
+  max-width: 1200px !important;
+}
+
+/* Scripture table gets wider automatically */
+body.mtb-has-scripture-controls #doc-target > section.mtb-doc{
+  max-width: min(1600px, calc(100vw - 80px)) !important;
+}
+
+/* Scripture table fills width */
+/* =========================================================
+   Chapter Explanation tweaks
+   ========================================================= */
+
+/* 1) Ensure the white document card is centered */
+#doc-target{
+  width: 100% !important;
+  display: block !important;
+}
+
+#doc-target > section.mtb-doc{
+  margin-left: auto !important;
+  margin-right: auto !important;
+}
+
+
+
+/* 3) Hide Read / Understand / Dwell buttons (for now) */
+#ce-modebar{
+  display: none !important;
+}
+/* =========================================================
+   MTB FIXPACK: Chapter pages alignment + explanation card
+   Add at very bottom of mtb-ui.css so it overrides everything
+   ========================================================= */
+
+/* 1) Pull the whole chapter header/tabs area in from the far edges
+      (this also moves the prev/next arrow buttons left because they live in this row) */
+main.doc-shell.wide .doc-header,
+main.doc-shell.wide .tabs-shell,
+main.doc-shell.wide #doc-layout {
+  max-width: 1400px;     /* adjust (e.g., 1320–1500) if you want */
+  margin-left: auto;
+  margin-right: auto;
+}
+
+/* 2) Temporarily hide READ / UNDERSTAND / DWELL buttons */
+body[data-doc-type="chapter-explanation"] #ce-modebar{
+  display: none !important;
+}
+
+/* 3) Chapter Explanation: restore a centered white “document card” inside doc-target */
+body[data-doc-type="chapter-explanation"] #doc-target section.mtb-doc.mtb-doc--chapter-explanation{
+  background: #ffffff !important;
+  border: 1px solid var(--mtb-border) !important;
+  border-radius: 14px !important;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.06) !important;
+
+  max-width: 1100px;     /* card width */
+  margin: 0 auto 24px !important;
+  padding: 26px 28px !important;
+}
+
+/* Safety: if the injected explanation content ever shows up without the section wrapper,
+   keep it readable and centered anyway */
+body[data-doc-type="chapter-explanation"] #doc-target{
+  max-width: 1400px;
+  margin-left: auto;
+  margin-right: auto;
+}
+/* =========================================================
+   MTB CENTERING FIX (wins against almost anything)
+   Put at very bottom of mtb-ui.css
+   ========================================================= */
+
+body[data-book][data-chapter] main.doc-shell.wide .doc-header,
+body[data-book][data-chapter] main.doc-shell.wide .tabs-shell,
+body[data-book][data-chapter] main.doc-shell.wide #doc-layout,
+body[data-book][data-chapter] main.doc-shell.wide #doc-target{
+  /* center the whole “page column” */
+  width: min(1400px, calc(100% - 44px)) !important;
+  margin-left: auto !important;
+  margin-right: auto !important;
+}
+
+/* Give chapter pages a consistent outer blue-gray (optional but helps blend) */
+body[data-book][data-chapter] main.doc-shell.wide{
+  background: transparent !important;
+}
+
+/* =========================================================
+   WHITE DOCUMENT CARD for chapter pages (orientation/insights/culture/explanation)
+   ========================================================= */
+body[data-doc-type^="chapter-"] #doc-target > .mtb-doc{
+  background: #ffffff !important;
+  border: 1px solid var(--mtb-border) !important;
+  border-radius: 14px !important;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.06) !important;
+
+  max-width: 1100px !important;
+  margin: 0 auto 24px !important;
+  padding: 26px 28px !important;
+}
+
+/* =========================================================
+   TEMP: hide Read / Understand / Dwell on chapter explanation
+   ========================================================= */
+body[data-doc-type="chapter-explanation"] #ce-modebar{
+  display: none !important;
+}
+
+
+/* =========================================================
+   CENTER THE CHAPTER CONTENT COLUMN (non-scripture pages)
+   This targets the real layout container, not just the card.
+   ========================================================= */
+body[data-book][data-chapter]:not(.mtb-has-scripture-controls) #doc-layout{
+  display: block !important;
+}
+
+
+
+/* Keep the actual document card centered inside that column */
+body[data-doc-type^="chapter-"]:not(.mtb-has-scripture-controls) #doc-target > .mtb-doc{
+  max-width: 1100px !important;
+  margin-left: auto !important;
+  margin-right: auto !important;
+}
+/* =========================================================
+   CENTER NON-SCRIPTURE CHAPTER PAGES WITHOUT WIDENING THEM
+   ========================================================= */
+
+/* Center the grid content area itself */
+body[data-book][data-chapter]:not(.mtb-has-scripture-controls) #doc-layout{
+  display: grid !important;
+  justify-content: center !important;  /* centers the grid contents */
+}
+
+/* Don't force doc-main wider; just keep it centered */
+body[data-book][data-chapter]:not(.mtb-has-scripture-controls) article.doc-main{
+  width: auto !important;
+  max-width: 100% !important;
+  margin-left: 0 !important;
+  margin-right: 0 !important;
+}
+
+/* Your white "document" card: keep your existing width, just center it */
+body[data-doc-type^="chapter-"]:not(.mtb-has-scripture-controls) #doc-target > .mtb-doc{
+  margin-left: auto !important;
+  margin-right: auto !important;
+}
+/* =========================================================
+   CENTER NON-SCRIPTURE CHAPTER PAGES (keep current width)
+   + MOVE NAV ARROWS LEFT (non-scripture only)
+   ========================================================= */
+
+/* 1) Center the main chapter column WITHOUT changing its width */
+body[data-book][data-chapter]:not(.mtb-has-scripture-controls) main.doc-shell.wide{
+  margin-left: auto !important;
+  margin-right: auto !important;
+}
+
+/* The actual content column (this is usually the real "page") */
+body[data-book][data-chapter]:not(.mtb-has-scripture-controls) article.doc-main{
+  margin-left: auto !important;
+  margin-right: auto !important;
+}
+
+
+
+/* Give the tab row a little right padding so arrows never overlap tabs */
+body.mtb-has-scripture-controls #tabs{
+  padding-right: 160px !important;
+}
+
+/* Add a little top spacing before the table/card so arrows don't overlap content */
+body.mtb-has-scripture-controls #doc-target{
+  margin-top: 16px !important;
+}
+/* =========================================================
+   CHAPTER NAV POSITIONING (clean, correct targeting)
+   ========================================================= */
+
+/* Non-scripture chapter pages */
+body[data-book][data-chapter]:not(.mtb-has-scripture-controls) .chapter-nav{
+  left: auto !important;
+  right: 350px !important;   /* adjust to taste */
+}
+
+/* Scripture page */
+body.mtb-has-scripture-controls .chapter-nav{
+  left: auto !important;
+  right: 80px !important;    /* original good position */
+  top: 14px !important;
+}
+/* =========================================================
+   CENTER THE WHITE DOC CARD (non-scripture chapter pages)
+   Keep current card width, just center it in the screen
+   ========================================================= */
+body[data-book][data-chapter]:not(.mtb-has-scripture-controls) #doc-target{
+  margin-left: auto !important;
+  margin-right: auto !important;
+}
+
+/* If the injected section is the actual "white card", center it too */
+body[data-book][data-chapter]:not(.mtb-has-scripture-controls) #doc-target > .mtb-doc{
+  margin-left: auto !important;
+  margin-right: auto !important;
+}
+body[data-book][data-chapter]:not(.mtb-has-scripture-controls) article.doc-main{
+  justify-content: center !important;  /* flex */
+  justify-items: center !important;    /* grid */
+}
+/* =========================================================
+   CENTER THE WHITE DOCUMENT (non-scripture chapter tabs)
+   Centers the injected .mtb-doc card itself without changing width.
+   ========================================================= */
+
+body[data-book][data-chapter]:not(.mtb-has-scripture-controls)
+#doc-target > section.mtb-doc{
+  margin-left: auto !important;
+  margin-right: auto !important;
+}
+
+/* If some pages inject the mtb-doc deeper, cover that too */
+body[data-book][data-chapter]:not(.mtb-has-scripture-controls)
+#doc-target section.mtb-doc{
+  margin-left: auto !important;
+  margin-right: auto !important;
+}
+
+/* Non-scripture tabs: ensure doc-target is symmetric so centering is visually perfect */
+body[data-book][data-chapter]:not(.mtb-has-scripture-controls) #doc-target{
+  padding-left: 22px !important;
+  padding-right: 22px !important;
+}
+/* =========================================================
+   FINAL CENTERING – NON SCRIPTURE CHAPTER PAGES
+   One rule. One responsibility.
+   ========================================================= */
+
+body[data-book][data-chapter]:not(.mtb-has-scripture-controls)
+#doc-target > section.mtb-doc{
+  max-width: 1100px !important;   /* keep your good readable width */
+  width: 100% !important;
+  margin: 0 auto 24px auto !important;
+}
+/* =========================================================
+   CHAPTER SCRIPTURE — SINGLE SOURCE OF TRUTH (FINAL)
+   Hook: body.mtb-has-scripture-controls
+   - Wide, stable layout (no snap-back)
+   - Table expands and stays wide
+   ========================================================= */
+
+body.mtb-has-scripture-controls main.doc-shell.wide,
+body.mtb-has-scripture-controls .mtb-paper{
+  max-width: min(2000px, calc(100vw - 64px)) !important; /* adjust this ONE number */
+  margin-left: auto !important;
+  margin-right: auto !important;
+}
+
+/* Let the scripture "document card" fill the wide shell */
+body.mtb-has-scripture-controls #doc-target{
+  max-width: none !important;
+  width: 100% !important;
+}
+
+/* Ensure the injected doc section is not capped */
+body.mtb-has-scripture-controls #doc-target > section.mtb-doc{
   max-width: none !important;
   width: 100% !important;
   margin-left: auto !important;
   margin-right: auto !important;
 }
 
-/* =========================================================
-   Chapter Scripture — reliable centering (flex override)
-   ========================================================= */
-
-/* =========================================================
-   Chapter Scripture — centered layout (remove sidebar track)
-   ========================================================= */
-
-/* Collapse doc-layout to a single column */
-body.mtb-has-scripture-controls .doc-layout{
-  grid-template-columns: 1fr !important;
-  gap: 0 !important;
+/* Wrapper should fill and allow horizontal scroll on small screens */
+body.mtb-has-scripture-controls #doc-target .mtb-chapter-scripture-wrap{
+  max-width: none !important;
+  width: 100% !important;
+  overflow-x: auto !important;
 }
 
-/* Hide the right sidebar entirely for chapter scripture */
-body.mtb-has-scripture-controls .doc-side{
-  display: none !important;
+/* Table: expand naturally (do NOT force fixed layout) */
+body.mtb-has-scripture-controls #doc-target table{
+  width: 100% !important;
+  max-width: none !important;
+  table-layout: auto !important;
+  min-width: 1500px !important;   /* bump to 1600/1700 if desired */
 }
 
-/* Control width + centering here */
-body.mtb-has-scripture-controls .doc-shell{
-  max-width: 1700px !important;   /* adjust this number */
+/* Keep nav arrows in the "good" position for scripture */
+body.mtb-has-scripture-controls .chapter-nav{
+  left: auto !important;
+  right: 24px !important;
+  top: 14px !important;
+}
+/* =========================================================
+   WIDEN CHAPTER SCRIPTURE SHELL
+   ========================================================= */
+
+body.mtb-has-scripture-controls main.doc-shell{
+  max-width: 2000px !important;   /* adjust if needed */
+  margin-left: auto !important;
+  margin-right: auto !important;
+}
+/* =========================================================
+   CHAPTER SCRIPTURE — FORCE FULL WIDTH (container chain)
+   This overrides any max-width clamps from style.css
+   ========================================================= */
+
+body.mtb-has-scripture-controls main.doc-shell,
+body.mtb-has-scripture-controls main.doc-shell.wide{
+  max-width: none !important;
+  width: min(2200px, calc(100vw - 64px)) !important;
   margin-left: auto !important;
   margin-right: auto !important;
 }
 
-/* Table fills the centered shell */
-body.mtb-has-scripture-controls #doc-target table{
+body.mtb-has-scripture-controls #doc-layout{
+  max-width: none !important;
   width: 100% !important;
 }
 
-/* Table formatting */
-body.mtb-has-scripture-controls #doc-target table{
+body.mtb-has-scripture-controls article.doc-main{
+  max-width: none !important;
   width: 100% !important;
-  border-collapse: collapse !important;
 }
 
-body.mtb-has-scripture-controls #doc-target th,
-body.mtb-has-scripture-controls #doc-target td{
-  background: #ffffff !important;
-  border: 1px solid #d7dde5 !important;
-}
-/* =========================================================
-   Chapter Nav (Prev/Next icons) — move LEFT
-   Source is in style.css: .chapter-nav { right: 12px; }
-   We override here (mtb-ui.css loads after style.css on book.html).
-   ========================================================= */
-
-/* Only when scripture-controls.js is active */
-body.mtb-has-scripture-controls #tabs{
-  padding-right: 240px !important;  /* ensures tabs text doesn’t collide */
+body.mtb-has-scripture-controls #doc-target{
+  max-width: none !important;
+  width: 100% !important;
 }
 
-body.mtb-has-scripture-controls #tabs .chapter-nav{
-  right: 150px !important;          /* increase = move LEFT */
+/* The white scripture card wrapper */
+body.mtb-has-scripture-controls #doc-target .mtb-chapter-scripture-wrap{
+  max-width: none !important;
+  width: 100% !important;
 }
 /* =========================================================
-   Restore White Paper Card for ALL normal chapter documents
-   (Orientation, Explanation, Insights, EG Culture, Resources)
-   Excludes Chapter Scripture view
+   FIX: doc-main.wide shrinking Chapter Scripture
    ========================================================= */
 
-body:not(.mtb-has-scripture-controls) #doc-target{
-  background: #ffffff !important;
-  border: 1px solid #e6e6e6 !important;
-  border-radius: 14px !important;
-  padding: 28px 32px !important;
-  box-shadow: 0 2px 10px rgba(0,0,0,0.06) !important;
-}
-/* =========================================================
-   NORMAL DOCS: wider reading width (not Chapter Scripture)
-   ========================================================= */
-
-body:not(.mtb-has-scripture-controls) .doc-shell{
-  max-width: 1600px !important;   /* try 1400–1600 */
-   margin-left: auto !important;
+body.mtb-has-scripture-controls article.doc-main.wide{
+  max-width: none !important;
+  width: min(2200px, calc(100vw - 64px)) !important;
+  margin-left: auto !important;
   margin-right: auto !important;
 }
 /* =========================================================
-   CHAPTER EXPLANATION: restore blue-grey background
+   Chapter Scripture: remove the “shift right” gutter
    ========================================================= */
 
-body[data-doc-type="chapter-explanation"]{
-  background: #eef2f6 !important;   /* blue-grey */
+body.mtb-has-scripture-controls .mtb-chapter-scripture-wrap{
+  margin-left: auto !important;
+  margin-right: auto !important;
 }
-body:not(.mtb-has-scripture-controls) #doc-layout{
+
+body.mtb-has-scripture-controls .mtb-chapter-scripture-host{
+  padding-left: 0 !important;
+  padding-right: 0 !important;
+}
+
+/* If border-spacing is causing the left offset, kill it */
+body.mtb-has-scripture-controls table.mtb-chapter-scripture{
+  margin: 0 !important;
+  border-spacing: 0 !important;
+  border-collapse: collapse !important;
+  width: 100% !important;
+}
+/* =========================================================
+   Center the Chapter Scripture table properly
+   ========================================================= */
+
+body.mtb-has-scripture-controls .mtb-chapter-scripture-host{
+  display: flex !important;
   justify-content: center !important;
 }
+
+body.mtb-has-scripture-controls table.mtb-chapter-scripture{
+  width: auto !important;        /* stop stretching full width */
+  min-width: 1400px !important;  /* keeps it wide */
+  margin: 0 auto !important;
+}
 /* =========================================================
-   NORMAL CHAPTER DOCS — center the main content
-   Applies to: chapter-explanation, chapter-orientation, chapter-eg-culture, chapter-insights, etc.
-   Does NOT affect Chapter Scripture (mtb-has-scripture-controls)
+   PREVENT “JUMP” ON CHAPTER SCRIPTURE
+   Apply wide layout on first paint (before JS runs)
    ========================================================= */
 
-/* Collapse the 2-col layout to 1-col so the main content is truly centered */
-body:not(.mtb-has-scripture-controls) .doc-layout{
-  grid-template-columns: 1fr !important;
-  gap: 0 !important;
-}
-
-/* Hide the right sidebar so it doesn't reserve width */
-body:not(.mtb-has-scripture-controls) .doc-side{
-  display: none !important;
-}
-
-/* Set the centered reading width */
-body:not(.mtb-has-scripture-controls) .doc-shell{
-  max-width: 1500px !important;   /* adjust: 1400–1600 */
+html.mtb-pre-scripture article.doc-main{
+  max-width: none !important;
+  width: min(2200px, calc(100vw - 64px)) !important;
   margin-left: auto !important;
   margin-right: auto !important;
 }
 
-/* Restore the white paper card inside the centered column */
-body:not(.mtb-has-scripture-controls) #doc-target{
-  background: #ffffff !important;
-  border: 1px solid #e6e6e6 !important;
-  border-radius: 14px !important;
-  padding: 28px 32px !important;
-  box-shadow: 0 2px 10px rgba(0,0,0,0.06) !important;
+/* Keep the table filling the available space */
+html.mtb-pre-scripture #doc-target{
+  max-width: none !important;
+  width: 100% !important;
 }
 /* =========================================================
-   Chapter Scripture ONLY — width controller
+   HIDE SCRIPTURE VIEW UNTIL READY (prevents visible "jump")
    ========================================================= */
 
-body.mtb-has-scripture-controls .doc-shell{
-  max-width: 1650px !important;   /* try 1500–1750 */
+/* When we are on the scripture tab, keep doc-target hidden */
+html.mtb-pre-scripture #doc-target{
+  opacity: 0 !important;
+}
+
+/* Reveal once JS says it is ready */
+html.mtb-pre-scripture.mtb-scripture-ready #doc-target{
+  opacity: 1 !important;
+  transition: opacity 120ms ease-out;
+}
+/* =========================================================
+   CHAPTER SCRIPTURE: center the white card + center the table
+   (fixes the “table hugging the right side” look)
+   ========================================================= */
+
+body[data-doc-type="chapter-scripture"] #doc-target{
   margin-left: auto !important;
   margin-right: auto !important;
+}
+
+/* Make the host take full width and center its child */
+body[data-doc-type="chapter-scripture"] #doc-target .mtb-chapter-scripture-host{
+  width: 100% !important;
+  display: flex !important;
+  justify-content: center !important;
+}
+
+/* Ensure the table itself can center inside the host */
+body[data-doc-type="chapter-scripture"] #doc-target table.mtb-scripture-table,
+body[data-doc-type="chapter-scripture"] #doc-target table.mtb-chapter-scripture{
+  margin-left: auto !important;
+  margin-right: auto !important;
+}
+
+/* If the wrapper is doing something weird, force it to full width too */
+body[data-doc-type="chapter-scripture"] #doc-target .mtb-chapter-scripture-wrap{
+  width: 100% !important;
+}
+/* =========================================================
+   CHAPTER SCRIPTURE: center the whole block + stop right-shift
+   Your Scripture page uses body.mtb-has-scripture-controls
+   (NOT data-doc-type="chapter-scripture")
+   ========================================================= */
+
+/* 1) Make left/right padding symmetric so the “center” is truly centered */
+body.mtb-has-scripture-controls main.doc-shell.wide{
+  padding-left: 22px !important;
+  padding-right: 22px !important;
+}
+
+/* 2) Ensure the injected content column is centered and wide */
+body.mtb-has-scripture-controls #doc-target{
+  max-width: min(1600px, calc(100vw - 44px)) !important;
+  margin-left: auto !important;
+  margin-right: auto !important;
+}
+
+/* 3) Center the white card */
+body.mtb-has-scripture-controls #doc-target .mtb-chapter-scripture-wrap{
+  width: 100% !important;
+  max-width: 1600px !important;
+  margin-left: auto !important;
+  margin-right: auto !important;
+}
+
+/* 4) Prevent any flex/end alignment from pushing the table right */
+body.mtb-has-scripture-controls #doc-target .mtb-chapter-scripture-host{
+  width: 100% !important;
+  display: block !important;
+}
+
+/* 5) Center the table itself */
+body.mtb-has-scripture-controls #doc-target table.mtb-scripture-table,
+body.mtb-has-scripture-controls #doc-target table.mtb-chapter-scripture{
+  margin-left: auto !important;
+  margin-right: auto !important;
+  width: 100% !important;
+  max-width: none !important;
 }

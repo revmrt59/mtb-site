@@ -1,12 +1,63 @@
-<!doctype html>
 <html lang="en">
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width,initial-scale=1" />
 <title>Mastering the Bible - Book</title>
-<link rel="stylesheet" href="assets/css/style.css" />
- <link rel="stylesheet" href="/assets/css/mtb-ui.css">
 
+<!-- Favicon -->
+<link rel="icon" type="image/png" sizes="32x32" href="/assets/icons/favicon-32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/assets/icons/favicon-16.png">
+<link rel="apple-touch-icon" sizes="180x180" href="/assets/icons/apple-touch-icon.png">
+<link rel="icon" href="/assets/icons/favicon.ico">
+
+<link rel="stylesheet" href="assets/css/style.css" />
+<link rel="stylesheet" href="assets/css/mtb-ui.css">
+<link rel="stylesheet" href="assets/css/mtb-ui-overrides.css">
+
+
+<script>
+(function () {
+  const p = new URLSearchParams(location.search);
+  const tab = (p.get("tab") || "").toLowerCase();
+
+  // Explicit grouping (no ambiguity)
+  const isScriptureTab =
+    tab.includes("scripture") ||
+    tab.includes("chapter_scripture") ||
+    tab.includes("chapter-scripture") ||
+    (tab.includes("chap") && tab.includes("scr")) ||
+    (tab.includes("bible") && tab.includes("table"));
+
+  if (!isScriptureTab) return;
+
+  // Hide early
+  document.documentElement.classList.add("mtb-pre-scripture");
+
+  // Reveal when the table is injected
+  const markReadyIfFound = () => {
+    const table = document.querySelector("#doc-target table");
+    if (table) {
+      document.documentElement.classList.add("mtb-scripture-ready");
+      return true;
+    }
+    return false;
+  };
+
+  if (markReadyIfFound()) return;
+
+  const obs = new MutationObserver(() => {
+    if (markReadyIfFound()) obs.disconnect();
+  });
+
+  obs.observe(document.documentElement, { childList: true, subtree: true });
+
+  // Safety fallback
+  setTimeout(() => {
+    document.documentElement.classList.add("mtb-scripture-ready");
+    obs.disconnect();
+  }, 1000);
+})();
+</script>
 <style>
 /* ================================
    BOOK HERO (MATCHES HOME HERO)

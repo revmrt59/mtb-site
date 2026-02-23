@@ -269,3 +269,64 @@ body.loc-page #loc-next{
   right: auto !important;
   margin: 0 !important;
 }
+/* =========================================================
+   RESOURCES TABLE — Improve spacing only
+   ========================================================= */
+
+.resource-table{
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0 14px;  /* vertical row spacing */
+}
+
+/* Header spacing */
+.resource-table thead th{
+  padding: 12px 18px;
+  text-align: left;
+  border-bottom: 1px solid rgba(0,0,0,0.12);
+  white-space: nowrap;
+}
+
+/* Body cell spacing */
+.resource-table tbody td{
+  padding: 16px 18px;
+  vertical-align: top;
+}
+
+/* Slight separation between rows */
+.resource-table tbody tr{
+  background: #fff;
+}
+/* Tighten Open / PDF header columns */
+.resource-table thead th:last-child,
+.resource-table thead th:nth-last-child(2),
+.resource-table tbody td:last-child,
+.resource-table tbody td:nth-last-child(2){
+  width: 74px;
+  padding-left: 8px;
+  padding-right: 8px;
+  text-align: left;
+  white-space: nowrap;
+}
+/* =========================================================
+   CHAPTER PAGES — STOP WHITE CONTENT FROM SHOWING THROUGH STICKY HEADER/TABS
+   ========================================================= */
+
+/* Give the sticky chapter header area an opaque background + stacking */
+body[data-doc-type^="chapter"] .doc-header,
+body[data-doc-type^="chapter"] .tabs-shell{
+  background: var(--mtb-chrome, #eef3f8) !important;
+  position: sticky !important;   /* in case one lost it */
+  z-index: 200 !important;
+}
+
+/* Make sure the actual buttons row is also opaque */
+body[data-doc-type^="chapter"] .tabs-shell{
+  border-bottom: 1px solid rgba(0,0,0,0.08) !important;
+}
+
+/* If your chapter title area itself is a separate wrapper, keep it opaque too */
+body[data-doc-type^="chapter"] .doc-head,
+body[data-doc-type^="chapter"] .doc-head-inner{
+  background: var(--mtb-chrome, #eef3f8) !important;
+}

@@ -1,72 +1,25 @@
 /* =========================================================
-   MTB UI OVERRIDES (CLEAN BASELINE)
-   Scope: Chapter pages only (book.html chapter views)
-   Do NOT put LOC rules here.
-   Do NOT set overflow on html/body.
+   MTB UI OVERRIDES — CLEAN BASELINE (CHAPTER + ABOUT + LOC + RESOURCES)
+   Put ONLY overrides here.
    ========================================================= */
 
-/* ---------------------------------------------------------
-   1) Sticky CHAPTER header + tabs (under the primary header)
-   --------------------------------------------------------- */
 
-/* Sticky chapter header bar */
-body[data-book][data-chapter] main.doc-shell > section.doc-header{
-  position: sticky;
-  top: var(--mtb-header-h, 64px);
-  z-index: 2000;
-  background: #eef3f8;                /* match your blue-grey band */
-  border-bottom: 1px solid rgba(0,0,0,0.08);
-}
-
-/* Sticky tabs row */
-body[data-book][data-chapter] main.doc-shell > section.tabs-shell{
-  position: sticky;
-  top: calc(var(--mtb-header-h, 64px) + 74px); /* adjust later if needed */
-  z-index: 1900;
-  background: #eef3f8;
-  border-bottom: 1px solid rgba(0,0,0,0.08);
-}
-
-/* Prevent bleed-through gaps */
-body[data-book][data-chapter] main.doc-shell > section.doc-header,
-body[data-book][data-chapter] main.doc-shell > section.tabs-shell{
-  background-clip: border-box;
-}
-
-/* ---------------------------------------------------------
-   2) Chapter content panel width (non-scripture tabs)
-   --------------------------------------------------------- */
-
-body[data-book][data-chapter]:not([data-doc-type="chapter-scripture"]) main.doc-shell{
-  max-width: 1500px;
-  margin-left: auto;
-  margin-right: auto;
-}
-
-/* ---------------------------------------------------------
-   3) Chapter Scripture: wide + centered + stable
-   --------------------------------------------------------- */
+/* =========================================================
+   2) CHAPTER SCRIPTURE (wide + wrap + no clipping)
+   ========================================================= */
 
 body[data-book][data-chapter][data-doc-type="chapter-scripture"] main.doc-shell{
-  max-width: 1700px;
-  margin-left: auto;
-  margin-right: auto;
+  max-width: 1700px !important;
+  margin-left: auto !important;
+  margin-right: auto !important;
 }
 
-/* Make the scripture table/card fill and center */
-body[data-book][data-chapter][data-doc-type="chapter-scripture"] #doc-target{
-  max-width: none;
-  margin-left: auto;
-  margin-right: auto;
-}
-
-/* Keep the table from clipping */
+/* Table layout + wrapping */
 body[data-book][data-chapter][data-doc-type="chapter-scripture"] #doc-target table{
-  width: 100%;
-  table-layout: fixed;
+  width: 100% !important;
+  table-layout: fixed !important;
 }
 
-/* Make columns 2 and 3 equal, verse column narrow */
 body[data-book][data-chapter][data-doc-type="chapter-scripture"] #doc-target table colgroup col:nth-child(1){
   width: 70px !important;
 }
@@ -75,184 +28,60 @@ body[data-book][data-chapter][data-doc-type="chapter-scripture"] #doc-target tab
   width: calc((100% - 70px) / 2) !important;
 }
 
-/* Force wrapping so nothing gets cut off */
 body[data-book][data-chapter][data-doc-type="chapter-scripture"] #doc-target th,
 body[data-book][data-chapter][data-doc-type="chapter-scripture"] #doc-target td{
-  white-space: normal;
-  overflow-wrap: anywhere;
-  word-break: break-word;
-}
-
-/* ---------------------------------------------------------
-   4) Chapter nav arrows (keep scripture separate)
-   --------------------------------------------------------- */
-
-/* Default for most chapter tabs */
-body[data-book][data-chapter]:not([data-doc-type="chapter-scripture"]) .chapter-nav{
-  right: 24px;
-}
-
-/* Scripture page: keep nav out of the table */
-body[data-book][data-chapter][data-doc-type="chapter-scripture"] .chapter-nav{
-  right: 24px;
-  top: 14px;
+  white-space: normal !important;
+  overflow-wrap: anywhere !important;
+  word-break: break-word !important;
 }
 
 /* =========================================================
-   ABOUT PAGE — sticky tab row, scroll only content
+   3) ABOUT PAGE (inner scroll: tabs fixed, white content scrolls)
    ========================================================= */
 
-body:has(.about-nav) .about-nav{
-  position: sticky;
-  top: var(--mtb-header-h, 64px);
-  z-index: 2000;
-  background: #eef3f8;
-  border-bottom: 1px solid rgba(0,0,0,0.08);
-}
-
-/* Ensure the document area is the scrolling region */
-body:has(.about-nav) #doc-target{
-  overflow: auto;
-}
-
-/* =========================================================
-   ABOUT — Tabs fixed, ONLY the white doc scrolls
-   Works without body class. Uses :has(.about-nav).
-   ========================================================= */
-
-/* Kill window scrolling on pages that contain the About tabs */
 html:has(.about-nav),
 body:has(.about-nav){
   height: 100% !important;
   overflow: hidden !important;
 }
 
-/* Make the main area a flex column under the primary header */
 body:has(.about-nav) main{
   height: calc(100vh - var(--mtb-header-h, 64px)) !important;
   overflow: hidden !important;
-
   display: flex !important;
   flex-direction: column !important;
-  min-height: 0 !important; /* critical */
+  min-height: 0 !important;
 }
 
-/* Tabs row stays visible */
 body:has(.about-nav) .about-nav{
   flex: 0 0 auto !important;
   position: sticky !important;
   top: 0 !important;
   z-index: 5000 !important;
-
-  background: #eef3f8 !important;
+  background: var(--mtb-chrome, #eef3f8) !important;
   border-bottom: 1px solid rgba(0,0,0,0.08) !important;
 }
 
-/* The white content becomes the ONLY scroll area */
 body:has(.about-nav) #doc-target{
   flex: 1 1 auto !important;
-  min-height: 0 !important; /* critical */
+  min-height: 0 !important;
   overflow-y: auto !important;
   overflow-x: hidden !important;
 }
+
 /* =========================================================
-   LOC HARMONY — VISUAL ONLY
-   - Keep existing scroll behavior
-   - Make LOC header + column headings blue-grey
-   - Force nav arrows to the right
+   4) LOC HARMONY (visual only)
    ========================================================= */
 
-/* 1) Make the LOC “top band” blue-grey (Back / Title / Prev-Next) */
 body.loc-page .loc-seq-header{
-  background: #eef3f8 !important;
+  background: var(--mtb-chrome, #eef3f8) !important;
   border-bottom: 1px solid rgba(0,0,0,0.10) !important;
-}
-
-/* If the header sits inside the white card, keep it visually clean */
-body.loc-page .loc-seq-header{
-  border-top-left-radius: 18px;
-  border-top-right-radius: 18px;
-}
-
-/* 2) Force the header row layout: left / centered title / right arrows */
-body.loc-page .loc-seq-header{
-  display: flex !important;
-  align-items: center !important;
-  justify-content: space-between !important;
-  gap: 16px !important;
-}
-
-body.loc-page .loc-seq-left{
-  flex: 0 0 auto !important;
-}
-
-body.loc-page .loc-seq-center{
-  flex: 1 1 auto !important;
-  text-align: center !important;
-}
-
-body.loc-page .loc-seq-right{
-  flex: 0 0 auto !important;
-  margin-left: auto !important;
-  display: flex !important;
-  align-items: center !important;
-  justify-content: flex-end !important;
-  gap: 10px !important;
-}
-
-/* Safety: if #loc-prev/#loc-next get positioned weirdly elsewhere, reset them */
-body.loc-page #loc-prev,
-body.loc-page #loc-next{
-  position: static !important;
-}
-
-/* 3) Make the “Translation” band blue-grey too (optional but usually matches) */
-body.loc-page .loc-scroll-area,
-body.loc-page .loc-harmony-controls,
-body.loc-page .loc-scroll-head{
-  background: #eef3f8 !important;
-}
-
-/* 4) Matthew / Mark / Luke / John header row blue-grey */
-body.loc-page table.mtb-loc-harmony-table thead th{
-  background: #eef3f8 !important;
-  border-bottom: 1px solid rgba(0,0,0,0.10) !important;
-}
-
-/* Keep the table body as the white “sheet” */
-body.loc-page table.mtb-loc-harmony-table{
-  background: #ffffff !important;
-}
-/* =========================================================
-   LOC HARMONY — Remove white card border/frame
-   ========================================================= */
-
-body.loc-page main.loc-main.mtb-paper{
-  background: #eef3f8 !important;   /* match the blue-grey */
-  border: none !important;          /* remove white border */
-  box-shadow: none !important;      /* remove card shadow */
-}
-/* =========================================================
-   LOC HARMONY — Force arrows to the RIGHT (3-column header)
-   ========================================================= */
-
-body.loc-page .loc-seq-header{
   display: flex !important;
   align-items: center !important;
 }
 
-/* Left / Center / Right columns */
-body.loc-page .loc-seq-left{
-  flex: 0 0 170px !important;
-  display: flex !important;
-  align-items: center !important;
-}
-
-body.loc-page .loc-seq-center{
-  flex: 1 1 auto !important;
-  text-align: center !important;
-}
-
+body.loc-page .loc-seq-left{  flex: 0 0 170px !important; }
+body.loc-page .loc-seq-center{ flex: 1 1 auto !important; text-align: center !important; }
 body.loc-page .loc-seq-right{
   flex: 0 0 170px !important;
   display: flex !important;
@@ -261,7 +90,6 @@ body.loc-page .loc-seq-right{
   gap: 10px !important;
 }
 
-/* If any earlier CSS made the buttons absolute/offset, neutralize it */
 body.loc-page #loc-prev,
 body.loc-page #loc-next{
   position: static !important;
@@ -269,17 +97,22 @@ body.loc-page #loc-next{
   right: auto !important;
   margin: 0 !important;
 }
+
+body.loc-page table.mtb-loc-harmony-table thead th{
+  background: var(--mtb-chrome, #eef3f8) !important;
+  border-bottom: 1px solid rgba(0,0,0,0.10) !important;
+}
+
 /* =========================================================
-   RESOURCES TABLE — Improve spacing only
+   5) RESOURCES TABLE (spacing only)
    ========================================================= */
 
 .resource-table{
   width: 100%;
   border-collapse: separate;
-  border-spacing: 0 14px;  /* vertical row spacing */
+  border-spacing: 0 14px;
 }
 
-/* Header spacing */
 .resource-table thead th{
   padding: 12px 18px;
   text-align: left;
@@ -287,17 +120,16 @@ body.loc-page #loc-next{
   white-space: nowrap;
 }
 
-/* Body cell spacing */
 .resource-table tbody td{
   padding: 16px 18px;
   vertical-align: top;
 }
 
-/* Slight separation between rows */
 .resource-table tbody tr{
   background: #fff;
 }
-/* Tighten Open / PDF header columns */
+
+/* Keep “Open / PDF” tight */
 .resource-table thead th:last-child,
 .resource-table thead th:nth-last-child(2),
 .resource-table tbody td:last-child,
@@ -308,25 +140,781 @@ body.loc-page #loc-next{
   text-align: left;
   white-space: nowrap;
 }
+
 /* =========================================================
-   CHAPTER PAGES — STOP WHITE CONTENT FROM SHOWING THROUGH STICKY HEADER/TABS
+   CHAPTER PAGES — NO WINDOW SCROLL (SCROLL ONLY CONTENT)
+   Goal:
+   - Primary header stays sticky (already working)
+   - Chapter blue-grey header never moves/jumps
+   - Only the content area (#doc-layout) scrolls
    ========================================================= */
 
-/* Give the sticky chapter header area an opaque background + stacking */
-body[data-doc-type^="chapter"] .doc-header,
-body[data-doc-type^="chapter"] .tabs-shell{
-  background: var(--mtb-chrome, #eef3f8) !important;
-  position: sticky !important;   /* in case one lost it */
-  z-index: 200 !important;
+body[data-book][data-chapter]{
+  height: 100vh !important;
+  overflow: hidden !important;          /* kill window scroll */
 }
 
-/* Make sure the actual buttons row is also opaque */
-body[data-doc-type^="chapter"] .tabs-shell{
+/* main becomes a fixed viewport column under the primary header */
+body[data-book][data-chapter] main.doc-shell{
+  height: calc(100vh - var(--mtb-header-h, 64px)) !important;
+  display: flex !important;
+  flex-direction: column !important;
+  overflow: hidden !important;
+  min-height: 0 !important;
+}
+
+/* chapter header stays fixed because it is outside the scroller */
+body[data-book][data-chapter] .doc-header{
+  flex: 0 0 auto !important;
+  background: #eef3f8 !important;       /* solid so white page never shows behind buttons */
+  z-index: 5 !important;
+}
+
+/* ONLY this scrolls */
+body[data-book][data-chapter] #doc-layout{
+  flex: 1 1 auto !important;
+  min-height: 0 !important;             /* critical for inner scroll */
+  overflow-y: auto !important;
+  overflow-x: hidden !important;
+  scrollbar-gutter: stable !important;  /* prevents tiny width shift */
+  background: #eef3f8 !important;
+}
+/* =========================================================
+   CHAPTER HEADER — ADJUST SIZE + LEFT SHIFT (SAFE)
+   ========================================================= */
+
+/* Make header shorter WITHOUT moving its top */
+body[data-book][data-chapter] .doc-header{
+  padding-bottom: 6px !important;   /* reduces height */
+}
+
+/* Make title smaller (do not change layout) */
+body[data-book][data-chapter] #book-title,
+body[data-book][data-chapter] #book-subtitle{
+  font-size: 28px !important;
+  font-weight: 700 !important;
+  color: #111 !important;
+  opacity: 1 !important;
+  display: inline !important;
+  margin: 0 !important;
+}
+
+/* Tight single-space feel */
+body[data-book][data-chapter] #book-title{
+  margin-right: 8px !important;
+}
+
+/* Shift ONLY the book/chapter text left */
+body[data-book][data-chapter] #book-title,
+body[data-book][data-chapter] #book-subtitle{
+  margin-left: -72px !important;   /* ~1 inch */
+}
+
+/* Shift the tabs row (buttons + nav) left */
+body[data-book][data-chapter] #tabs-shell{
+  margin-left: -72px !important;   /* match title */
+}
+
+/* Make sure buttons don't crowd into the title line */
+body[data-book][data-chapter] .doc-header{
+  row-gap: 10px !important;
+}
+
+/* =========================================================
+   CHAPTER PAGES — FULL-BLEED SECONDARY HEADER (Option A)
+   Goal:
+   - The chapter header band (title + tabs) spans full screen width
+   - The content inside the band stays aligned to your normal max width
+   - No HTML changes required
+   ========================================================= */
+
+body[data-book][data-chapter] .doc-header{
+  /* full-bleed band */
+  width: 100vw;
+  margin-left: calc(50% - 50vw);
+  margin-right: calc(50% - 50vw);
+
+  /* band styling */
+  background: var(--mtb-bg, #eef2f6);
+  border-bottom: 1px solid rgba(0,0,0,0.08);
+
+  /* keep band from collapsing */
+  padding: 14px 0;
+}
+
+/* Keep the *inside* of the band aligned to your normal page width */
+body[data-book][data-chapter] .doc-header > *{
+  max-width: var(--mtb-maxw, 1100px);
+  margin-left: auto;
+  margin-right: auto;
+  padding-left: 18px;
+  padding-right: 18px;
+  box-sizing: border-box;
+}
+
+/* Optional: make the title+subtitle sit nicely in the band */
+body[data-book][data-chapter] #book-title{
+  margin: 0;
+}
+body[data-book][data-chapter] #book-subtitle{
+  margin: 4px 0 0 0;
+}
+/* Fix mashed-left Book/Chapter text inside full-bleed band */
+
+body[data-book][data-chapter] .doc-header{
+  padding-left: 0 !important;
+  padding-right: 0 !important;
+}
+
+/* Align title with tab row content */
+body[data-book][data-chapter] #book-title,
+body[data-book][data-chapter] #book-subtitle{
+  padding-left: 35px !important;   /* match internal content padding */
+  display: inline-block !important;
+}
+/* =========================================================
+   FIX: Prevent full-bleed chapter header from being CLIPPED
+   Cause: main.doc-shell has overflow:hidden, which clips 100vw header.
+   ========================================================= */
+
+body[data-book][data-chapter] main.doc-shell{
+  overflow: visible !important; /* allow the header band to extend full width */
+}
+
+/* keep the scroll confined to the content area only */
+body[data-book][data-chapter] #doc-layout{
+  overflow-y: auto !important;
+}
+/* =========================================================
+   CHAPTER HEADER TITLE FIX — stop "TitusChapter 2" overlap
+   ========================================================= */
+
+body[data-book][data-chapter] #book-title,
+body[data-book][data-chapter] #book-subtitle{
+  display: inline-block !important;
+  vertical-align: baseline !important;
+  margin: 0 !important;
+  line-height: 1.1 !important;
+}
+
+body[data-book][data-chapter] #book-subtitle{
+  margin-left: 14px !important;   /* forces the single space gap */
+  color: #000 !important;         /* match title */
+  font-size: inherit !important;  /* match title size */
+  font-weight: inherit !important;
+}
+/* =========================================================
+   CHAPTER HEADER (book.html) — stable layout
+   Title | Subtitle | Tabs | Prev/Next
+   ========================================================= */
+
+body[data-book][data-chapter] .doc-header{
+  margin-top: 0 !important;
+  padding: 10px 24px 12px 24px !important;
+
+  /* lock layout so title never crushes tabs */
+  display: grid !important;
+  grid-template-columns: max-content max-content 1fr max-content !important;
+  align-items: center !important;
+  column-gap: 18px !important;
+
+  /* keep the blue-grey band full width */
+  width: 100% !important;
+}
+
+/* Titus + Chapter 2: same size, black, no weird gaps */
+body[data-book][data-chapter] #book-title,
+body[data-book][data-chapter] #book-subtitle{
+  margin: 0 !important;
+  padding: 0 !important;
+  color: #000 !important;
+  font-size: 38px !important;     /* adjust smaller if you want */
+  font-weight: 700 !important;
+  line-height: 1.05 !important;
+}
+
+/* Subtitle should not be “muted” on chapter pages */
+body[data-book][data-chapter] #book-subtitle.muted{
+  opacity: 1 !important;
+}
+
+/* Tabs sit in the 3rd column and start LEFT (no centering) */
+body[data-book][data-chapter] #tabs-shell{
+  margin: 0 !important;
+  padding: 0 !important;
+  min-width: 0 !important;       /* critical so grid column can shrink */
+}
+
+body[data-book][data-chapter] #tabs{
+  display: flex !important;
+  align-items: center !important;
+  justify-content: flex-start !important;
+  gap: 12px !important;
+
+  /* do not create its own scroll unless absolutely necessary */
+  overflow: visible !important;
+  flex-wrap: nowrap !important;
+}
+
+/* Keep the nav arrows aligned and same height as tabs */
+body[data-book][data-chapter] .chapter-nav{
+  display: flex !important;
+  align-items: center !important;
+  gap: 10px !important;
+  margin-left: 8px !important;
+}
+body[data-book][data-chapter] .chapter-nav .chapter-nav-btn{
+  height: 44px !important;
+  min-width: 44px !important;
+  padding: 0 12px !important;
+  border-radius: 12px !important;
+}
+
+/* Optional: if you want slightly smaller tabs so they fit tighter */
+body[data-book][data-chapter] #tabs .tab-btn,
+body[data-book][data-chapter] #tabs button{
+  height: 44px !important;
+  padding: 10px 14px !important;
+  border-radius: 12px !important;
+}
+/* =========================================================
+   CHAPTER HEADER — full-bleed band (works even inside mtb-paper)
+   ========================================================= */
+body[data-book][data-chapter] .doc-header{
+  position: relative !important;
+  background: transparent !important;     /* the band comes from ::before */
+}
+
+/* full-width blue-grey band behind the header */
+body[data-book][data-chapter] .doc-header::before{
+  content: "" !important;
+  position: absolute !important;
+  top: 0; bottom: 0;
+  left: 50% !important;
+  right: 50% !important;
+  margin-left: -50vw !important;
+  margin-right: -50vw !important;
+
+  background: var(--mtb-chrome, #eef3f8) !important;
+  border-bottom: 1px solid var(--mtb-border, #d7dde5) !important;
+  z-index: 0 !important;
+}
+
+/* keep the actual header content above the band */
+body[data-book][data-chapter] .doc-header > *{
+  position: relative !important;
+  z-index: 1 !important;
+}
+
+/* remove any “card” look from the header itself */
+body[data-book][data-chapter] .doc-header{
+  box-shadow: none !important;
+  border-radius: 0 !important;
+}
+/* =========================================================
+   MTB CHAPTER HEADER — FINAL OVERRIDE (paste at VERY bottom)
+   Goals:
+   - Title + buttons in ONE row
+   - Title smaller and not squished
+   - Header shorter (less tall) without shifting down
+   - Buttons sit to the right; nav arrows same height as buttons
+   MRT
+   ========================================================= */
+
+/* =========================================================
+   MTB CHAPTER HEADER — STABLE ROW LAYOUT (replace prior block)
+   Fixes:
+   - Force ONE row layout (title + tabs + arrows)
+   - Prevent title stacking
+   - Prevent arrows overlapping tabs
+   ========================================================= */
+
+body[data-book][data-chapter] .doc-header{
+  position: sticky !important;
+  top: var(--mtb-header-h, 72px) !important;
+  z-index: 9000 !important;
+
+  display: flex !important;
+  flex-direction: row !important;   /* FORCE row */
+  flex-wrap: nowrap !important;     /* never wrap */
+
+  align-items: center !important;
+  gap: 18px !important;
+
+  background: var(--mtb-chrome, #eef3f8) !important;
   border-bottom: 1px solid rgba(0,0,0,0.08) !important;
+
+  padding: 10px 18px !important;
+  margin: 0 !important;
 }
 
-/* If your chapter title area itself is a separate wrapper, keep it opaque too */
-body[data-doc-type^="chapter"] .doc-head,
-body[data-doc-type^="chapter"] .doc-head-inner{
+/* Title area stays together and never collapses */
+body[data-book][data-chapter] #book-title,
+body[data-book][data-chapter] #book-subtitle{
+  flex: 0 0 auto !important;
+  margin: 0 !important;
+  padding: 0 !important;
+
+  font-size: 32px !important;
+  line-height: 1.05 !important;
+
+  color: #111 !important;
+  opacity: 1 !important;
+
+  white-space: nowrap !important;  /* no wrapping */
+}
+
+body[data-book][data-chapter] #book-title{ font-weight: 800 !important; }
+body[data-book][data-chapter] #book-subtitle{
+  font-weight: 800 !important;
+  margin-left: 10px !important;
+}
+
+/* Tabs take remaining space, stay in one line */
+body[data-book][data-chapter] .tabs-shell{
+  flex: 1 1 auto !important;
+  min-width: 0 !important;
+  margin-left: 22px !important;    /* moves tabs left/right as a group */
+  padding: 0 !important;
+}
+
+body[data-book][data-chapter] #tabs{
+  display: flex !important;
+  align-items: center !important;
+  gap: 12px !important;
+  flex-wrap: nowrap !important;
+  min-width: 0 !important;
+}
+
+/* Keep arrows to the far right, never overlap tabs */
+body[data-book][data-chapter] .chapter-nav{
+  flex: 0 0 auto !important;
+  display: flex !important;
+  align-items: center !important;
+  gap: 10px !important;
+  margin-left: 12px !important;
+}
+
+/* Button sizing + gray default, blue hover/active */
+body[data-book][data-chapter] .tabs .tab-btn,
+body[data-book][data-chapter] .tabs button,
+body[data-book][data-chapter] .chapter-nav-btn{
+  height: 44px !important;
+  min-height: 44px !important;
+  padding: 0 14px !important;
+  border-radius: 12px !important;
+
+  background: #e6ebf1 !important;
+  color: #1b2430 !important;
+  border: 1px solid rgba(0,0,0,0.12) !important;
+
+  font-weight: 600 !important;
+}
+
+body[data-book][data-chapter] .tabs .tab-btn:hover,
+body[data-book][data-chapter] .tabs button:hover,
+body[data-book][data-chapter] .chapter-nav-btn:hover{
+  background: #3b6fb6 !important;
+  border-color: #3b6fb6 !important;
+  color: #fff !important;
+}
+
+body[data-book][data-chapter] .tabs .tab-btn.active,
+body[data-book][data-chapter] .tabs .tab-btn[aria-current="page"]{
+  background: #3b6fb6 !important;
+  border-color: #3b6fb6 !important;
+  color: #fff !important;
+}
+/* =========================================================
+   CHAPTER PAGES — SINGLE SOURCE OF TRUTH (HEADER + TABS)
+   Scope: only book.html chapter pages (body has data-book + data-chapter)
+   Goals:
+   - No jumping
+   - Full-width blue/grey band under the primary header
+   - Title + tabs on one line
+   - Buttons grey by default, blue on hover/active
+   ========================================================= */
+
+body[data-book][data-chapter]{
+  background: var(--mtb-chrome, #eef3f8);
+}
+
+/* IMPORTANT: undo any old “lock scroll / overflow hidden” experiments */
+body[data-book][data-chapter],
+body[data-book][data-chapter] main.doc-shell{
+  height: auto !important;
+  overflow: visible !important;
+}
+
+/* Make the whole chapter header band sticky under the PRIMARY header */
+body[data-book][data-chapter] .doc-header{
+  position: sticky;
+  top: var(--mtb-header-h, 72px);
+  z-index: 5000;
+
+  /* full-width band look */
+  background: var(--mtb-chrome, #eef3f8);
+  border-bottom: 1px solid rgba(0,0,0,0.08);
+
+  /* tighter (about 1/2 inch shorter than before) */
+  padding: 10px 18px;
+
+  /* layout */
+  display: flex;
+  align-items: center;
+  gap: 12px;
+
+  margin: 0;
+}
+
+/* Title: Titus Chapter 2 = same size, black, one “space” between */
+body[data-book][data-chapter] #book-title,
+body[data-book][data-chapter] #book-subtitle{
+  margin: 0;
+  padding: 0;
+  color: #111;
+  opacity: 1;              /* defeats .muted */
+  white-space: nowrap;
+  font-size: 32px;         /* smaller than your big Titus */
+  line-height: 1.05;
+  font-weight: 800;
+}
+
+/* Visually “one space” */
+body[data-book][data-chapter] #book-subtitle{
+  margin-left: 10px;
+}
+
+/* Tabs sit to the right of the title */
+body[data-book][data-chapter] .tabs-shell{
+  margin-left: auto;
+  padding: 0;
+}
+
+/* Keep tabs in one row */
+body[data-book][data-chapter] #tabs{
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: nowrap;
+}
+
+/* Tabs + nav buttons default grey; blue on hover/active */
+body[data-book][data-chapter] .tabs .tab-btn,
+body[data-book][data-chapter] .tabs button,
+body[data-book][data-chapter] .chapter-nav-btn{
+  height: 44px;
+  min-height: 44px;
+
+  padding: 0 14px;
+  border-radius: 12px;
+
+  background: #e6ebf1;
+  color: #1b2430;
+  border: 1px solid rgba(0,0,0,0.12);
+
+  font-weight: 600;
+  line-height: 1.2;
+}
+
+body[data-book][data-chapter] .tabs .tab-btn:hover,
+body[data-book][data-chapter] .tabs button:hover,
+body[data-book][data-chapter] .chapter-nav-btn:hover{
+  background: #3b6fb6;
+  border-color: #3b6fb6;
+  color: #fff;
+}
+
+body[data-book][data-chapter] .tabs .tab-btn.active,
+body[data-book][data-chapter] .tabs .tab-btn[aria-current="page"]{
+  background: #3b6fb6;
+  border-color: #3b6fb6;
+  color: #fff;
+}
+
+/* Nav arrows: same height as tabs, spaced a bit, aligned */
+body[data-book][data-chapter] .chapter-nav{
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-left: 12px;
+}
+
+/* White “page” container for all non-scripture chapter tabs */
+body[data-book][data-chapter]:not([data-doc-type="chapter-scripture"]) #doc-target{
+  background: #fff;
+  border: 1px solid rgba(0,0,0,0.10);
+  border-radius: 14px;
+  padding: 28px 32px;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.06);
+  margin-top: 18px; /* keeps it from touching the sticky band */
+}
+
+/* Scripture tab should NOT be boxed like a page */
+body[data-book][data-chapter][data-doc-type="chapter-scripture"] #doc-target{
+  background: transparent;
+  border: 0;
+  box-shadow: none;
+  padding: 0;
+  margin-top: 18px;
+}
+/* =========================================================
+   CHAPTER HEADER — stable sticky band + correct layout
+   ========================================================= */
+
+body[data-book][data-chapter] .doc-header{
+  position: sticky !important;
+  top: var(--mtb-header-h, 72px) !important;
+  z-index: 2000 !important;
+
+  display: flex !important;
+  align-items: center !important;
+  flex-wrap: nowrap !important;
+  gap: 18px !important;
+
   background: var(--mtb-chrome, #eef3f8) !important;
+  border-bottom: 1px solid rgba(0,0,0,0.08) !important;
+
+  /* keep it tighter */
+  padding: 10px 18px !important;
+  margin: 0 !important;
+}
+
+/* Title: Titus Chapter 2 — one line, same size, black */
+body[data-book][data-chapter] #book-title,
+body[data-book][data-chapter] #book-subtitle{
+  display: inline !important;
+  margin: 0 !important;
+  padding: 0 !important;
+
+  font-size: 32px !important;
+  line-height: 1.05 !important;
+
+  color: #111 !important;
+  opacity: 1 !important;              /* overrides "muted" */
+  white-space: nowrap !important;
+
+  flex: 0 0 auto !important;          /* prevents squishing */
+}
+
+body[data-book][data-chapter] #book-title{
+  font-weight: 800 !important;
+}
+
+body[data-book][data-chapter] #book-subtitle{
+  font-weight: 800 !important;
+  margin-left: 12px !important;       /* “one space” feel */
+}
+
+/* Tabs container participates in the same row */
+body[data-book][data-chapter] .tabs-shell{
+  flex: 1 1 auto !important;
+  padding: 0 !important;
+  margin: 0 !important;
+}
+
+/* Keep all buttons in one row */
+body[data-book][data-chapter] #tabs{
+  display: flex !important;
+  align-items: center !important;
+  gap: 12px !important;
+  flex-wrap: nowrap !important;
+  min-width: 0 !important;
+}
+
+/* Push the arrow nav group to the far right */
+body[data-book][data-chapter] .chapter-nav{
+  margin-left: auto !important;
+  display: flex !important;
+  align-items: center !important;
+  gap: 10px !important;
+}
+
+/* Default grey buttons; blue on hover/active */
+body[data-book][data-chapter] .tabs .tab-btn,
+body[data-book][data-chapter] .tabs button,
+body[data-book][data-chapter] .chapter-nav-btn{
+  height: 44px !important;
+  min-height: 44px !important;
+  padding: 0 14px !important;
+  border-radius: 12px !important;
+
+  background: #e6ebf1 !important;
+  color: #1b2430 !important;
+  border: 1px solid rgba(0,0,0,0.12) !important;
+
+  font-weight: 600 !important;
+}
+
+body[data-book][data-chapter] .tabs .tab-btn:hover,
+body[data-book][data-chapter] .tabs button:hover,
+body[data-book][data-chapter] .chapter-nav-btn:hover{
+  background: #3b6fb6 !important;
+  border-color: #3b6fb6 !important;
+  color: #fff !important;
+}
+
+body[data-book][data-chapter] .tabs .tab-btn.active,
+body[data-book][data-chapter] .tabs .tab-btn[aria-current="page"]{
+  background: #3b6fb6 !important;
+  border-color: #3b6fb6 !important;
+  color: #fff !important;
+}
+/* ===== FIX: Chapter header title wrapping + nav overlapping tabs ===== */
+
+/* 1) Force title + subtitle to stay on one line and not shrink */
+body[data-book][data-chapter] #book-title,
+body[data-book][data-chapter] #book-subtitle{
+  display: inline !important;
+  flex: 0 0 auto !important;      /* prevents shrink-wrap squeezing */
+  white-space: nowrap !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  color: #111 !important;
+  opacity: 1 !important;
+}
+
+body[data-book][data-chapter] #book-subtitle{
+  margin-left: 12px !important;
+}
+
+/* 2) Reserve space for the arrow nav and pin it to the right */
+body[data-book][data-chapter] #tabs{
+  position: relative !important;
+  padding-right: 140px !important;   /* keeps last tab from hiding under arrows */
+}
+
+body[data-book][data-chapter] .chapter-nav{
+  position: absolute !important;
+  right: 0 !important;
+  top: 50% !important;
+  transform: translateY(-50%) !important;
+  margin-left: 0 !important;
+  z-index: 5 !important;
+}
+/* =========================================================
+   CHAPTER PAGES — FOUNDATION HEADER (FINAL OVERRIDES)
+   KEEP THIS AT THE VERY END of mtb-ui-overrides.css
+   ========================================================= */
+
+body[data-book][data-chapter]{
+  /* prevents tiny “jump” when scrollbar appears */
+  scrollbar-gutter: stable;
+}
+
+body[data-book][data-chapter] main.doc-shell{
+  max-width: none !important;
+  width: 100% !important;
+  margin: 0 !important;
+  padding: 0 !important;
+}
+
+/* Full-width blue-grey band under the PRIMARY site header */
+body[data-book][data-chapter] .doc-header{
+  position: sticky !important;
+  top: var(--mtb-header-h, 72px) !important;
+  z-index: 3000 !important;
+
+  display: flex !important;
+  align-items: center !important;
+  gap: 18px !important;
+
+  background: var(--mtb-chrome, #eef3f8) !important;
+  border-bottom: 1px solid rgba(0,0,0,0.08) !important;
+
+  /* shorter band */
+  padding: 8px 24px !important;
+  margin: 0 !important;
+}
+
+/* Titus + Chapter 2 = one line, same size, black */
+body[data-book][data-chapter] #book-title,
+body[data-book][data-chapter] #book-subtitle{
+  display: inline-block !important;
+  margin: 0 !important;
+  padding: 0 !important;
+
+  font-size: 32px !important;
+  line-height: 1.1 !important;
+  font-weight: 800 !important;
+
+  color: #111 !important;
+  opacity: 1 !important;
+  white-space: nowrap !important;
+
+  /* prevents flex from crushing the title */
+  flex: 0 0 auto !important;
+}
+
+body[data-book][data-chapter] #book-subtitle{
+  margin-left: 10px !important; /* one visual space */
+}
+
+/* Tabs sit to the right of the title */
+body[data-book][data-chapter] .tabs-shell{
+  margin-left: 28px !important;
+  flex: 1 1 auto !important;
+  padding: 0 !important;
+  min-width: 0 !important;
+}
+
+/* Keep all buttons on one row (no inner scroll badges) */
+body[data-book][data-chapter] #tabs{
+  display: flex !important;
+  align-items: center !important;
+  gap: 12px !important;
+  flex-wrap: nowrap !important;
+  overflow: visible !important;
+  min-width: 0 !important;
+}
+
+/* Default gray, blue on hover/active */
+body[data-book][data-chapter] .tabs .tab-btn,
+body[data-book][data-chapter] .tabs button,
+body[data-book][data-chapter] .chapter-nav-btn{
+  height: 42px !important;
+  min-height: 42px !important;
+  padding: 0 14px !important;
+  border-radius: 12px !important;
+
+  background: #e6ebf1 !important;
+  color: #1b2430 !important;
+  border: 1px solid rgba(0,0,0,0.12) !important;
+
+  font-weight: 600 !important;
+}
+
+body[data-book][data-chapter] .tabs .tab-btn:hover,
+body[data-book][data-chapter] .tabs button:hover,
+body[data-book][data-chapter] .chapter-nav-btn:hover{
+  background: #3b6fb6 !important;
+  border-color: #3b6fb6 !important;
+  color: #fff !important;
+}
+
+body[data-book][data-chapter] .tabs .tab-btn.active,
+body[data-book][data-chapter] .tabs .tab-btn[aria-current="page"]{
+  background: #3b6fb6 !important;
+  border-color: #3b6fb6 !important;
+  color: #fff !important;
+}
+
+/* Nav arrows aligned with tabs */
+body[data-book][data-chapter] .chapter-nav{
+  display: flex !important;
+  align-items: center !important;
+  gap: 10px !important;
+  margin-left: 10px !important;
+}
+
+body[data-book][data-chapter] .chapter-nav-btn{
+  padding: 0 12px !important;
+  min-width: 42px !important;
+}
+
+/* White page (content) stays centered below the header */
+body[data-book][data-chapter] #doc-layout{
+  max-width: var(--mtb-maxw-wide, 1600px) !important;
+  margin: 0 auto !important;
+  padding: 18px !important;
 }

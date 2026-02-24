@@ -918,3 +918,119 @@ body[data-book][data-chapter] #doc-layout{
   margin: 0 auto !important;
   padding: 18px !important;
 }
+/* Hide READ / UNDERSTAND / DWELL on Chapter Explanation page */
+body[data-doc-type="chapter-explanation"] .ce-mode-controls,
+body[data-doc-type="chapter-explanation"] .read-understand-dwell,
+body[data-doc-type="chapter-explanation"] .ce-controls{
+  display: none !important;
+}
+/* Chapter Explanation: hide READ / UNDERSTAND / DWELL bar */
+body[data-doc-type="chapter-explanation"] #ce-modebar{
+  display: none !important;
+}
+/* Narrow white page container for non-Scripture chapter tabs */
+body[data-book][data-chapter]:not([data-doc-type="chapter-scripture"]) #doc-layout{
+  max-width: 1100px !important;   /* match scripture width */
+  margin: 0 auto !important;
+  padding-left: 24px !important;
+  padding-right: 24px !important;
+}
+/* =========================================================
+   CHAPTER EXPLANATION ONLY
+   Make the blue-grey header band span full screen width
+   (without changing the centered content width)
+   ========================================================= */
+
+body[data-doc-type="chapter-explanation"] .doc-header{
+  position: sticky;            /* keep whatever sticky/top you already have */
+  left: auto;
+  right: auto;
+  width: 100%;
+  background: transparent !important;  /* move bg to ::before */
+  position: relative !important;       /* needed for ::before */
+  z-index: 9000 !important;
+}
+
+/* Full-width background strip behind the header */
+body[data-doc-type="chapter-explanation"] .doc-header::before{
+  content: "";
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 100vw;
+  background: var(--mtb-chrome, #eef3f8);
+  border-bottom: 1px solid rgba(0,0,0,0.08);
+  z-index: -1;
+}
+/* Chapter Explanation: force the header band background to full viewport width */
+body[data-doc-type="chapter-explanation"] .chapter-header-band{
+  position: relative !important;
+  background: transparent !important; /* background will come from ::before */
+  z-index: 9000 !important;
+}
+
+body[data-doc-type="chapter-explanation"] .chapter-header-band::before{
+  content: "";
+  position: absolute;
+  inset: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 100vw;
+  background: var(--mtb-chrome, #eef3f8);
+  border-bottom: 1px solid rgba(0,0,0,0.08);
+  z-index: -1;
+  pointer-events: none;
+}
+/* Chapter Explanation ONLY: make the outer shell full-width (not a centered white card) */
+body[data-doc-type="chapter-explanation"] main.doc-shell{
+  max-width: none !important;
+  width: 100% !important;
+  margin: 0 !important;
+
+  /* remove the white-card effect from the shell */
+  background: transparent !important;
+  border-radius: 0 !important;
+  box-shadow: none !important;
+  padding: 0 !important;
+}
+
+
+/* =========================================================
+   CHAPTER RESOURCES TAB — make card bigger + link styling
+   Works even when body has no data-doc-type.
+   ========================================================= */
+
+body[data-book][data-chapter]:has(#tabs .tab-btn.active[data-tab="resources"]) #doc-target,
+body[data-book][data-chapter]:has(#tabs button.active[data-tab="resources"]) #doc-target,
+body[data-book][data-chapter]:has(#tabs .tab-btn[aria-current="page"][data-tab="resources"]) #doc-target,
+body[data-book][data-chapter]:has(#tabs button[aria-current="page"][data-tab="resources"]) #doc-target{
+  /* bigger white container */
+  max-width: 980px !important;
+  width: min(980px, calc(100% - 64px)) !important;
+  margin: 28px auto !important;
+
+  padding: 40px 52px !important;
+  background: #fff !important;
+  border: 1px solid rgba(0,0,0,0.10) !important;
+  border-radius: 16px !important;
+  box-shadow: 0 10px 24px rgba(0,0,0,0.08) !important;
+}
+
+/* Make links look like links (Resources tab only) */
+body[data-book][data-chapter]:has(#tabs .tab-btn.active[data-tab="resources"]) #doc-target a,
+body[data-book][data-chapter]:has(#tabs button.active[data-tab="resources"]) #doc-target a,
+body[data-book][data-chapter]:has(#tabs .tab-btn[aria-current="page"][data-tab="resources"]) #doc-target a,
+body[data-book][data-chapter]:has(#tabs button[aria-current="page"][data-tab="resources"]) #doc-target a{
+  color: #1a5fd1 !important;
+  text-decoration: underline !important;
+  font-weight: 600 !important;
+}
+
+body[data-book][data-chapter]:has(#tabs .tab-btn.active[data-tab="resources"]) #doc-target a:hover,
+body[data-book][data-chapter]:has(#tabs button.active[data-tab="resources"]) #doc-target a:hover,
+body[data-book][data-chapter]:has(#tabs .tab-btn[aria-current="page"][data-tab="resources"]) #doc-target a:hover,
+body[data-book][data-chapter]:has(#tabs button[aria-current="page"][data-tab="resources"]) #doc-target a:hover{
+  color: #0f3ea8 !important;
+}

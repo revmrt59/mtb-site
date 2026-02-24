@@ -797,67 +797,39 @@ $count = (Get-ChildItem $outDir -Filter "*.html" -ErrorAction SilentlyContinue |
   exit 0
 }
 
-
-
 if ($Mode -eq "ABOUT") {
 
   Write-Host ""
-  Write-Host "Mode: ABOUT (Processing standard and 'About the Bible' folders)" -ForegroundColor Cyan
-  
-  # --- PART 1: Standard ABOUT Documents ---
+  Write-Host "Mode: ABOUT"
   if (-not (Test-Path $DEFAULT_ABOUT_SRC)) { Fail "About source not found: $DEFAULT_ABOUT_SRC" }
+
   $outDir = Join-Path $SITE_ROOT "about"
   Ensure-Path $outDir
 
   $docxFiles = Get-ChildItem $DEFAULT_ABOUT_SRC -Filter "*.docx" -ErrorAction SilentlyContinue
   foreach ($docx in $docxFiles) {
     try {
-      Write-Host ("Processing Standard: " + $docx.Name + "...")
+      Write-Host ("Processing " + $docx.Name + "...")
       $html = Convert-DocxToHtmlFragment $docx.FullName
       $html = Fix-MojibakeHtml $html
+
       $base = [System.IO.Path]::GetFileNameWithoutExtension($docx.Name)
       $slug = Slugify $base
       $outPath = Join-Path $outDir ($slug + ".html")
+
       Set-Content -Path $outPath -Value $html -Encoding UTF8 -Force
-      Write-Host ("OK Standard: " + $docx.Name + " -> " + ([System.IO.Path]::GetFileName($outPath))) -ForegroundColor Green
+      Write-Host ("OK   " + $docx.Name + "  ->  " + ([System.IO.Path]::GetFileName($outPath))) -ForegroundColor Green
     }
     catch {
-      Write-Host ("FAIL Standard: " + $docx.Name) -ForegroundColor Red
+      Write-Host ("FAIL " + $docx.Name) -ForegroundColor Red
+      Write-Host ($_.Exception.Message) -ForegroundColor Red
     }
-  }
-
-  # --- PART 2: ABOUT THE BIBLE Documents ---
-  $BIBLE_ABOUT_SRC = Join-Path $MTB_SOURCE_ROOT "aboutthebible"
-  $bibleOutDir     = Join-Path $SITE_ROOT "aboutthebible"
-
-  if (Test-Path $BIBLE_ABOUT_SRC) {
-    Ensure-Path $bibleOutDir
-    $bibleDocxFiles = Get-ChildItem $BIBLE_ABOUT_SRC -Filter "*.docx" -ErrorAction SilentlyContinue
-    
-    foreach ($docx in $bibleDocxFiles) {
-      try {
-        Write-Host ("Processing Bible-Topic: " + $docx.Name + "...")
-        $html = Convert-DocxToHtmlFragment $docx.FullName
-        $html = Fix-MojibakeHtml $html
-        $base = [System.IO.Path]::GetFileNameWithoutExtension($docx.Name)
-        $slug = Slugify $base
-        $outPath = Join-Path $bibleOutDir ($slug + ".html")
-        Set-Content -Path $outPath -Value $html -Encoding UTF8 -Force
-        Write-Host ("OK Bible-Topic: " + $docx.Name + " -> " + ([System.IO.Path]::GetFileName($outPath))) -ForegroundColor Green
-      }
-      catch {
-        Write-Host ("FAIL Bible-Topic: " + $docx.Name) -ForegroundColor Red
-      }
-    }
-  } else {
-    Write-Host "Skip: 'aboutthebible' source folder not found." -ForegroundColor Yellow
   }
 
   Write-Host ""
-  Write-Host "ABOUT and ABOUT THE BIBLE generation complete." -ForegroundColor Green
+  Write-Host "ABOUT generation complete." -ForegroundColor Green
   exit 0
 }
-
 
 if ($Mode -eq "RESOURCES") {
 

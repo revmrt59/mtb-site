@@ -26,18 +26,18 @@
 
   function getDocParam() {
     const params = new URLSearchParams(window.location.search);
-    return params.get("doc") || "about-mastering-the-bible.html";
+    return params.get("doc") || "what-is-the-bible.html";
   }
 
   function safeDocName(name) {
     // Only allow simple filenames to prevent path traversal
-    return /^[a-z0-9\-]+\.html$/i.test(name) ? name : "about-mastering-the-bible.html";
+    return /^[a-z0-9\-]+\.html$/i.test(name) ? name : "what-is-the-bible.html";
   }
 
   const requested = safeDocName(getDocParam());
   setActiveAboutTab(requested);
 
-  const docPath = "/about/" + requested;
+  const docPath = "/aboutthebible/" + requested;
 
   fetch(docPath, { cache: "no-store" })
     .then(r => {

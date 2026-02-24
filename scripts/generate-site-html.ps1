@@ -355,10 +355,9 @@ function Resolve-BookSource($bookSlug, [ref]$testamentOut) {
 
 function Canonicalize-WordStudyNames($outDir, $bookSlug) {
   # Canonical word study filename format:
-  #   {bookSlug}-{chapter}-{g|h}{number}.html
-  # This intentionally strips the English gloss portion to avoid multi-word / punctuation issues.
-  # Applies recursively under the book output directory.
-  $rx = [regex]('^(?<book>' + [regex]::Escape($bookSlug) + ')-(?<ch>\d+)-(?<strong>[gh]\d+)(?:-.+)?\.html$')
+  #   {bookSlug}-{chapter}-{verse}-{g|h}{number}.html
+  # Strips the English gloss portion to avoid multi-word / punctuation issues.
+  $rx = [regex]('^(?<book>' + [regex]::Escape($bookSlug) + ')-(?<ch>\d+)-(?<v>\d+)-(?<strong>[gh]\d+)(?:-.+)?\.html$')
 
   Get-ChildItem -Path $outDir -Recurse -File -Filter "*.html" | ForEach-Object {
     $nameLower = $_.Name.ToLowerInvariant()
@@ -366,13 +365,14 @@ function Canonicalize-WordStudyNames($outDir, $bookSlug) {
 
     $m = $rx.Match($nameLower)
     $ch = $m.Groups["ch"].Value
+    $v  = $m.Groups["v"].Value
     $strong = $m.Groups["strong"].Value
 
     $letter = $strong.Substring(0,1)
     $digits = $strong.Substring(1)
     $n = [int]$digits
 
-    $canonical = "$bookSlug-$ch-$letter$n.html"
+    $canonical = "$bookSlug-$ch-$v-$letter$n.html"
     $destPath = Join-Path $_.Directory.FullName $canonical
 
     if ($_.FullName -ieq $destPath) { return }
@@ -384,6 +384,34 @@ function Canonicalize-WordStudyNames($outDir, $bookSlug) {
 
     Rename-Item -LiteralPath $_.FullName -NewName $canonical
   }
+}
+
+function Enrich-WordStudyHtml([string]$html) {
+  if ([string]::IsNullOrWhiteSpace($html)) { return $html }
+
+  # Prevent double wrapping
+  if ($html -match "id=['""]ws-summary-text['""]" -or $html -match "id=['""]ws-full-body['""]") {
+    return $html
+  }
+
+  # We rely on stable anchors produced by Pandoc: h2#summary and h2#full-study
+  $pattern = '(?is)(?<before>.*?<h2\b[^>]*\bid=["'']summary["''][^>]*>.*?</h2>)(?<summary>.*?)(?<fullh><h2\b[^>]*\bid=["'']full-study["''][^>]*>.*?</h2>)(?<full>.*)$'
+
+  if ($html -match $pattern) {
+    $before  = $Matches['before']
+    $summary = $Matches['summary']
+    $fullh   = $Matches['fullh']
+    $full    = $Matches['full']
+
+    return ($before +
+      "<div id='ws-summary-text'>" + $summary + "</div>" +
+      $fullh +
+      "<div id='ws-full-body'>" + $full + "</div>"
+    )
+  }
+
+  # If anchors aren't found, do nothing (avoid corrupting pages)
+  return $html
 }
 function Group-MtbDwellRuns([string]$html) {
   if ([string]::IsNullOrWhiteSpace($html)) { return $html }
@@ -537,17 +565,30 @@ $outDir = Join-Path $SITE_ROOT ("books\" + $testament + "\" + $BOOK_SLUG)
   Write-Host "Source: $bookSource"
   Write-Host "Output: $resolvedOut"
   Write-Host ""
-
+# temp mrt line
+Write-Host "SOURCE FOLDER BEING SCANNED: $bookSrc" -ForegroundColor Cyan
   $docxFiles = Get-ChildItem $bookSource -Filter "*.docx" -Recurse -ErrorAction SilentlyContinue
   if ($null -eq $docxFiles -or $docxFiles.Count -eq 0) { Fail "No DOCX files found under: $bookSource" }
 
   $debugShown = 0
+  $okCount = 0
+$failCount = 0
+$failList = New-Object System.Collections.Generic.List[string]
 
   foreach ($docx in $docxFiles) {
     try {
       Write-Host ("Processing " + $docx.Name + "...")
-      $html = Convert-DocxToHtmlFragment $docx.FullName
-      $html = Fix-MojibakeHtml $html
+ 
+$html = Convert-DocxToHtmlFragment $docx.FullName
+$html = Fix-MojibakeHtml $html
+
+$base = [System.IO.Path]::GetFileNameWithoutExtension($docx.Name)
+$outName = (Slugify $base) + ".html"
+
+# Enrich Word Study HTML (verse-tied format)
+if ($outName -match '^(?<book>[a-z0-9-]+)-(?<ch>\d+)-(?<v>\d+)-(?<strong>[gh]\d+)(?:-.+)?\.html$') {
+  $html = Enrich-WordStudyHtml $html
+}
 
       $base = [System.IO.Path]::GetFileNameWithoutExtension($docx.Name)
       $outName = (Slugify $base) + ".html"
@@ -556,11 +597,11 @@ $outDir = Join-Path $SITE_ROOT ("books\" + $testament + "\" + $BOOK_SLUG)
       # - <book>-<n>-* (n > 0)    -> <n as 3 digits> (001, 002, ...)
       # - otherwise               -> book root
       $targetSub = ""
-      if ($outName -match '^[a-z0-9-]+-0-') {
+     if ($outName -match '^(?<book>[a-z0-9-]+?)-0-') {
         $targetSub = "000-book"
       }
-      elseif ($outName -match '^[a-z0-9-]+-(\d+)-') {
-        $n = [int]$Matches[1]
+    elseif ($outName -match '^(?<book>[a-z0-9-]+?)-(?<ch>\d+)-') {
+  $n = [int]$Matches['ch']
         if ($n -gt 0) { $targetSub = ("{0:D3}" -f $n) }
       }
 
@@ -587,6 +628,9 @@ if ($docType -eq "chapter-explanation") {
 
 # Wrap everything else in a consistent MTB doc root
 $html = Wrap-MtbDocHtml $html $docType
+if (Test-Path $outPath) {  #mrt
+  Write-Host ("OVERWRITE: " + (Split-Path $outPath -Leaf) + "  <-  " + $docx.FullName) -ForegroundColor Yellow
+}
 [System.IO.File]::WriteAllText($outPath, $html, [System.Text.UTF8Encoding]::new($false))
 
       if ($debugShown -lt 3) {
@@ -665,9 +709,10 @@ catch {
       $book = $Matches.book
       $ch = [int]$Matches.ch
 
-      $folder = "{0:D3}" -f $ch
-      $targetDir = Join-Path $outDir $folder
-      Ensure-Path $targetDir
+    $ch = 1
+if ($outName -match '^[a-z0-9-]+-(\d+)-') {
+  $ch = [int]$Matches[1]
+}
 
       $indexName = "$book-$ch-chapter-resources.html"
       $indexPath = Join-Path $targetDir $indexName

@@ -203,6 +203,7 @@
 
     const params = getParams();
     const activeTab = params.tab || "chapter_scripture";
+    document.body.setAttribute("data-active-tab", activeTab);
 
     tabsEl.innerHTML = "";
 
@@ -238,6 +239,7 @@
   function syncActiveTab() {
     const params = getParams();
     const activeTab = params.tab || "chapter_scripture";
+    document.body.setAttribute("data-active-tab", activeTab);
     const buttons = Array.from(document.querySelectorAll("#tabs .tab-btn"));
 
     buttons.forEach(b => {

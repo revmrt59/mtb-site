@@ -1034,3 +1034,96 @@ body[data-book][data-chapter]:has(#tabs .tab-btn[aria-current="page"][data-tab="
 body[data-book][data-chapter]:has(#tabs button[aria-current="page"][data-tab="resources"]) #doc-target a:hover{
   color: #0f3ea8 !important;
 }
+/* =========================================================
+   CHAPTER RESOURCES — make card properly large
+   ========================================================= */
+
+body[data-book][data-chapter]:has(#tabs .active[data-tab="resources"]) #doc-target {
+  max-width: 1100px !important;
+  width: min(1100px, 92%) !important;
+  margin: 40px auto !important;
+
+  padding: 60px 80px !important;
+
+  border-radius: 20px !important;
+}
+/* Only when the Chapter Resources tab is active */
+body[data-book][data-chapter][data-active-tab="resources"] #doc-target{
+  max-width: 1100px !important;
+  width: min(1100px, 92vw) !important;
+  margin: 40px auto !important;
+  padding: 60px 80px !important;
+  border-radius: 20px !important;
+}
+/* =========================================================
+   CHAPTER RESOURCES: make the white container larger
+   (ONLY on the Resources tab)
+   ========================================================= */
+
+body[data-book][data-chapter][data-active-tab="resources"] main.doc-shell{
+  max-width: none !important;
+  width: 100% !important;
+}
+
+/* If your layout grid is constraining width, neutralize it for this tab */
+body[data-book][data-chapter][data-active-tab="resources"] #doc-layout{
+  display: block !important;
+}
+
+/* The actual white card */
+body[data-book][data-chapter][data-active-tab="resources"] #doc-target{
+  max-width: 1100px !important;
+  width: min(1100px, 92vw) !important;
+  margin: 48px auto !important;
+
+  padding: 70px 90px !important;
+  border-radius: 18px !important;
+}
+
+/* =========================================================
+   Chapter Resources: make the white card wider (but keep centered)
+   ========================================================= */
+body[data-active-tab="resources"] #doc-target > section.mtb-doc{
+  width: min(1100px, calc(100vw - 120px)) !important;
+}
+
+/* Make sure links look like links in Resources */
+body[data-active-tab="resources"] #doc-target a{
+  color: #1a5fd1 !important;
+  text-decoration: underline !important;
+}
+body[data-active-tab="resources"] #doc-target a:hover{
+  color: #0f3ea8 !important;
+}
+/* =========================================================
+   CHAPTER RESOURCES — make the white card bigger
+   (only when the Resources tab is active)
+   ========================================================= */
+body[data-book][data-chapter][data-active-tab="resources"] #doc-target{
+  width: min(1100px, calc(100vw - 64px)) !important;
+  max-width: 1100px !important;
+  padding: 52px 64px !important;
+  min-height: 340px !important;
+
+  /* keep it centered like the other chapter pages */
+  margin-left: auto !important;
+  margin-right: auto !important;
+}
+/* =========================================================
+   CHAPTER RESOURCES — remove parent width clamp, then widen card
+   ========================================================= */
+body[data-book][data-chapter][data-active-tab="resources"] .doc-layout,
+body[data-book][data-chapter][data-active-tab="resources"] .doc-main{
+  width: 100% !important;
+  max-width: none !important;
+}
+
+/* Now the card can actually grow wider */
+body[data-book][data-chapter][data-active-tab="resources"] #doc-target{
+  width: min(1200px, calc(100vw - 80px)) !important;
+  max-width: 1200px !important;
+  margin: 28px auto !important;
+
+  padding: 52px 64px !important;
+  min-height: 340px !important;
+}

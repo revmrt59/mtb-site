@@ -26,18 +26,111 @@ $PANDOC = "pandoc"
 function Enrich-MtbReadStrongSpans([string]$html, [string]$bookSlug) {
   if ([string]::IsNullOrWhiteSpace($html)) { return $html }
 
-  # Only process <div class="MTB-Read"><p> ... </p></div> blocks
+   # Only process <div class="MTB-Read"><p> ... </p></div> blocks
   $rx = [regex]::new('(?is)(?<open><div\s+class="MTB-Read">\s*<p>)(?<p>.*?)(?<close></p>\s*</div>)')
 
   return $rx.Replace($html, {
     param($m)
+
     $open  = $m.Groups["open"].Value
     $phtml = $m.Groups["p"].Value
     $close = $m.Groups["close"].Value
 
-    $newP = Enrich-OneMtbReadParagraph $phtml $bookSlug
+    $newP = Enrich-MtbReadStrongTokens $phtml $bookSlug
+
     return $open + $newP + $close
   })
+}
+
+function Enrich-MtbReadStrongTokens([string]$pInnerHtml, [string]$bookSlug) {
+  if ([string]::IsNullOrWhiteSpace($pInnerHtml)) { return $pInnerHtml }
+
+  $BR = "__MTB_BR__"
+  $work = [regex]::Replace($pInnerHtml, '(?is)<br\s*/?>', $BR)
+
+  # Pattern A: "2:3-5 (NKJV)" — NKJV immediately after reference
+$hdr = [regex]::Match(
+  $work,
+  '(?is)\b(?<ch>\d+):(?<v1>\d+)(?:-(?<v2>\d+))?\s*\(NKJV\)'
+)
+
+$nkAtEnd = $false
+
+# Pattern B: "2:1 ... (NKJV)" — NKJV appears at the end
+if (-not $hdr.Success) {
+
+  $hdr = [regex]::Match(
+    $work,
+    '(?is)\b(?<ch>\d+):(?<v1>\d+)(?:-(?<v2>\d+))?\b'
+  )
+
+  if ($hdr.Success -and ($work -match '(?is)\(NKJV\)\s*$')) {
+    $nkAtEnd = $true
+  }
+}
+
+if (-not $hdr.Success) {
+  return ($work -replace [regex]::Escape($BR), '<br />')
+}
+
+  $ch = [int]$hdr.Groups["ch"].Value
+  $v1 = [int]$hdr.Groups["v1"].Value
+  $v2 = if ($hdr.Groups["v2"].Success) { [int]$hdr.Groups["v2"].Value } else { $v1 }
+
+  $splitPos = $hdr.Index + $hdr.Length
+  $prefix = $work.Substring(0, $splitPos)
+  $rest   = $work.Substring($splitPos)
+
+$rest = [regex]::Replace($rest, "^(?:\s|$BR|&nbsp;|\u201C|`"|')+", ' ')
+
+  $currentV = $v1
+
+  $scan = [regex]::new('(?is)\((?<L>[GH])\s*(?<N>\d+)\)|\b(?<VM>\d{1,3})\b')
+
+  $sb = New-Object System.Text.StringBuilder
+  [void]$sb.Append($prefix)
+
+  $idx = 0
+  foreach ($m in $scan.Matches($rest)) {
+
+    if ($m.Index -gt $idx) {
+      [void]$sb.Append($rest.Substring($idx, $m.Index - $idx))
+    }
+
+    if ($m.Groups["VM"].Success -and -not $m.Groups["L"].Success) {
+      $vm = [int]$m.Groups["VM"].Value
+      if ($vm -ge $v1 -and $vm -le $v2) { $currentV = $vm }
+      [void]$sb.Append($m.Value)
+      $idx = $m.Index + $m.Length
+      continue
+    }
+
+    if ($m.Groups["L"].Success -and $m.Groups["N"].Success) {
+      $L = $m.Groups["L"].Value.ToLowerInvariant()
+      $N = $m.Groups["N"].Value
+      $strong = "$L$N"
+      $token = $m.Value
+
+      $wsDoc = "$bookSlug-$ch-$currentV-$strong.html"
+
+      $span = "<span class=""ws"" data-ws-doc=""$wsDoc"" data-book=""$bookSlug"" data-ch=""$ch"" data-v=""$currentV"" data-strong=""$strong"">$token</span>"
+      [void]$sb.Append($span)
+
+      $idx = $m.Index + $m.Length
+      continue
+    }
+
+    [void]$sb.Append($m.Value)
+    $idx = $m.Index + $m.Length
+  }
+
+  if ($idx -lt $rest.Length) {
+    [void]$sb.Append($rest.Substring($idx))
+  }
+
+  $out = $sb.ToString()
+  $out = $out -replace [regex]::Escape($BR), '<br />'
+  return $out
 }
 
 function Enrich-OneMtbReadParagraph([string]$phtml, [string]$bookSlug) {

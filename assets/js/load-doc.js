@@ -504,6 +504,10 @@ function groupVerseDwellBlocks(root) {
     if (!target) return;
 
     target.innerHTML = fixMojibake(content);
+    // Store injected document directory for word-study resolution (critical for book.html SPA loading)
+const injectedDocDir = docPath.slice(0, docPath.lastIndexOf("/") + 1); // ends with "/"
+target.setAttribute("data-doc-dir", injectedDocDir);
+    
     groupDwellBlocks(target);
     wireDocLinks(target);
 

@@ -23,6 +23,90 @@ $PANDOC = "pandoc"
 # -----------------------------
 # HELPERS
 # -----------------------------
+function Enrich-MtbReadStrongSpans([string]$html, [string]$bookSlug) {
+  if ([string]::IsNullOrWhiteSpace($html)) { return $html }
+
+  # Only process <div class="MTB-Read"><p> ... </p></div> blocks
+  $rx = [regex]::new('(?is)(?<open><div\s+class="MTB-Read">\s*<p>)(?<p>.*?)(?<close></p>\s*</div>)')
+
+  return $rx.Replace($html, {
+    param($m)
+    $open  = $m.Groups["open"].Value
+    $phtml = $m.Groups["p"].Value
+    $close = $m.Groups["close"].Value
+
+    $newP = Enrich-OneMtbReadParagraph $phtml $bookSlug
+    return $open + $newP + $close
+  })
+}
+
+function Enrich-OneMtbReadParagraph([string]$phtml, [string]$bookSlug) {
+  if ([string]::IsNullOrWhiteSpace($phtml)) { return $phtml }
+
+  # Keep <br> tags intact while we scan text
+  $BR = "__MTB_BR__"
+  $work = [regex]::Replace($phtml, '(?is)<br\s*/?>', $BR)
+
+  # Parse header like: "Titus 2:1" or "Titus 2:3-5"
+  $hdr = [regex]::Match($work, '^\s*(?<book>.+?)\s+(?<ch>\d+):(?<v1>\d+)(?:-(?<v2>\d+))?', [System.Text.RegularExpressions.RegexOptions]::IgnoreCase)
+  if (-not $hdr.Success) {
+    # No recognizable reference at start; restore <br> and exit
+    return ($work -replace [regex]::Escape($BR), '<br />')
+  }
+
+  $ch = [int]$hdr.Groups["ch"].Value
+  $v1 = [int]$hdr.Groups["v1"].Value
+  $v2 = if ($hdr.Groups["v2"].Success) { [int]$hdr.Groups["v2"].Value } else { $v1 }
+  $currentV = $v1
+
+  # Scan for either verse markers (standalone numbers) or Strong tokens "(G####)/(H####)"
+  $scan = [regex]::new('(?is)\((?<L>[GH])\s*(?<N>\d+)\)|\b(?<VM>\d{1,3})\b')
+  $sb = New-Object System.Text.StringBuilder
+  $idx = 0
+
+  foreach ($m in $scan.Matches($work)) {
+    # append text before match
+    if ($m.Index -gt $idx) {
+      [void]$sb.Append($work.Substring($idx, $m.Index - $idx))
+    }
+
+    # verse marker?
+    if ($m.Groups["VM"].Success -and -not $m.Groups["L"].Success) {
+      $vm = [int]$m.Groups["VM"].Value
+      if ($vm -ge $v1 -and $vm -le $v2) { $currentV = $vm }
+      [void]$sb.Append($m.Value)
+      $idx = $m.Index + $m.Length
+      continue
+    }
+
+    # Strong token
+    if ($m.Groups["L"].Success -and $m.Groups["N"].Success) {
+      $L = $m.Groups["L"].Value.ToLowerInvariant()     # g or h
+      $N = $m.Groups["N"].Value                        # digits
+      $strong = "$L$N"
+      $token = $m.Value                                # "(G1319)"
+
+      $span = "<span class=""ws"" data-book=""$bookSlug"" data-ch=""$ch"" data-v=""$currentV"" data-strong=""$strong"">$token</span>"
+      [void]$sb.Append($span)
+      $idx = $m.Index + $m.Length
+      continue
+    }
+
+    # fallback
+    [void]$sb.Append($m.Value)
+    $idx = $m.Index + $m.Length
+  }
+
+  # append remainder
+  if ($idx -lt $work.Length) {
+    [void]$sb.Append($work.Substring($idx))
+  }
+
+  $out = $sb.ToString()
+  # restore <br>
+  $out = $out -replace [regex]::Escape($BR), '<br />'
+  return $out
+}
 function Fail($msg) {
   Write-Host ""
   Write-Host "ERROR: $msg" -ForegroundColor Red
@@ -371,7 +455,7 @@ function Canonicalize-WordStudyNames($outDir, $bookSlug) {
     $letter = $strong.Substring(0,1)
     $digits = $strong.Substring(1)
     $n = [int]$digits
-
+    $v = $m.Groups["v"].Value
     $canonical = "$bookSlug-$ch-$v-$letter$n.html"
     $destPath = Join-Path $_.Directory.FullName $canonical
 
@@ -585,13 +669,14 @@ $html = Fix-MojibakeHtml $html
 $base = [System.IO.Path]::GetFileNameWithoutExtension($docx.Name)
 $outName = (Slugify $base) + ".html"
 
-# Enrich Word Study HTML (verse-tied format)
-if ($outName -match '^(?<book>[a-z0-9-]+)-(?<ch>\d+)-(?<v>\d+)-(?<strong>[gh]\d+)(?:-.+)?\.html$') {
-  $html = Enrich-WordStudyHtml $html
-}
+
 
       $base = [System.IO.Path]::GetFileNameWithoutExtension($docx.Name)
       $outName = (Slugify $base) + ".html"
+      # Enrich Word Study HTML (wrap Summary and Full Study sections)
+if ($outName -match '^(?<book>[a-z0-9-]+)-(?<ch>\d+)-(?<v>\d+)-(?<strong>[gh]\d+)(?:-.+)?\.html$') {
+  $html = Enrich-WordStudyHtml $html
+}
       # Route output based on slugged filename:
       # - <book>-0-*              -> 000-book
       # - <book>-<n>-* (n > 0)    -> <n as 3 digits> (001, 002, ...)
@@ -627,6 +712,9 @@ if ($docType -eq "chapter-explanation") {
 }
 
 # Wrap everything else in a consistent MTB doc root
+if ($docType -eq "chapter-explanation") {
+  $html = Enrich-MtbReadStrongSpans $html $BOOK_SLUG
+}
 $html = Wrap-MtbDocHtml $html $docType
 if (Test-Path $outPath) {  #mrt
   Write-Host ("OVERWRITE: " + (Split-Path $outPath -Leaf) + "  <-  " + $docx.FullName) -ForegroundColor Yellow
@@ -855,21 +943,7 @@ if ($Mode -eq "ABOUT") {
   Ensure-Path $outDir
 
   $docxFiles = Get-ChildItem $DEFAULT_ABOUT_SRC -Filter "*.docx" -ErrorAction SilentlyContinue
-  foreach ($docx in $docxFiles) {
-    try {
-      Write-Host ("Processing Standard: " + $docx.Name + "...")
-      $html = Convert-DocxToHtmlFragment $docx.FullName
-      $html = Fix-MojibakeHtml $html
-      $base = [System.IO.Path]::GetFileNameWithoutExtension($docx.Name)
-      $slug = Slugify $base
-      $outPath = Join-Path $outDir ($slug + ".html")
-      Set-Content -Path $outPath -Value $html -Encoding UTF8 -Force
-      Write-Host ("OK Standard: " + $docx.Name + " -> " + ([System.IO.Path]::GetFileName($outPath))) -ForegroundColor Green
-    }
-    catch {
-      Write-Host ("FAIL Standard: " + $docx.Name) -ForegroundColor Red
-    }
-  }
+
 
   # --- PART 2: ABOUT THE BIBLE Documents ---
   $BIBLE_ABOUT_SRC = Join-Path $MTB_SOURCE_ROOT "aboutthebible"

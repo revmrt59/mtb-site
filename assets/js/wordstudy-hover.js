@@ -1,15 +1,18 @@
 // wordstudy-hover.js
 // Desktop/laptop: hover shows extracted Summary from the word-study HTML; click opens full popup
 // Mobile/touch: no hover tooltip; tap reliably opens full popup (and suppresses OS dictionary/selection)
+//
 // Supports verse-aware word studies via .ws spans with:
 //   data-book="titus" data-ch="2" data-v="1" data-strong="g1319"
 // or explicit data-ws-doc/href.
-// Uses generator wrappers if present:
-//   #ws-summary-text for hover
-//   #ws-full-body for popup
 //
-// IMPORTANT: URL resolution uses window.location.href (not origin) to avoid <base href="/"> issues.
-console.log("WS-HOVER VERSION: 2026-02-24-A");
+// Uses generator wrappers if present:
+//   #ws-summary-text for hover + modal summary
+//   #ws-full-body for modal full study
+//
+// IMPORTANT: This site often runs as SPA: book.html?book=... injects chapter HTML into #doc-target.
+// Therefore we resolve relative paths against #doc-target[data-doc-dir] (set by load-doc.js).
+
 (function () {
   // ---------------------------------------------------
   // State
@@ -17,7 +20,7 @@ console.log("WS-HOVER VERSION: 2026-02-24-A");
   let tooltipEl = null;
   let modalEl = null;
 
-  // Cache fetched HTML word-study docs
+  // Cache fetched HTML word-study docs (keyed by absolute URL)
   const docCache = new Map();
 
   // ---------------------------------------------------
@@ -123,7 +126,7 @@ console.log("WS-HOVER VERSION: 2026-02-24-A");
   }
 
   function showModal(html) {
-    hideTooltip(); // critical for mobile overlay issues
+    hideTooltip();
     const el = ensureModal();
     const body = el.querySelector(".ws-modal-body");
     body.innerHTML = html || "<p class='muted'>No details available.</p>";
@@ -138,153 +141,135 @@ console.log("WS-HOVER VERSION: 2026-02-24-A");
   }
 
   // ---------------------------------------------------
-  // URL helpers
+  // SPA-aware base directory helpers
   // ---------------------------------------------------
-  function getCurrentDirPath() {
-    // NOT affected by <base href="">
-    // Example:
-    //   /books/new-testament/titus/002/titus-2-chapter-explanation.html
-    // -> /books/new-testament/titus/002/
+  function getInjectedDocDir() {
+    const target = document.getElementById("doc-target");
+    if (target) {
+      const dir = target.getAttribute("data-doc-dir");
+      if (dir) return dir; // e.g. "/books/new-testament/titus/002/"
+    }
+    // Fallback: current page directory (if a chapter HTML is loaded directly)
     return window.location.pathname.replace(/[^/]*$/, "");
   }
-  function getInjectedDocDir() {
-  const target = document.getElementById("doc-target");
-  const dir = target ? target.getAttribute("data-doc-dir") : null;
-  if (dir) return dir; // e.g. "/books/new-testament/titus/002/"
-  return window.location.pathname.replace(/[^/]*$/, "/");
-}
 
-  // Resolve any URL relative to the current page (NOT origin) so <base href="/"> can't break it.
-  // Also: if a bare root path like "/titus-2-1-g1319.html" slips in, force it into current dir.
-  function resolveDocUrl(raw) {
-    if (!raw) return null;
+  function toAbsoluteUrl(rawUrl) {
+    if (!rawUrl) return null;
 
-    // already absolute
-    if (/^https?:\/\//i.test(raw)) return raw;
+    // Already absolute
+    if (/^https?:\/\//i.test(rawUrl)) return rawUrl;
 
-    // root-absolute: if it's a bare word-study filename, treat it as chapter-local
-    if (raw.startsWith("/") && /^\/[a-z0-9-]+-\d+-\d+-[gh]\d+\.html$/i.test(raw)) {
-      raw = raw.slice(1);
-    }
+    // Rooted site path
+    if (rawUrl.startsWith("/")) return window.location.origin + rawUrl;
 
-    try {
-      // new URL(relative, window.location.href) resolves to the current directory
-      return new URL(raw, window.location.href).toString();
-    } catch {
-      return null;
-    }
-  }
-
-  function normalizeDocUrl(u) {
-    // If absolute, keep
-    if (/^https?:\/\//i.test(u)) return u;
-
-    // If root-absolute, keep (resolveDocUrl will handle bare-word-study root case)
-    if (u.startsWith("/")) return u;
-
-    // Otherwise force relative to current directory (ignores <base href>)
-    return getCurrentDirPath() + u.replace(/^\.\//, "");
+    // Otherwise treat as filename relative to injected doc directory
+    const baseDir = getInjectedDocDir();
+    const rel = rawUrl.replace(/^\.\//, "");
+    return window.location.origin + baseDir + rel;
   }
 
   // ---------------------------------------------------
-  // HTML loading + parsing
+  // HTML loader (returns object, used consistently everywhere)
   // ---------------------------------------------------
-async function loadDocHtml(rawUrl) {
-  if (!rawUrl) return { ok: false, url: null, status: 0, html: null };
+  async function loadDocHtml(rawUrl) {
+    const absUrl = toAbsoluteUrl(rawUrl);
+    if (!absUrl) return { ok: false, url: null, status: 0, html: null };
 
-  // If absolute URL already, use it
-  if (/^https?:\/\//i.test(rawUrl)) {
+    if (docCache.has(absUrl)) {
+      return { ok: true, url: absUrl, status: 200, html: docCache.get(absUrl) };
+    }
+
     try {
-      const res = await fetch(rawUrl, { cache: "no-store" });
-      if (!res.ok) return { ok: false, url: rawUrl, status: res.status, html: null };
+      const res = await fetch(absUrl, { cache: "no-store" });
+      if (!res.ok) return { ok: false, url: absUrl, status: res.status, html: null };
+
       const txt = await res.text();
-      return { ok: true, url: rawUrl, status: res.status, html: fixMojibake(txt) };
+      const cleaned = fixMojibake(txt);
+      docCache.set(absUrl, cleaned);
+
+      return { ok: true, url: absUrl, status: res.status, html: cleaned };
     } catch {
-      return { ok: false, url: rawUrl, status: 0, html: null };
+      return { ok: false, url: absUrl, status: 0, html: null };
     }
   }
 
- // Use injected document directory (set by load-doc.js)
-const baseDir = getInjectedDocDir(); // e.g. "/books/new-testament/titus/002/"
-
-// Normalize filename
-let rel = rawUrl.replace(/^\.\//, "").replace(/^\/+/, "");
-
-// Force into injected document directory
-const absUrl = window.location.origin + baseDir + rel;
-
-  try {
-    const res = await fetch(absUrl, { cache: "no-store" });
-    if (!res.ok) return { ok: false, url: absUrl, status: res.status, html: null };
-    const txt = await res.text();
-    return { ok: true, url: absUrl, status: res.status, html: fixMojibake(txt) };
-  } catch {
-    return { ok: false, url: absUrl, status: 0, html: null };
-  }
-}
-
-  // Extract #doc-root inner HTML when present; else use body inner; else raw
-  function extractDocRootInnerHtml(fullHtml) {
-    const temp = document.createElement("div");
-    temp.innerHTML = fullHtml;
-
-    const root = temp.querySelector("#doc-root");
-    if (root) return root.innerHTML;
-
-    const body = temp.querySelector("body");
-    if (body) return body.innerHTML;
-
-    return fullHtml;
-  }
-
-  // Summary extractor:
-  // Preferred: #ws-summary-text
-  // Fallback: between h2#summary and h2#full-study, concatenating paragraphs
+  // ---------------------------------------------------
+  // Extractors
+  // ---------------------------------------------------
   function extractSummaryFromHtml(fullHtml) {
     const temp = document.createElement("div");
     temp.innerHTML = fullHtml;
 
-    const root = temp.querySelector("#doc-root") || temp;
-
-    const wrapped = root.querySelector("#ws-summary-text");
+    // 1) Preferred: generator wrapper
+    const wrapped = temp.querySelector("#ws-summary-text");
     if (wrapped) {
       const txt = (wrapped.textContent || "").replace(/\u00A0/g, " ").trim();
-      return txt.length ? txt : null;
+      if (txt) return txt;
     }
 
-    const h2 = root.querySelector("h2#summary");
-    if (!h2) return null;
+    // 2) Common format: a paragraph that starts with "Summary:"
+    const ps = Array.from(temp.querySelectorAll("p"));
+    for (const p of ps) {
+      const t = (p.textContent || "").replace(/\u00A0/g, " ").trim();
+      if (!t) continue;
 
-    const stop = root.querySelector("h2#full-study");
-    let el = h2.nextElementSibling;
-    const parts = [];
-
-    while (el) {
-      if (stop && el === stop) break;
-
-      if (el.tagName === "P") {
-        const txt = (el.textContent || "").replace(/\u00A0/g, " ").trim();
-        if (txt.length) parts.push(txt);
+      // "Summary: ...."
+      if (t.toLowerCase().startsWith("summary:")) {
+        const body = t.replace(/^summary:\s*/i, "").trim();
+        return body || t;
       }
-      el = el.nextElementSibling;
     }
 
-    return parts.length ? parts.join("\n\n") : null;
+    // 3) Fallback: between h2#summary and h2#full-study
+    const h2 = temp.querySelector("h2#summary");
+    if (h2) {
+      const stop = temp.querySelector("h2#full-study");
+      let el = h2.nextElementSibling;
+      const parts = [];
+
+      while (el) {
+        if (stop && el === stop) break;
+        if (el.tagName === "P") {
+          const t = (el.textContent || "").replace(/\u00A0/g, " ").trim();
+          if (t) parts.push(t);
+        }
+        el = el.nextElementSibling;
+      }
+
+      if (parts.length) return parts.join("\n\n");
+    }
+
+    return null;
   }
 
-  // Full body extractor:
-  // Preferred: #ws-full-body
-  // Fallback: entire #doc-root
-  function extractFullBodyHtml(fullHtml) {
+  function extractModalHtml(fullHtml) {
     const temp = document.createElement("div");
     temp.innerHTML = fullHtml;
 
-    const root = temp.querySelector("#doc-root") || temp;
+    const summaryWrap = temp.querySelector("#ws-summary-text");
+    const fullWrap = temp.querySelector("#ws-full-body");
 
-    const full = root.querySelector("#ws-full-body");
-    if (full) return full.innerHTML;
+    // If wrappers exist, build a clear modal with headings
+    if (summaryWrap || fullWrap) {
+      const summaryHtml = summaryWrap ? summaryWrap.innerHTML : "";
+      const fullStudyHtml = fullWrap ? fullWrap.innerHTML : "";
 
-    return root.innerHTML;
+      return `
+        <h2>Summary</h2>
+        <div>${summaryHtml || "<p class='muted'>No summary available.</p>"}</div>
+        <h2>Full Study</h2>
+        <div>${fullStudyHtml || "<p class='muted'>No full study available.</p>"}</div>
+      `;
+    }
+
+    // Fallback: show #doc-root if present, else entire body
+    const docRoot = temp.querySelector("#doc-root");
+    if (docRoot) return docRoot.innerHTML;
+
+    const body = temp.querySelector("body");
+    if (body) return body.innerHTML;
+
+    return temp.innerHTML;
   }
 
   // ---------------------------------------------------
@@ -293,10 +278,10 @@ const absUrl = window.location.origin + baseDir + rel;
   function getDocUrlFromEl(el) {
     // Explicit URL wins (backward compatible)
     const d = el.getAttribute("data-ws-doc");
-    if (d) return normalizeDocUrl(d);
+    if (d) return d;
 
     const href = el.getAttribute("href");
-    if (href && href !== "#") return normalizeDocUrl(href);
+    if (href && href !== "#") return href;
 
     // Verse-aware metadata
     const book = (el.getAttribute("data-book") || "").trim();
@@ -311,8 +296,7 @@ const absUrl = window.location.origin + baseDir + rel;
 
     if (!book || !ch || !v || !strong) return null;
 
-    // Word studies live in the same chapter folder as the page that references them
-    // IMPORTANT: return a relative filename, not a root path
+    // Return filename relative to injected doc directory
     return `${book}-${ch}-${v}-${strong}.html`;
   }
 
@@ -331,23 +315,24 @@ const absUrl = window.location.origin + baseDir + rel;
       el.dataset.wsBound = "1";
 
       const docUrl = getDocUrlFromEl(el);
+      if (!docUrl) return;
+
       let hoverTimer = null;
 
       // Desktop hover: show extracted Summary
       if (!touch) {
         el.addEventListener("mouseenter", (e) => {
           hoverTimer = window.setTimeout(async () => {
-            if (!docUrl) return;
-
             try {
-              const fullHtml = await loadDocHtml(docUrl);
-              if (!fullHtml) {
+              const r = await loadDocHtml(docUrl);
+              if (!r.ok || !r.html) {
                 showTooltip("Click for word study", e.clientX, e.clientY);
                 return;
               }
-              const summary = extractSummaryFromHtml(fullHtml);
+              const summary = extractSummaryFromHtml(r.html);
               showTooltip(summary || "Click for word study", e.clientX, e.clientY);
-            } catch {
+            } catch (err) {
+              console.error(err);
               showTooltip("Click for word study", e.clientX, e.clientY);
             }
           }, 150);
@@ -365,7 +350,7 @@ const absUrl = window.location.origin + baseDir + rel;
         });
       }
 
-      // Reliable opener for desktop + mobile
+      // Click/tap: open modal
       const openWordStudy = async (e) => {
         if (e) {
           e.preventDefault();
@@ -373,37 +358,35 @@ const absUrl = window.location.origin + baseDir + rel;
         }
         hideTooltip();
 
-        if (!docUrl) return;
-
         try {
-        const r = await loadDocHtml(docUrl);
+          const r = await loadDocHtml(docUrl);
 
-if (!r.ok || !r.html) {
-  showModal(
-    `<p class="muted">No details available.</p>
-     <p class="muted">URL: ${r.url || "(none)"}</p>
-     <p class="muted">HTTP: ${r.status || "(failed)"}</p>`
-  );
-  return;
-}
+          if (!r.ok || !r.html) {
+            showModal(
+              `<p class="muted">No details available.</p>
+               <p class="muted">URL: ${r.url || "(none)"}</p>
+               <p class="muted">HTTP: ${r.status || "(failed)"}</p>`
+            );
+            return;
+          }
 
-const bodyHtml = extractFullBodyHtml(r.html);
-showModal(bodyHtml);
+          const modalHtml = extractModalHtml(r.html);
+          showModal(modalHtml);
         } catch (err) {
           console.error(err);
-          showModal(
-            `<p class="muted">Could not load word study.</p>
-             <p class="muted">${resolveDocUrl(docUrl) || docUrl}</p>`
-          );
+          showModal("<p class='muted'>Could not load word study.</p>");
         }
       };
 
       if (touch) {
-        // Prevent iOS/Android "Define/Look Up" callout and text selection behaviors
-        el.addEventListener("touchstart", (e) => {
-          e.preventDefault();
-          e.stopPropagation();
-        }, { passive: false });
+        el.addEventListener(
+          "touchstart",
+          (e) => {
+            e.preventDefault();
+            e.stopPropagation();
+          },
+          { passive: false }
+        );
 
         el.addEventListener("touchend", openWordStudy, { passive: false });
       } else {
@@ -425,7 +408,7 @@ showModal(bodyHtml);
 
   // Expose hook for load-doc.js (so it can rebind after injecting HTML)
   window.MTBWordStudyHover = {
-    bind: (root) => bindWordStudies(root || document)
+    bind: (root) => bindWordStudies(root || document),
   };
 
   document.addEventListener("DOMContentLoaded", startObservers);

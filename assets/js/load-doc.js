@@ -504,6 +504,10 @@ function groupVerseDwellBlocks(root) {
     if (!target) return;
 
     target.innerHTML = fixMojibake(content);
+    // Store injected document directory for word-study resolution
+// Example docPath: "/books/new-testament/titus/002/titus-2-chapter-explanation.html"
+// injectedDocDir: "/books/new-testament/titus/002/"
+
     // Store injected document directory for word-study resolution (critical for book.html SPA loading)
 const injectedDocDir = docPath.slice(0, docPath.lastIndexOf("/") + 1); // ends with "/"
 target.setAttribute("data-doc-dir", injectedDocDir);

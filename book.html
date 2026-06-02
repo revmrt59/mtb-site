@@ -335,7 +335,7 @@ body { margin: 0; }
 </style>
 </head>
 
-<body data-testament="old-testament" data-section="law">
+<body>
 
 <header class="site-header mtb-primary-header">
  
@@ -360,7 +360,6 @@ body { margin: 0; }
 <div id="book-hero-title" class="book-hero-title"></div>
 
       <div class="book-hero-controls">
-         <button id="book-hero-canonical" type="button">Canonical Context</button>
         <button id="book-hero-intro" type="button">Book Introduction</button>
         <button id="book-hero-resources" type="button">Book Resources</button>
       </div>
@@ -425,7 +424,6 @@ document.addEventListener("DOMContentLoaded", function () {
   const tabsShell = document.getElementById("tabs-shell");
   const docLayout = document.getElementById("doc-layout");
   const chapterWrap = document.getElementById("book-hero-chapters");
-  const canonicalBtn = document.getElementById("book-hero-canonical");
   const introBtn = document.getElementById("book-hero-intro");
   const resourcesBtn = document.getElementById("book-hero-resources");
   const heroTitle = document.getElementById("book-hero-title");
@@ -600,30 +598,7 @@ function wireModalLinks(modalContentEl) {
     }
   });
 }
-function getCanonicalSectionForBook(bookSlug) {
-  // OT (what we built so far)
-  const map = {
-    // Law
-    "genesis":"law","exodus":"law","leviticus":"law","numbers":"law","deuteronomy":"law",
 
-    // History
-    "joshua":"history","judges":"history","ruth":"history",
-    "1-samuel":"history","2-samuel":"history","1-kings":"history","2-kings":"history",
-    "1-chronicles":"history","2-chronicles":"history","ezra":"history","nehemiah":"history","esther":"history",
-
-    // Wisdom
-    "job":"wisdom","psalms":"wisdom","proverbs":"wisdom","ecclesiastes":"wisdom","song-of-solomon":"wisdom",
-
-    // Major Prophets
-    "isaiah":"major-prophets","jeremiah":"major-prophets","lamentations":"major-prophets","ezekiel":"major-prophets","daniel":"major-prophets",
-
-    // Minor Prophets
-    "hosea":"minor-prophets","joel":"minor-prophets","amos":"minor-prophets","obadiah":"minor-prophets","jonah":"minor-prophets",
-    "micah":"minor-prophets","nahum":"minor-prophets","habakkuk":"minor-prophets","zephaniah":"minor-prophets",
-    "haggai":"minor-prophets","zechariah":"minor-prophets","malachi":"minor-prophets"
-  };
-  return map[bookSlug] || "";
-}
   async function openBookModal(kind) {
     const modal = document.getElementById("book-modal");
     const content = document.getElementById("book-modal-content");
@@ -639,32 +614,16 @@ function getCanonicalSectionForBook(bookSlug) {
     modal.setAttribute("aria-hidden", "false");
     content.innerHTML = "Loading...";
 
-let candidates = [];
+    const docFile = (kind === "book_resources")
+      ? `${book}-0-book-resources.html`
+      : `${book}-0-book-introduction.html`;
+     // : `${book}-0-book-introduction.html`;
 
-if (kind === "canonical_context") {
-  const testament = document.body.dataset.testament; // e.g. old-testament
-  const section   = document.body.dataset.section;   // e.g. law
-
-  if (!testament || !section) {
-    content.innerHTML = "<p><strong>Canonical Context not configured for this book.</strong></p>";
-    return;
-  }
-
-  candidates = [
-    `/sections/${testament}/${section}/index.html`
-  ];
-
-} else {
-  const docFile = (kind === "book_resources")
-    ? `${book}-0-book-resources.html`
-    : `${book}-0-book-introduction.html`;
-
-  // Try both testaments to avoid hardcoding
-  candidates = [
-    `/books/new-testament/${book}/000-book/${docFile}`,
-    `/books/old-testament/${book}/000-book/${docFile}`
-  ];
-}
+    // Try both testaments to avoid hardcoding
+    const candidates = [
+      `/books/new-testament/${book}/000-book/${docFile}`,
+      `/books/old-testament/${book}/000-book/${docFile}`
+    ];
 
   const loaded = await fetchFirstOk(candidates);
   if (loaded) {
@@ -743,11 +702,7 @@ function wireModalLinks_DUPLICATE_1(modalContentEl) {
       openBookModal("book_intro");
     };
   }
-if (canonicalBtn) {
-  canonicalBtn.onclick = function(){
-    openBookModal("canonical_context");
-  };
-}
+
   if (resourcesBtn) {
     resourcesBtn.onclick = function(){
       openBookModal("book_resources");

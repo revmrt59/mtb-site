@@ -7,16 +7,6 @@
 # -----------------------------
 # EDIT THESE CONSTANTS (ONCE)
 # -----------------------------
-param(
-  [string]$Mode = ""
-)
-
-# If Mode wasn't passed in, ask interactively (keeps your current behavior)
-if ([string]::IsNullOrWhiteSpace($Mode)) {
-  $Mode = Read-Host "Mode (BOOK / ABOUT / RESOURCES / SECTIONS) [BOOK]"
-  if ([string]::IsNullOrWhiteSpace($Mode)) { $Mode = "BOOK" }
-}
-$Mode = $Mode.Trim().ToUpperInvariant()
 # Your website repo root (folder containing index.html, book.html, assets, books, about, resources)
 $SITE_ROOT = "C:\Users\Mike\Documents\MTB\GitHub\mtb-site"
 
@@ -726,8 +716,8 @@ Write-Host ""
 Write-Host "Mastering the Bible - site Generator"
 Write-Host ""
 
-#$Mode = Prompt-NonEmpty "Mode (BOOK / ABOUT / RESOURCES)" "BOOK"
-#$Mode = $Mode.Trim().ToUpperInvariant()
+$Mode = Prompt-NonEmpty "Mode (BOOK / ABOUT / RESOURCES)" "BOOK"
+$Mode = $Mode.Trim().ToUpperInvariant()
 
 if ($Mode -eq "BOOK") {
 
@@ -1114,50 +1104,5 @@ if ($Mode -eq "RESOURCES") {
   Write-Host "RESOURCES generation complete." -ForegroundColor Green
   exit 0
 }
-if ($Mode -eq "SECTIONS") {
 
-  Write-Host ""
-  Write-Host "Mode: SECTIONS (Canonical Context)"
-  
-  $sectionsSrcRoot = Join-Path $MTB_SOURCE_ROOT "sections"
-  if (-not (Test-Path $sectionsSrcRoot)) { Fail "Sections source not found: $sectionsSrcRoot" }
-
-  $sectionsOutRoot = Join-Path $SITE_ROOT "sections"
-  Ensure-Path $sectionsOutRoot
-
-  $docxFiles = Get-ChildItem $sectionsSrcRoot -Recurse -Filter "*.docx" -ErrorAction SilentlyContinue
-
-  foreach ($docx in $docxFiles) {
-    try {
-      # Build output path mirroring folder structure under /sections
-      $rel = $docx.FullName.Substring($sectionsSrcRoot.Length).TrimStart("\","/")
-      $relDir = Split-Path $rel -Parent
-
-      $outDir = if ([string]::IsNullOrWhiteSpace($relDir)) { $sectionsOutRoot } else { Join-Path $sectionsOutRoot $relDir }
-      Ensure-Path $outDir
-
-      # Default to index.html (so /sections/.../ renders clean)
-      $outPath = Join-Path $outDir "index.html"
-
-      Write-Host ("Processing Section: " + $rel + " -> " + ($outDir + "\index.html") + "...")
-
-      $html = Convert-DocxToHtmlFragment $docx.FullName
-      $html = Fix-MojibakeHtml $html
-
-      # Wrap as a canonical-context fragment for stable styling/hooks
-      $html = "<section class=`"mtb-doc mtb-doc--read`" data-doc-type=`"canonical-context`">`n$html`n</section>`n"
-
-      Set-Content -Path $outPath -Value $html -Encoding UTF8 -Force
-      Write-Host ("OK Section: " + $rel + " -> index.html") -ForegroundColor Green
-    }
-    catch {
-      Write-Host ("FAIL Section: " + $docx.FullName) -ForegroundColor Red
-      Write-Host ($_.Exception.Message) -ForegroundColor Red
-    }
-  }
-
-  Write-Host ""
-  Write-Host "SECTIONS generation complete." -ForegroundColor Green
-  exit 0
-}
-Fail "Unknown mode '$Mode'. Use BOOK, ABOUT, RESOURCES, or SECTIONS."
+Fail "Unknown mode '$Mode'. Use BOOK, ABOUT, or RESOURCES."

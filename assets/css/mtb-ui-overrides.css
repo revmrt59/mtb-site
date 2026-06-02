@@ -35,17 +35,21 @@ body[data-book][data-chapter][data-doc-type="chapter-scripture"] #doc-target td{
   word-break: break-word !important;
 }
 
+
 /* =========================================================
-   3) ABOUT PAGE (inner scroll: tabs fixed, white content scrolls)
+   3) ABOUT PAGE (inner scroll: primary header fixed, about tabs fixed, white content scrolls)
    ========================================================= */
 
 html:has(.about-nav),
-body:has(.about-nav){
+body:has(.about-nav),
+html:has(.about-mtb-nav),
+body:has(.about-mtb-nav){
   height: 100% !important;
   overflow: hidden !important;
 }
 
-body:has(.about-nav) main{
+body:has(.about-nav) main,
+body:has(.about-mtb-nav) main{
   height: calc(100vh - var(--mtb-header-h, 64px)) !important;
   overflow: hidden !important;
   display: flex !important;
@@ -53,7 +57,8 @@ body:has(.about-nav) main{
   min-height: 0 !important;
 }
 
-body:has(.about-nav) .about-nav{
+body:has(.about-nav) .about-nav,
+body:has(.about-mtb-nav) .about-mtb-nav{
   flex: 0 0 auto !important;
   position: sticky !important;
   top: 0 !important;
@@ -62,11 +67,21 @@ body:has(.about-nav) .about-nav{
   border-bottom: 1px solid rgba(0,0,0,0.08) !important;
 }
 
-body:has(.about-nav) #doc-target{
+body:has(.about-nav) #doc-target,
+body:has(.about-mtb-nav) #doc-target{
   flex: 1 1 auto !important;
   min-height: 0 !important;
+  height: 100% !important;
   overflow-y: auto !important;
   overflow-x: hidden !important;
+  box-sizing: border-box !important;
+  padding-bottom: 120px !important;
+  scroll-padding-bottom: 120px !important;
+}
+
+body:has(.about-nav) #doc-target > *:last-child,
+body:has(.about-mtb-nav) #doc-target > *:last-child{
+  margin-bottom: 0 !important;
 }
 
 /* =========================================================

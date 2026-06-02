@@ -48,6 +48,7 @@
     psalms: "old-testament",
     proverbs: "old-testament",
     obadiah: "old-testament",
+    ruth: "old-testament",
   };
 
   // ==========================================

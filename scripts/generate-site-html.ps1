@@ -769,6 +769,9 @@ $failList = New-Object System.Collections.Generic.List[string]
 $html = Convert-DocxToHtmlFragment $docx.FullName
 $html = Fix-MojibakeHtml $html
 
+$html = $html -replace 'class="mtb-scripture"', 'class="MTB-Read"'
+$html = $html -replace 'class="MTB-Scripture"', 'class="MTB-Read"'
+
 $base = [System.IO.Path]::GetFileNameWithoutExtension($docx.Name)
 $outName = (Slugify $base) + ".html"
 

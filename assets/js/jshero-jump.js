@@ -9,7 +9,7 @@
   { name: "Obadiah", slug: "obadiah", chapters: 1 },
   { name: "Ruth", slug: "ruth", chapters: 4 },
   // { name: "Second Timothy", slug: "2-timothy", chapters: 4 },
-   { name: "Titus", slug: "titus", chapters: 3 }
+  // { name: "Titus", slug: "titus", chapters: 3 }
 ];
 
 // Make available to book.html too (so you don’t maintain two lists)

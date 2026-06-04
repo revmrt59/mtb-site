@@ -335,7 +335,7 @@ body { margin: 0; }
 </style>
 </head>
 
-<body data-testament="old-testament" data-section="law">
+<body>
 
 <header class="site-header mtb-primary-header">
  
@@ -601,30 +601,32 @@ function wireModalLinks(modalContentEl) {
     }
   });
 }
-function getCanonicalSectionForBook(bookSlug) {
-  // OT (what we built so far)
+function getCanonicalContextForBook(bookSlug) {
   const map = {
-    // Law
-    "genesis":"law","exodus":"law","leviticus":"law","numbers":"law","deuteronomy":"law",
+    "genesis":["old-testament","law"], "exodus":["old-testament","law"], "leviticus":["old-testament","law"], "numbers":["old-testament","law"], "deuteronomy":["old-testament","law"],
 
-    // History
-    "joshua":"history","judges":"history","ruth":"history",
-    "1-samuel":"history","2-samuel":"history","1-kings":"history","2-kings":"history",
-    "1-chronicles":"history","2-chronicles":"history","ezra":"history","nehemiah":"history","esther":"history",
+    "joshua":["old-testament","history"], "judges":["old-testament","history"], "ruth":["old-testament","history"], "1-samuel":["old-testament","history"], "2-samuel":["old-testament","history"], "1-kings":["old-testament","history"], "2-kings":["old-testament","history"], "1-chronicles":["old-testament","history"], "2-chronicles":["old-testament","history"], "ezra":["old-testament","history"], "nehemiah":["old-testament","history"], "esther":["old-testament","history"],
 
-    // Wisdom
-    "job":"wisdom","psalms":"wisdom","proverbs":"wisdom","ecclesiastes":"wisdom","song-of-solomon":"wisdom",
+    "job":["old-testament","wisdom"], "psalms":["old-testament","wisdom"], "proverbs":["old-testament","wisdom"], "ecclesiastes":["old-testament","wisdom"], "song-of-solomon":["old-testament","wisdom"],
 
-    // Major Prophets
-    "isaiah":"major-prophets","jeremiah":"major-prophets","lamentations":"major-prophets","ezekiel":"major-prophets","daniel":"major-prophets",
+    "isaiah":["old-testament","major-prophets"], "jeremiah":["old-testament","major-prophets"], "lamentations":["old-testament","major-prophets"], "ezekiel":["old-testament","major-prophets"], "daniel":["old-testament","major-prophets"],
 
-    // Minor Prophets
-    "hosea":"minor-prophets","joel":"minor-prophets","amos":"minor-prophets","obadiah":"minor-prophets","jonah":"minor-prophets",
-    "micah":"minor-prophets","nahum":"minor-prophets","habakkuk":"minor-prophets","zephaniah":"minor-prophets",
-    "haggai":"minor-prophets","zechariah":"minor-prophets","malachi":"minor-prophets"
+    "hosea":["old-testament","minor-prophets"], "joel":["old-testament","minor-prophets"], "amos":["old-testament","minor-prophets"], "obadiah":["old-testament","minor-prophets"], "jonah":["old-testament","minor-prophets"], "micah":["old-testament","minor-prophets"], "nahum":["old-testament","minor-prophets"], "habakkuk":["old-testament","minor-prophets"], "zephaniah":["old-testament","minor-prophets"], "haggai":["old-testament","minor-prophets"], "zechariah":["old-testament","minor-prophets"], "malachi":["old-testament","minor-prophets"],
+
+    "matthew":["new-testament","gospels"], "mark":["new-testament","gospels"], "luke":["new-testament","gospels"], "john":["new-testament","gospels"],
+    "acts":["new-testament","acts"],
+    "romans":["new-testament","pauline-epistles"], "1-corinthians":["new-testament","pauline-epistles"], "2-corinthians":["new-testament","pauline-epistles"], "galatians":["new-testament","pauline-epistles"], "ephesians":["new-testament","pauline-epistles"], "philippians":["new-testament","pauline-epistles"], "colossians":["new-testament","pauline-epistles"], "1-thessalonians":["new-testament","pauline-epistles"], "2-thessalonians":["new-testament","pauline-epistles"],
+    "1-timothy":["new-testament","pastoral-epistles"], "2-timothy":["new-testament","pastoral-epistles"], "titus":["new-testament","pastoral-epistles"],
+    "hebrews":["new-testament","general-epistles"], "james":["new-testament","general-epistles"], "1-peter":["new-testament","general-epistles"], "2-peter":["new-testament","general-epistles"], "1-john":["new-testament","general-epistles"], "2-john":["new-testament","general-epistles"], "3-john":["new-testament","general-epistles"], "jude":["new-testament","general-epistles"],
+    "revelation":["new-testament","revelation"]
   };
-  return map[bookSlug] || "";
+
+  const found = map[bookSlug];
+  if (!found) return null;
+
+  return { testament: found[0], section: found[1] };
 }
+
   async function openBookModal(kind) {
     const modal = document.getElementById("book-modal");
     const content = document.getElementById("book-modal-content");
@@ -641,30 +643,33 @@ function getCanonicalSectionForBook(bookSlug) {
     content.innerHTML = "Loading...";
 
 let candidates = [];
+let missingLabel = "";
 
 if (kind === "canonical_context") {
-  const testament = document.body.dataset.testament; // e.g. old-testament
-  const section   = document.body.dataset.section;   // e.g. law
+  const context = getCanonicalContextForBook(book);
 
-  if (!testament || !section) {
-    content.innerHTML = "<p><strong>Canonical Context not configured for this book.</strong></p>";
+  if (!context) {
+    content.innerHTML = "<p><strong>Canonical Context is not configured for this book yet.</strong></p>";
     return;
   }
 
   candidates = [
-    `/sections/${testament}/${section}/index.html`
+    `/sections/${context.testament}/${context.section}/index.html`
   ];
+
+  missingLabel = candidates[0];
 
 } else {
   const docFile = (kind === "book_resources")
     ? `${book}-0-book-resources.html`
     : `${book}-0-book-introduction.html`;
 
-  // Try both testaments to avoid hardcoding
   candidates = [
     `/books/new-testament/${book}/000-book/${docFile}`,
     `/books/old-testament/${book}/000-book/${docFile}`
   ];
+
+  missingLabel = docFile;
 }
 
   const loaded = await fetchFirstOk(candidates);
@@ -676,12 +681,13 @@ if (kind === "canonical_context") {
 
   } else {
     content.innerHTML =
-      `<p><strong>Could not load:</strong> ${docFile}</p>` +
+      `<p><strong>Could not load:</strong> ${missingLabel}</p>` +
       `<p>Expected one of these paths:</p>` +
       `<ul>` +
       candidates.map(u => `<li><code>${u}</code></li>`).join("") +
       `</ul>` +
-      `<p>If this is Book Resources, make sure you generate <code>${docFile}</code> into <code>000-book</code>.</p>`;
+      `<p>If this is Book Resources, make sure the file exists in <code>000-book</code>.</p>`;
+
   }
 
 

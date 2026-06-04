@@ -27,62 +27,6 @@ $DEFAULT_ABOUT_SRC     = Join-Path $MTB_SOURCE_ROOT "about"
 $DEFAULT_RESOURCES_SRC = Join-Path $MTB_SOURCE_ROOT "resources"
 $DEFAULT_BOOKS_SRC     = Join-Path $MTB_SOURCE_ROOT "books"
 
-# --------------------------------------------------
-# Canonical Section Mapping (Scalable)
-# --------------------------------------------------
-
-$BOOK_TO_SECTION = @{
-  # Law
-  "genesis"="law"; "exodus"="law"; "leviticus"="law"; "numbers"="law"; "deuteronomy"="law"
-
-  # History
-  "joshua"="history"; "judges"="history"; "ruth"="history"
-  "1-samuel"="history"; "2-samuel"="history"
-  "1-kings"="history"; "2-kings"="history"
-  "1-chronicles"="history"; "2-chronicles"="history"
-  "ezra"="history"; "nehemiah"="history"; "esther"="history"
-
-  # Wisdom
-  "job"="wisdom"; "psalms"="wisdom"; "proverbs"="wisdom"
-  "ecclesiastes"="wisdom"; "song-of-solomon"="wisdom"
-
-  # Major Prophets
-  "isaiah"="major-prophets"; "jeremiah"="major-prophets"
-  "lamentations"="major-prophets"; "ezekiel"="major-prophets"; "daniel"="major-prophets"
-
-  # Minor Prophets
-  "hosea"="minor-prophets"; "joel"="minor-prophets"; "amos"="minor-prophets"
-  "obadiah"="minor-prophets"; "jonah"="minor-prophets"; "micah"="minor-prophets"
-  "nahum"="minor-prophets"; "habakkuk"="minor-prophets"; "zephaniah"="minor-prophets"
-  "haggai"="minor-prophets"; "zechariah"="minor-prophets"; "malachi"="minor-prophets"
-
-  # Gospels
-  "matthew"="gospels"; "mark"="gospels"; "luke"="gospels"; "john"="gospels"
-
-  # Acts
-  "acts"="acts"
-
-  # Pauline Epistles
-  "romans"="pauline-epistles"; "1-corinthians"="pauline-epistles"
-  "2-corinthians"="pauline-epistles"; "galatians"="pauline-epistles"
-  "ephesians"="pauline-epistles"; "philippians"="pauline-epistles"
-  "colossians"="pauline-epistles"; "1-thessalonians"="pauline-epistles"
-  "2-thessalonians"="pauline-epistles"
-
-  # Pastoral Epistles
-  "1-timothy"="pastoral-epistles"; "2-timothy"="pastoral-epistles"
-  "titus"="pastoral-epistles"; "philemon"="pastoral-epistles"
-
-  # General Epistles
-  "hebrews"="general-epistles"; "james"="general-epistles"
-  "1-peter"="general-epistles"; "2-peter"="general-epistles"
-  "1-john"="general-epistles"; "2-john"="general-epistles"
-  "3-john"="general-epistles"; "jude"="general-epistles"
-
-  # Revelation
-  "revelation"="revelation"
-}
-
 # Pandoc must be on PATH (or set full path to pandoc.exe)
 $PANDOC = "pandoc"
 

@@ -558,6 +558,177 @@ function Remove-PandocDecorationsKeepImages([string]$html) {
   return $out
 }
 
+
+# --------------------------------------------------
+# Excel Book Introduction -> HTML
+# --------------------------------------------------
+function ConvertTo-HtmlEncoded([string]$text) {
+  if ($null -eq $text) { return "" }
+  return [System.Net.WebUtility]::HtmlEncode([string]$text)
+}
+
+function Convert-MtbIntroCellToHtml([string]$text) {
+  if ([string]::IsNullOrWhiteSpace($text)) { return "" }
+
+  $normalized = ([string]$text) -replace "`r`n", "`n" -replace "`r", "`n"
+  $blocks = [regex]::Split($normalized.Trim(), "`n\s*`n")
+  $sb = New-Object System.Text.StringBuilder
+
+  foreach ($block in $blocks) {
+    $b = $block.Trim()
+    if ([string]::IsNullOrWhiteSpace($b)) { continue }
+
+    # Bullet block: one workbook bullet per line.
+    $lines = $b -split "`n"
+    $nonEmpty = @($lines | Where-Object { -not [string]::IsNullOrWhiteSpace($_) })
+    $bulletLines = @($nonEmpty | Where-Object { $_.Trim() -match '^[•\-]\s*' })
+
+    if ($nonEmpty.Count -gt 0 -and $bulletLines.Count -eq $nonEmpty.Count) {
+      [void]$sb.Append('<ul>')
+      foreach ($line in $nonEmpty) {
+        $item = $line.Trim() -replace '^[•\-]\s*', ''
+        [void]$sb.Append('<li>' + (ConvertTo-HtmlEncoded $item) + '</li>')
+      }
+      [void]$sb.Append('</ul>')
+      continue
+    }
+
+    if ($b -match '^(?is)Pastoral Insight:\s*(?<body>.*)$') {
+      $body = ConvertTo-HtmlEncoded $Matches['body']
+      $body = $body -replace "`n", '<br />'
+      [void]$sb.Append('<div class="mtb-book-intro-insight"><strong>Pastoral Insight:</strong> ' + $body + '</div>')
+      continue
+    }
+
+    $encoded = ConvertTo-HtmlEncoded $b
+    $encoded = $encoded -replace "`n", '<br />'
+    [void]$sb.Append('<p>' + $encoded + '</p>')
+  }
+
+  return $sb.ToString()
+}
+
+function Get-ExcelWorksheetValues {
+  param(
+    [Parameter(Mandatory)] [string] $WorkbookPath,
+    [Parameter(Mandatory)] [string] $WorksheetName
+  )
+
+  if (-not (Test-Path $WorkbookPath)) { throw "Workbook not found: $WorkbookPath" }
+
+  $excel = $null
+  $workbook = $null
+  $worksheet = $null
+  $usedRange = $null
+
+  try {
+    $excel = New-Object -ComObject Excel.Application
+    $excel.Visible = $false
+    $excel.DisplayAlerts = $false
+
+    $workbook = $excel.Workbooks.Open($WorkbookPath, 0, $true)
+    $worksheet = $workbook.Worksheets.Item($WorksheetName)
+    $usedRange = $worksheet.UsedRange
+
+    $rows = [int]$usedRange.Rows.Count
+    $cols = [int]$usedRange.Columns.Count
+    $values = @()
+
+    for ($r = 1; $r -le $rows; $r++) {
+      $row = @()
+      for ($c = 1; $c -le $cols; $c++) {
+        $v = $usedRange.Cells.Item($r, $c).Text
+        $row += [string]$v
+      }
+      $values += ,$row
+    }
+
+    return ,$values
+  }
+  finally {
+    if ($null -ne $workbook) { $workbook.Close($false) | Out-Null }
+    if ($null -ne $excel) { $excel.Quit() }
+
+    foreach ($obj in @($usedRange, $worksheet, $workbook, $excel)) {
+      if ($null -ne $obj) {
+        try { [void][System.Runtime.InteropServices.Marshal]::FinalReleaseComObject($obj) } catch {}
+      }
+    }
+    [GC]::Collect()
+    [GC]::WaitForPendingFinalizers()
+  }
+}
+
+function New-MtbBookIntroductionHtmlFromExcel {
+  param(
+    [Parameter(Mandatory)] [string] $WorkbookPath,
+    [Parameter(Mandatory)] [string] $BookSlug
+  )
+
+  $data = Get-ExcelWorksheetValues -WorkbookPath $WorkbookPath -WorksheetName 'Book Introduction'
+  if ($data.Count -lt 9) { throw "The 'Book Introduction' worksheet does not contain the expected two-table layout." }
+
+  # Expected canonical layout:
+  # Row 3 section title, row 4 headers, row 5 content
+  # Row 7 section title, row 8 headers, row 9 content
+  $bookTitle = if (-not [string]::IsNullOrWhiteSpace($data[0][1])) { $data[0][1] } else { $BookSlug }
+
+  $sections = @(
+    @{ Title = $data[2][0]; Headers = $data[3]; Values = $data[4] },
+    @{ Title = $data[6][0]; Headers = $data[7]; Values = $data[8] }
+  )
+
+  $sb = New-Object System.Text.StringBuilder
+  [void]$sb.Append('<div class="mtb-book-introduction">')
+  [void]$sb.Append('<h1>Book Introduction: ' + (ConvertTo-HtmlEncoded $bookTitle) + '</h1>')
+
+  foreach ($section in $sections) {
+    $sectionTitle = [string]$section.Title
+    if ([string]::IsNullOrWhiteSpace($sectionTitle)) { continue }
+
+    [void]$sb.Append('<section class="mtb-book-intro-section">')
+    [void]$sb.Append('<h2>' + (ConvertTo-HtmlEncoded $sectionTitle) + '</h2>')
+    [void]$sb.Append('<div class="mtb-book-intro-grid">')
+
+    for ($i = 0; $i -lt $section.Headers.Count; $i++) {
+      $header = [string]$section.Headers[$i]
+      $value  = if ($i -lt $section.Values.Count) { [string]$section.Values[$i] } else { "" }
+      if ([string]::IsNullOrWhiteSpace($header)) { continue }
+
+      [void]$sb.Append('<article class="mtb-book-intro-card">')
+      [void]$sb.Append('<h3>' + (ConvertTo-HtmlEncoded $header) + '</h3>')
+      [void]$sb.Append('<div class="mtb-book-intro-content">' + (Convert-MtbIntroCellToHtml $value) + '</div>')
+      [void]$sb.Append('</article>')
+    }
+
+    [void]$sb.Append('</div></section>')
+  }
+
+  [void]$sb.Append('</div>')
+  return $sb.ToString()
+}
+
+function Write-MtbBookIntroductionFromExcel {
+  param(
+    [Parameter(Mandatory)] [string] $WorkbookPath,
+    [Parameter(Mandatory)] [string] $OutBookDir,
+    [Parameter(Mandatory)] [string] $BookSlug
+  )
+
+  $bookDir = Join-Path $OutBookDir '000-book'
+  Ensure-Path $bookDir
+
+  $outName = "$BookSlug-0-book-introduction.html"
+  $outPath = Join-Path $bookDir $outName
+
+  $html = New-MtbBookIntroductionHtmlFromExcel -WorkbookPath $WorkbookPath -BookSlug $BookSlug
+  $html = Wrap-MtbDocHtml $html 'book-introduction'
+  [System.IO.File]::WriteAllText($outPath, $html, [System.Text.UTF8Encoding]::new($false))
+
+  Write-Host ("OK   " + (Split-Path $WorkbookPath -Leaf) + " [Book Introduction] -> " + $outName) -ForegroundColor Green
+  return $outPath
+}
+
 # -----------------------------
 # FIXED: Resolve testament using Contains (no regex)
 # -----------------------------
@@ -808,10 +979,28 @@ $outDir = Join-Path $SITE_ROOT ("books\" + $testament + "\" + $BOOK_SLUG)
   Write-Host "Source: $bookSource"
   Write-Host "Output: $resolvedOut"
   Write-Host ""
-# temp mrt line
-Write-Host "SOURCE FOLDER BEING SCANNED: $bookSrc" -ForegroundColor Cyan
-  $docxFiles = Get-ChildItem $bookSource -Filter "*.docx" -Recurse -ErrorAction SilentlyContinue
-  if ($null -eq $docxFiles -or $docxFiles.Count -eq 0) { Fail "No DOCX files found under: $bookSource" }
+# Generate the Book Introduction directly from the canonical workbook when present.
+  $bookWorkbook = Join-Path $bookSource ($BOOK_SLUG + ".xlsm")
+  $introGeneratedFromExcel = $false
+
+  if (Test-Path $bookWorkbook) {
+    try {
+      $introOut = Write-MtbBookIntroductionFromExcel -WorkbookPath $bookWorkbook -OutBookDir $outDir -BookSlug $BOOK_SLUG
+      Write-Host ("WROTE: " + $introOut) -ForegroundColor Cyan
+      $introGeneratedFromExcel = $true
+    }
+    catch {
+      Fail ("Could not generate the Book Introduction from " + $bookWorkbook + ":`n" + $_.Exception.Message)
+    }
+  }
+  else {
+    Write-Host ("No workbook found at: " + $bookWorkbook) -ForegroundColor Yellow
+  }
+
+  $docxFiles = @(Get-ChildItem $bookSource -Filter "*.docx" -Recurse -ErrorAction SilentlyContinue)
+  if ($docxFiles.Count -eq 0 -and -not $introGeneratedFromExcel) {
+    Fail "No DOCX files or canonical workbook content found under: $bookSource"
+  }
 
   $debugShown = 0
   $okCount = 0

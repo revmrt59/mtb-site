@@ -637,8 +637,51 @@ function Get-ExcelWorksheetValues {
     for ($r = 1; $r -le $rows; $r++) {
       $row = @()
       for ($c = 1; $c -le $cols; $c++) {
-        $v = $usedRange.Cells.Item($r, $c).Text
-        $row += [string]$v
+        $cell = $usedRange.Cells.Item($r, $c)
+        $v = [string]$cell.Text
+
+        # Preserve mixed inline bold only in Study Chapter worksheets.
+        # Checking the cell once is fast. Character-by-character COM calls
+        # occur only when Excel reports mixed formatting in that cell.
+        if ($WorksheetName -like 'Study Chapter *' -and -not [string]::IsNullOrEmpty($v)) {
+          $boldState = $cell.Font.Bold
+
+          if ($null -eq $boldState) {
+            $rich = New-Object System.Text.StringBuilder
+            $inBold = $false
+
+            for ($i = 1; $i -le $v.Length; $i++) {
+              $chars = $null
+              try {
+                $chars = $cell.Characters($i, 1)
+                $charBold = [bool]$chars.Font.Bold
+
+                if ($charBold -and -not $inBold) {
+                  [void]$rich.Append('[[MTB-B]]')
+                  $inBold = $true
+                }
+                elseif (-not $charBold -and $inBold) {
+                  [void]$rich.Append('[[/MTB-B]]')
+                  $inBold = $false
+                }
+
+                [void]$rich.Append($v.Substring($i - 1, 1))
+              }
+              finally {
+                if ($null -ne $chars) {
+                  try { [void][System.Runtime.InteropServices.Marshal]::FinalReleaseComObject($chars) } catch {}
+                }
+              }
+            }
+
+            if ($inBold) { [void]$rich.Append('[[/MTB-B]]') }
+            $v = $rich.ToString()
+          }
+        }
+
+        $row += $v
+
+        try { [void][System.Runtime.InteropServices.Marshal]::FinalReleaseComObject($cell) } catch {}
       }
       $values += ,$row
     }
@@ -1133,7 +1176,7 @@ function New-MtbChapterOverviewHtmlFromExcel {
   --mtb-blue-soft: #eef4f9;
   --mtb-border: #d7e0e8;
   --mtb-text: #1d2935;
-  width: 100%; max-width: 1600px; margin: 0 auto; padding: 2px 4px 30px;
+  width: 100%; max-width: 1380px; margin: 0 auto; padding: 2px 4px 30px;
   color: var(--mtb-text); font-family: Arial, Helvetica, sans-serif;
 }
 .mtb-chapter-overview-dashboard * { box-sizing: border-box; }
@@ -1167,7 +1210,7 @@ function New-MtbChapterOverviewHtmlFromExcel {
   display: grid; grid-template-columns: repeat(12,minmax(0,1fr)); gap: 15px;
 }
 .mtb-chapter-overview-dashboard .mtb-overview-card {
-  grid-column: span 3; min-width: 0; overflow: hidden; border: 1px solid var(--mtb-border);
+  grid-column: span 6; min-width: 0; overflow: hidden; border: 1px solid var(--mtb-border);
   border-top: 4px solid var(--mtb-navy-2); border-radius: 12px; background: #fff;
   box-shadow: 0 4px 15px rgba(28,48,66,.055);
 }
@@ -1183,6 +1226,9 @@ function New-MtbChapterOverviewHtmlFromExcel {
 .mtb-chapter-overview-dashboard .mtb-overview-card-body ul { margin: 0; padding-left: 1.25em; }
 .mtb-chapter-overview-dashboard .mtb-overview-card-body li { margin: 0 0 .5em; }
 .mtb-chapter-overview-dashboard .mtb-overview-card-body li:last-child { margin-bottom: 0; }
+.mtb-chapter-overview-dashboard .mtb-overview-card-theme,
+.mtb-chapter-overview-dashboard .mtb-overview-card-summary,
+.mtb-chapter-overview-dashboard .mtb-overview-card-christ { grid-column: span 6; }
 .mtb-chapter-overview-dashboard .mtb-overview-card-theme {
   border-top-color: var(--mtb-gold); background: linear-gradient(180deg,#fffdf8 0%,#fff 100%);
 }
@@ -1206,14 +1252,12 @@ function New-MtbChapterOverviewHtmlFromExcel {
 .mtb-chapter-overview-dashboard .mtb-overview-glossary-item:last-child { padding-bottom: 0; margin-bottom: 0; border-bottom: 0; }
 .mtb-chapter-overview-dashboard .mtb-overview-glossary dt { color: var(--mtb-navy); font-weight: 800; }
 .mtb-chapter-overview-dashboard .mtb-overview-glossary dd { margin: 3px 0 0; }
-@media (max-width: 1100px) {
-  .mtb-chapter-overview-dashboard .mtb-overview-card,
-  .mtb-chapter-overview-dashboard [class*='mtb-overview-card-'] { grid-column: span 6; }
-}
-@media (max-width: 660px) {
+@media (max-width: 900px) {
   .mtb-chapter-overview-dashboard .mtb-overview-grid { grid-template-columns: 1fr; }
   .mtb-chapter-overview-dashboard .mtb-overview-card,
   .mtb-chapter-overview-dashboard [class*='mtb-overview-card-'] { grid-column: 1 / -1; }
+}
+@media (max-width: 660px) {
   .mtb-chapter-overview-dashboard { padding-left: 0; padding-right: 0; }
   .mtb-chapter-overview-dashboard .mtb-overview-hero { align-items: flex-start; flex-direction: column; padding: 19px; border-radius: 10px; }
   .mtb-chapter-overview-dashboard .mtb-overview-card-body { padding: 14px 15px 16px; }
@@ -1521,6 +1565,13 @@ function Get-MtbStudyHeaderParts([string]$header) {
   return @{ Title = $title; Prompt = $prompt }
 }
 
+function ConvertTo-MtbStudyEncoded([string]$text) {
+  $encoded = ConvertTo-HtmlEncoded ([string]$text)
+  $encoded = $encoded.Replace('[[MTB-B]]', '<strong>')
+  $encoded = $encoded.Replace('[[/MTB-B]]', '</strong>')
+  return $encoded
+}
+
 function Convert-MtbStudyCellToHtml([string]$text, [string]$header, [switch]$EmphasizeLabels) {
   if ([string]::IsNullOrWhiteSpace($text)) { return '<p class="mtb-study-empty">No content added yet.</p>' }
 
@@ -1536,10 +1587,10 @@ function Convert-MtbStudyCellToHtml([string]$text, [string]$header, [switch]$Emp
     foreach ($line in $nonEmpty) {
       $item = ($line.Trim() -replace '^[•\-]\s*', '').Trim()
       if ($EmphasizeLabels -and $item -match '^(?<label>[^:]{2,70}):\s*(?<body>.*)$') {
-        [void]$sb.Append('<li><strong>' + (ConvertTo-HtmlEncoded $Matches['label'].Trim()) + ':</strong> ' + (ConvertTo-HtmlEncoded $Matches['body'].Trim()) + '</li>')
+        [void]$sb.Append('<li><strong>' + (ConvertTo-MtbStudyEncoded $Matches['label'].Trim()) + ':</strong> ' + (ConvertTo-MtbStudyEncoded $Matches['body'].Trim()) + '</li>')
       }
       else {
-        [void]$sb.Append('<li>' + (ConvertTo-HtmlEncoded $item) + '</li>')
+        [void]$sb.Append('<li>' + (ConvertTo-MtbStudyEncoded $item) + '</li>')
       }
     }
     [void]$sb.Append('</ul>')
@@ -1555,10 +1606,10 @@ function Convert-MtbStudyCellToHtml([string]$text, [string]$header, [switch]$Emp
       foreach ($line in $items) {
         $item = $line.Trim()
         if ($item -match '^(?<phrase>[“"].+?[”"]|[^\-–—:]{2,90})\s*[\-–—:]\s*(?<body>.+)$') {
-          [void]$sb.Append('<div class="mtb-study-observation"><strong>' + (ConvertTo-HtmlEncoded $Matches['phrase'].Trim()) + '</strong><span>' + (ConvertTo-HtmlEncoded $Matches['body'].Trim()) + '</span></div>')
+          [void]$sb.Append('<div class="mtb-study-observation"><strong>' + (ConvertTo-MtbStudyEncoded $Matches['phrase'].Trim()) + '</strong><span>' + (ConvertTo-MtbStudyEncoded $Matches['body'].Trim()) + '</span></div>')
         }
         else {
-          [void]$sb.Append('<div class="mtb-study-observation"><span>' + (ConvertTo-HtmlEncoded $item) + '</span></div>')
+          [void]$sb.Append('<div class="mtb-study-observation"><span>' + (ConvertTo-MtbStudyEncoded $item) + '</span></div>')
         }
       }
       [void]$sb.Append('</div>')
@@ -1572,10 +1623,10 @@ function Convert-MtbStudyCellToHtml([string]$text, [string]$header, [switch]$Emp
     $b = $block.Trim()
     if ([string]::IsNullOrWhiteSpace($b)) { continue }
     if ($EmphasizeLabels -and $b -match '^(?s)(?<label>[^:`n]{2,70}):\s*(?<body>.*)$') {
-      [void]$sb.Append('<p><strong>' + (ConvertTo-HtmlEncoded $Matches['label'].Trim()) + ':</strong> ' + ((ConvertTo-HtmlEncoded $Matches['body'].Trim()) -replace "`n", '<br />') + '</p>')
+      [void]$sb.Append('<p><strong>' + (ConvertTo-MtbStudyEncoded $Matches['label'].Trim()) + ':</strong> ' + ((ConvertTo-MtbStudyEncoded $Matches['body'].Trim()) -replace "`n", '<br />') + '</p>')
     }
     else {
-      [void]$sb.Append('<p>' + ((ConvertTo-HtmlEncoded $b) -replace "`n", '<br />') + '</p>')
+      [void]$sb.Append('<p>' + ((ConvertTo-MtbStudyEncoded $b) -replace "`n", '<br />') + '</p>')
     }
   }
   return $sb.ToString()

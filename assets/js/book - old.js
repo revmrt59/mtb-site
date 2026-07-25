@@ -4,17 +4,15 @@
   // ==========================================
   // CONFIG (LOCKED TAB ORDER)
   // ==========================================
-  
-
-
   const TABS = [
-  { key: "chapter_scripture", label: "Chapter Scripture" },
-  { key: "book_introduction", label: "Book Introduction" },
-  { key: "chapter_orientation", label: "Chapter Overview" },
-  { key: "chapter_explanation", label: "Chapter Study" },
-  { key: "eg_culture", label: "EG Culture" },
-  { key: "resources", label: "Resources" }
-];
+    { key: "chapter_scripture", label: "Chapter Scripture" },
+    { key: "book_introduction", label: "Book Introduction" },
+    { key: "chapter_orientation", label: "Chapter Orientation" },
+    { key: "chapter_explanation", label: "Chapter Explanation" },
+    { key: "chapter_insights", label: "Chapter Insights" },
+    { key: "eg_culture", label: "EG Culture" },
+    { key: "resources", label: "Resources" }
+  ];
 
   // ==========================================
   // BOOK → TESTAMENT MAP (same as load-doc.js)

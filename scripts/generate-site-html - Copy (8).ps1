@@ -1133,7 +1133,7 @@ function New-MtbChapterOverviewHtmlFromExcel {
   --mtb-blue-soft: #eef4f9;
   --mtb-border: #d7e0e8;
   --mtb-text: #1d2935;
-  width: 100%; max-width: 1600px; margin: 0 auto; padding: 2px 4px 30px;
+  width: 100%; max-width: 1380px; margin: 0 auto; padding: 2px 4px 30px;
   color: var(--mtb-text); font-family: Arial, Helvetica, sans-serif;
 }
 .mtb-chapter-overview-dashboard * { box-sizing: border-box; }
@@ -1167,7 +1167,7 @@ function New-MtbChapterOverviewHtmlFromExcel {
   display: grid; grid-template-columns: repeat(12,minmax(0,1fr)); gap: 15px;
 }
 .mtb-chapter-overview-dashboard .mtb-overview-card {
-  grid-column: span 3; min-width: 0; overflow: hidden; border: 1px solid var(--mtb-border);
+  grid-column: span 6; min-width: 0; overflow: hidden; border: 1px solid var(--mtb-border);
   border-top: 4px solid var(--mtb-navy-2); border-radius: 12px; background: #fff;
   box-shadow: 0 4px 15px rgba(28,48,66,.055);
 }
@@ -1183,6 +1183,9 @@ function New-MtbChapterOverviewHtmlFromExcel {
 .mtb-chapter-overview-dashboard .mtb-overview-card-body ul { margin: 0; padding-left: 1.25em; }
 .mtb-chapter-overview-dashboard .mtb-overview-card-body li { margin: 0 0 .5em; }
 .mtb-chapter-overview-dashboard .mtb-overview-card-body li:last-child { margin-bottom: 0; }
+.mtb-chapter-overview-dashboard .mtb-overview-card-theme,
+.mtb-chapter-overview-dashboard .mtb-overview-card-summary,
+.mtb-chapter-overview-dashboard .mtb-overview-card-christ { grid-column: span 6; }
 .mtb-chapter-overview-dashboard .mtb-overview-card-theme {
   border-top-color: var(--mtb-gold); background: linear-gradient(180deg,#fffdf8 0%,#fff 100%);
 }
@@ -1206,14 +1209,12 @@ function New-MtbChapterOverviewHtmlFromExcel {
 .mtb-chapter-overview-dashboard .mtb-overview-glossary-item:last-child { padding-bottom: 0; margin-bottom: 0; border-bottom: 0; }
 .mtb-chapter-overview-dashboard .mtb-overview-glossary dt { color: var(--mtb-navy); font-weight: 800; }
 .mtb-chapter-overview-dashboard .mtb-overview-glossary dd { margin: 3px 0 0; }
-@media (max-width: 1100px) {
-  .mtb-chapter-overview-dashboard .mtb-overview-card,
-  .mtb-chapter-overview-dashboard [class*='mtb-overview-card-'] { grid-column: span 6; }
-}
-@media (max-width: 660px) {
+@media (max-width: 900px) {
   .mtb-chapter-overview-dashboard .mtb-overview-grid { grid-template-columns: 1fr; }
   .mtb-chapter-overview-dashboard .mtb-overview-card,
   .mtb-chapter-overview-dashboard [class*='mtb-overview-card-'] { grid-column: 1 / -1; }
+}
+@media (max-width: 660px) {
   .mtb-chapter-overview-dashboard { padding-left: 0; padding-right: 0; }
   .mtb-chapter-overview-dashboard .mtb-overview-hero { align-items: flex-start; flex-direction: column; padding: 19px; border-radius: 10px; }
   .mtb-chapter-overview-dashboard .mtb-overview-card-body { padding: 14px 15px 16px; }
@@ -1682,29 +1683,6 @@ function Get-MtbStudyVerseReference([string]$scripture, [string]$fallbackBook, [
   return ((Get-Culture).TextInfo.ToTitleCase($fallbackBook)) + " $chapter"
 }
 
-
-function Get-MtbStudyIconHtml([string]$title) {
-  $key = ([string]$title).Trim().ToLowerInvariant()
-  $icon = '&#9679;'
-
-  if ($key -match 'section summary|summary') { $icon = '&#8801;' }
-  elseif ($key -match 'key observations|observation') { $icon = '&#9678;' }
-  elseif ($key -match 'main idea') { $icon = '&#9733;' }
-  elseif ($key -match '^understanding') { $icon = '&#9672;' }
-  elseif ($key -match 'historical.*setting') { $icon = '&#8982;' }
-  elseif ($key -match 'historical.*notes') { $icon = '&#9638;' }
-  elseif ($key -match 'foundational truths') { $icon = '&#9635;' }
-  elseif ($key -match 'section insights|going deeper') { $icon = '&#10022;' }
-  elseif ($key -match 'christ connection') { $icon = '&#10013;' }
-  elseif ($key -match 'dwelling in the word') { $icon = '&#9825;' }
-  elseif ($key -match '^remarks') { $icon = '&#9998;' }
-  elseif ($key -match 'healthy church culture|community') { $icon = '&#8962;' }
-  elseif ($key -match 'expository|lexical') { $icon = '&#9636;' }
-  elseif ($key -match 'nuggets') { $icon = '&#10022;' }
-
-  return '<span class="mtb-study-title-icon" aria-hidden="true">' + $icon + '</span>'
-}
-
 function New-MtbChapterStudyHtmlFromExcel {
   param(
     [Parameter(Mandatory)] [string] $WorkbookPath,
@@ -1776,9 +1754,9 @@ function New-MtbChapterStudyHtmlFromExcel {
 .mtb-study-eyebrow{margin:0 0 5px;color:var(--gold);font-size:.78rem;font-weight:800;letter-spacing:.13em;text-transform:uppercase}.mtb-study-title{margin:0;color:var(--navy);font-size:clamp(1.55rem,3vw,2.25rem);line-height:1.1}.mtb-study-badge{flex:0 0 auto;padding:10px 16px;border:1px solid rgba(23,58,94,.18);border-radius:999px;background:#fff;color:var(--navy);font-weight:800}
 .mtb-study-controls{display:flex;justify-content:flex-end;gap:10px;margin:-10px 0 18px}.mtb-study-control{appearance:none;border:1px solid #b9c8d5;border-radius:8px;background:#fff;color:var(--navy);padding:8px 13px;font-weight:800;cursor:pointer}.mtb-study-control:hover{background:#eef4f9}.mtb-study-section{margin:0 0 30px;border:1px solid var(--line);border-radius:15px;background:#fff;box-shadow:0 5px 18px rgba(28,48,66,.06);overflow:hidden}.mtb-study-section>summary{list-style:none;cursor:pointer}.mtb-study-section>summary::-webkit-details-marker{display:none}.mtb-study-section-banner{display:flex;align-items:center;justify-content:space-between;gap:15px;padding:17px 21px;background:linear-gradient(100deg,var(--navy),#315f88);color:#fff}.mtb-study-section-banner h2{margin:0;font-size:1.28rem}.mtb-study-section-number{font-size:.76rem;font-weight:800;letter-spacing:.1em;text-transform:uppercase;opacity:.82}.mtb-study-section-toggle{flex:0 0 auto;width:34px;height:34px;border:1px solid rgba(255,255,255,.4);border-radius:999px;display:grid;place-items:center;font-size:1.35rem;font-weight:700}.mtb-study-section-toggle:before{content:'−'}.mtb-study-section:not([open]) .mtb-study-section-toggle:before{content:'+'}.mtb-study-section:not([open]) .mtb-study-section-banner{border-radius:14px}
 .mtb-study-block{padding:20px}.mtb-study-block-title{display:flex;align-items:center;gap:12px;margin:0 0 14px;color:var(--navy);font-size:1.02rem;text-transform:uppercase;letter-spacing:.055em}.mtb-study-block-title:after{content:'';height:1px;flex:1;background:linear-gradient(to right,#c7d3de,transparent)}
-.mtb-study-grid{display:grid;grid-template-columns:repeat(12,minmax(0,1fr));gap:18px;align-items:stretch}.mtb-study-card{grid-column:span 3;border:1px solid var(--line);border-top:4px solid #6288aa;border-radius:11px;overflow:hidden;background:#fff}.mtb-study-card-wide{grid-column:span 6}.mtb-study-card h3{display:flex;align-items:center;gap:8px;margin:0;padding:11px 14px;background:var(--blue-soft);border-bottom:1px solid #e4ebf0;color:var(--navy);font-size:.94rem}.mtb-study-title-icon{display:inline-grid;place-items:center;flex:0 0 auto;width:1.15em;color:#315f88;font-size:1.05em;line-height:1}.mtb-study-card-prompt{display:none}.mtb-study-card-body{padding:14px 16px 16px;line-height:1.5}.mtb-study-card-body p{margin:0 0 .85em}.mtb-study-card-body p:last-child{margin-bottom:0}.mtb-study-card-body ul{margin:0;padding-left:1.2em}.mtb-study-card-body li{margin:0 0 .48em}.mtb-study-card-theme,.mtb-study-card-mainidea,.mtb-study-card-christ{border-top-color:#6288aa;background:#fff}.mtb-study-card-theme h3,.mtb-study-card-mainidea h3,.mtb-study-card-christ h3{background:var(--blue-soft);color:var(--navy)}
-.mtb-study-verses{padding:0 20px 20px}.mtb-study-verse{margin:0 0 13px;border:1px solid #cfdae3;border-radius:11px;background:#fff;overflow:hidden}.mtb-study-verse summary{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:14px 17px;cursor:pointer;background:#f3f7fa;color:var(--navy);font-weight:800;list-style:none}.mtb-study-verse summary::-webkit-details-marker{display:none}.mtb-study-verse summary:after{content:'+';font-size:1.3rem}.mtb-study-verse[open] summary:after{content:'−'}.mtb-study-verse[open] summary{border-bottom:1px solid #dbe3ea;background:#eaf2f8}.mtb-study-verse-body{padding:16px}.mtb-study-scripture-block{position:relative;margin:0 0 11px;padding:16px 18px;border-left:5px solid var(--gold);border-radius:0 9px 9px 0;background:#fffaf0}.mtb-study-scripture-block p{margin:0;line-height:1.5}.mtb-study-translation{float:right;margin:0 0 6px 10px;padding:3px 7px;border-radius:999px;background:#efe2c7;color:#6b4818;font-size:.7rem;font-weight:800}.mtb-study-verse-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:16px;margin-top:14px;align-items:stretch}.mtb-study-verse-panel{border:1px solid var(--line);border-radius:9px;overflow:hidden}.mtb-study-verse-panel h4{display:flex;align-items:center;gap:8px;margin:0;padding:9px 12px;background:#f4f7f9;color:var(--navy);font-size:.88rem}.mtb-study-verse-panel-content{padding:12px 13px;line-height:1.47}.mtb-study-verse-panel-content p{margin:0 0 .8em}.mtb-study-observation{padding:0 0 9px;margin:0 0 9px;border-bottom:1px solid #e7ecef}.mtb-study-observation:last-child{padding-bottom:0;margin-bottom:0;border-bottom:0}.mtb-study-observation strong{display:block;margin-bottom:3px;color:var(--navy)}.mtb-study-observation span{display:block}.mtb-study-empty{color:#77818a;font-style:italic}
-.mtb-study-wrap{padding:0 20px 22px}.mtb-study-wrap-grid{display:grid;grid-template-columns:repeat(12,minmax(0,1fr));gap:13px}.mtb-study-wrap-card{grid-column:span 4;border:1px solid var(--line);border-radius:10px;overflow:hidden;background:#fff}.mtb-study-wrap-card h3{display:flex;align-items:center;gap:8px;margin:0;padding:10px 13px;background:#f3f7fa;color:var(--navy);font-size:.9rem}.mtb-study-wrap-card .mtb-study-card-body{padding:13px 14px}.mtb-study-wrap-card-christ,.mtb-study-wrap-card-dwelling{border-top:1px solid var(--line)}
+.mtb-study-grid{display:grid;grid-template-columns:repeat(12,minmax(0,1fr));gap:18px;align-items:stretch}.mtb-study-card{grid-column:span 3;border:1px solid var(--line);border-top:4px solid #6288aa;border-radius:11px;overflow:hidden;background:#fff}.mtb-study-card-wide{grid-column:span 6}.mtb-study-card h3{margin:0;padding:11px 14px 9px;background:var(--blue-soft);border-bottom:1px solid #e4ebf0;color:var(--navy);font-size:.94rem}.mtb-study-card-prompt{display:block;margin-top:3px;color:var(--muted);font-size:.72rem;font-weight:500}.mtb-study-card-body{padding:14px 16px 16px;line-height:1.5}.mtb-study-card-body p{margin:0 0 .85em}.mtb-study-card-body p:last-child{margin-bottom:0}.mtb-study-card-body ul{margin:0;padding-left:1.2em}.mtb-study-card-body li{margin:0 0 .48em}.mtb-study-card-theme,.mtb-study-card-mainidea,.mtb-study-card-christ{border-top-color:var(--gold);background:linear-gradient(180deg,#fffdf8,#fff)}.mtb-study-card-theme h3,.mtb-study-card-mainidea h3,.mtb-study-card-christ h3{background:var(--gold-soft);color:#6f4b16}
+.mtb-study-verses{padding:0 20px 20px}.mtb-study-verse{margin:0 0 13px;border:1px solid #cfdae3;border-radius:11px;background:#fff;overflow:hidden}.mtb-study-verse summary{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:14px 17px;cursor:pointer;background:#f3f7fa;color:var(--navy);font-weight:800;list-style:none}.mtb-study-verse summary::-webkit-details-marker{display:none}.mtb-study-verse summary:after{content:'+';font-size:1.3rem}.mtb-study-verse[open] summary:after{content:'−'}.mtb-study-verse[open] summary{border-bottom:1px solid #dbe3ea;background:#eaf2f8}.mtb-study-verse-body{padding:16px}.mtb-study-scripture-block{position:relative;margin:0 0 11px;padding:16px 18px;border-left:5px solid var(--gold);border-radius:0 9px 9px 0;background:#fffaf0}.mtb-study-scripture-block p{margin:0;line-height:1.5}.mtb-study-translation{float:right;margin:0 0 6px 10px;padding:3px 7px;border-radius:999px;background:#efe2c7;color:#6b4818;font-size:.7rem;font-weight:800}.mtb-study-verse-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:16px;margin-top:14px;align-items:stretch}.mtb-study-verse-panel{border:1px solid var(--line);border-radius:9px;overflow:hidden}.mtb-study-verse-panel h4{margin:0;padding:9px 12px;background:#f4f7f9;color:var(--navy);font-size:.88rem}.mtb-study-verse-panel-content{padding:12px 13px;line-height:1.47}.mtb-study-verse-panel-content p{margin:0 0 .8em}.mtb-study-observation{padding:0 0 9px;margin:0 0 9px;border-bottom:1px solid #e7ecef}.mtb-study-observation:last-child{padding-bottom:0;margin-bottom:0;border-bottom:0}.mtb-study-observation strong{display:block;margin-bottom:3px;color:var(--navy)}.mtb-study-observation span{display:block}.mtb-study-empty{color:#77818a;font-style:italic}
+.mtb-study-wrap{padding:0 20px 22px}.mtb-study-wrap-grid{display:grid;grid-template-columns:repeat(12,minmax(0,1fr));gap:13px}.mtb-study-wrap-card{grid-column:span 4;border:1px solid var(--line);border-radius:10px;overflow:hidden;background:#fff}.mtb-study-wrap-card h3{margin:0;padding:10px 13px;background:#f3f7fa;color:var(--navy);font-size:.9rem}.mtb-study-wrap-card .mtb-study-card-body{padding:13px 14px}.mtb-study-wrap-card-christ,.mtb-study-wrap-card-dwelling{border-top:4px solid var(--gold)}
 @media(max-width:1100px){.mtb-study-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.mtb-study-card{grid-column:span 1}.mtb-study-card-wide{grid-column:span 2}.mtb-study-wrap-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.mtb-study-wrap-card,.mtb-study-wrap-card-christ,.mtb-study-wrap-card-dwelling{grid-column:span 1}.mtb-study-verse-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
 @media(max-width:660px){.mtb-study-grid{grid-template-columns:1fr}.mtb-study-card,.mtb-study-card-wide{grid-column:1/-1}.mtb-chapter-study{padding-left:0;padding-right:0}.mtb-study-hero{align-items:flex-start;flex-direction:column;padding:18px;border-radius:10px}.mtb-study-controls{justify-content:stretch;margin-top:-6px}.mtb-study-control{flex:1}.mtb-study-section-banner{align-items:center}.mtb-study-block,.mtb-study-verses,.mtb-study-wrap{padding-left:13px;padding-right:13px}.mtb-study-wrap-grid{grid-template-columns:1fr}.mtb-study-verse-grid{grid-template-columns:1fr}.mtb-study-verse summary{padding:13px}.mtb-study-verse-body{padding:12px}}
 </style>
@@ -1829,7 +1807,9 @@ function New-MtbChapterStudyHtmlFromExcel {
         $extra = ''
         if ($key -match 'main idea') { $extra=' mtb-study-card-mainidea' }
         if ($key -match '^remarks') { $extra += ' mtb-study-card-wide' }
-        [void]$sb.Append('<article class="mtb-study-card' + $extra + '"><h3>' + (Get-MtbStudyIconHtml $parts.Title) + (ConvertTo-HtmlEncoded $parts.Title) + '</h3><div class="mtb-study-card-body">' + (Convert-MtbStudyCellToHtml $value $parts.Title -EmphasizeLabels) + '</div></article>')
+        [void]$sb.Append('<article class="mtb-study-card' + $extra + '"><h3>' + (ConvertTo-HtmlEncoded $parts.Title))
+        if (-not [string]::IsNullOrWhiteSpace($parts.Prompt)) { [void]$sb.Append('<span class="mtb-study-card-prompt">' + (ConvertTo-HtmlEncoded $parts.Prompt) + '</span>') }
+        [void]$sb.Append('</h3><div class="mtb-study-card-body">' + (Convert-MtbStudyCellToHtml $value $parts.Title -EmphasizeLabels) + '</div></article>')
       }
     }
     [void]$sb.Append('</div></div>')
@@ -1852,7 +1832,7 @@ function New-MtbChapterStudyHtmlFromExcel {
           if ([string]::IsNullOrWhiteSpace($rawHeader)) { continue }
           $parts=Get-MtbStudyHeaderParts $rawHeader
           $value=if($c -lt $row.Count){[string]$row[$c]}else{''}
-          [void]$sb.Append('<section class="mtb-study-verse-panel"><h4>' + (Get-MtbStudyIconHtml $parts.Title) + (ConvertTo-HtmlEncoded $parts.Title) + '</h4><div class="mtb-study-verse-panel-content">' + (Convert-MtbStudyCellToHtml $value $parts.Title -EmphasizeLabels) + '</div></section>')
+          [void]$sb.Append('<section class="mtb-study-verse-panel"><h4>' + (ConvertTo-HtmlEncoded $parts.Title) + '</h4><div class="mtb-study-verse-panel-content">' + (Convert-MtbStudyCellToHtml $value $parts.Title -EmphasizeLabels) + '</div></section>')
         }
         [void]$sb.Append('</div></div></details>')
       }
@@ -1868,7 +1848,7 @@ function New-MtbChapterStudyHtmlFromExcel {
         $value=if($c -lt $section.WrapValues.Count){[string]$section.WrapValues[$c]}else{''}
         $key=$parts.Title.Trim().ToLowerInvariant(); $extra=''
         if($key -match 'christ connection'){$extra=' mtb-study-wrap-card-christ'}elseif($key -match 'dwelling'){$extra=' mtb-study-wrap-card-dwelling'}
-        [void]$sb.Append('<article class="mtb-study-wrap-card' + $extra + '"><h3>' + (Get-MtbStudyIconHtml $parts.Title) + (ConvertTo-HtmlEncoded $parts.Title) + '</h3><div class="mtb-study-card-body">' + (Convert-MtbStudyCellToHtml $value $parts.Title -EmphasizeLabels) + '</div></article>')
+        [void]$sb.Append('<article class="mtb-study-wrap-card' + $extra + '"><h3>' + (ConvertTo-HtmlEncoded $parts.Title) + '</h3><div class="mtb-study-card-body">' + (Convert-MtbStudyCellToHtml $value $parts.Title -EmphasizeLabels) + '</div></article>')
       }
       [void]$sb.Append('</div></div>')
     }

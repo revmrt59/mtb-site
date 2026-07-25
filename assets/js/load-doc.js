@@ -315,7 +315,8 @@
     if (!rootEl) return;
 
     // Matches: word (G###) or word (H###) ; allow 1–5 digits (so G96 works)
-    const re = /(\b[\w’'-]+\b)\s*\((G\d{1,5}|H\d{1,5})\)/g;
+    //const re = /(\b[\w’'-]+\b)\s*\((G\d{1,5}|H\d{1,5})\)/g;
+    const re = /(\b[\w’'-]+\b)\s*\(([GH]\d{1,5})\)/gi;
 
     const baseDir = docPath ? docPath.slice(0, docPath.lastIndexOf("/") + 1) : "";
 
@@ -359,7 +360,8 @@
       while ((m = re.exec(text)) !== null) {
         const full = m[0];
         const word = m[1];
-        const strong = m[2];
+        // const strong = m[2];
+        const strong = m[2].toUpperCase();
         const start = m.index;
 
         if (start > last) frag.appendChild(document.createTextNode(text.slice(last, start)));

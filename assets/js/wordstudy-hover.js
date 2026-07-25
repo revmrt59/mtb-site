@@ -26,13 +26,22 @@
   // ---------------------------------------------------
   // Device detection
   // ---------------------------------------------------
-  function isTouchDevice() {
-    return (
-      "ontouchstart" in window ||
-      (navigator.maxTouchPoints || 0) > 0 ||
-      (window.matchMedia && window.matchMedia("(pointer: coarse)").matches)
-    );
-  }
+function isTouchDevice() {
+  // If the device has any fine pointer capable of hover,
+  // treat it as a desktop device even when it also has a touchscreen.
+  const hasHoverMouse =
+    window.matchMedia &&
+    window.matchMedia("(any-hover: hover) and (any-pointer: fine)").matches;
+
+  if (hasHoverMouse) return false;
+
+  return (
+    "ontouchstart" in window ||
+    (navigator.maxTouchPoints || 0) > 0 ||
+    (window.matchMedia &&
+      window.matchMedia("(pointer: coarse)").matches)
+  );
+}
 
   // ---------------------------------------------------
   // Mojibake fix (applied to loaded HTML)
@@ -196,52 +205,115 @@
   // ---------------------------------------------------
   // Extractors
   // ---------------------------------------------------
+  
   function extractSummaryFromHtml(fullHtml) {
-    const temp = document.createElement("div");
-    temp.innerHTML = fullHtml;
+  const temp = document.createElement("div");
+  temp.innerHTML = fullHtml;
 
-    // 1) Preferred: generator wrapper
-    const wrapped = temp.querySelector("#ws-summary-text");
-    if (wrapped) {
-      const txt = (wrapped.textContent || "").replace(/\u00A0/g, " ").trim();
-      if (txt) return txt;
-    }
+  // 1) Preferred: generator wrapper
+  const wrapped = temp.querySelector("#ws-summary-text");
 
-    // 2) Common format: a paragraph that starts with "Summary:"
-    const ps = Array.from(temp.querySelectorAll("p"));
-    for (const p of ps) {
-      const t = (p.textContent || "").replace(/\u00A0/g, " ").trim();
-      if (!t) continue;
+  if (wrapped) {
+    const txt = (wrapped.textContent || "")
+      .replace(/\u00A0/g, " ")
+      .replace(/\s+/g, " ")
+      .trim();
 
-      // "Summary: ...."
-      if (t.toLowerCase().startsWith("summary:")) {
-        const body = t.replace(/^summary:\s*/i, "").trim();
-        return body || t;
-      }
-    }
-
-    // 3) Fallback: between h2#summary and h2#full-study
-    const h2 = temp.querySelector("h2#summary");
-    if (h2) {
-      const stop = temp.querySelector("h2#full-study");
-      let el = h2.nextElementSibling;
-      const parts = [];
-
-      while (el) {
-        if (stop && el === stop) break;
-        if (el.tagName === "P") {
-          const t = (el.textContent || "").replace(/\u00A0/g, " ").trim();
-          if (t) parts.push(t);
-        }
-        el = el.nextElementSibling;
-      }
-
-      if (parts.length) return parts.join("\n\n");
-    }
-
-    return null;
+    if (txt) return txt;
   }
 
+  // 2) Paragraph beginning with "Summary:"
+  const ps = Array.from(temp.querySelectorAll("p"));
+
+  for (const p of ps) {
+    const t = (p.textContent || "")
+      .replace(/\u00A0/g, " ")
+      .replace(/\s+/g, " ")
+      .trim();
+
+    if (!t) continue;
+
+    if (/^summary\s*:/i.test(t)) {
+      const body = t.replace(/^summary\s*:\s*/i, "").trim();
+
+      // Summary text is in this same paragraph
+      if (body) return body;
+
+      // "Summary:" is a standalone paragraph.
+      // Find the next meaningful paragraph or list item.
+      let next = p.nextElementSibling;
+
+      while (next) {
+        const nextText = (next.textContent || "")
+          .replace(/\u00A0/g, " ")
+          .replace(/\s+/g, " ")
+          .trim();
+
+        if (
+          nextText &&
+          !/^summary\s*:?\s*$/i.test(nextText) &&
+          nextText.length > 10
+        ) {
+          return nextText;
+        }
+
+        next = next.nextElementSibling;
+      }
+    }
+  }
+
+  // 3) Content between h2#summary and h2#full-study
+  const h2 = temp.querySelector("h2#summary");
+
+  if (h2) {
+    const stop = temp.querySelector("h2#full-study");
+    let el = h2.nextElementSibling;
+    const parts = [];
+
+    while (el) {
+      if (stop && el === stop) break;
+
+      if (el.matches("p, li")) {
+        const t = (el.textContent || "")
+          .replace(/\u00A0/g, " ")
+          .replace(/\s+/g, " ")
+          .trim();
+
+        if (t) parts.push(t);
+      }
+
+      el = el.nextElementSibling;
+    }
+
+    if (parts.length) return parts.join("\n\n");
+  }
+
+  // 4) Final fallback: first meaningful paragraph
+  const root =
+    temp.querySelector("#doc-root") ||
+    temp.querySelector("main") ||
+    temp.querySelector("body") ||
+    temp;
+
+  const fallbackParagraphs = Array.from(root.querySelectorAll("p"));
+
+  for (const p of fallbackParagraphs) {
+    const text = (p.textContent || "")
+      .replace(/\u00A0/g, " ")
+      .replace(/\s+/g, " ")
+      .trim();
+
+    if (!text) continue;
+    if (/^summary\s*:?\s*$/i.test(text)) continue;
+    if (/^full study\s*:?\s*$/i.test(text)) continue;
+
+    if (text.length >= 30) {
+      return text;
+    }
+  }
+
+  return null;
+}
   function extractModalHtml(fullHtml) {
     const temp = document.createElement("div");
     temp.innerHTML = fullHtml;

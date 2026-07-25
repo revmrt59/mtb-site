@@ -1133,7 +1133,7 @@ function New-MtbChapterOverviewHtmlFromExcel {
   --mtb-blue-soft: #eef4f9;
   --mtb-border: #d7e0e8;
   --mtb-text: #1d2935;
-  width: 100%; max-width: 1600px; margin: 0 auto; padding: 2px 4px 30px;
+  width: 100%; max-width: 1380px; margin: 0 auto; padding: 2px 4px 30px;
   color: var(--mtb-text); font-family: Arial, Helvetica, sans-serif;
 }
 .mtb-chapter-overview-dashboard * { box-sizing: border-box; }
@@ -1167,7 +1167,7 @@ function New-MtbChapterOverviewHtmlFromExcel {
   display: grid; grid-template-columns: repeat(12,minmax(0,1fr)); gap: 15px;
 }
 .mtb-chapter-overview-dashboard .mtb-overview-card {
-  grid-column: span 3; min-width: 0; overflow: hidden; border: 1px solid var(--mtb-border);
+  grid-column: span 6; min-width: 0; overflow: hidden; border: 1px solid var(--mtb-border);
   border-top: 4px solid var(--mtb-navy-2); border-radius: 12px; background: #fff;
   box-shadow: 0 4px 15px rgba(28,48,66,.055);
 }
@@ -1183,6 +1183,9 @@ function New-MtbChapterOverviewHtmlFromExcel {
 .mtb-chapter-overview-dashboard .mtb-overview-card-body ul { margin: 0; padding-left: 1.25em; }
 .mtb-chapter-overview-dashboard .mtb-overview-card-body li { margin: 0 0 .5em; }
 .mtb-chapter-overview-dashboard .mtb-overview-card-body li:last-child { margin-bottom: 0; }
+.mtb-chapter-overview-dashboard .mtb-overview-card-theme,
+.mtb-chapter-overview-dashboard .mtb-overview-card-summary,
+.mtb-chapter-overview-dashboard .mtb-overview-card-christ { grid-column: span 6; }
 .mtb-chapter-overview-dashboard .mtb-overview-card-theme {
   border-top-color: var(--mtb-gold); background: linear-gradient(180deg,#fffdf8 0%,#fff 100%);
 }
@@ -1206,14 +1209,12 @@ function New-MtbChapterOverviewHtmlFromExcel {
 .mtb-chapter-overview-dashboard .mtb-overview-glossary-item:last-child { padding-bottom: 0; margin-bottom: 0; border-bottom: 0; }
 .mtb-chapter-overview-dashboard .mtb-overview-glossary dt { color: var(--mtb-navy); font-weight: 800; }
 .mtb-chapter-overview-dashboard .mtb-overview-glossary dd { margin: 3px 0 0; }
-@media (max-width: 1100px) {
-  .mtb-chapter-overview-dashboard .mtb-overview-card,
-  .mtb-chapter-overview-dashboard [class*='mtb-overview-card-'] { grid-column: span 6; }
-}
-@media (max-width: 660px) {
+@media (max-width: 900px) {
   .mtb-chapter-overview-dashboard .mtb-overview-grid { grid-template-columns: 1fr; }
   .mtb-chapter-overview-dashboard .mtb-overview-card,
   .mtb-chapter-overview-dashboard [class*='mtb-overview-card-'] { grid-column: 1 / -1; }
+}
+@media (max-width: 660px) {
   .mtb-chapter-overview-dashboard { padding-left: 0; padding-right: 0; }
   .mtb-chapter-overview-dashboard .mtb-overview-hero { align-items: flex-start; flex-direction: column; padding: 19px; border-radius: 10px; }
   .mtb-chapter-overview-dashboard .mtb-overview-card-body { padding: 14px 15px 16px; }

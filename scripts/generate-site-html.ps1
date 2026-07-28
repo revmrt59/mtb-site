@@ -71,13 +71,19 @@ $BOOK_TO_SECTION = @{
 
   # Pastoral Epistles
   "1-timothy"="pastoral-epistles"; "2-timothy"="pastoral-epistles"
-  "titus"="pastoral-epistles"; "philemon"="pastoral-epistles"
+  "titus"="pastoral-epistles"
+
+  # Philemon remains one of the Pauline Epistles
+  "philemon"="pauline-epistles"
 
   # General Epistles
   "hebrews"="general-epistles"; "james"="general-epistles"
   "1-peter"="general-epistles"; "2-peter"="general-epistles"
-  "1-john"="general-epistles"; "2-john"="general-epistles"
-  "3-john"="general-epistles"; "jude"="general-epistles"
+  "jude"="general-epistles"
+
+  # Johannine Epistles
+  "1-john"="johannine-epistles"; "2-john"="johannine-epistles"
+  "3-john"="johannine-epistles"
 
   # Revelation
   "revelation"="revelation"
@@ -607,6 +613,79 @@ function Convert-MtbIntroCellToHtml([string]$text) {
 
   return $sb.ToString()
 }
+function Convert-MtbResourceMarkupToHtml {
+  param(
+    [AllowEmptyString()]
+    [string] $Html
+  )
+
+  if ([string]::IsNullOrWhiteSpace($Html)) {
+    return $Html
+  }
+
+  $pattern = '\[\[(?<label>[^\]|]+?)\s*\|\s*(?<type>[a-z0-9-]+)\s*:\s*(?<id>[a-z0-9-]+)\s*\]\]'
+
+  return [regex]::Replace(
+    $Html,
+    $pattern,
+    {
+      param($match)
+
+      $label = $match.Groups['label'].Value.Trim()
+      $type  = $match.Groups['type'].Value.Trim().ToLowerInvariant()
+      $id    = $match.Groups['id'].Value.Trim().ToLowerInvariant()
+
+      # Prefer the exact workbook resource ID.
+      $resolvedId = $id
+
+      # Safety fallback for older/stale links:
+      # when the exact generated HTML does not exist, locate one unique
+      # resource in the requested folder whose filename contains the ID.
+      try {
+        $resourceFolder = Join-Path (Join-Path $SITE_ROOT "resources") $type
+        $exactPath = Join-Path $resourceFolder ($resolvedId + ".html")
+
+        if (
+          (Test-Path -LiteralPath $resourceFolder) -and
+          -not (Test-Path -LiteralPath $exactPath)
+        ) {
+          $matches = @(
+            Get-ChildItem `
+              -LiteralPath $resourceFolder `
+              -File `
+              -Filter ("*" + $id + "*.html") `
+              -ErrorAction SilentlyContinue
+          )
+
+          if ($matches.Count -eq 1) {
+            $resolvedId = [System.IO.Path]::GetFileNameWithoutExtension(
+              $matches[0].Name
+            )
+          }
+        }
+      }
+      catch {
+        # Keep the exact workbook ID if resource discovery is unavailable.
+        $resolvedId = $id
+      }
+
+      $labelEncoded = [System.Net.WebUtility]::HtmlEncode($label)
+      $url = "/resources/$type/$resolvedId.html"
+
+      return (
+        "<a href=`"$url`"" +
+        " class=`"mtb-resource-link mtb-resource-link--popup`"" +
+        " data-resource-url=`"$url`"" +
+        " data-resource-type=`"$type`"" +
+        " data-resource-id=`"$resolvedId`"" +
+        " aria-label=`"$labelEncoded (opens in a popup)`">" +
+        $labelEncoded +
+        "</a>"
+      )
+    },
+    [System.Text.RegularExpressions.RegexOptions]::IgnoreCase
+  )
+}
 
 function Get-ExcelWorksheetValues {
   param(
@@ -632,18 +711,33 @@ function Get-ExcelWorksheetValues {
 
     $rows = [int]$usedRange.Rows.Count
     $cols = [int]$usedRange.Columns.Count
-    $values = @()
 
-    for ($r = 1; $r -le $rows; $r++) {
-      $row = @()
-      for ($c = 1; $c -le $cols; $c++) {
-        $v = $usedRange.Cells.Item($r, $c).Text
-        $row += [string]$v
-      }
-      $values += ,$row
+    # Read the entire used range in one COM call. Avoid PowerShell array += here:
+    # appending tens of thousands of rows with += repeatedly reallocates the array
+    # and can make even Obadiah appear to hang while ALL_BIBLES.xlsm is loaded.
+    $rawValues = $usedRange.Value2
+
+    if ($rows -eq 1 -and $cols -eq 1) {
+      return ,@(@([string]$rawValues))
     }
 
-    return ,$values
+    $values = New-Object 'System.Collections.Generic.List[object]'
+
+    for ($r = 1; $r -le $rows; $r++) {
+      $row = New-Object 'System.Collections.Generic.List[string]'
+      for ($c = 1; $c -le $cols; $c++) {
+        $v = $rawValues.GetValue($r, $c)
+        if ($null -eq $v) {
+          $row.Add('')
+        }
+        else {
+          $row.Add([string]$v)
+        }
+      }
+      $values.Add($row.ToArray())
+    }
+
+    return ,$values.ToArray()
   }
   finally {
     if ($null -ne $workbook) { $workbook.Close($false) | Out-Null }
@@ -659,36 +753,144 @@ function Get-ExcelWorksheetValues {
   }
 }
 
-function Get-MtbIntroCardClass([string]$sectionClass, [string]$header) {
-  $key = if ($null -eq $header) { '' } else { $header.Trim().ToLowerInvariant() }
+function Get-MtbIntroFieldValue {
+  param(
+    [Parameter(Mandatory)] [hashtable] $Fields,
+    [Parameter(Mandatory)] [string] $Key
+  )
 
-  if ($sectionClass -eq 'background') {
-    switch ($key) {
-      'book'               { return 'mtb-span-3 mtb-card-book' }
-      'author'             { return 'mtb-span-5 mtb-card-author' }
-      'audience'           { return 'mtb-span-4 mtb-card-audience' }
-      'date'               { return 'mtb-span-3 mtb-card-date' }
-      'historical setting' { return 'mtb-span-6 mtb-card-historical-setting' }
-      'occasion'           { return 'mtb-span-3 mtb-card-occasion' }
-      default              { return 'mtb-span-4' }
+  $lookup = $Key.Trim().ToLowerInvariant()
+  if ($Fields.ContainsKey($lookup)) {
+    return [string]$Fields[$lookup]
+  }
+
+  $aliases = @{
+    'theme(s)'             = @('themes', 'major themes')
+    'themes'               = @('theme(s)', 'major themes')
+    'major themes'         = @('theme(s)', 'themes')
+    'big idea'             = @('central message')
+    'central message'      = @('big idea')
+    'key verse(s)'         = @('key verses')
+    'key verses'           = @('key verse(s)')
+    'book summary'         = @('summary')
+    'introductory summary' = @('introduction summary')
+  }
+
+  if ($aliases.ContainsKey($lookup)) {
+    foreach ($alias in $aliases[$lookup]) {
+      if ($Fields.ContainsKey($alias)) {
+        return [string]$Fields[$alias]
+      }
     }
   }
 
-  if ($sectionClass -eq 'message') {
-    switch ($key) {
-      'purpose'             { return 'mtb-span-5 mtb-card-purpose' }
-      'theme(s)'            { return 'mtb-span-7 mtb-card-themes' }
-      'themes'              { return 'mtb-span-7 mtb-card-themes' }
-      'big idea'            { return 'mtb-span-7 mtb-card-big-idea' }
-      'key verse(s)'        { return 'mtb-span-5 mtb-card-key-verses' }
-      'key verses'          { return 'mtb-span-5 mtb-card-key-verses' }
-      'outline'             { return 'mtb-span-7 mtb-card-outline' }
-      'christ in this book' { return 'mtb-span-5 mtb-card-christ' }
-      default               { return 'mtb-span-4' }
+  return ''
+}
+
+function Get-MtbIntroBookTitle {
+  param(
+    [Parameter(Mandatory)] [object[]] $Data,
+    [Parameter(Mandatory)] [string] $BookSlug
+  )
+
+  foreach ($row in $Data) {
+    if ($null -eq $row -or $row.Count -eq 0) { continue }
+
+    $firstCell = [string]$row[0]
+    if ([string]::IsNullOrWhiteSpace($firstCell)) { continue }
+
+    if ($firstCell -match '^(?<book>.+?)\s*[—-]\s*(Background|Message)\s*$') {
+      return $Matches['book'].Trim()
     }
   }
 
-  return 'mtb-span-4'
+  if ([string]::IsNullOrWhiteSpace($BookSlug)) {
+    return 'Book Introduction'
+  }
+
+  return (Get-Culture).TextInfo.ToTitleCase(
+    ($BookSlug -replace '-', ' ')
+  )
+}
+
+function Get-MtbIntroFieldsFromWorksheetData {
+  param(
+    [Parameter(Mandatory)] [object[]] $Data
+  )
+
+  $recognizedHeaders = @(
+    'book',
+    'author',
+    'audience',
+    'date',
+    'historical setting',
+    'occasion',
+    'purpose',
+    'book summary',
+    'summary',
+    'major themes',
+    'theme(s)',
+    'themes',
+    'central message',
+    'big idea',
+    'key verse(s)',
+    'key verses',
+    'outline',
+    'christ in this book'
+  )
+
+  $fields = @{}
+
+  for ($rowIndex = 0; $rowIndex -lt ($Data.Count - 1); $rowIndex++) {
+    $headerRow = @($Data[$rowIndex])
+    $valueRow = @($Data[$rowIndex + 1])
+
+    $recognizedCount = 0
+
+    foreach ($cell in $headerRow) {
+      $headerText = ([string]$cell).Trim().ToLowerInvariant()
+      if ($recognizedHeaders -contains $headerText) {
+        $recognizedCount++
+      }
+    }
+
+    # A real Book Introduction header row contains several recognized fields.
+    if ($recognizedCount -lt 2) {
+      continue
+    }
+
+    for ($column = 0; $column -lt $headerRow.Count; $column++) {
+      $header = ([string]$headerRow[$column]).Trim()
+      if ([string]::IsNullOrWhiteSpace($header)) { continue }
+
+      $key = $header.ToLowerInvariant()
+      if ($recognizedHeaders -notcontains $key) { continue }
+
+      $value = ''
+      if ($column -lt $valueRow.Count) {
+        $value = [string]$valueRow[$column]
+      }
+
+      $fields[$key] = $value
+    }
+  }
+
+  # Introductory Summary is stored as a merged heading followed by a merged value.
+  for ($rowIndex = 0; $rowIndex -lt ($Data.Count - 1); $rowIndex++) {
+    $firstCell = ([string]$Data[$rowIndex][0]).Trim()
+
+    if (
+      $firstCell.Equals(
+        'Introductory Summary',
+        [System.StringComparison]::OrdinalIgnoreCase
+      )
+    ) {
+      $fields['introductory summary'] = [string]$Data[$rowIndex + 1][0]
+      break
+    }
+  }
+
+  return $fields
 }
 
 function New-MtbBookIntroductionHtmlFromExcel {
@@ -697,31 +899,95 @@ function New-MtbBookIntroductionHtmlFromExcel {
     [Parameter(Mandatory)] [string] $BookSlug
   )
 
-  $data = Get-ExcelWorksheetValues -WorkbookPath $WorkbookPath -WorksheetName 'Book Introduction'
-  if ($data.Count -lt 9) { throw "The 'Book Introduction' worksheet does not contain the expected two-table layout." }
+  $data = Get-ExcelWorksheetValues `
+    -WorkbookPath $WorkbookPath `
+    -WorksheetName 'Book Introduction'
 
-  # Canonical workbook layout:
-  # Row 1: Book Introduction | Book name
-  # Row 3: Background
-  # Row 4: Background headers
-  # Row 5: Background content
-  # Row 7: Message
-  # Row 8: Message headers
-  # Row 9: Message content
-  $pageTitle = if (-not [string]::IsNullOrWhiteSpace($data[0][0])) { [string]$data[0][0] } else { 'Book Introduction' }
-  $bookTitle = if (-not [string]::IsNullOrWhiteSpace($data[0][1])) { [string]$data[0][1] } else { $BookSlug }
+  if ($data.Count -lt 3) {
+    throw (
+      "The 'Book Introduction' worksheet does not contain enough data."
+    )
+  }
 
-  $sections = @(
-    @{ Title = $data[2][0]; Headers = $data[3]; Values = $data[4]; Class = 'background' },
-    @{ Title = $data[6][0]; Headers = $data[7]; Values = $data[8]; Class = 'message' }
+  # Detect the current workbook layout by header names instead of fixed rows.
+  # This supports both the older workbook layout and the current layout:
+  #
+  # Row 1: Book — Background
+  # Row 2: Background headers
+  # Row 3: Background values
+  # Row 5: Book — Message
+  # Row 6: Message headers
+  # Row 7: Message values
+  # Row 9: Introductory Summary
+  # Row 10: Introductory Summary value
+  $fields = Get-MtbIntroFieldsFromWorksheetData -Data $data
+  $bookTitle = Get-MtbIntroBookTitle -Data $data -BookSlug $BookSlug
+  $introLabel = $bookTitle + ' - Book Introduction'
+
+  if ($fields.Count -eq 0) {
+    throw (
+      "No Book Introduction fields were detected in: " +
+      $WorkbookPath
+    )
+  }
+
+  $layoutRows = @(
+    @{
+      Title = 'Background'
+      Cards = @(
+        @{ Header = 'Author'; Key = 'author'; Span = 1 },
+        @{ Header = 'Audience'; Key = 'audience'; Span = 1 },
+        @{ Header = 'Date'; Key = 'date'; Span = 1 },
+        @{ Header = 'Occasion'; Key = 'occasion'; Span = 1 },
+        @{
+          Header = 'Historical Setting'
+          Key = 'historical setting'
+          Span = 4
+        }
+      )
+    },
+    @{
+      Title = 'Message'
+      Cards = @(
+        @{ Header = 'Purpose'; Key = 'purpose'; Span = 1 },
+        @{ Header = 'Book Summary'; Key = 'book summary'; Span = 1 },
+        @{ Header = 'Major Themes'; Key = 'major themes'; Span = 1 },
+        @{
+          Header = 'Central Message'
+          Key = 'central message'
+          Span = 1
+        }
+      )
+    },
+    @{
+      Title = 'Study Guide'
+      Cards = @(
+        @{ Header = 'Outline'; Key = 'outline'; Span = 1 },
+        @{ Header = 'Key Verse(s)'; Key = 'key verse(s)'; Span = 1 },
+        @{
+          Header = 'Christ in This Book'
+          Key = 'christ in this book'
+          Span = 1
+        },
+        @{
+          Header = 'Introductory Summary'
+          Key = 'introductory summary'
+          Span = 1
+        }
+      )
+    }
   )
 
   $sb = New-Object System.Text.StringBuilder
 
-  # Scoped styles: workbook structure becomes a responsive web dashboard,
-  # while the existing modal and all other generated documents remain unchanged.
   [void]$sb.Append(@'
 <style>
+/* Widen only the Book Introduction modal when this generated dashboard is present. */
+.book-modal-panel:has(.mtb-book-introduction-dashboard) {
+  width: min(1600px, 96vw);
+  max-width: none;
+}
+
 .mtb-book-introduction-dashboard {
   --mtb-navy: #173a5e;
   --mtb-navy-2: #274f76;
@@ -730,24 +996,20 @@ function New-MtbBookIntroductionHtmlFromExcel {
   --mtb-blue-soft: #eef4f9;
   --mtb-border: #d7e0e8;
   --mtb-text: #1d2935;
-  --mtb-muted: #5f6f7d;
   width: 100%;
-  max-width: 1380px;
+  max-width: 1560px;
   margin: 0 auto;
   padding: 2px 4px 28px;
   color: var(--mtb-text);
   font-family: Arial, Helvetica, sans-serif;
 }
 .mtb-book-introduction-dashboard * { box-sizing: border-box; }
+
 .mtb-book-introduction-dashboard .mtb-intro-hero {
   position: relative;
   overflow: hidden;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 22px;
   margin: 0 0 24px;
-  padding: 24px 28px;
+  padding: 22px 28px;
   border: 1px solid #cbd8e3;
   border-radius: 14px;
   background: linear-gradient(135deg, #f7fafc 0%, #e8f0f7 100%);
@@ -763,6 +1025,8 @@ function New-MtbBookIntroductionHtmlFromExcel {
   background: rgba(183, 131, 47, .10);
 }
 .mtb-book-introduction-dashboard .mtb-intro-eyebrow {
+  position: relative;
+  z-index: 1;
   margin: 0 0 5px;
   color: var(--mtb-gold);
   font-size: .78rem;
@@ -771,38 +1035,36 @@ function New-MtbBookIntroductionHtmlFromExcel {
   text-transform: uppercase;
 }
 .mtb-book-introduction-dashboard .mtb-intro-title {
-  margin: 0;
-  color: var(--mtb-navy);
-  font-size: clamp(1.65rem, 3vw, 2.45rem);
-  line-height: 1.08;
-}
-.mtb-book-introduction-dashboard .mtb-intro-book-badge {
   position: relative;
   z-index: 1;
-  flex: 0 0 auto;
-  padding: 10px 17px;
-  border: 1px solid rgba(23, 58, 94, .18);
-  border-radius: 999px;
-  background: #fff;
+  margin: 0;
   color: var(--mtb-navy);
-  font-size: 1rem;
-  font-weight: 800;
-  box-shadow: 0 4px 14px rgba(24, 48, 72, .08);
+  font-size: clamp(1.85rem, 3vw, 2.6rem);
+  line-height: 1.05;
 }
+.mtb-book-introduction-dashboard .mtb-intro-subtitle {
+  position: relative;
+  z-index: 1;
+  margin: 6px 0 0;
+  color: #4e6477;
+  font-size: 1rem;
+  font-weight: 700;
+}
+
 .mtb-book-introduction-dashboard .mtb-intro-section {
-  margin: 0 0 27px;
+  margin: 0 0 25px;
 }
 .mtb-book-introduction-dashboard .mtb-intro-section-heading {
   display: flex;
   align-items: center;
   gap: 12px;
-  margin: 0 0 13px;
+  margin: 0 0 12px;
 }
 .mtb-book-introduction-dashboard .mtb-intro-section-heading h2 {
   margin: 0;
   color: var(--mtb-navy);
-  font-size: 1.18rem;
-  letter-spacing: .055em;
+  font-size: 1.08rem;
+  letter-spacing: .05em;
   text-transform: uppercase;
 }
 .mtb-book-introduction-dashboard .mtb-intro-section-heading::after {
@@ -811,13 +1073,15 @@ function New-MtbBookIntroductionHtmlFromExcel {
   flex: 1 1 auto;
   background: linear-gradient(to right, #c7d3de, transparent);
 }
+
 .mtb-book-introduction-dashboard .mtb-intro-grid {
   display: grid;
-  grid-template-columns: repeat(12, minmax(0, 1fr));
-  gap: 15px;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 16px;
+  align-items: stretch;
 }
 .mtb-book-introduction-dashboard .mtb-intro-card {
-  grid-column: span 4;
+  grid-column: span 1;
   min-width: 0;
   overflow: hidden;
   border: 1px solid var(--mtb-border);
@@ -825,6 +1089,12 @@ function New-MtbBookIntroductionHtmlFromExcel {
   border-radius: 12px;
   background: #fff;
   box-shadow: 0 4px 15px rgba(28, 48, 66, .055);
+}
+.mtb-book-introduction-dashboard .mtb-intro-card.mtb-span-2 {
+  grid-column: span 2;
+}
+.mtb-book-introduction-dashboard .mtb-intro-card.mtb-span-4 {
+  grid-column: span 4;
 }
 .mtb-book-introduction-dashboard .mtb-intro-card-header {
   margin: 0;
@@ -843,7 +1113,7 @@ function New-MtbBookIntroductionHtmlFromExcel {
   overflow-wrap: anywhere;
 }
 .mtb-book-introduction-dashboard .mtb-intro-card-body p {
-  margin: 0 0 .86em;
+  margin: 0 0 .8em;
 }
 .mtb-book-introduction-dashboard .mtb-intro-card-body p:last-child { margin-bottom: 0; }
 .mtb-book-introduction-dashboard .mtb-intro-card-body ul {
@@ -851,10 +1121,12 @@ function New-MtbBookIntroductionHtmlFromExcel {
   padding-left: 1.24em;
 }
 .mtb-book-introduction-dashboard .mtb-intro-card-body li {
-  margin: 0 0 .48em;
+  margin: 0 0 .45em;
   padding-left: .1em;
 }
 .mtb-book-introduction-dashboard .mtb-intro-card-body li:last-child { margin-bottom: 0; }
+
+/* Keep emphasis inside otherwise-identical panels. */
 .mtb-book-introduction-dashboard .mtb-book-intro-insight {
   margin: 14px 0 0;
   padding: 11px 13px;
@@ -866,89 +1138,121 @@ function New-MtbBookIntroductionHtmlFromExcel {
 .mtb-book-introduction-dashboard .mtb-book-intro-insight strong {
   color: #79531b;
 }
-.mtb-book-introduction-dashboard .mtb-card-big-idea {
-  border-top-color: var(--mtb-gold);
-  background: linear-gradient(180deg, #fffdf8 0%, #fff 100%);
+
+/* Inline links to reusable MTB resources. */
+.mtb-book-introduction-dashboard .mtb-resource-link {
+  color: #1f5fae;
+  font-weight: 700;
+  text-decoration-line: underline;
+  text-decoration-style: dotted;
+  text-decoration-thickness: 2px;
+  text-underline-offset: 4px;
+  cursor: pointer;
 }
-.mtb-book-introduction-dashboard .mtb-card-big-idea .mtb-intro-card-header {
-  background: var(--mtb-gold-soft);
-  color: #6f4b16;
+.mtb-book-introduction-dashboard .mtb-resource-link::after {
+  content: " \2197";
+  display: inline-block;
+  margin-left: 2px;
+  font-size: .78em;
+  line-height: 1;
+  opacity: .78;
 }
-.mtb-book-introduction-dashboard .mtb-card-christ {
-  border-top-color: #8a5d25;
-  background: linear-gradient(180deg, #fffaf0 0%, #fff 100%);
+.mtb-book-introduction-dashboard .mtb-resource-link:hover,
+.mtb-book-introduction-dashboard .mtb-resource-link:focus-visible {
+  color: #123f7a;
+  text-decoration-style: solid;
 }
-.mtb-book-introduction-dashboard .mtb-card-christ .mtb-intro-card-header {
-  background: #f7ecd7;
-  color: #684517;
+.mtb-book-introduction-dashboard .mtb-resource-link:focus-visible {
+  outline: 3px solid rgba(31, 95, 174, .28);
+  outline-offset: 3px;
+  border-radius: 3px;
 }
 .mtb-book-introduction-dashboard .mtb-card-key-verses .mtb-intro-card-body p {
   padding-left: 12px;
   border-left: 3px solid #b9cce0;
 }
-.mtb-book-introduction-dashboard .mtb-span-3 { grid-column: span 3; }
-.mtb-book-introduction-dashboard .mtb-span-4 { grid-column: span 4; }
-.mtb-book-introduction-dashboard .mtb-span-5 { grid-column: span 5; }
-.mtb-book-introduction-dashboard .mtb-span-6 { grid-column: span 6; }
-.mtb-book-introduction-dashboard .mtb-span-7 { grid-column: span 7; }
-.mtb-book-introduction-dashboard .mtb-span-8 { grid-column: span 8; }
-.mtb-book-introduction-dashboard .mtb-span-12 { grid-column: span 12; }
-@media (max-width: 1050px) {
-  .mtb-book-introduction-dashboard .mtb-intro-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+
+@media (max-width: 1100px) {
+  .book-modal-panel:has(.mtb-book-introduction-dashboard) {
+    width: min(1100px, 94vw);
+  }
+  .mtb-book-introduction-dashboard .mtb-intro-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
   .mtb-book-introduction-dashboard .mtb-intro-card,
-  .mtb-book-introduction-dashboard [class*='mtb-span-'] { grid-column: span 1; }
-  .mtb-book-introduction-dashboard .mtb-card-historical-setting,
-  .mtb-book-introduction-dashboard .mtb-card-big-idea,
-  .mtb-book-introduction-dashboard .mtb-card-outline,
-  .mtb-book-introduction-dashboard .mtb-card-christ { grid-column: 1 / -1; }
+  .mtb-book-introduction-dashboard .mtb-intro-card.mtb-span-2 {
+    grid-column: span 1;
+  }
+  .mtb-book-introduction-dashboard .mtb-intro-card.mtb-span-4 {
+    grid-column: 1 / -1;
+  }
+  .mtb-book-introduction-dashboard .mtb-card-outline {
+    grid-column: 1 / -1;
+  }
 }
 @media (max-width: 660px) {
-  .mtb-book-introduction-dashboard { padding-left: 0; padding-right: 0; }
+  .book-modal-panel:has(.mtb-book-introduction-dashboard) {
+    width: 94vw;
+    padding-left: 12px;
+    padding-right: 12px;
+  }
+  .mtb-book-introduction-dashboard {
+    padding-left: 0;
+    padding-right: 0;
+  }
   .mtb-book-introduction-dashboard .mtb-intro-hero {
-    align-items: flex-start;
-    flex-direction: column;
-    padding: 20px;
+    padding: 19px;
     border-radius: 10px;
   }
-  .mtb-book-introduction-dashboard .mtb-intro-grid { grid-template-columns: 1fr; gap: 12px; }
+  .mtb-book-introduction-dashboard .mtb-intro-grid {
+    grid-template-columns: 1fr;
+    gap: 12px;
+  }
   .mtb-book-introduction-dashboard .mtb-intro-card,
-  .mtb-book-introduction-dashboard [class*='mtb-span-'] { grid-column: 1 / -1; }
-  .mtb-book-introduction-dashboard .mtb-intro-card-body { padding: 14px 15px 16px; }
+  .mtb-book-introduction-dashboard .mtb-intro-card.mtb-span-2,
+  .mtb-book-introduction-dashboard .mtb-intro-card.mtb-span-4,
+  .mtb-book-introduction-dashboard .mtb-card-outline {
+    grid-column: 1;
+  }
+  .mtb-book-introduction-dashboard .mtb-intro-card-body {
+    padding: 14px 15px 16px;
+  }
 }
 </style>
 '@)
 
   [void]$sb.Append('<div class="mtb-book-introduction-dashboard">')
   [void]$sb.Append('<header class="mtb-intro-hero">')
-  [void]$sb.Append('<div><p class="mtb-intro-eyebrow">Mastering the Bible</p>')
-  [void]$sb.Append('<h1 class="mtb-intro-title">' + (ConvertTo-HtmlEncoded $pageTitle) + '</h1></div>')
-  [void]$sb.Append('<div class="mtb-intro-book-badge">' + (ConvertTo-HtmlEncoded $bookTitle) + '</div>')
+  [void]$sb.Append('<p class="mtb-intro-eyebrow">Mastering the Bible</p>')
+  [void]$sb.Append('<h1 class="mtb-intro-title">' + (ConvertTo-HtmlEncoded $bookTitle) + '</h1>')
+  [void]$sb.Append('<p class="mtb-intro-subtitle">' + (ConvertTo-HtmlEncoded $introLabel) + '</p>')
   [void]$sb.Append('</header>')
 
-  foreach ($section in $sections) {
-    $sectionTitle = [string]$section.Title
-    if ([string]::IsNullOrWhiteSpace($sectionTitle)) { continue }
-
-    $validColumns = @()
-    for ($i = 0; $i -lt $section.Headers.Count; $i++) {
-      if (-not [string]::IsNullOrWhiteSpace([string]$section.Headers[$i])) {
-        $validColumns += $i
-      }
-    }
-    if ($validColumns.Count -eq 0) { continue }
-
-    [void]$sb.Append('<section class="mtb-intro-section mtb-intro-section-' + $section.Class + '">')
-    [void]$sb.Append('<div class="mtb-intro-section-heading"><h2>' + (ConvertTo-HtmlEncoded $sectionTitle) + '</h2></div>')
+  foreach ($row in $layoutRows) {
+    [void]$sb.Append('<section class="mtb-intro-section">')
+    [void]$sb.Append('<div class="mtb-intro-section-heading"><h2>' + (ConvertTo-HtmlEncoded ([string]$row.Title)) + '</h2></div>')
     [void]$sb.Append('<div class="mtb-intro-grid">')
 
-    foreach ($i in $validColumns) {
-      $header = [string]$section.Headers[$i]
-      $value = if ($i -lt $section.Values.Count) { [string]$section.Values[$i] } else { '' }
-      $cardClass = Get-MtbIntroCardClass -sectionClass ([string]$section.Class) -header $header
+    foreach ($card in $row.Cards) {
+      $header = [string]$card.Header
+      $value = Get-MtbIntroFieldValue -Fields $fields -Key ([string]$card.Key)
+      $spanClass = switch ([int]$card.Span) {
+        4 { ' mtb-span-4' }
+        2 { ' mtb-span-2' }
+        default { '' }
+      }
+      $extraClass = switch ($header.ToLowerInvariant()) {
+        'outline' { ' mtb-card-outline' }
+        'key verse(s)' { ' mtb-card-key-verses' }
+        default { '' }
+      }
 
-      [void]$sb.Append('<article class="mtb-intro-card ' + $cardClass + '">')
+      $valueHtml = Convert-MtbIntroCellToHtml $value
+      $valueHtml = Convert-MtbResourceMarkupToHtml $valueHtml
+
+      [void]$sb.Append('<article class="mtb-intro-card' + $spanClass + $extraClass + '">')
       [void]$sb.Append('<h3 class="mtb-intro-card-header">' + (ConvertTo-HtmlEncoded $header) + '</h3>')
-      [void]$sb.Append('<div class="mtb-intro-card-body">' + (Convert-MtbIntroCellToHtml $value) + '</div>')
+      [void]$sb.Append('<div class="mtb-intro-card-body">' + $valueHtml + '</div>')
       [void]$sb.Append('</article>')
     }
 
@@ -1107,22 +1411,150 @@ function New-MtbChapterOverviewHtmlFromExcel {
     [Parameter(Mandatory)] [string] $WorksheetName
   )
 
-  $data = Get-ExcelWorksheetValues -WorkbookPath $WorkbookPath -WorksheetName $WorksheetName
-  if ($data.Count -lt 7) { throw "The '$WorksheetName' worksheet does not contain the expected chapter overview layout." }
+  $data = Get-ExcelWorksheetValues `
+    -WorkbookPath $WorkbookPath `
+    -WorksheetName $WorksheetName
 
-  # Canonical layout:
-  # Row 1: sheet type | display title
-  # Row 3: first four headers
-  # Row 4: first four values
-  # Row 6: second four headers
-  # Row 7: second four values
-  $displayTitle = if (-not [string]::IsNullOrWhiteSpace([string]$data[0][1])) { [string]$data[0][1] } else { ((Get-Culture).TextInfo.ToTitleCase($BookSlug)) + " Chapter $Chapter" }
-  $groups = @(
-    @{ Label = 'Chapter at a Glance'; Headers = $data[2]; Values = $data[3]; Class = 'primary' },
-    @{ Label = 'Study Foundations'; Headers = $data[5]; Values = $data[6]; Class = 'secondary' }
+  if ($data.Count -lt 3) {
+    throw (
+      "The '$WorksheetName' worksheet does not contain enough " +
+      "chapter overview data."
+    )
+  }
+
+  $bookDisplay = (Get-Culture).TextInfo.ToTitleCase(
+    ($BookSlug -replace '-', ' ')
   )
 
+  $displayTitle = $bookDisplay + " Chapter " + $Chapter
+
+  if (
+    $data.Count -gt 0 -and
+    $data[0].Count -gt 0 -and
+    -not [string]::IsNullOrWhiteSpace([string]$data[0][0])
+  ) {
+    $displayTitle = [string]$data[0][0]
+  }
+
+  $recognizedHeaders = @(
+    'chapter theme',
+    'purpose & importance',
+    'chapter flow',
+    'chapter summary',
+    'key truths taught',
+    'pastoral insights',
+    'key words & concepts',
+    'christ in this chapter'
+  )
+
+  $fieldPairs = New-Object 'System.Collections.Generic.List[object]'
+
+  # Current layout:
+  # Row 1: merged chapter title
+  # Row 2: headers
+  # Row 3: values
+  #
+  # The parser also supports additional header/value pairs below that row,
+  # allowing the remaining four Chapter Overview fields to be added later.
+  for ($r = 0; $r -lt ($data.Count - 1); $r++) {
+    $headerRow = @($data[$r])
+    $valueRow = @($data[$r + 1])
+
+    $recognizedCount = 0
+    foreach ($cell in $headerRow) {
+      $key = ([string]$cell).Trim().ToLowerInvariant()
+      if ($recognizedHeaders -contains $key) {
+        $recognizedCount++
+      }
+    }
+
+    if ($recognizedCount -lt 1) {
+      continue
+    }
+
+    for ($c = 0; $c -lt $headerRow.Count; $c++) {
+      $header = ([string]$headerRow[$c]).Trim()
+      if ([string]::IsNullOrWhiteSpace($header)) {
+        continue
+      }
+
+      $key = $header.ToLowerInvariant()
+      if ($recognizedHeaders -notcontains $key) {
+        continue
+      }
+
+      $value = ''
+      if ($c -lt $valueRow.Count) {
+        $value = [string]$valueRow[$c]
+      }
+
+      $fieldPairs.Add(
+        [pscustomobject]@{
+          Header = $header
+          Value = $value
+        }
+      )
+    }
+  }
+
+  if ($fieldPairs.Count -eq 0) {
+    throw (
+      "No recognized Chapter Overview fields were found in " +
+      "'$WorksheetName'."
+    )
+  }
+
+  $primaryHeaders = New-Object 'System.Collections.Generic.List[string]'
+  $primaryValues = New-Object 'System.Collections.Generic.List[string]'
+  $secondaryHeaders = New-Object 'System.Collections.Generic.List[string]'
+  $secondaryValues = New-Object 'System.Collections.Generic.List[string]'
+
+  foreach ($pair in $fieldPairs) {
+    $key = ([string]$pair.Header).Trim().ToLowerInvariant()
+
+    if (
+      $key -in @(
+        'chapter theme',
+        'purpose & importance',
+        'chapter flow',
+        'chapter summary'
+      )
+    ) {
+      $primaryHeaders.Add([string]$pair.Header)
+      $primaryValues.Add([string]$pair.Value)
+    }
+    else {
+      $secondaryHeaders.Add([string]$pair.Header)
+      $secondaryValues.Add([string]$pair.Value)
+    }
+  }
+
+  $groups = New-Object 'System.Collections.Generic.List[object]'
+
+  if ($primaryHeaders.Count -gt 0) {
+    $groups.Add(
+      [pscustomobject]@{
+        Label = 'Chapter at a Glance'
+        Headers = $primaryHeaders.ToArray()
+        Values = $primaryValues.ToArray()
+        Class = 'primary'
+      }
+    )
+  }
+
+  if ($secondaryHeaders.Count -gt 0) {
+    $groups.Add(
+      [pscustomobject]@{
+        Label = 'Study Foundations'
+        Headers = $secondaryHeaders.ToArray()
+        Values = $secondaryValues.ToArray()
+        Class = 'secondary'
+      }
+    )
+  }
+
   $sb = New-Object System.Text.StringBuilder
+
   [void]$sb.Append(@'
 <style>
 .mtb-chapter-overview-dashboard {
@@ -1231,16 +1663,26 @@ function New-MtbChapterOverviewHtmlFromExcel {
     [void]$sb.Append('<section class="mtb-overview-section mtb-overview-section-' + $group.Class + '">')
     [void]$sb.Append('<div class="mtb-overview-section-heading"><h2>' + (ConvertTo-HtmlEncoded ([string]$group.Label)) + '</h2></div>')
     [void]$sb.Append('<div class="mtb-overview-grid">')
+
     for ($i = 0; $i -lt $group.Headers.Count; $i++) {
       $header = [string]$group.Headers[$i]
-      if ([string]::IsNullOrWhiteSpace($header)) { continue }
-      $value = if ($i -lt $group.Values.Count) { [string]$group.Values[$i] } else { '' }
+      if ([string]::IsNullOrWhiteSpace($header)) {
+        continue
+      }
+
+      $value = ''
+      if ($i -lt $group.Values.Count) {
+        $value = [string]$group.Values[$i]
+      }
+
       $cardClass = Get-MtbOverviewCardClass $header
+
       [void]$sb.Append('<article class="mtb-overview-card ' + $cardClass + '">')
       [void]$sb.Append('<h3 class="mtb-overview-card-header">' + (ConvertTo-HtmlEncoded $header) + '</h3>')
       [void]$sb.Append('<div class="mtb-overview-card-body">' + (Convert-MtbOverviewCellToHtml $value $header) + '</div>')
       [void]$sb.Append('</article>')
     }
+
     [void]$sb.Append('</div></section>')
   }
 
@@ -1283,10 +1725,12 @@ function Write-AllMtbChapterOverviewsFromExcel {
   $writtenNames = New-Object 'System.Collections.Generic.List[string]'
   $sheetNames = Get-ExcelWorksheetNames -WorkbookPath $WorkbookPath
   foreach ($sheetName in $sheetNames) {
-    if ($sheetName -match '^Overview\s+Chapter\s+(?<chapter>\d+)$') {
+    if ($sheetName -match '^Overview(?:\s+Chapter)?\s+(?<chapter>\d+)$') {
       $chapter = [int]$Matches['chapter']
       $path = Write-MtbChapterOverviewFromExcel -WorkbookPath $WorkbookPath -OutBookDir $OutBookDir -BookSlug $BookSlug -Chapter $chapter -WorksheetName $sheetName
-      $writtenNames.Add((Split-Path $path -Leaf))
+      if (-not [string]::IsNullOrWhiteSpace([string]$path)) {
+        $writtenNames.Add((Split-Path $path -Leaf))
+      }
     }
   }
   return ,$writtenNames.ToArray()
@@ -1513,71 +1957,272 @@ function Write-ChapterAvailabilityManifest([string]$SiteRoot) {
 # -----------------------------
 # Excel Chapter Study -> responsive web study
 # -----------------------------
+
+function Get-MtbStandardSectionHeading([string]$value) {
+  if ([string]::IsNullOrWhiteSpace($value)) { return '' }
+
+  $heading = ([string]$value) -replace "`r`n", "`n" -replace "`r", "`n"
+  $heading = ($heading -split "`n", 2)[0].Trim()
+
+  # A section banner must be only: verse reference + outline title.
+  # Remove Chapter Flow commentary accidentally carried after the title,
+  # such as "(1–9): God exposes...".  Use a look-ahead so the title itself
+  # is preserved exactly as entered in the Section cell.
+  $commentary = [regex]::Match(
+    $heading,
+    '\s+\(\s*\d+[A-Za-z]?\s*(?:[-–—]\s*\d+[A-Za-z]?)?\s*\)\s*:',
+    [System.Text.RegularExpressions.RegexOptions]::IgnoreCase
+  )
+  if ($commentary.Success) {
+    $heading = $heading.Substring(0, $commentary.Index).Trim()
+  }
+
+  return $heading
+}
+
 function Get-MtbStudyHeaderParts([string]$header) {
   $normalized = if ($null -eq $header) { '' } else { ([string]$header) -replace "`r`n", "`n" -replace "`r", "`n" }
   $lines = @($normalized -split "`n" | ForEach-Object { $_.Trim() } | Where-Object { -not [string]::IsNullOrWhiteSpace($_) })
   $title = if ($lines.Count -gt 0) { $lines[0] } else { '' }
   $prompt = if ($lines.Count -gt 1) { ($lines[1..($lines.Count - 1)] -join ' ') } else { '' }
+
+  # Some workbooks store the helper question on the same line as the title,
+  # for example: Section Summary(What happens in this passage?).
+  # Keep the helper text available as Prompt, but never show it in the card title.
+  if ($title -match '^(?<title>.*?)\s*\((?<prompt>.*)\)\s*$') {
+    $title = $Matches['title'].Trim()
+    if ([string]::IsNullOrWhiteSpace($prompt)) {
+      $prompt = $Matches['prompt'].Trim()
+    }
+  }
+
   return @{ Title = $title; Prompt = $prompt }
 }
 
+function Get-MtbVerseStudyDisplayTitle([string]$title) {
+  if ([string]::IsNullOrWhiteSpace($title)) { return '' }
+
+  $clean = ([string]$title).Trim()
+  $key = $clean.ToLowerInvariant()
+
+  # Approved five-card MTB verse-by-verse structure.
+  if ($key -match '^key explanations?(?:\s*\(.*\))?$') { return 'Key Explanations' }
+  if ($key -match '^main idea(?:\s*\(.*\))?$') { return 'Main Idea' }
+  if ($key -match '^verse explanation(?:\s*\(.*\))?$') { return 'Verse Explanation' }
+  if ($key -match '^christ connection(?:\s*\(.*\))?$') { return 'Christ Connection' }
+  if ($key -match '^application(?:\s*\(.*\))?$') { return 'Application' }
+
+  # Transitional aliases permit older sheets to render under the approved
+  # titles, but current workbook headings are always used directly.
+  if ($key -match '^observation(?:\s*\(.*\))?$') { return 'Key Explanations' }
+  if ($key -match '^understanding(?:\s*\(.*\))?$') { return 'Main Idea' }
+  if ($key -match '^(?:exposition|expository\s*&\s*lexical notes?|fuller explanation)$') { return 'Verse Explanation' }
+  if ($key -match '^(?:remarks|insights,?\s*pastoral observations,?\s*(?:&|and)?\s*remarks\.?)$') { return 'Application' }
+
+  return $clean
+}
+
+function Get-MtbSectionOutlineTitlesFromWorkbook {
+  param(
+    [Parameter(Mandatory)] [string] $WorkbookPath,
+    [Parameter(Mandatory)] [int] $Chapter
+  )
+
+  $sheetName = ("Overview {0:D3}" -f $Chapter)
+  try {
+    $overviewData = Get-ExcelWorksheetValues -WorkbookPath $WorkbookPath -WorksheetName $sheetName
+  }
+  catch {
+    return @()
+  }
+
+  $chapterFlow = ''
+  for ($r = 0; $r -lt $overviewData.Count; $r++) {
+    $row = $overviewData[$r]
+    for ($c = 0; $c -lt $row.Count; $c++) {
+      if (([string]$row[$c]).Trim().ToLowerInvariant() -eq 'chapter flow') {
+        if (($r + 1) -lt $overviewData.Count -and $c -lt $overviewData[$r + 1].Count) {
+          $chapterFlow = [string]$overviewData[$r + 1][$c]
+        }
+        break
+      }
+    }
+    if (-not [string]::IsNullOrWhiteSpace($chapterFlow)) { break }
+  }
+
+  if ([string]::IsNullOrWhiteSpace($chapterFlow)) { return @() }
+
+  $normalized = $chapterFlow -replace "`r`n", "`n" -replace "`r", "`n"
+  $titles = New-Object 'System.Collections.Generic.List[string]'
+
+  # Standard Chapter Flow entries are written as:
+  #   Outline Title (1–4): explanatory sentence
+  # They may be on separate lines or combined in one paragraph. Capture each
+  # title by locating its parenthetical verse range, without treating the
+  # explanatory sentence as part of the title.
+  $rx = [regex]::new(
+    '(?ims)(?:^|(?<=\.\s)|(?<=\n))\s*[•\-]?\s*(?<title>[^\n]*?\S)\s*\((?<range>\d+(?:[–-]\d+)?)\)\s*:'
+  )
+
+  foreach ($m in $rx.Matches($normalized)) {
+    $title = ([string]$m.Groups['title'].Value).Trim()
+    # Remove any leading book/reference if a workbook includes it.
+    $title = $title -replace '^\s*(?:[1-3]?\s*[A-Za-z]+(?:\s+[A-Za-z]+)*)\s+\d+:\d+(?:[–-]\d+)?\s*[—-]\s*', ''
+    if (-not [string]::IsNullOrWhiteSpace($title)) { $titles.Add($title) }
+  }
+
+  # Some workbooks put one Chapter Flow item on each line without a summary.
+  if ($titles.Count -eq 0) {
+    foreach ($line in ($normalized -split "`n")) {
+      $clean = $line.Trim() -replace '^[•\-]\s*', ''
+      if ($clean -match '^(?<title>.*?)\s*\(\d+(?:[–-]\d+)?\)\s*$') {
+        $title = $Matches['title'].Trim()
+        if (-not [string]::IsNullOrWhiteSpace($title)) { $titles.Add($title) }
+      }
+    }
+  }
+
+  return $titles.ToArray()
+}
+
 function Convert-MtbStudyCellToHtml([string]$text, [string]$header, [switch]$EmphasizeLabels) {
-  if ([string]::IsNullOrWhiteSpace($text)) { return '<p class="mtb-study-empty">No content added yet.</p>' }
+  if ([string]::IsNullOrWhiteSpace($text)) {
+    return '<p class="mtb-study-empty">No content added yet.</p>'
+  }
+
+  # Encode ordinary text first, then convert MTB [[label|type:id]] markup
+  # into a real resource link. This same helper is used in every study-card
+  # output path below: bullets, observations, labeled paragraphs, and prose.
+  function Convert-MtbStudyTextFragment([string]$value) {
+    if ([string]::IsNullOrWhiteSpace($value)) { return '' }
+
+    $html = ConvertTo-HtmlEncoded $value
+    return Convert-MtbResourceMarkupToHtml $html
+  }
 
   $normalized = ([string]$text) -replace "`r`n", "`n" -replace "`r", "`n"
   $trimmed = $normalized.Trim()
   $lines = @($trimmed -split "`n")
-  $nonEmpty = @($lines | Where-Object { -not [string]::IsNullOrWhiteSpace($_) })
-  $bulletLines = @($nonEmpty | Where-Object { $_.Trim() -match '^[•\-]\s*' })
+  $nonEmpty = @(
+    $lines |
+      Where-Object { -not [string]::IsNullOrWhiteSpace($_) }
+  )
+  $bulletLines = @(
+    $nonEmpty |
+      Where-Object { $_.Trim() -match '^[•\-]\s*' }
+  )
 
+  # All-bullet cells
   if ($nonEmpty.Count -gt 0 -and $bulletLines.Count -eq $nonEmpty.Count) {
     $sb = New-Object System.Text.StringBuilder
     [void]$sb.Append('<ul class="mtb-study-list">')
+
     foreach ($line in $nonEmpty) {
       $item = ($line.Trim() -replace '^[•\-]\s*', '').Trim()
-      if ($EmphasizeLabels -and $item -match '^(?<label>[^:]{2,70}):\s*(?<body>.*)$') {
-        [void]$sb.Append('<li><strong>' + (ConvertTo-HtmlEncoded $Matches['label'].Trim()) + ':</strong> ' + (ConvertTo-HtmlEncoded $Matches['body'].Trim()) + '</li>')
+
+      if (
+        $EmphasizeLabels -and
+        $item -notmatch '\[\[' -and
+        $item -match '^(?<label>[^:]{2,70}):\s*(?<body>.*)$'
+      ) {
+        $labelHtml = Convert-MtbStudyTextFragment $Matches['label'].Trim()
+        $bodyHtml = Convert-MtbStudyTextFragment $Matches['body'].Trim()
+
+        [void]$sb.Append(
+          '<li><strong>' +
+          $labelHtml +
+          ':</strong> ' +
+          $bodyHtml +
+          '</li>'
+        )
       }
       else {
-        [void]$sb.Append('<li>' + (ConvertTo-HtmlEncoded $item) + '</li>')
+        $itemHtml = Convert-MtbStudyTextFragment $item
+        [void]$sb.Append('<li>' + $itemHtml + '</li>')
       }
     }
+
     [void]$sb.Append('</ul>')
     return $sb.ToString()
   }
 
-  # Observation rows commonly use one quoted phrase followed by a dash and explanation.
-  if ($header -match '(?i)Observation') {
-    $items = @($nonEmpty | Where-Object { -not [string]::IsNullOrWhiteSpace($_) })
+  # Observation rows commonly use one quoted phrase followed by
+  # a dash, colon, or similar separator and an explanation.
+  if ($header -match '(?i)^(Observation|Key Explanations?)') {
+    $items = @(
+      $nonEmpty |
+        Where-Object { -not [string]::IsNullOrWhiteSpace($_) }
+    )
+
     if ($items.Count -gt 0) {
       $sb = New-Object System.Text.StringBuilder
       [void]$sb.Append('<div class="mtb-study-observations">')
+
       foreach ($line in $items) {
         $item = $line.Trim()
-        if ($item -match '^(?<phrase>[“"].+?[”"]|[^\-–—:]{2,90})\s*[\-–—:]\s*(?<body>.+)$') {
-          [void]$sb.Append('<div class="mtb-study-observation"><strong>' + (ConvertTo-HtmlEncoded $Matches['phrase'].Trim()) + '</strong><span>' + (ConvertTo-HtmlEncoded $Matches['body'].Trim()) + '</span></div>')
+
+        if (
+          $item -notmatch '\[\[' -and
+          $item -match '^(?<phrase>[“"].+?[”"]|[^\-–—:]{2,90})\s*[\-–—:]\s*(?<body>.+)$'
+        ) {
+          $phraseHtml = Convert-MtbStudyTextFragment $Matches['phrase'].Trim()
+          $bodyHtml = Convert-MtbStudyTextFragment $Matches['body'].Trim()
+
+          [void]$sb.Append(
+            '<div class="mtb-study-observation">' +
+            '<strong>' + $phraseHtml + '</strong>' +
+            '<span>' + $bodyHtml + '</span>' +
+            '</div>'
+          )
         }
         else {
-          [void]$sb.Append('<div class="mtb-study-observation"><span>' + (ConvertTo-HtmlEncoded $item) + '</span></div>')
+          $itemHtml = Convert-MtbStudyTextFragment $item
+
+          [void]$sb.Append(
+            '<div class="mtb-study-observation">' +
+            '<span>' + $itemHtml + '</span>' +
+            '</div>'
+          )
         }
       }
+
       [void]$sb.Append('</div>')
       return $sb.ToString()
     }
   }
 
+  # Ordinary paragraphs and label-led paragraphs
   $blocks = [regex]::Split($trimmed, "`n\s*`n")
   $sb = New-Object System.Text.StringBuilder
+
   foreach ($block in $blocks) {
     $b = $block.Trim()
     if ([string]::IsNullOrWhiteSpace($b)) { continue }
-    if ($EmphasizeLabels -and $b -match '^(?s)(?<label>[^:`n]{2,70}):\s*(?<body>.*)$') {
-      [void]$sb.Append('<p><strong>' + (ConvertTo-HtmlEncoded $Matches['label'].Trim()) + ':</strong> ' + ((ConvertTo-HtmlEncoded $Matches['body'].Trim()) -replace "`n", '<br />') + '</p>')
+
+    if (
+      $EmphasizeLabels -and
+      $b -notmatch '\[\[' -and
+      $b -match '^(?s)(?<label>[^:`n]{2,70}):\s*(?<body>.*)$'
+    ) {
+      $labelHtml = Convert-MtbStudyTextFragment $Matches['label'].Trim()
+      $bodyHtml = Convert-MtbStudyTextFragment $Matches['body'].Trim()
+      $bodyHtml = $bodyHtml -replace "`n", '<br />'
+
+      [void]$sb.Append(
+        '<p><strong>' +
+        $labelHtml +
+        ':</strong> ' +
+        $bodyHtml +
+        '</p>'
+      )
     }
     else {
-      [void]$sb.Append('<p>' + ((ConvertTo-HtmlEncoded $b) -replace "`n", '<br />') + '</p>')
+      $paragraphHtml = Convert-MtbStudyTextFragment $b
+      $paragraphHtml = $paragraphHtml -replace "`n", '<br />'
+      [void]$sb.Append('<p>' + $paragraphHtml + '</p>')
     }
   }
+
   return $sb.ToString()
 }
 
@@ -1645,6 +2290,242 @@ function Convert-MtbStrongMarkedTextToHtml {
   return ($sb.ToString() -replace "`n", '<br />')
 }
 
+$script:MtbAllBiblesVerseLookup = $null
+
+function Get-MtbCleanBibleReference {
+  param(
+    [Parameter(Mandatory)] [string] $Reference
+  )
+
+  if ([string]::IsNullOrWhiteSpace($Reference)) {
+    return ''
+  }
+
+  $value = $Reference.Trim()
+
+  # Older ALL_BIBLES rows may include the translation in the reference cell.
+  $value = $value -replace '\s*\((?i:NKJV|NLT)\)\s*$', ''
+  $value = $value -replace '\s+', ' '
+
+  return $value.Trim()
+}
+
+function Initialize-MtbAllBiblesVerseLookup {
+  if ($null -ne $script:MtbAllBiblesVerseLookup) {
+    return
+  }
+
+  $script:MtbAllBiblesVerseLookup = @{
+    NKJV = @{}
+    NLT = @{}
+  }
+
+  $biblePath = Join-Path $SITE_ROOT 'assets\ALL_BIBLES.xlsm'
+
+  if (-not (Test-Path -LiteralPath $biblePath -PathType Leaf)) {
+    throw (
+      "Required Bible source workbook not found: " +
+      $biblePath
+    )
+  }
+
+  Write-Host (
+    "Loading verse text only from ALL_BIBLES.xlsm..."
+  ) -ForegroundColor Cyan
+
+  $rows = Get-ExcelWorksheetValues `
+    -WorkbookPath $biblePath `
+    -WorksheetName 'ALL_BIBLES'
+
+  if ($rows.Count -lt 2) {
+    throw (
+      "The ALL_BIBLES worksheet does not contain verse rows."
+    )
+  }
+
+  for ($rowIndex = 1; $rowIndex -lt $rows.Count; $rowIndex++) {
+    $row = @($rows[$rowIndex])
+
+    if ($row.Count -lt 2) {
+      continue
+    }
+
+    $rawReference = ([string]$row[0]).Trim()
+    $fullVerse = ([string]$row[1]).Trim()
+
+    if (
+      [string]::IsNullOrWhiteSpace($rawReference) -or
+      [string]::IsNullOrWhiteSpace($fullVerse)
+    ) {
+      continue
+    }
+
+    $cleanReference = Get-MtbCleanBibleReference $rawReference
+    $normalizedReference = Normalize-MtbBibleReference $cleanReference
+
+    if ([string]::IsNullOrWhiteSpace($normalizedReference)) {
+      continue
+    }
+
+    $translation = ''
+
+    # Determine translation from either column.
+    if (
+      $rawReference -match '(?i)\(NKJV\)\s*$' -or
+      $fullVerse -match '(?i)\(NKJV\)\s*$'
+    ) {
+      $translation = 'NKJV'
+    }
+    elseif (
+      $rawReference -match '(?i)\(NLT\)\s*$' -or
+      $fullVerse -match '(?i)\(NLT\)\s*$'
+    ) {
+      $translation = 'NLT'
+    }
+    else {
+      # Historical ALL_BIBLES pattern:
+      # NKJV row is explicitly marked (NKJV); the unmarked row for the same
+      # reference contains the NLT wording.
+      $translation = 'NLT'
+    }
+
+    if ($translation -eq 'NKJV') {
+      if ($fullVerse -notmatch '(?i)\(NKJV\)\s*$') {
+        $fullVerse = $fullVerse + ' (NKJV)'
+      }
+
+      $script:MtbAllBiblesVerseLookup.NKJV[
+        $normalizedReference
+      ] = $fullVerse
+
+      continue
+    }
+
+    if ($fullVerse -notmatch '(?i)\(NLT\)\s*$') {
+      $fullVerse = $fullVerse + ' (NLT)'
+    }
+
+    $script:MtbAllBiblesVerseLookup.NLT[
+      $normalizedReference
+    ] = $fullVerse
+  }
+
+  Write-Host (
+    (
+      "Loaded ALL_BIBLES verse text: NKJV={0}, NLT={1}" -f
+      $script:MtbAllBiblesVerseLookup.NKJV.Count,
+      $script:MtbAllBiblesVerseLookup.NLT.Count
+    )
+  ) -ForegroundColor Green
+}
+
+function Get-MtbAllBiblesVerse {
+  param(
+    [Parameter(Mandatory)] [string] $Reference,
+    [Parameter(Mandatory)]
+    [ValidateSet('NKJV', 'NLT')]
+    [string] $Translation
+  )
+
+  $cleanReference = Get-MtbCleanBibleReference $Reference
+  $normalizedReference = Normalize-MtbBibleReference $cleanReference
+
+  if ([string]::IsNullOrWhiteSpace($normalizedReference)) {
+    return ''
+  }
+
+  Initialize-MtbAllBiblesVerseLookup
+
+  $translationLookup =
+    $script:MtbAllBiblesVerseLookup[$Translation]
+
+  if ($translationLookup.ContainsKey($normalizedReference)) {
+    return [string]$translationLookup[$normalizedReference]
+  }
+
+  return ''
+}
+
+function Get-MtbStudyNkjvText {
+  param(
+    [Parameter(Mandatory)] [string] $CellValue,
+    [Parameter(Mandatory)] [string] $BookSlug
+  )
+
+  if ([string]::IsNullOrWhiteSpace($CellValue)) {
+    return ''
+  }
+
+  $trimmed = $CellValue.Trim()
+  $parts = Get-MtbReferenceParts (
+    Get-MtbCleanBibleReference $trimmed
+  )
+
+  # A completed Scripture cell is preserved as written.
+  if ($null -eq $parts) {
+    return $trimmed
+  }
+
+  $text = Get-MtbAllBiblesVerse `
+    -Reference $trimmed `
+    -Translation 'NKJV'
+
+  if (-not [string]::IsNullOrWhiteSpace($text)) {
+    return $text.Trim()
+  }
+
+  Write-Warning (
+    "NKJV text not found in ALL_BIBLES for: " + $trimmed
+  )
+
+  return (
+    (Get-MtbCleanBibleReference $trimmed) +
+    ' (NKJV)'
+  )
+}
+
+function Get-MtbStudyNltText {
+  param(
+    [Parameter(Mandatory)] [string] $CellValue,
+    [Parameter(Mandatory)] [string] $BookSlug
+  )
+
+  if ([string]::IsNullOrWhiteSpace($CellValue)) {
+    return ''
+  }
+
+  $trimmed = $CellValue.Trim()
+  $parts = Get-MtbReferenceParts (
+    Get-MtbCleanBibleReference $trimmed
+  )
+
+  # A completed Scripture cell is preserved as written.
+  if ($null -eq $parts) {
+    if ($trimmed -notmatch '(?i)\(NLT\)\s*$') {
+      return $trimmed + ' (NLT)'
+    }
+
+    return $trimmed
+  }
+
+  $text = Get-MtbAllBiblesVerse `
+    -Reference $trimmed `
+    -Translation 'NLT'
+
+  if (-not [string]::IsNullOrWhiteSpace($text)) {
+    return $text.Trim()
+  }
+
+  Write-Warning (
+    "NLT text not found in ALL_BIBLES for: " + $trimmed
+  )
+
+  return (
+    (Get-MtbCleanBibleReference $trimmed) +
+    ' (NLT)'
+  )
+}
+
 function Convert-MtbStudyScriptureToHtml {
   param(
     [Parameter(Mandatory)] [string] $Text,
@@ -1665,7 +2546,20 @@ function Convert-MtbStudyScriptureToHtml {
     $translation = ''
     if ($b -match '\((NKJV|NLT|ESV|NASB|CSB|KJV)\)\s*$') { $translation = $Matches[1] }
 
-    [void]$sb.Append('<blockquote class="mtb-study-scripture-block">')
+    $translationClass = ''
+
+    if ($translation -eq 'NLT') {
+      $translationClass = ' mtb-study-scripture-nlt'
+    }
+    elseif ($translation -eq 'NKJV') {
+      $translationClass = ' mtb-study-scripture-nkjv'
+    }
+
+    [void]$sb.Append(
+      '<blockquote class="mtb-study-scripture-block' +
+      $translationClass +
+      '">'
+    )
     if (-not [string]::IsNullOrWhiteSpace($translation)) {
       [void]$sb.Append('<span class="mtb-study-translation">' + (ConvertTo-HtmlEncoded $translation) + '</span>')
     }
@@ -1683,6 +2577,416 @@ function Get-MtbStudyVerseReference([string]$scripture, [string]$fallbackBook, [
 }
 
 
+# --------------------------------------------------
+# Chapter Study Bible lookup
+#
+# Source of truth:
+#   assets\ALL_BIBLES.xlsm
+#
+# Generated Strong's cache:
+#   assets\js\bibles-json-strongs\nkjv\<book>.json
+#
+# Normal Chapter Study generation reads only the small per-book JSON files.
+# ALL_BIBLES.xlsm is opened only when its timestamp is newer than the
+# Strong's JSON manifest (or when the cache is missing).
+# --------------------------------------------------
+
+$script:MtbStudyBibleCache = @{}
+$script:MtbStrongsJsonChecked = $false
+
+function Normalize-MtbBibleReference([string]$Reference) {
+  if ([string]::IsNullOrWhiteSpace($Reference)) { return '' }
+
+  $value = ([string]$Reference).Trim()
+  $value = $value -replace '[\u2010\u2011\u2012\u2013\u2014\u2212]', '-'
+  $value = $value -replace '\s+', ' '
+
+  if ($value -match '^(?<book>[1-3]?\s*[A-Za-z]+(?:\s+[A-Za-z]+)*)\s+(?<chapter>\d+)\s*:\s*(?<verse>\d+)$') {
+    $book = ($Matches['book'] -replace '\s+', ' ').Trim()
+    return ($book + ' ' + $Matches['chapter'] + ':' + $Matches['verse']).ToLowerInvariant()
+  }
+
+  return ''
+}
+
+function ConvertTo-MtbBookSlug([string]$BookName) {
+  if ([string]::IsNullOrWhiteSpace($BookName)) { return '' }
+
+  $slug = $BookName.Trim().ToLowerInvariant()
+  $slug = $slug -replace '&', 'and'
+  $slug = $slug -replace '[^a-z0-9]+', '-'
+  return $slug.Trim('-')
+}
+
+function Get-MtbReferenceParts([string]$Reference) {
+  $normalized = Normalize-MtbBibleReference $Reference
+  if ([string]::IsNullOrWhiteSpace($normalized)) { return $null }
+
+  if ($normalized -match '^(?<book>.+?)\s+(?<chapter>\d+):(?<verse>\d+)$') {
+    return [pscustomobject]@{
+      Key       = $normalized
+      BookName  = $Matches['book']
+      BookSlug  = ConvertTo-MtbBookSlug $Matches['book']
+      Chapter   = [int]$Matches['chapter']
+      Verse     = [int]$Matches['verse']
+    }
+  }
+
+  return $null
+}
+
+function Remove-MtbLeadingVerseReference([string]$FullVerse, [string]$Reference) {
+  if ([string]::IsNullOrWhiteSpace($FullVerse)) { return '' }
+
+  $value = $FullVerse.Trim()
+  $parts = Get-MtbReferenceParts $Reference
+  if ($null -eq $parts) { return $value }
+
+  $bookPattern = [regex]::Escape($parts.BookName) -replace '\\ ', '\s+'
+  $prefixPattern = '^\s*' + $bookPattern + '\s+' + $parts.Chapter + '\s*:\s*' + $parts.Verse + '\s*'
+  $value = [regex]::Replace($value, $prefixPattern, '', [System.Text.RegularExpressions.RegexOptions]::IgnoreCase)
+  return $value.Trim()
+}
+
+function Export-MtbStrongsBibleJson {
+  $biblePath = Join-Path $SITE_ROOT 'assets\ALL_BIBLES.xlsm'
+  $strongsDir = Join-Path $SITE_ROOT 'assets\js\bibles-json-strongs\nkjv'
+  $manifestPath = Join-Path $strongsDir '.manifest.json'
+
+  if (-not (Test-Path -LiteralPath $biblePath)) {
+    Write-Warning "Strong's source workbook not found: $biblePath"
+    return $false
+  }
+
+  Ensure-Path $strongsDir
+
+  Write-Host "ALL_BIBLES.xlsm changed. Rebuilding Strong's NKJV book JSON files..." -ForegroundColor Cyan
+  $timer = [System.Diagnostics.Stopwatch]::StartNew()
+
+  try {
+    $rows = Get-ExcelWorksheetValues -WorkbookPath $biblePath -WorksheetName 'ALL_BIBLES'
+  }
+  catch {
+    Write-Warning ("Unable to read Strong's source workbook '{0}': {1}" -f $biblePath, $_.Exception.Message)
+    return $false
+  }
+
+  if ($rows.Count -lt 2) {
+    Write-Warning "ALL_BIBLES worksheet does not contain verse rows."
+    return $false
+  }
+
+  $books = @{}
+
+  for ($i = 1; $i -lt $rows.Count; $i++) {
+    if ($rows[$i].Count -lt 2) { continue }
+
+    $reference = ([string]$rows[$i][0]).Trim()
+    $fullVerse = ([string]$rows[$i][1]).Trim()
+
+    if ([string]::IsNullOrWhiteSpace($reference) -or [string]::IsNullOrWhiteSpace($fullVerse)) {
+      continue
+    }
+
+    if ($fullVerse -notmatch '(?i)\(NKJV\)\s*$') { continue }
+
+    $parts = Get-MtbReferenceParts $reference
+    if ($null -eq $parts) { continue }
+
+    $bookSlug = $parts.BookSlug
+    if (-not $books.ContainsKey($bookSlug)) {
+      $books[$bookSlug] = [ordered]@{
+        translation  = 'NKJV'
+        book         = (Get-Culture).TextInfo.ToTitleCase($parts.BookName)
+        generatedUtc = [DateTime]::UtcNow.ToString('o')
+        source       = 'ALL_BIBLES.xlsm'
+        verses       = [ordered]@{}
+      }
+    }
+
+    # Store the complete source verse so the existing renderer receives:
+    # reference + text + Strong's markers + (NKJV)
+    $books[$bookSlug].verses[$parts.Key] = $fullVerse
+  }
+
+  foreach ($bookSlug in $books.Keys) {
+    $outPath = Join-Path $strongsDir ($bookSlug + '.json')
+    $json = $books[$bookSlug] | ConvertTo-Json -Depth 8
+    [System.IO.File]::WriteAllText($outPath, $json, [System.Text.UTF8Encoding]::new($false))
+  }
+
+  $sourceInfo = Get-Item -LiteralPath $biblePath
+  $manifest = [ordered]@{
+    sourceFile               = 'ALL_BIBLES.xlsm'
+    sourceLastWriteTimeUtc    = $sourceInfo.LastWriteTimeUtc.ToString('o')
+    generatedUtc              = [DateTime]::UtcNow.ToString('o')
+    bookCount                 = $books.Count
+  }
+
+  [System.IO.File]::WriteAllText(
+    $manifestPath,
+    ($manifest | ConvertTo-Json -Depth 4),
+    [System.Text.UTF8Encoding]::new($false)
+  )
+
+  $timer.Stop()
+  Write-Host ("Strong's JSON rebuilt for {0} books in {1:n1} seconds." -f $books.Count, $timer.Elapsed.TotalSeconds) -ForegroundColor Green
+  return $true
+}
+
+function Test-MtbStrongsJsonCurrent {
+  $biblePath = Join-Path $SITE_ROOT 'assets\ALL_BIBLES.xlsm'
+  $strongsDir = Join-Path $SITE_ROOT 'assets\js\bibles-json-strongs\nkjv'
+  $manifestPath = Join-Path $strongsDir '.manifest.json'
+
+  if (-not (Test-Path -LiteralPath $biblePath)) {
+    Write-Warning "Strong's source workbook not found: $biblePath"
+    return $false
+  }
+
+  if (-not (Test-Path -LiteralPath $manifestPath)) {
+    Write-Host "Strong's JSON manifest not found; rebuild required." -ForegroundColor Yellow
+    return $false
+  }
+
+  # A manifest by itself is not enough. If no per-book JSON files exist,
+  # the cache is incomplete and must be rebuilt.
+  $bookJsonFiles = @(Get-ChildItem -LiteralPath $strongsDir -Filter '*.json' -File -ErrorAction SilentlyContinue |
+    Where-Object { $_.Name -ne '.manifest.json' })
+
+  if ($bookJsonFiles.Count -eq 0) {
+    Write-Host "No Strong's book JSON files found; rebuild required." -ForegroundColor Yellow
+    return $false
+  }
+
+  try {
+    $manifest = Get-Content -LiteralPath $manifestPath -Raw -Encoding UTF8 | ConvertFrom-Json
+    if ($null -eq $manifest -or [string]::IsNullOrWhiteSpace([string]$manifest.sourceLastWriteTimeUtc)) {
+      return $false
+    }
+
+    $recordedUtc = [DateTime]::Parse(
+      [string]$manifest.sourceLastWriteTimeUtc,
+      [System.Globalization.CultureInfo]::InvariantCulture,
+      [System.Globalization.DateTimeStyles]::RoundtripKind
+    ).ToUniversalTime()
+
+    $actualUtc = (Get-Item -LiteralPath $biblePath).LastWriteTimeUtc
+
+    # A one-second tolerance avoids filesystem timestamp precision differences.
+    return ($actualUtc -le $recordedUtc.AddSeconds(1))
+  }
+  catch {
+    return $false
+  }
+}
+
+function Ensure-MtbStrongsJsonCurrent {
+  if ($script:MtbStrongsJsonChecked) { return }
+  $script:MtbStrongsJsonChecked = $true
+
+  if (Test-MtbStrongsJsonCurrent) {
+    Write-Host "Strong's NKJV JSON cache is current." -ForegroundColor DarkGreen
+    return
+  }
+
+  Write-Host "Strong's NKJV JSON cache is missing or outdated. Rebuilding now..." -ForegroundColor Cyan
+  $rebuilt = Export-MtbStrongsBibleJson
+
+  if (-not $rebuilt) {
+    Write-Warning "Strong's JSON rebuild did not complete."
+  }
+}
+
+function Get-MtbJsonPropertyValue($Object, [string]$Name) {
+  if ($null -eq $Object) { return $null }
+
+  if ($Object -is [System.Collections.IDictionary]) {
+    if ($Object.Contains($Name)) { return $Object[$Name] }
+    return $null
+  }
+
+  $property = $Object.PSObject.Properties[$Name]
+  if ($null -ne $property) { return $property.Value }
+  return $null
+}
+
+function Get-MtbVerseFromExistingBookJson($Json, [int]$Chapter, [int]$Verse) {
+  if ($null -eq $Json) { return '' }
+
+  # Common schema:
+  # { chapters: { "1": { "1": "text" } } }
+  $chapters = Get-MtbJsonPropertyValue $Json 'chapters'
+  if ($null -ne $chapters) {
+    $chapterNode = Get-MtbJsonPropertyValue $chapters ([string]$Chapter)
+    if ($null -ne $chapterNode) {
+      $directVerse = Get-MtbJsonPropertyValue $chapterNode ([string]$Verse)
+      if ($null -ne $directVerse) {
+        if ($directVerse -is [string]) { return ([string]$directVerse).Trim() }
+
+        foreach ($field in @('text','verseText','content')) {
+          $candidate = Get-MtbJsonPropertyValue $directVerse $field
+          if (-not [string]::IsNullOrWhiteSpace([string]$candidate)) {
+            return ([string]$candidate).Trim()
+          }
+        }
+      }
+
+      # Alternate schema:
+      # { chapters: { "1": [ { verse: 1, text: "..." } ] } }
+      if ($chapterNode -is [System.Collections.IEnumerable] -and -not ($chapterNode -is [string])) {
+        foreach ($item in $chapterNode) {
+          $number = Get-MtbJsonPropertyValue $item 'verse'
+          if ($null -eq $number) { $number = Get-MtbJsonPropertyValue $item 'number' }
+
+          if ([string]$number -eq [string]$Verse) {
+            foreach ($field in @('text','verseText','content')) {
+              $candidate = Get-MtbJsonPropertyValue $item $field
+              if (-not [string]::IsNullOrWhiteSpace([string]$candidate)) {
+                return ([string]$candidate).Trim()
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+
+  # Alternate schema:
+  # { verses: { "Ruth 1:1": "..." } }
+  $verses = Get-MtbJsonPropertyValue $Json 'verses'
+  if ($null -ne $verses) {
+    foreach ($property in $verses.PSObject.Properties) {
+      if ($property.Name -match '(?i)\s' + $Chapter + ':' + $Verse + '$') {
+        return ([string]$property.Value).Trim()
+      }
+    }
+  }
+
+  return ''
+}
+
+function Initialize-MtbStudyBibleBook([string]$BookSlug) {
+  if ([string]::IsNullOrWhiteSpace($BookSlug)) { return }
+
+  if ($script:MtbStudyBibleCache.ContainsKey($BookSlug)) { return }
+
+  Ensure-MtbStrongsJsonCurrent
+
+  $strongsPath = Join-Path $SITE_ROOT ("assets\js\bibles-json-strongs\nkjv\" + $BookSlug + '.json')
+  $nltPath = Join-Path $SITE_ROOT ("assets\js\bibles-json\nlt\" + $BookSlug + '.json')
+
+  $strongsJson = $null
+  $nltJson = $null
+
+  # Even when the manifest is current, verify that the requested book file exists.
+  # If it is missing, force one rebuild before giving up.
+  if (-not (Test-Path -LiteralPath $strongsPath)) {
+    Write-Host ("Strong's JSON for '{0}' is missing. Forcing cache rebuild..." -f $BookSlug) -ForegroundColor Yellow
+    $script:MtbStrongsJsonChecked = $false
+    [void](Export-MtbStrongsBibleJson)
+    $script:MtbStrongsJsonChecked = $true
+  }
+
+  if (Test-Path -LiteralPath $strongsPath) {
+    try {
+      $strongsJson = Get-Content -LiteralPath $strongsPath -Raw -Encoding UTF8 | ConvertFrom-Json
+    }
+    catch {
+      Write-Warning ("Unable to read Strong's JSON '{0}': {1}" -f $strongsPath, $_.Exception.Message)
+    }
+  }
+  else {
+    Write-Warning "Strong's NKJV JSON not found for book: $BookSlug"
+  }
+
+  if (Test-Path -LiteralPath $nltPath) {
+    try {
+      $nltJson = Get-Content -LiteralPath $nltPath -Raw -Encoding UTF8 | ConvertFrom-Json
+    }
+    catch {
+      Write-Warning ("Unable to read NLT JSON '{0}': {1}" -f $nltPath, $_.Exception.Message)
+    }
+  }
+  else {
+    Write-Warning "NLT JSON not found for book: $BookSlug"
+  }
+
+  $script:MtbStudyBibleCache[$BookSlug] = @{
+    StrongNKJV = $strongsJson
+    NLT        = $nltJson
+  }
+}
+
+function Get-MtbStrongNkjvVerse([string]$BookSlug, [string]$NormalizedReference) {
+  Initialize-MtbStudyBibleBook $BookSlug
+
+  if (-not $script:MtbStudyBibleCache.ContainsKey($BookSlug)) { return '' }
+
+  $json = $script:MtbStudyBibleCache[$BookSlug]['StrongNKJV']
+  if ($null -eq $json) { return '' }
+
+  $verses = Get-MtbJsonPropertyValue $json 'verses'
+  if ($null -eq $verses) { return '' }
+
+  $property = $verses.PSObject.Properties[$NormalizedReference]
+  if ($null -ne $property) {
+    return ([string]$property.Value).Trim()
+  }
+
+  return ''
+}
+
+function Expand-MtbStudyScriptureReference([string]$CellValue, [string]$BookSlug) {
+  if ([string]::IsNullOrWhiteSpace($CellValue)) { return $CellValue }
+
+  $trimmed = ([string]$CellValue).Trim()
+  $parts = Get-MtbReferenceParts $trimmed
+
+  # Only a cell consisting entirely of one verse reference is expanded.
+  # OVERVIEW, headings, verse ranges, and completed Scripture cells remain unchanged.
+  if ($null -eq $parts) { return $CellValue }
+
+  $effectiveBookSlug = if ([string]::IsNullOrWhiteSpace($BookSlug)) { $parts.BookSlug } else { $BookSlug }
+  Initialize-MtbStudyBibleBook $effectiveBookSlug
+
+  $blocks = New-Object 'System.Collections.Generic.List[string]'
+
+  $nkjv = Get-MtbStrongNkjvVerse $effectiveBookSlug $parts.Key
+  if (-not [string]::IsNullOrWhiteSpace($nkjv)) {
+    $blocks.Add($nkjv)
+  }
+  else {
+    Write-Warning "Strong's NKJV text not found for Bible reference: $trimmed"
+  }
+
+  $nltJson = $script:MtbStudyBibleCache[$effectiveBookSlug]['NLT']
+  $nltText = Get-MtbVerseFromExistingBookJson $nltJson $parts.Chapter $parts.Verse
+
+  if (-not [string]::IsNullOrWhiteSpace($nltText)) {
+    # Existing NLT JSON normally stores only the verse body.
+    # Add the reference and translation label expected by the Chapter Study renderer.
+    if ($nltText -match '(?i)\(NLT\)\s*$') {
+      if ($nltText -match '^\s*[1-3]?\s*[A-Za-z]+(?:\s+[A-Za-z]+)*\s+\d+:\d+') {
+        $blocks.Add($nltText.Trim())
+      }
+      else {
+        $blocks.Add(($trimmed + ' ' + $nltText.Trim()))
+      }
+    }
+    else {
+      $blocks.Add(($trimmed + ' ' + $nltText.Trim() + ' (NLT)'))
+    }
+  }
+  else {
+    Write-Warning "NLT text not found in existing JSON for Bible reference: $trimmed"
+  }
+
+  if ($blocks.Count -eq 0) { return $CellValue }
+  return ($blocks -join "`r`n`r`n")
+}
+
+
 function Get-MtbStudyIconHtml([string]$title) {
   $key = ([string]$title).Trim().ToLowerInvariant()
   $icon = '&#9679;'
@@ -1697,8 +3001,8 @@ function Get-MtbStudyIconHtml([string]$title) {
   elseif ($key -match 'section insights|going deeper') { $icon = '&#10022;' }
   elseif ($key -match 'christ connection') { $icon = '&#10013;' }
   elseif ($key -match 'dwelling in the word') { $icon = '&#9825;' }
-  elseif ($key -match '^remarks') { $icon = '&#9998;' }
-  elseif ($key -match 'healthy church culture|community') { $icon = '&#8962;' }
+  elseif ($key -match 'seeds for the sower|^remarks') { $icon = '&#9998;' }
+  elseif ($key -match 'how shall we then live|healthy church culture|community') { $icon = '&#8962;' }
   elseif ($key -match 'expository|lexical') { $icon = '&#9636;' }
   elseif ($key -match 'nuggets') { $icon = '&#10022;' }
 
@@ -1713,60 +3017,364 @@ function New-MtbChapterStudyHtmlFromExcel {
     [Parameter(Mandatory)] [string] $WorksheetName
   )
 
-  $data = Get-ExcelWorksheetValues -WorkbookPath $WorkbookPath -WorksheetName $WorksheetName
-  if ($data.Count -lt 10) { throw "The '$WorksheetName' worksheet does not contain the expected chapter study layout." }
+  $data = Get-ExcelWorksheetValues `
+    -WorkbookPath $WorkbookPath `
+    -WorksheetName $WorksheetName
 
-  $bookDisplay = if (-not [string]::IsNullOrWhiteSpace([string]$data[0][0])) { [string]$data[0][0] } else { (Get-Culture).TextInfo.ToTitleCase($BookSlug) }
+  if ($data.Count -lt 5) {
+    throw (
+      "The '$WorksheetName' worksheet does not contain enough " +
+      "chapter study data."
+    )
+  }
+
+  $bookDisplay = (Get-Culture).TextInfo.ToTitleCase(
+    ($BookSlug -replace '-', ' ')
+  )
+
   $sections = New-Object 'System.Collections.Generic.List[object]'
-  $i = 2
-  while ($i -lt $data.Count) {
-    $marker = ([string]$data[$i][0]).Trim()
-    if ($marker -notmatch '^(?i)Overview$') { $i++; continue }
 
-    $passage = ([string]$data[$i][1]).Trim()
-    if ($i + 4 -ge $data.Count) { break }
-    $overviewHeaders1 = $data[$i + 1]
-    $overviewValues1 = $data[$i + 2]
-    $overviewHeaders2 = $data[$i + 3]
-    $overviewValues2 = $data[$i + 4]
-    $i += 5
+  $hasLegacyMarkers = $false
+  foreach ($row in $data) {
+    if (
+      $row.Count -gt 0 -and
+      ([string]$row[0]).Trim() -match '^(?i)(Overview|VERSE-BY-VERSE|WRAP-UP)$'
+    ) {
+      $hasLegacyMarkers = $true
+      break
+    }
+  }
 
-    $verseHeaders = @()
-    $verseRows = New-Object 'System.Collections.Generic.List[object]'
-    if ($i -lt $data.Count -and ([string]$data[$i][0]).Trim() -match '^(?i)VERSE-BY-VERSE$') {
-      if ([string]::IsNullOrWhiteSpace($passage)) { $passage = ([string]$data[$i][1]).Trim() }
-      $i++
-      if ($i -lt $data.Count) { $verseHeaders = $data[$i]; $i++ }
-      while ($i -lt $data.Count) {
-        $nextMarker = ([string]$data[$i][0]).Trim()
-        if ($nextMarker -match '^(?i)WRAP-UP$' -or $nextMarker -match '^(?i)Overview$') { break }
-        if (-not [string]::IsNullOrWhiteSpace([string]$data[$i][0])) { $verseRows.Add($data[$i]) }
+  if ($hasLegacyMarkers) {
+    # Legacy workbook parser.
+    $i = 2
+
+    while ($i -lt $data.Count) {
+      $marker = ([string]$data[$i][0]).Trim()
+
+      if ($marker -notmatch '^(?i)Overview$') {
         $i++
+        continue
       }
-    }
 
-    $wrapHeaders = @()
-    $wrapValues = @()
-    if ($i -lt $data.Count -and ([string]$data[$i][0]).Trim() -match '^(?i)WRAP-UP$') {
-      $i++
-      if ($i -lt $data.Count) { $wrapHeaders = $data[$i]; $i++ }
-      if ($i -lt $data.Count) { $wrapValues = $data[$i]; $i++ }
-    }
+      $passage = Get-MtbStandardSectionHeading ([string]$data[$i][1])
 
-    $sections.Add([pscustomobject]@{
-      Passage = $passage
-      OverviewHeaders1 = $overviewHeaders1
-      OverviewValues1 = $overviewValues1
-      OverviewHeaders2 = $overviewHeaders2
-      OverviewValues2 = $overviewValues2
-      VerseHeaders = $verseHeaders
-      VerseRows = $verseRows.ToArray()
-      WrapHeaders = $wrapHeaders
-      WrapValues = $wrapValues
-    })
+      if ($i + 4 -ge $data.Count) {
+        break
+      }
+
+      $overviewHeaders1 = $data[$i + 1]
+      $overviewValues1 = $data[$i + 2]
+      $overviewHeaders2 = $data[$i + 3]
+      $overviewValues2 = $data[$i + 4]
+      $i += 5
+
+      $verseHeaders = @()
+      $verseRows = New-Object 'System.Collections.Generic.List[object]'
+
+      if (
+        $i -lt $data.Count -and
+        ([string]$data[$i][0]).Trim() -match '^(?i)VERSE-BY-VERSE$'
+      ) {
+        if ([string]::IsNullOrWhiteSpace($passage)) {
+          $passage = ([string]$data[$i][1]).Trim()
+        }
+
+        $i++
+
+        if ($i -lt $data.Count) {
+          $verseHeaders = $data[$i]
+          $i++
+        }
+
+        while ($i -lt $data.Count) {
+          $nextMarker = ([string]$data[$i][0]).Trim()
+
+          if (
+            $nextMarker -match '^(?i)WRAP-UP$' -or
+            $nextMarker -match '^(?i)Overview$'
+          ) {
+            break
+          }
+
+          if (
+            -not [string]::IsNullOrWhiteSpace(
+              [string]$data[$i][0]
+            )
+          ) {
+            $verseRows.Add($data[$i])
+          }
+
+          $i++
+        }
+      }
+
+      $wrapHeaders = @()
+      $wrapValues = @()
+
+      if (
+        $i -lt $data.Count -and
+        ([string]$data[$i][0]).Trim() -match '^(?i)WRAP-UP$'
+      ) {
+        $i++
+
+        if ($i -lt $data.Count) {
+          $wrapHeaders = $data[$i]
+          $i++
+        }
+
+        if ($i -lt $data.Count) {
+          $wrapValues = $data[$i]
+          $i++
+        }
+      }
+
+      $sections.Add(
+        [pscustomobject]@{
+          Passage = $passage
+          OverviewHeaders1 = $overviewHeaders1
+          OverviewValues1 = $overviewValues1
+          OverviewHeaders2 = $overviewHeaders2
+          OverviewValues2 = $overviewValues2
+          VerseHeaders = $verseHeaders
+          VerseRows = $verseRows.ToArray()
+          WrapHeaders = $wrapHeaders
+          WrapValues = $wrapValues
+        }
+      )
+    }
+  }
+  else {
+    # Current numbered-sheet parser.
+    #
+    # Row 1: chapter title
+    # Repeating section blocks:
+    #   merged section heading
+    #   8 overview headers
+    #   8 overview values
+    #   blank row
+    #   verse headers
+    #   verse rows
+    #   blank row
+    #   wrap-up headers
+    #   wrap-up values
+
+    $r = 1
+
+    while ($r -lt $data.Count) {
+      $row = @($data[$r])
+      $first = ''
+      if ($row.Count -gt 0) {
+        $first = ([string]$row[0]).Trim()
+      }
+
+      if ([string]::IsNullOrWhiteSpace($first)) {
+        $r++
+        continue
+      }
+
+      # A section heading occupies column A while the remaining cells are blank.
+      $otherContent = $false
+
+      for ($c = 1; $c -lt $row.Count; $c++) {
+        if (
+          -not [string]::IsNullOrWhiteSpace(
+            [string]$row[$c]
+          )
+        ) {
+          $otherContent = $true
+          break
+        }
+      }
+
+      if ($otherContent) {
+        $r++
+        continue
+      }
+
+      if ($r + 2 -ge $data.Count) {
+        break
+      }
+
+      $overviewHeaders = @($data[$r + 1])
+      $overviewValues = @($data[$r + 2])
+
+      $recognizedOverviewHeaders = @(
+        $overviewHeaders |
+        Where-Object {
+          ([string]$_).Trim().ToLowerInvariant() -in @(
+            'theme',
+            'section summary',
+            'key observations',
+            'main idea',
+            'understanding',
+            'historical & cultural setting',
+            'historical & cultural notes',
+            'remarks'
+          )
+        }
+      )
+
+      if ($recognizedOverviewHeaders.Count -lt 2) {
+        $r++
+        continue
+      }
+
+      $passage = Get-MtbStandardSectionHeading $first
+
+      $overviewHeaders1 = @()
+      $overviewValues1 = @()
+      $overviewHeaders2 = @()
+      $overviewValues2 = @()
+
+      for ($c = 0; $c -lt $overviewHeaders.Count; $c++) {
+        $header = [string]$overviewHeaders[$c]
+        $value = ''
+
+        if ($c -lt $overviewValues.Count) {
+          $value = [string]$overviewValues[$c]
+        }
+
+        if ($c -lt 4) {
+          $overviewHeaders1 += $header
+          $overviewValues1 += $value
+        }
+        else {
+          $overviewHeaders2 += $header
+          $overviewValues2 += $value
+        }
+      }
+
+      $r += 3
+
+      while (
+        $r -lt $data.Count -and
+        [string]::IsNullOrWhiteSpace([string]$data[$r][0])
+      ) {
+        $r++
+      }
+
+      $verseHeaders = @()
+      $verseRows = New-Object 'System.Collections.Generic.List[object]'
+
+      if ($r -lt $data.Count) {
+        $candidateHeaders = @($data[$r])
+
+        $candidateHeaderKeys = @(
+          $candidateHeaders |
+            ForEach-Object { ([string]$_).Trim().ToLowerInvariant() }
+        )
+
+        $approvedVerseHeaderCount = @(
+          $candidateHeaderKeys |
+            Where-Object {
+              $_ -in @(
+                'key explanations',
+                'main idea',
+                'verse explanation',
+                'christ connection',
+                'application'
+              )
+            }
+        ).Count
+
+        $hasScriptureOrReferenceHeader = @(
+          $candidateHeaderKeys |
+            Where-Object { $_ -in @('nkjv','nlt','verse','reference') }
+        ).Count -gt 0
+
+        if (
+          $candidateHeaders.Count -ge 5 -and
+          $hasScriptureOrReferenceHeader -and
+          $approvedVerseHeaderCount -ge 3
+        ) {
+          $verseHeaders = $candidateHeaders
+          $r++
+
+          while ($r -lt $data.Count) {
+            $candidateRow = @($data[$r])
+            $candidateFirst = ''
+
+            if ($candidateRow.Count -gt 0) {
+              $candidateFirst = ([string]$candidateRow[0]).Trim()
+            }
+
+            if (
+              $candidateFirst.ToLowerInvariant() -eq
+              'foundational truths'
+            ) {
+              break
+            }
+
+            if (
+              [string]::IsNullOrWhiteSpace($candidateFirst)
+            ) {
+              $lookAhead = $r + 1
+
+              while (
+                $lookAhead -lt $data.Count -and
+                [string]::IsNullOrWhiteSpace(
+                  [string]$data[$lookAhead][0]
+                )
+              ) {
+                $lookAhead++
+              }
+
+              if (
+                $lookAhead -lt $data.Count -and
+                ([string]$data[$lookAhead][0]).Trim().ToLowerInvariant() -eq
+                'foundational truths'
+              ) {
+                $r = $lookAhead
+                break
+              }
+
+              $r++
+              continue
+            }
+
+            $verseRows.Add($candidateRow)
+            $r++
+          }
+        }
+      }
+
+      $wrapHeaders = @()
+      $wrapValues = @()
+
+      if (
+        $r -lt $data.Count -and
+        ([string]$data[$r][0]).Trim().ToLowerInvariant() -eq
+        'foundational truths'
+      ) {
+        $wrapHeaders = @($data[$r])
+
+        if (($r + 1) -lt $data.Count) {
+          $wrapValues = @($data[$r + 1])
+        }
+
+        $r += 2
+      }
+
+      $sections.Add(
+        [pscustomobject]@{
+          Passage = $passage
+          OverviewHeaders1 = $overviewHeaders1
+          OverviewValues1 = $overviewValues1
+          OverviewHeaders2 = $overviewHeaders2
+          OverviewValues2 = $overviewValues2
+          VerseHeaders = $verseHeaders
+          VerseRows = $verseRows.ToArray()
+          WrapHeaders = $wrapHeaders
+          WrapValues = $wrapValues
+        }
+      )
+    }
   }
 
   if ($sections.Count -eq 0) { throw "No section blocks were found in '$WorksheetName'." }
+
+  $outlineTitles = @(Get-MtbSectionOutlineTitlesFromWorkbook -WorkbookPath $WorkbookPath -Chapter $Chapter)
 
   $sb = New-Object System.Text.StringBuilder
   [void]$sb.Append(@'
@@ -1777,7 +3385,7 @@ function New-MtbChapterStudyHtmlFromExcel {
 .mtb-study-controls{display:flex;justify-content:flex-end;gap:10px;margin:-10px 0 18px}.mtb-study-control{appearance:none;border:1px solid #b9c8d5;border-radius:8px;background:#fff;color:var(--navy);padding:8px 13px;font-weight:800;cursor:pointer}.mtb-study-control:hover{background:#eef4f9}.mtb-study-section{margin:0 0 30px;border:1px solid var(--line);border-radius:15px;background:#fff;box-shadow:0 5px 18px rgba(28,48,66,.06);overflow:hidden}.mtb-study-section>summary{list-style:none;cursor:pointer}.mtb-study-section>summary::-webkit-details-marker{display:none}.mtb-study-section-banner{display:flex;align-items:center;justify-content:space-between;gap:15px;padding:17px 21px;background:linear-gradient(100deg,var(--navy),#315f88);color:#fff}.mtb-study-section-banner h2{margin:0;font-size:1.28rem}.mtb-study-section-number{font-size:.76rem;font-weight:800;letter-spacing:.1em;text-transform:uppercase;opacity:.82}.mtb-study-section-toggle{flex:0 0 auto;width:34px;height:34px;border:1px solid rgba(255,255,255,.4);border-radius:999px;display:grid;place-items:center;font-size:1.35rem;font-weight:700}.mtb-study-section-toggle:before{content:'−'}.mtb-study-section:not([open]) .mtb-study-section-toggle:before{content:'+'}.mtb-study-section:not([open]) .mtb-study-section-banner{border-radius:14px}
 .mtb-study-block{padding:20px}.mtb-study-block-title{display:flex;align-items:center;gap:12px;margin:0 0 14px;color:var(--navy);font-size:1.02rem;text-transform:uppercase;letter-spacing:.055em}.mtb-study-block-title:after{content:'';height:1px;flex:1;background:linear-gradient(to right,#c7d3de,transparent)}
 .mtb-study-grid{display:grid;grid-template-columns:repeat(12,minmax(0,1fr));gap:18px;align-items:stretch}.mtb-study-card{grid-column:span 3;border:1px solid var(--line);border-top:4px solid #6288aa;border-radius:11px;overflow:hidden;background:#fff}.mtb-study-card-wide{grid-column:span 6}.mtb-study-card h3{display:flex;align-items:center;gap:8px;margin:0;padding:11px 14px;background:var(--blue-soft);border-bottom:1px solid #e4ebf0;color:var(--navy);font-size:.94rem}.mtb-study-title-icon{display:inline-grid;place-items:center;flex:0 0 auto;width:1.15em;color:#315f88;font-size:1.05em;line-height:1}.mtb-study-card-prompt{display:none}.mtb-study-card-body{padding:14px 16px 16px;line-height:1.5}.mtb-study-card-body p{margin:0 0 .85em}.mtb-study-card-body p:last-child{margin-bottom:0}.mtb-study-card-body ul{margin:0;padding-left:1.2em}.mtb-study-card-body li{margin:0 0 .48em}.mtb-study-card-theme,.mtb-study-card-mainidea,.mtb-study-card-christ{border-top-color:#6288aa;background:#fff}.mtb-study-card-theme h3,.mtb-study-card-mainidea h3,.mtb-study-card-christ h3{background:var(--blue-soft);color:var(--navy)}
-.mtb-study-verses{padding:0 20px 20px}.mtb-study-verse{margin:0 0 13px;border:1px solid #cfdae3;border-radius:11px;background:#fff;overflow:hidden}.mtb-study-verse summary{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:14px 17px;cursor:pointer;background:#f3f7fa;color:var(--navy);font-weight:800;list-style:none}.mtb-study-verse summary::-webkit-details-marker{display:none}.mtb-study-verse summary:after{content:'+';font-size:1.3rem}.mtb-study-verse[open] summary:after{content:'−'}.mtb-study-verse[open] summary{border-bottom:1px solid #dbe3ea;background:#eaf2f8}.mtb-study-verse-body{padding:16px}.mtb-study-scripture-block{position:relative;margin:0 0 11px;padding:16px 18px;border-left:5px solid var(--gold);border-radius:0 9px 9px 0;background:#fffaf0}.mtb-study-scripture-block p{margin:0;line-height:1.5}.mtb-study-translation{float:right;margin:0 0 6px 10px;padding:3px 7px;border-radius:999px;background:#efe2c7;color:#6b4818;font-size:.7rem;font-weight:800}.mtb-study-verse-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:16px;margin-top:14px;align-items:stretch}.mtb-study-verse-panel{border:1px solid var(--line);border-radius:9px;overflow:hidden}.mtb-study-verse-panel h4{display:flex;align-items:center;gap:8px;margin:0;padding:9px 12px;background:#f4f7f9;color:var(--navy);font-size:.88rem}.mtb-study-verse-panel-content{padding:12px 13px;line-height:1.47}.mtb-study-verse-panel-content p{margin:0 0 .8em}.mtb-study-observation{padding:0 0 9px;margin:0 0 9px;border-bottom:1px solid #e7ecef}.mtb-study-observation:last-child{padding-bottom:0;margin-bottom:0;border-bottom:0}.mtb-study-observation strong{display:block;margin-bottom:3px;color:var(--navy)}.mtb-study-observation span{display:block}.mtb-study-empty{color:#77818a;font-style:italic}
+.mtb-study-verses{padding:0 20px 20px}.mtb-study-verse{margin:0 0 13px;border:1px solid #cfdae3;border-radius:11px;background:#fff;overflow:hidden}.mtb-study-verse summary{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:14px 17px;cursor:pointer;background:#f3f7fa;color:var(--navy);font-weight:800;list-style:none}.mtb-study-verse summary::-webkit-details-marker{display:none}.mtb-study-verse summary:after{content:'+';font-size:1.3rem}.mtb-study-verse[open] summary:after{content:'−'}.mtb-study-verse[open] summary{border-bottom:1px solid #dbe3ea;background:#eaf2f8}.mtb-study-verse-body{padding:16px}.mtb-study-scripture-block{position:relative;margin:0 0 10px;padding:16px 18px;border-left:5px solid var(--gold);border-radius:0 9px 9px 0;background:#fffaf0}.mtb-study-scripture-block.mtb-study-scripture-nlt{border-left-color:var(--gold)!important;background:#fffaf0!important}.mtb-study-scripture-block.mtb-study-scripture-nlt .mtb-study-translation{background:#efe2c7!important;color:#6b4818!important}.mtb-study-scripture-block p{margin:0;line-height:1.5}.mtb-study-translation{float:right;margin:0 0 6px 10px;padding:3px 7px;border-radius:999px;background:#efe2c7;color:#6b4818;font-size:.7rem;font-weight:800}.mtb-study-verse-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:16px;margin-top:15px;align-items:stretch}.mtb-study-verse-grid.mtb-study-verse-grid-5{grid-template-columns:repeat(5,minmax(0,1fr))}.mtb-study-verse-grid.mtb-study-verse-grid-3{grid-template-columns:repeat(3,minmax(0,1fr))}.mtb-study-verse-panel{min-width:0;border:1px solid var(--line);border-radius:9px;overflow:hidden}.mtb-study-verse-panel h4{display:flex;align-items:center;gap:8px;margin:0;padding:9px 12px;background:#f4f7f9;color:var(--navy);font-size:.88rem}.mtb-study-verse-panel-content{padding:12px 13px;line-height:1.47}.mtb-study-verse-panel-content p{margin:0 0 .8em}.mtb-study-observation{padding:0 0 9px;margin:0 0 9px;border-bottom:1px solid #e7ecef}.mtb-study-observation:last-child{padding-bottom:0;margin-bottom:0;border-bottom:0}.mtb-study-observation strong{display:block;margin-bottom:3px;color:var(--navy)}.mtb-study-observation span{display:block}.mtb-study-empty{color:#77818a;font-style:italic}.mtb-chapter-study .mtb-resource-link{color:#1f5fae;font-weight:700;text-decoration-line:underline;text-decoration-style:dotted;text-decoration-thickness:2px;text-underline-offset:4px;cursor:pointer}.mtb-chapter-study .mtb-resource-link:after{content:' ↗';font-size:.78em;opacity:.78}.mtb-chapter-study .mtb-resource-link:hover,.mtb-chapter-study .mtb-resource-link:focus-visible{color:#123f7a;text-decoration-style:solid}
 .mtb-study-wrap{padding:0 20px 22px}.mtb-study-wrap-grid{display:grid;grid-template-columns:repeat(12,minmax(0,1fr));gap:13px}.mtb-study-wrap-card{grid-column:span 4;border:1px solid var(--line);border-radius:10px;overflow:hidden;background:#fff}.mtb-study-wrap-card h3{display:flex;align-items:center;gap:8px;margin:0;padding:10px 13px;background:#f3f7fa;color:var(--navy);font-size:.9rem}.mtb-study-wrap-card .mtb-study-card-body{padding:13px 14px}.mtb-study-wrap-card-christ,.mtb-study-wrap-card-dwelling{border-top:1px solid var(--line)}
 @media(max-width:1100px){.mtb-study-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.mtb-study-card{grid-column:span 1}.mtb-study-card-wide{grid-column:span 2}.mtb-study-wrap-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.mtb-study-wrap-card,.mtb-study-wrap-card-christ,.mtb-study-wrap-card-dwelling{grid-column:span 1}.mtb-study-verse-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
 @media(max-width:660px){.mtb-study-grid{grid-template-columns:1fr}.mtb-study-card,.mtb-study-card-wide{grid-column:1/-1}.mtb-chapter-study{padding-left:0;padding-right:0}.mtb-study-hero{align-items:flex-start;flex-direction:column;padding:18px;border-radius:10px}.mtb-study-controls{justify-content:stretch;margin-top:-6px}.mtb-study-control{flex:1}.mtb-study-section-banner{align-items:center}.mtb-study-block,.mtb-study-verses,.mtb-study-wrap{padding-left:13px;padding-right:13px}.mtb-study-wrap-grid{grid-template-columns:1fr}.mtb-study-verse-grid{grid-template-columns:1fr}.mtb-study-verse summary{padding:13px}.mtb-study-verse-body{padding:12px}}
@@ -1786,32 +3394,54 @@ function New-MtbChapterStudyHtmlFromExcel {
 
   [void]$sb.Append('<div class="mtb-chapter-study"><header class="mtb-study-hero"><div><p class="mtb-study-eyebrow">Chapter Study</p><h1 class="mtb-study-title">' + (ConvertTo-HtmlEncoded $bookDisplay) + ' Chapter ' + $Chapter + '</h1></div><div class="mtb-study-badge">Verse-by-Verse</div></header><div class="mtb-study-controls" aria-label="Chapter study display controls"><button type="button" class="mtb-study-control" onclick="this.closest(&quot;.mtb-chapter-study&quot;).querySelectorAll(&quot;details.mtb-study-section, details.mtb-study-verse&quot;).forEach(function(panel){panel.open=true;});">Expand All</button><button type="button" class="mtb-study-control" onclick="this.closest(&quot;.mtb-chapter-study&quot;).querySelectorAll(&quot;details.mtb-study-section, details.mtb-study-verse&quot;).forEach(function(panel){panel.open=false;});">Collapse All</button></div>')
 
+  # STANDARD: The Section cell itself contains the complete banner heading:
+  #   Ruth 1:1-2 - The Famine
+  #   Obadiah 1:1-4 - The Judgment of Edom Announced
+  # Use that cell exactly as the source of truth. Do not append Theme,
+  # Main Idea, or Chapter Flow text.
+
   $sectionNumber = 0
   foreach ($section in $sections) {
     $sectionNumber++
 
-    # Pull the Theme value into the collapsible section heading instead of
-    # rendering it as a separate overview card.
     $overviewPairs = @(@($section.OverviewHeaders1,$section.OverviewValues1),@($section.OverviewHeaders2,$section.OverviewValues2))
-    $sectionTheme = ''
-    foreach ($pair in $overviewPairs) {
-      $themeHeaders = $pair[0]
-      $themeValues = $pair[1]
-      for ($themeColumn = 0; $themeColumn -lt $themeHeaders.Count; $themeColumn++) {
-        $themeHeader = [string]$themeHeaders[$themeColumn]
-        if ([string]::IsNullOrWhiteSpace($themeHeader)) { continue }
-        $themeParts = Get-MtbStudyHeaderParts $themeHeader
-        if ($themeParts.Title.Trim().ToLowerInvariant() -match '^theme') {
-          if ($themeColumn -lt $themeValues.Count) { $sectionTheme = ([string]$themeValues[$themeColumn]).Trim() }
-          break
-        }
-      }
-      if (-not [string]::IsNullOrWhiteSpace($sectionTheme)) { break }
+
+    # STANDARD CHAPTER-STUDY BANNER:
+    #
+    # New workbook standard:
+    #   The OVERVIEW marker row, column B, contains the complete heading:
+    #   Ruth 1:1-2 - The Famine
+    #
+    # Legacy Obadiah structure:
+    #   Column B contains only the passage, and the first overview value
+    #   directly below it contains the outline title.
+    #
+    # Prefer the complete heading from column B whenever it already contains
+    # text after the verse range. Only use the legacy Theme-cell fallback when
+    # column B contains a bare passage reference.
+    $sectionPassage = Get-MtbStandardSectionHeading ([string]$section.Passage)
+    $sectionOutline = ''
+    if ($section.OverviewValues1 -and $section.OverviewValues1.Count -gt 0) {
+      $sectionOutline = ([string]$section.OverviewValues1[0]).Trim()
     }
 
-    $sectionHeading = [string]$section.Passage
-    if (-not [string]::IsNullOrWhiteSpace($sectionTheme)) {
-      $sectionHeading += ': ' + $sectionTheme
+    $passageAlreadyHasOutline = $false
+    if (-not [string]::IsNullOrWhiteSpace($sectionPassage)) {
+      $passageAlreadyHasOutline = (
+        $sectionPassage -match '^\s*[1-3]?\s*[A-Za-z]+(?:\s+[A-Za-z]+)*\s+\d+:\d+(?:\s*[-–—]\s*\d+)?\s+[-–—:]\s+\S'
+      )
+    }
+
+    if ($passageAlreadyHasOutline) {
+      $sectionHeading = $sectionPassage
+    } elseif (-not [string]::IsNullOrWhiteSpace($sectionPassage) -and -not [string]::IsNullOrWhiteSpace($sectionOutline)) {
+      $sectionHeading = $sectionPassage.TrimEnd(' ','-','–','—') + ' - ' + $sectionOutline
+    } elseif (-not [string]::IsNullOrWhiteSpace($sectionPassage)) {
+      $sectionHeading = $sectionPassage
+    } elseif (-not [string]::IsNullOrWhiteSpace($sectionOutline)) {
+      $sectionHeading = $sectionOutline
+    } else {
+      $sectionHeading = 'Section ' + $sectionNumber
     }
 
     [void]$sb.Append('<details class="mtb-study-section"><summary class="mtb-study-section-banner"><div><div class="mtb-study-section-number">Section ' + $sectionNumber + '</div><h2>' + (ConvertTo-HtmlEncoded $sectionHeading) + '</h2></div><span class="mtb-study-section-toggle" aria-hidden="true"></span></summary>')
@@ -1824,8 +3454,10 @@ function New-MtbChapterStudyHtmlFromExcel {
         $parts = Get-MtbStudyHeaderParts $rawHeader
         $value = if ($c -lt $values.Count) { [string]$values[$c] } else { '' }
         $key = $parts.Title.Trim().ToLowerInvariant()
-        # Theme is displayed in the section heading, so do not repeat it as a card.
-        if ($key -match '^theme') { continue }
+        # Theme is intentionally omitted from the overview cards; the approved outline title appears in the section banner.
+        # Also suppress structural marker labels if a workbook layout causes one
+        # to be read as an overview heading.
+        if ($key -match '^theme' -or $key -match '^verse-by-verse$' -or $key -match '^wrap-up$') { continue }
         $extra = ''
         if ($key -match 'main idea') { $extra=' mtb-study-card-mainidea' }
         if ($key -match '^remarks') { $extra += ' mtb-study-card-wide' }
@@ -1837,23 +3469,143 @@ function New-MtbChapterStudyHtmlFromExcel {
     if ($section.VerseRows.Count -gt 0) {
       [void]$sb.Append('<div class="mtb-study-verses"><h2 class="mtb-study-block-title">Verse-by-Verse Study</h2>')
       $verseIndex=0
+      # The first verse-table column may be labeled either "Verse" (new standard)
+      # or "NKJV" (legacy Obadiah). In both cases column A is treated as the
+      # Identify Scripture/reference columns by heading rather than assuming
+      # fixed positions. This supports both NKJV/NLT sheets and sheets whose
+      # first column is simply Verse or Reference.
+      $headerKeys = @(
+        $section.VerseHeaders |
+          ForEach-Object { ([string]$_).Trim().ToLowerInvariant() }
+      )
+
+      $nkjvColumn = -1
+      $nltColumn = -1
+      $referenceColumn = -1
+
+      for ($headerIndex = 0; $headerIndex -lt $headerKeys.Count; $headerIndex++) {
+        switch ($headerKeys[$headerIndex]) {
+          'nkjv' { if ($nkjvColumn -lt 0) { $nkjvColumn = $headerIndex } }
+          'nlt' { if ($nltColumn -lt 0) { $nltColumn = $headerIndex } }
+          'verse' { if ($referenceColumn -lt 0) { $referenceColumn = $headerIndex } }
+          'reference' { if ($referenceColumn -lt 0) { $referenceColumn = $headerIndex } }
+        }
+      }
+
+      if ($nkjvColumn -lt 0) { $nkjvColumn = $referenceColumn }
+      if ($referenceColumn -lt 0) { $referenceColumn = $nkjvColumn }
+      if ($nltColumn -lt 0) { $nltColumn = $referenceColumn }
+
+      $studyColumns = New-Object 'System.Collections.Generic.List[int]'
+      for ($headerIndex = 0; $headerIndex -lt $section.VerseHeaders.Count; $headerIndex++) {
+        $headerKey = $headerKeys[$headerIndex]
+        if ([string]::IsNullOrWhiteSpace($headerKey)) { continue }
+        if ($headerKey -in @('nkjv','nlt','verse','reference')) { continue }
+        $studyColumns.Add($headerIndex)
+      }
+
       foreach ($row in $section.VerseRows) {
         $verseIndex++
-        $scripture=[string]$row[0]
-        $reference=Get-MtbStudyVerseReference $scripture $BookSlug $Chapter
-        $openAttr='' # All verses begin collapsed; section panels begin expanded.
-        $verseNumber = $verseIndex
-        if ($reference -match ':\s*(?<verse>\d+)') { $verseNumber = [int]$Matches['verse'] }
-        [void]$sb.Append('<details class="mtb-study-verse" data-verse="' + $verseNumber + '"' + $openAttr + '><summary><span>' + (ConvertTo-HtmlEncoded $reference) + '</span></summary><div class="mtb-study-verse-body">')
-        [void]$sb.Append((Convert-MtbStudyScriptureToHtml -Text $scripture -BookSlug $BookSlug -Chapter $Chapter -Verse $verseNumber))
-        [void]$sb.Append('<div class="mtb-study-verse-grid">')
-        for ($c=1; $c -lt $section.VerseHeaders.Count; $c++) {
-          $rawHeader=[string]$section.VerseHeaders[$c]
-          if ([string]::IsNullOrWhiteSpace($rawHeader)) { continue }
-          $parts=Get-MtbStudyHeaderParts $rawHeader
-          $value=if($c -lt $row.Count){[string]$row[$c]}else{''}
-          [void]$sb.Append('<section class="mtb-study-verse-panel"><h4>' + (Get-MtbStudyIconHtml $parts.Title) + (ConvertTo-HtmlEncoded $parts.Title) + '</h4><div class="mtb-study-verse-panel-content">' + (Convert-MtbStudyCellToHtml $value $parts.Title -EmphasizeLabels) + '</div></section>')
+
+        $nkjvSource = ''
+        $nltSource = ''
+        $referenceSource = ''
+
+        if ($nkjvColumn -ge 0 -and $nkjvColumn -lt $row.Count) {
+          $nkjvSource = [string]$row[$nkjvColumn]
         }
+        if ($nltColumn -ge 0 -and $nltColumn -lt $row.Count) {
+          $nltSource = [string]$row[$nltColumn]
+        }
+        if ($referenceColumn -ge 0 -and $referenceColumn -lt $row.Count) {
+          $referenceSource = [string]$row[$referenceColumn]
+        }
+        if ([string]::IsNullOrWhiteSpace($referenceSource)) {
+          $referenceSource = $nkjvSource
+        }
+
+        $reference = Get-MtbStudyVerseReference `
+          $referenceSource `
+          $BookSlug `
+          $Chapter
+
+        $verseNumber = $verseIndex
+        if ($reference -match ':\s*(?<verse>\d+)') {
+          $verseNumber = [int]$Matches['verse']
+        }
+
+        $nkjvText = Get-MtbStudyNkjvText `
+          -CellValue $nkjvSource `
+          -BookSlug $BookSlug
+
+        if ([string]::IsNullOrWhiteSpace($nltSource)) {
+          $nltSource = $referenceSource
+        }
+
+        $nltText = Get-MtbStudyNltText `
+          -CellValue $nltSource `
+          -BookSlug $BookSlug
+
+        [void]$sb.Append(
+          '<details class="mtb-study-verse" data-verse="' +
+          $verseNumber +
+          '"><summary><span>' +
+          (ConvertTo-HtmlEncoded $reference) +
+          '</span></summary><div class="mtb-study-verse-body">'
+        )
+
+        if (-not [string]::IsNullOrWhiteSpace($nkjvText)) {
+          $nkjvHtml = Convert-MtbStudyScriptureToHtml `
+            -Text $nkjvText `
+            -BookSlug $BookSlug `
+            -Chapter $Chapter `
+            -Verse $verseNumber
+          [void]$sb.Append($nkjvHtml)
+        }
+
+        if (-not [string]::IsNullOrWhiteSpace($nltText)) {
+          $nltHtml = Convert-MtbStudyScriptureToHtml `
+            -Text $nltText `
+            -BookSlug $BookSlug `
+            -Chapter $Chapter `
+            -Verse $verseNumber
+          [void]$sb.Append($nltHtml)
+        }
+
+        $studyCardCount = $studyColumns.Count
+        $verseGridClass = 'mtb-study-verse-grid'
+        if ($studyCardCount -eq 5) {
+          $verseGridClass += ' mtb-study-verse-grid-5'
+        }
+        elseif ($studyCardCount -eq 3) {
+          $verseGridClass += ' mtb-study-verse-grid-3'
+        }
+
+        [void]$sb.Append('<div class="' + $verseGridClass + '">')
+
+        foreach ($c in $studyColumns) {
+          $rawHeader = [string]$section.VerseHeaders[$c]
+          $parts = Get-MtbStudyHeaderParts $rawHeader
+          $displayTitle = Get-MtbVerseStudyDisplayTitle $parts.Title
+
+          $value = if ($c -lt $row.Count) { [string]$row[$c] } else { '' }
+          $panelIcon = Get-MtbStudyIconHtml $displayTitle
+          $panelTitle = ConvertTo-HtmlEncoded $displayTitle
+          $panelBody = Convert-MtbStudyCellToHtml `
+            $value `
+            $displayTitle `
+            -EmphasizeLabels
+
+          [void]$sb.Append(
+            '<section class="mtb-study-verse-panel"><h4>' +
+            $panelIcon +
+            $panelTitle +
+            '</h4><div class="mtb-study-verse-panel-content">' +
+            $panelBody +
+            '</div></section>'
+          )
+        }
+
         [void]$sb.Append('</div></div></details>')
       }
       [void]$sb.Append('</div>')
@@ -1865,10 +3617,38 @@ function New-MtbChapterStudyHtmlFromExcel {
         $rawHeader=[string]$section.WrapHeaders[$c]
         if ([string]::IsNullOrWhiteSpace($rawHeader)) { continue }
         $parts=Get-MtbStudyHeaderParts $rawHeader
+
+        $displayTitle = [string]$parts.Title
+        $displayTitleKey = $displayTitle.Trim().ToLowerInvariant()
+
+        if ($displayTitleKey -eq 'remarks') {
+          $displayTitle = 'Seeds for the Sower'
+        }
+        elseif (
+          $displayTitleKey -eq
+          'healthy church culture & community'
+        ) {
+          $displayTitle = 'How Shall We Then Live?'
+        }
+
         $value=if($c -lt $section.WrapValues.Count){[string]$section.WrapValues[$c]}else{''}
-        $key=$parts.Title.Trim().ToLowerInvariant(); $extra=''
+        $key=$displayTitle.Trim().ToLowerInvariant(); $extra=''
         if($key -match 'christ connection'){$extra=' mtb-study-wrap-card-christ'}elseif($key -match 'dwelling'){$extra=' mtb-study-wrap-card-dwelling'}
-        [void]$sb.Append('<article class="mtb-study-wrap-card' + $extra + '"><h3>' + (Get-MtbStudyIconHtml $parts.Title) + (ConvertTo-HtmlEncoded $parts.Title) + '</h3><div class="mtb-study-card-body">' + (Convert-MtbStudyCellToHtml $value $parts.Title -EmphasizeLabels) + '</div></article>')
+        [void]$sb.Append(
+          '<article class="mtb-study-wrap-card' +
+          $extra +
+          '"><h3>' +
+          (Get-MtbStudyIconHtml $displayTitle) +
+          (ConvertTo-HtmlEncoded $displayTitle) +
+          '</h3><div class="mtb-study-card-body">' +
+          (
+            Convert-MtbStudyCellToHtml `
+              $value `
+              $displayTitle `
+              -EmphasizeLabels
+          ) +
+          '</div></article>'
+        )
       }
       [void]$sb.Append('</div></div>')
     }
@@ -1902,13 +3682,1071 @@ function Write-AllMtbChapterStudiesFromExcel {
   $writtenNames=New-Object 'System.Collections.Generic.List[string]'
   $sheetNames=Get-ExcelWorksheetNames -WorkbookPath $WorkbookPath
   foreach($sheetName in $sheetNames){
-    if($sheetName -match '^Study\s+Chapter\s+(?<chapter>\d+)$'){
+    if($sheetName -match '^Study(?:\s+Chapter)?\s+(?<chapter>\d+)$'){
       $chapter=[int]$Matches['chapter']
       $path=Write-MtbChapterStudyFromExcel -WorkbookPath $WorkbookPath -OutBookDir $OutBookDir -BookSlug $BookSlug -Chapter $chapter -WorksheetName $sheetName
-      $writtenNames.Add((Split-Path $path -Leaf))
+      if (-not [string]::IsNullOrWhiteSpace([string]$path)) {
+        $writtenNames.Add((Split-Path $path -Leaf))
+      }
     }
   }
   return ,$writtenNames.ToArray()
+}
+
+
+function New-MtbChapterCultureHtmlFromExcel {
+  param(
+    [Parameter(Mandatory)] [string] $WorkbookPath,
+    [Parameter(Mandatory)] [string] $BookSlug,
+    [Parameter(Mandatory)] [int] $Chapter,
+    [Parameter(Mandatory)] [string] $WorksheetName
+  )
+
+  $data = Get-ExcelWorksheetValues `
+    -WorkbookPath $WorkbookPath `
+    -WorksheetName $WorksheetName
+
+  $bookDisplay = (Get-Culture).TextInfo.ToTitleCase(
+    ($BookSlug -replace '-', ' ')
+  )
+
+  $displayTitle = "East Gate Culture in $bookDisplay Chapter $Chapter"
+  $cards = New-Object 'System.Collections.Generic.List[object]'
+
+  # Current layout:
+  # Chapter | Culture Value | Official Culture Statement | Chapter Application
+  $headerRowIndex = -1
+  $cultureValueColumn = -1
+  $statementColumn = -1
+  $applicationColumn = -1
+
+  for ($r = 0; $r -lt $data.Count; $r++) {
+    $row = @($data[$r])
+
+    for ($c = 0; $c -lt $row.Count; $c++) {
+      $header = ([string]$row[$c]).Trim().ToLowerInvariant()
+
+      switch ($header) {
+        'culture value' {
+          $cultureValueColumn = $c
+          $headerRowIndex = $r
+        }
+        'official culture statement' {
+          $statementColumn = $c
+          $headerRowIndex = $r
+        }
+        'chapter application' {
+          $applicationColumn = $c
+          $headerRowIndex = $r
+        }
+      }
+    }
+
+    if (
+      $cultureValueColumn -ge 0 -and
+      $statementColumn -ge 0 -and
+      $applicationColumn -ge 0
+    ) {
+      break
+    }
+  }
+
+  if ($headerRowIndex -ge 0) {
+    for ($r = ($headerRowIndex + 1); $r -lt $data.Count; $r++) {
+      $row = @($data[$r])
+
+      $cultureValue = ''
+      $statement = ''
+      $application = ''
+
+      if ($cultureValueColumn -lt $row.Count) {
+        $cultureValue = ([string]$row[$cultureValueColumn]).Trim()
+      }
+
+      if ($statementColumn -lt $row.Count) {
+        $statement = ([string]$row[$statementColumn]).Trim()
+      }
+
+      if ($applicationColumn -lt $row.Count) {
+        $application = ([string]$row[$applicationColumn]).Trim()
+      }
+
+      if (
+        [string]::IsNullOrWhiteSpace($cultureValue) -and
+        [string]::IsNullOrWhiteSpace($statement) -and
+        [string]::IsNullOrWhiteSpace($application)
+      ) {
+        continue
+      }
+
+      $cards.Add(
+        [pscustomobject]@{
+          CultureValue = $cultureValue
+          Statement = $statement
+          Application = $application
+        }
+      )
+
+      if ($cards.Count -eq 3) {
+        break
+      }
+    }
+  }
+  else {
+    # Legacy two-row culture layout.
+    if ($data.Count -lt 2) {
+      return ''
+    }
+
+    $titleRowIndex = -1
+
+    for ($r = 0; $r -lt $data.Count; $r++) {
+      for ($c = 0; $c -lt $data[$r].Count; $c++) {
+        $cellText = ([string]$data[$r][$c]).Trim()
+
+        if ($cellText -match '^(?i)East\s+Gate\s+Culture') {
+          $displayTitle = $cellText
+          $titleRowIndex = $r
+          break
+        }
+      }
+
+      if ($titleRowIndex -ge 0) {
+        break
+      }
+    }
+
+    $contentRows = New-Object 'System.Collections.Generic.List[int]'
+    $scanStart = if ($titleRowIndex -ge 0) {
+      $titleRowIndex + 1
+    }
+    else {
+      0
+    }
+
+    for ($r = $scanStart; $r -lt $data.Count; $r++) {
+      $hasContent = $false
+
+      for ($c = 0; $c -lt $data[$r].Count; $c++) {
+        if (
+          -not [string]::IsNullOrWhiteSpace(
+            [string]$data[$r][$c]
+          )
+        ) {
+          $hasContent = $true
+          break
+        }
+      }
+
+      if ($hasContent) {
+        $contentRows.Add($r)
+
+        if ($contentRows.Count -eq 2) {
+          break
+        }
+      }
+    }
+
+    if ($contentRows.Count -ge 2) {
+      $statementRow = $data[$contentRows[0]]
+      $applicationRow = $data[$contentRows[1]]
+      $maxColumns = [Math]::Max(
+        $statementRow.Count,
+        $applicationRow.Count
+      )
+
+      for ($c = 0; $c -lt $maxColumns; $c++) {
+        $statement = ''
+        $application = ''
+
+        if ($c -lt $statementRow.Count) {
+          $statement = ([string]$statementRow[$c]).Trim()
+        }
+
+        if ($c -lt $applicationRow.Count) {
+          $application = ([string]$applicationRow[$c]).Trim()
+        }
+
+        if (
+          [string]::IsNullOrWhiteSpace($statement) -and
+          [string]::IsNullOrWhiteSpace($application)
+        ) {
+          continue
+        }
+
+        $cards.Add(
+          [pscustomobject]@{
+            CultureValue = ''
+            Statement = $statement
+            Application = $application
+          }
+        )
+
+        if ($cards.Count -eq 3) {
+          break
+        }
+      }
+    }
+  }
+
+  # Empty EG Culture worksheets are valid. Return no HTML so no tab content
+  # is generated for a chapter without a direct East Gate Culture connection.
+  if ($cards.Count -eq 0) {
+    return ''
+  }
+
+  $sb = New-Object System.Text.StringBuilder
+
+  [void]$sb.Append(@'
+<style>
+body[data-doc-type="chapter-eg-culture"] #doc-layout {
+  width: min(96vw, 1680px) !important;
+  max-width: 1680px !important;
+  margin-left: auto !important;
+  margin-right: auto !important;
+}
+body[data-doc-type="chapter-eg-culture"] .doc-main,
+body[data-doc-type="chapter-eg-culture"] #doc-target,
+body[data-doc-type="chapter-eg-culture"] .doc-content {
+  width: 100% !important;
+  max-width: none !important;
+}
+.mtb-culture-dashboard {
+  --mtb-culture-navy: #173a5e;
+  --mtb-culture-blue: #2b587f;
+  --mtb-culture-soft: #eef4f9;
+  --mtb-culture-border: #d3dee8;
+  --mtb-culture-gold: #b7832f;
+  width: 100%;
+  max-width: none;
+  margin: 0 auto;
+  padding: 8px 0 34px;
+  color: #1d2935;
+  font-family: Arial, Helvetica, sans-serif;
+}
+.mtb-culture-dashboard * { box-sizing: border-box; }
+.mtb-culture-dashboard .mtb-culture-hero {
+  margin: 0 0 24px;
+  padding: 22px 26px;
+  border: 1px solid #cbd8e3;
+  border-radius: 14px;
+  background: linear-gradient(135deg, #f7fafc 0%, #e8f0f7 100%);
+}
+.mtb-culture-dashboard .mtb-culture-eyebrow {
+  margin: 0 0 6px;
+  color: var(--mtb-culture-gold);
+  font-size: .78rem;
+  font-weight: 800;
+  letter-spacing: .13em;
+  text-transform: uppercase;
+}
+.mtb-culture-dashboard .mtb-culture-title {
+  margin: 0;
+  color: var(--mtb-culture-navy);
+  font-size: clamp(1.55rem, 3vw, 2.2rem);
+  line-height: 1.12;
+}
+.mtb-culture-dashboard .mtb-culture-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 20px;
+  align-items: stretch;
+}
+.mtb-culture-dashboard .mtb-culture-card-title {
+  margin: 0;
+  padding: 15px 20px;
+  background: var(--mtb-culture-navy);
+  color: #fff;
+  font-size: 1.08rem;
+}
+.mtb-culture-dashboard .mtb-culture-card {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  overflow: hidden;
+  border: 1px solid var(--mtb-culture-border);
+  border-top: 4px solid var(--mtb-culture-blue);
+  border-radius: 13px;
+  background: #fff;
+  box-shadow: 0 4px 14px rgba(28, 55, 80, .06);
+}
+.mtb-culture-dashboard .mtb-culture-standard {
+  padding: 24px 26px;
+  background: linear-gradient(135deg, #edf4fa 0%, #e2edf6 100%);
+  border-bottom: 1px solid var(--mtb-culture-border);
+}
+.mtb-culture-dashboard .mtb-culture-standard-label,
+.mtb-culture-dashboard .mtb-culture-application-label {
+  margin: 0 0 10px;
+  color: var(--mtb-culture-navy);
+  font-size: .76rem;
+  font-weight: 800;
+  letter-spacing: .09em;
+  text-transform: uppercase;
+}
+.mtb-culture-dashboard .mtb-culture-standard-content {
+  color: var(--mtb-culture-navy);
+  font-size: 1.08rem;
+  font-weight: 700;
+  line-height: 1.58;
+}
+.mtb-culture-dashboard .mtb-culture-application {
+  flex: 1 1 auto;
+  padding: 24px 26px 28px;
+  background: #ffffff;
+}
+.mtb-culture-dashboard .mtb-culture-application-content {
+  font-size: 1rem;
+  line-height: 1.65;
+}
+.mtb-culture-dashboard p { margin: 0 0 13px; }
+.mtb-culture-dashboard p:last-child { margin-bottom: 0; }
+.mtb-culture-dashboard .mtb-resource-link {
+  color: #1f5fae;
+  font-weight: 700;
+  text-decoration-line: underline;
+  text-decoration-style: dotted;
+  text-decoration-thickness: 2px;
+  text-underline-offset: 4px;
+  cursor: pointer;
+}
+.mtb-culture-dashboard .mtb-resource-link::after {
+  content: " ↗";
+  font-size: .78em;
+  opacity: .78;
+}
+.mtb-culture-dashboard .mtb-resource-link:hover,
+.mtb-culture-dashboard .mtb-resource-link:focus-visible {
+  color: #123f7a;
+  text-decoration-style: solid;
+}
+@media (max-width: 1050px) {
+  .mtb-culture-dashboard .mtb-culture-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+@media (max-width: 680px) {
+  .mtb-culture-dashboard {
+    padding-left: 0;
+    padding-right: 0;
+  }
+  .mtb-culture-dashboard .mtb-culture-grid {
+    grid-template-columns: 1fr;
+  }
+  .mtb-culture-dashboard .mtb-culture-hero,
+  .mtb-culture-dashboard .mtb-culture-standard,
+  .mtb-culture-dashboard .mtb-culture-application {
+    padding-left: 18px;
+    padding-right: 18px;
+  }
+}
+</style>
+'@)
+
+  [void]$sb.Append('<div class="mtb-culture-dashboard">')
+  [void]$sb.Append('<header class="mtb-culture-hero">')
+  [void]$sb.Append('<p class="mtb-culture-eyebrow">East Gate Bethlehem</p>')
+  [void]$sb.Append('<h1 class="mtb-culture-title">' + (ConvertTo-HtmlEncoded $displayTitle) + '</h1>')
+  [void]$sb.Append('</header>')
+  [void]$sb.Append('<div class="mtb-culture-grid">')
+
+  foreach ($card in $cards) {
+    $statementHtml = Convert-MtbStudyCellToHtml $card.Statement "Culture Statement"
+    $applicationHtml = Convert-MtbStudyCellToHtml $card.Application "Chapter Application" -EmphasizeLabels
+
+    [void]$sb.Append('<article class="mtb-culture-card">')
+
+    if (
+      -not [string]::IsNullOrWhiteSpace(
+        [string]$card.CultureValue
+      )
+    ) {
+      [void]$sb.Append(
+        '<h2 class="mtb-culture-card-title">' +
+        (ConvertTo-HtmlEncoded ([string]$card.CultureValue)) +
+        '</h2>'
+      )
+    }
+
+    [void]$sb.Append('<section class="mtb-culture-standard">')
+    [void]$sb.Append('<h2 class="mtb-culture-standard-label">Culture Statement</h2>')
+    [void]$sb.Append('<div class="mtb-culture-standard-content">' + $statementHtml + '</div>')
+    [void]$sb.Append('</section>')
+    [void]$sb.Append('<section class="mtb-culture-application">')
+    [void]$sb.Append('<h2 class="mtb-culture-application-label">Living It in ' + (ConvertTo-HtmlEncoded $bookDisplay) + '</h2>')
+    [void]$sb.Append('<div class="mtb-culture-application-content">' + $applicationHtml + '</div>')
+    [void]$sb.Append('</section>')
+    [void]$sb.Append('</article>')
+  }
+
+  [void]$sb.Append('</div></div>')
+  return $sb.ToString()
+}
+
+function Write-MtbChapterCultureFromExcel {
+  param(
+    [Parameter(Mandatory)] [string] $WorkbookPath,
+    [Parameter(Mandatory)] [string] $OutBookDir,
+    [Parameter(Mandatory)] [string] $BookSlug,
+    [Parameter(Mandatory)] [int] $Chapter,
+    [Parameter(Mandatory)] [string] $WorksheetName
+  )
+
+  $chapterDir = Join-Path $OutBookDir ("{0:D3}" -f $Chapter)
+  Ensure-Path $chapterDir
+
+  $outName = "$BookSlug-$Chapter-chapter-eg-culture.html"
+  $outPath = Join-Path $chapterDir $outName
+
+  $html = New-MtbChapterCultureHtmlFromExcel `
+    -WorkbookPath $WorkbookPath `
+    -BookSlug $BookSlug `
+    -Chapter $Chapter `
+    -WorksheetName $WorksheetName
+
+  if ([string]::IsNullOrWhiteSpace($html)) {
+    Write-Host (
+      "SKIP " + $WorksheetName +
+      " because the chapter has no EG Culture cards."
+    ) -ForegroundColor DarkYellow
+
+    return $null
+  }
+
+  $html = Wrap-MtbDocHtml $html "chapter-eg-culture"
+
+  [System.IO.File]::WriteAllText(
+    $outPath,
+    $html,
+    [System.Text.UTF8Encoding]::new($false)
+  )
+
+  Write-Host (
+    "OK   " +
+    (Split-Path $WorkbookPath -Leaf) +
+    " [$WorksheetName] -> " +
+    $outName
+  ) -ForegroundColor Green
+
+  return $outPath
+}
+
+function Write-AllMtbChapterCulturesFromExcel {
+  param(
+    [Parameter(Mandatory)] [string] $WorkbookPath,
+    [Parameter(Mandatory)] [string] $OutBookDir,
+    [Parameter(Mandatory)] [string] $BookSlug
+  )
+
+  $writtenNames = New-Object 'System.Collections.Generic.List[string]'
+  $sheetNames = Get-ExcelWorksheetNames -WorkbookPath $WorkbookPath
+
+  foreach ($sheetName in $sheetNames) {
+    if ($sheetName -match '^(?:EG\s+Culture|Culture\s+Chapter)\s+(?<chapter>\d+)$') {
+      $chapter = [int]$Matches['chapter']
+
+      $path = Write-MtbChapterCultureFromExcel `
+        -WorkbookPath $WorkbookPath `
+        -OutBookDir $OutBookDir `
+        -BookSlug $BookSlug `
+        -Chapter $chapter `
+        -WorksheetName $sheetName
+
+      if (-not [string]::IsNullOrWhiteSpace([string]$path)) {
+        $writtenNames.Add((Split-Path $path -Leaf))
+      }
+    }
+  }
+
+  return ,$writtenNames.ToArray()
+}
+
+
+function Convert-MtbCanonCellToHtml {
+  param(
+    [AllowEmptyString()]
+    [string] $Text,
+    [AllowEmptyString()]
+    [string] $Header
+  )
+
+  if ([string]::IsNullOrWhiteSpace($Text)) {
+    return '<p class="mtb-canon-empty">No content added yet.</p>'
+  }
+
+  $normalized = ([string]$Text) -replace "`r`n", "`n" -replace "`r", "`n"
+
+  # Some Excel cells contain several bullet characters without line breaks.
+  # Put each bullet on its own line before using the shared study formatter.
+  $normalized = [regex]::Replace(
+    $normalized,
+    '(?<!^)\s*•\s*',
+    "`n• "
+  )
+
+  if ($normalized.TrimStart().StartsWith('•')) {
+    $normalized = '• ' + $normalized.TrimStart().Substring(1).TrimStart()
+  }
+
+  return Convert-MtbStudyCellToHtml `
+    -text $normalized `
+    -header $Header `
+    -EmphasizeLabels
+}
+
+function Get-MtbCanonSectionSheetMap {
+  return [ordered]@{
+    "OT_LAW"                = "old-testament\law"
+    "OT_HISTORY"            = "old-testament\history"
+    "OT_POETRY_WISDOM"      = "old-testament\wisdom"
+    "OT_MAJOR_PROPHETS"     = "old-testament\major-prophets"
+    "OT_MINOR_PROPHETS"     = "old-testament\minor-prophets"
+
+    "NT_GOSPELS"            = "new-testament\gospels"
+    "NT_HISTORY"            = "new-testament\acts"
+    "NT_PAULINE_EPISTLES"   = "new-testament\pauline-epistles"
+    "NT_PASTORAL_EPISTLES"  = "new-testament\pastoral-epistles"
+    "NT_GENERAL_EPISTLES"   = "new-testament\general-epistles"
+    "NT_JOHANNINE_EPISTLES" = "new-testament\johannine-epistles"
+    "NT_PROPHECY"           = "new-testament\revelation"
+  }
+}
+
+function Find-MtbCanonHeaderRow {
+  param(
+    [Parameter(Mandatory)]
+    [object[]] $Data
+  )
+
+  for ($r = 0; $r -lt $Data.Count; $r++) {
+    if ($Data[$r].Count -lt 4) { continue }
+
+    $a = ([string]$Data[$r][0]).Trim()
+    $b = ([string]$Data[$r][1]).Trim()
+    $c = ([string]$Data[$r][2]).Trim()
+    $d = ([string]$Data[$r][3]).Trim()
+
+    if (
+      $a -ieq "Testament" -and
+      $b -ieq "Division" -and
+      $c -ieq "Books" -and
+      $d -ieq "Overarching Theme"
+    ) {
+      return $r
+    }
+  }
+
+  return -1
+}
+
+function Convert-MtbCanonBooksHeaderHtml {
+  param(
+    [AllowEmptyString()]
+    [string] $Text
+  )
+
+  if ([string]::IsNullOrWhiteSpace($Text)) {
+    return ""
+  }
+
+  $normalized = ([string]$Text) -replace "`r`n", "`n" -replace "`r", "`n"
+  $lines = @(
+    $normalized -split "`n" |
+      ForEach-Object { $_.Trim() } |
+      Where-Object { -not [string]::IsNullOrWhiteSpace($_) }
+  )
+
+  # Convert bullets into an inline book list while preserving an optional
+  # first-line range such as "Joshua–Esther".
+  $range = ""
+  $books = New-Object 'System.Collections.Generic.List[string]'
+
+  foreach ($line in $lines) {
+    $clean = ($line -replace '^[•\-]\s*', '').Trim()
+
+    if ([string]::IsNullOrWhiteSpace($clean)) {
+      continue
+    }
+
+    if (
+      [string]::IsNullOrWhiteSpace($range) -and
+      $line -notmatch '^[•\-]\s*' -and
+      $clean -match '[–—-]' -and
+      $clean.Length -lt 80
+    ) {
+      $range = $clean
+    }
+    else {
+      # A cell may contain several bullet characters on one line.
+      foreach ($piece in ($clean -split '\s*•\s*')) {
+        $book = $piece.Trim()
+        if (-not [string]::IsNullOrWhiteSpace($book)) {
+          $books.Add($book)
+        }
+      }
+    }
+  }
+
+  # Remove an exact duplicate of the range when it was also captured
+  # as part of the list.
+  $bookValues = @(
+    $books |
+      Where-Object {
+        [string]::IsNullOrWhiteSpace($range) -or
+        $_ -ne $range
+      }
+  )
+
+  $sb = New-Object System.Text.StringBuilder
+
+  if (-not [string]::IsNullOrWhiteSpace($range)) {
+    [void]$sb.Append(
+      '<span class="mtb-canon-book-range">' +
+      (ConvertTo-HtmlEncoded $range) +
+      '</span>'
+    )
+  }
+
+  if ($bookValues.Count -gt 0) {
+    if ($sb.Length -gt 0) {
+      [void]$sb.Append('<span class="mtb-canon-book-separator"> — </span>')
+    }
+
+    $encodedBooks = @(
+      $bookValues |
+        ForEach-Object { ConvertTo-HtmlEncoded $_ }
+    )
+
+    [void]$sb.Append(
+      '<span class="mtb-canon-book-list">' +
+      ($encodedBooks -join ' <span aria-hidden="true">•</span> ') +
+      '</span>'
+    )
+  }
+
+  return $sb.ToString()
+}
+
+function New-MtbCanonSectionHtmlFromExcel {
+  param(
+    [Parameter(Mandatory)] [string] $WorkbookPath,
+    [Parameter(Mandatory)] [string] $WorksheetName
+  )
+
+  $data = Get-ExcelWorksheetValues `
+    -WorkbookPath $WorkbookPath `
+    -WorksheetName $WorksheetName
+
+  $headerRow = Find-MtbCanonHeaderRow -Data $data
+
+  if ($headerRow -lt 0) {
+    throw "Could not locate the canonical section header row in '$WorksheetName'."
+  }
+
+  # Expected workbook pattern:
+  # header row / data row, repeated three times.
+  $groups = New-Object 'System.Collections.Generic.List[object]'
+  $cursor = $headerRow
+
+  while ($cursor -lt $data.Count -and $groups.Count -lt 3) {
+    while ($cursor -lt $data.Count) {
+      $row = $data[$cursor]
+      $nonEmpty = 0
+
+      for ($c = 0; $c -lt [Math]::Min(4, $row.Count); $c++) {
+        if (-not [string]::IsNullOrWhiteSpace([string]$row[$c])) {
+          $nonEmpty++
+        }
+      }
+
+      if ($nonEmpty -ge 4) { break }
+      $cursor++
+    }
+
+    if ($cursor -ge $data.Count) { break }
+
+    $headers = @()
+    for ($c = 0; $c -lt 4; $c++) {
+      $headers += ([string]$data[$cursor][$c]).Trim()
+    }
+
+    $valueRow = $cursor + 1
+    while ($valueRow -lt $data.Count) {
+      $hasValue = $false
+
+      for ($c = 0; $c -lt [Math]::Min(4, $data[$valueRow].Count); $c++) {
+        if (-not [string]::IsNullOrWhiteSpace([string]$data[$valueRow][$c])) {
+          $hasValue = $true
+          break
+        }
+      }
+
+      if ($hasValue) { break }
+      $valueRow++
+    }
+
+    if ($valueRow -ge $data.Count) { break }
+
+    $values = @()
+    for ($c = 0; $c -lt 4; $c++) {
+      $values += if ($c -lt $data[$valueRow].Count) {
+        ([string]$data[$valueRow][$c]).Trim()
+      }
+      else {
+        ""
+      }
+    }
+
+    $groups.Add([pscustomobject]@{
+      Headers = $headers
+      Values  = $values
+    })
+
+    $cursor = $valueRow + 1
+  }
+
+  if ($groups.Count -lt 3) {
+    throw "The '$WorksheetName' worksheet did not contain all three four-card rows."
+  }
+
+  $testament = $groups[0].Values[0]
+  $division = $groups[0].Values[1]
+  $books = $groups[0].Values[2]
+
+  if ([string]::IsNullOrWhiteSpace($division)) {
+    $division = ($WorksheetName -replace '^OT_|^NT_', '' -replace '_', ' ')
+    $division = (Get-Culture).TextInfo.ToTitleCase($division.ToLowerInvariant())
+  }
+
+  $pageTitle = if ([string]::IsNullOrWhiteSpace($testament)) {
+    $division
+  }
+  else {
+    ($testament.Trim() + " " + $division.Trim())
+  }
+
+  $booksHtml = Convert-MtbCanonBooksHeaderHtml $books
+
+  # Three fields from the original first row move into the hero:
+  # Testament, Division, and Books.
+  # The remaining nine fields form one 3x3 grid.
+  $cards = New-Object 'System.Collections.Generic.List[object]'
+
+  $cards.Add([pscustomobject]@{
+    Header = $groups[0].Headers[3]
+    Value  = $groups[0].Values[3]
+  })
+
+  for ($g = 1; $g -lt 3; $g++) {
+    for ($c = 0; $c -lt 4; $c++) {
+      $cards.Add([pscustomobject]@{
+        Header = $groups[$g].Headers[$c]
+        Value  = $groups[$g].Values[$c]
+      })
+    }
+  }
+
+  $sb = New-Object System.Text.StringBuilder
+
+  [void]$sb.Append(@'
+<style>
+.book-modal-panel:has(.mtb-canon-dashboard){
+  width:min(1600px,96vw) !important;
+  max-width:1600px !important;
+}
+.mtb-canon-dashboard{
+  --mtb-canon-navy:#173a5e;
+  --mtb-canon-blue:#2b587f;
+  --mtb-canon-soft:#edf3f8;
+  --mtb-canon-border:#d3dee8;
+  --mtb-canon-gold:#b7832f;
+  width:100%;
+  max-width:none;
+  margin:0 auto;
+  padding:6px 2px 34px;
+  color:#1d2935;
+  font-family:Arial,Helvetica,sans-serif;
+}
+.mtb-canon-dashboard *{box-sizing:border-box}
+.mtb-canon-hero{
+  position:relative;
+  margin:0 0 24px;
+  padding:26px 30px 27px;
+  border:1px solid #cbd8e3;
+  border-radius:14px;
+  background:linear-gradient(135deg,#f7fafc 0%,#e8f0f7 100%);
+}
+.mtb-canon-eyebrow{
+  margin:0 0 7px;
+  color:var(--mtb-canon-gold);
+  font-size:.78rem;
+  font-weight:800;
+  letter-spacing:.13em;
+  text-transform:uppercase;
+}
+.mtb-canon-title{
+  margin:0;
+  color:var(--mtb-canon-navy);
+  font-size:clamp(1.8rem,3.2vw,2.55rem);
+  line-height:1.1;
+}
+.mtb-canon-books{
+  margin:11px 0 0;
+  color:#40566a;
+  font-size:1rem;
+  line-height:1.55;
+}
+.mtb-canon-book-range{
+  color:var(--mtb-canon-navy);
+  font-weight:800;
+}
+.mtb-canon-book-separator{
+  color:#8291a0;
+}
+.mtb-canon-book-list span[aria-hidden="true"]{
+  display:inline-block;
+  margin:0 .22rem;
+  color:#718397;
+}
+.mtb-canon-section-heading{
+  display:flex;
+  align-items:center;
+  gap:14px;
+  margin:0 0 15px;
+  color:var(--mtb-canon-navy);
+  font-size:1.18rem;
+  font-weight:800;
+  letter-spacing:.07em;
+  text-transform:uppercase;
+}
+.mtb-canon-section-heading::after{
+  content:"";
+  flex:1 1 auto;
+  height:1px;
+  background:#cfd9e2;
+}
+.mtb-canon-grid{
+  display:grid;
+  grid-template-columns:repeat(3,minmax(0,1fr));
+  gap:19px;
+  align-items:stretch;
+}
+.mtb-canon-card{
+  min-width:0;
+  overflow:hidden;
+  border:1px solid var(--mtb-canon-border);
+  border-top:4px solid var(--mtb-canon-blue);
+  border-radius:12px;
+  background:#fff;
+  box-shadow:0 3px 12px rgba(28,55,80,.05);
+}
+.mtb-canon-card-header{
+  padding:17px 19px;
+  background:var(--mtb-canon-soft);
+  border-bottom:1px solid var(--mtb-canon-border);
+}
+.mtb-canon-card-title{
+  margin:0;
+  color:var(--mtb-canon-navy);
+  font-size:1.02rem;
+  font-weight:800;
+  line-height:1.25;
+}
+.mtb-canon-card-body{
+  padding:20px 21px 23px;
+  font-size:.97rem;
+  line-height:1.64;
+}
+.mtb-canon-card-body p{margin:0 0 12px}
+.mtb-canon-card-body p:last-child{margin-bottom:0}
+.mtb-canon-card-body ul{
+  margin:0;
+  padding-left:1.25rem;
+}
+.mtb-canon-card-body li{margin:0 0 8px}
+.mtb-canon-card-body li:last-child{margin-bottom:0}
+.mtb-canon-empty{color:#7b858f;font-style:italic}
+.mtb-canon-dashboard .mtb-resource-link{
+  color:#1f5fae;
+  font-weight:700;
+  text-decoration-line:underline;
+  text-decoration-style:dotted;
+  text-decoration-thickness:2px;
+  text-underline-offset:4px;
+}
+.mtb-canon-dashboard .mtb-resource-link::after{
+  content:" ↗";
+  font-size:.78em;
+  opacity:.78;
+}
+@media(max-width:1100px){
+  .mtb-canon-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
+}
+@media(max-width:680px){
+  .book-modal-panel:has(.mtb-canon-dashboard){
+    width:96vw !important;
+    padding-left:12px !important;
+    padding-right:12px !important;
+  }
+  .mtb-canon-grid{grid-template-columns:1fr}
+  .mtb-canon-hero{padding:21px 18px}
+  .mtb-canon-books{font-size:.94rem}
+}
+</style>
+'@)
+
+  [void]$sb.Append('<div class="mtb-canon-dashboard">')
+  [void]$sb.Append('<header class="mtb-canon-hero">')
+  [void]$sb.Append('<p class="mtb-canon-eyebrow">Canonical Context</p>')
+  [void]$sb.Append(
+    '<h1 class="mtb-canon-title">' +
+    (ConvertTo-HtmlEncoded $pageTitle) +
+    '</h1>'
+  )
+
+  if (-not [string]::IsNullOrWhiteSpace($booksHtml)) {
+    [void]$sb.Append(
+      '<p class="mtb-canon-books">' +
+      $booksHtml +
+      '</p>'
+    )
+  }
+
+  [void]$sb.Append('</header>')
+  [void]$sb.Append('<h2 class="mtb-canon-section-heading">Understanding This Portion</h2>')
+  [void]$sb.Append('<div class="mtb-canon-grid">')
+
+  foreach ($card in $cards) {
+    $valueHtml = Convert-MtbCanonCellToHtml `
+      -Text $card.Value `
+      -Header $card.Header
+
+    [void]$sb.Append('<article class="mtb-canon-card">')
+    [void]$sb.Append('<header class="mtb-canon-card-header">')
+    [void]$sb.Append(
+      '<h3 class="mtb-canon-card-title">' +
+      (ConvertTo-HtmlEncoded $card.Header) +
+      '</h3>'
+    )
+    [void]$sb.Append('</header>')
+    [void]$sb.Append('<div class="mtb-canon-card-body">' + $valueHtml + '</div>')
+    [void]$sb.Append('</article>')
+  }
+
+  [void]$sb.Append('</div></div>')
+
+  return $sb.ToString()
+}
+
+function Write-AllMtbCanonSectionsFromExcel {
+  param(
+    [Parameter(Mandatory)] [string] $WorkbookPath,
+    [Parameter(Mandatory)] [string] $SectionsOutRoot
+  )
+
+  $sheetMap = Get-MtbCanonSectionSheetMap
+
+  # Get-ExcelWorksheetNames intentionally returns its array as one object
+  # for other generator workflows. Flatten it here before comparing names.
+  $rawSheets = Get-ExcelWorksheetNames -WorkbookPath $WorkbookPath
+  $availableSheets = New-Object 'System.Collections.Generic.List[string]'
+
+  foreach ($entry in @($rawSheets)) {
+    if ($entry -is [System.Array]) {
+      foreach ($nestedName in $entry) {
+        if (-not [string]::IsNullOrWhiteSpace([string]$nestedName)) {
+          $availableSheets.Add(([string]$nestedName).Trim())
+        }
+      }
+    }
+    elseif (-not [string]::IsNullOrWhiteSpace([string]$entry)) {
+      $availableSheets.Add(([string]$entry).Trim())
+    }
+  }
+
+  Write-Host "Worksheets found in Canon Sections workbook:" -ForegroundColor Cyan
+  foreach ($foundSheet in $availableSheets) {
+    Write-Host ("  - " + $foundSheet) -ForegroundColor DarkCyan
+  }
+
+  $sheetLookup = @{}
+  foreach ($foundSheet in $availableSheets) {
+    $sheetLookup[$foundSheet.Trim().ToUpperInvariant()] = $foundSheet
+  }
+
+  # Accept either common name for the Pastoral Epistles worksheet.
+  $sheetAliases = @{
+    "NT_PASTORAL_EPISTLES" = @(
+      "NT_PASTORAL_EPISTLES",
+      "NT_PASTORAL"
+    )
+  }
+
+  $written = New-Object 'System.Collections.Generic.List[string]'
+
+  foreach ($expectedSheetName in $sheetMap.Keys) {
+    $candidateNames = if ($sheetAliases.ContainsKey($expectedSheetName)) {
+      $sheetAliases[$expectedSheetName]
+    }
+    else {
+      @($expectedSheetName)
+    }
+
+    $actualSheetName = $null
+    foreach ($candidateName in $candidateNames) {
+      $key = ([string]$candidateName).Trim().ToUpperInvariant()
+      if ($sheetLookup.ContainsKey($key)) {
+        $actualSheetName = $sheetLookup[$key]
+        break
+      }
+    }
+
+    if ([string]::IsNullOrWhiteSpace($actualSheetName)) {
+      Write-Host (
+        "SKIP Canon section worksheet not found: " +
+        $expectedSheetName
+      ) -ForegroundColor Yellow
+      continue
+    }
+
+    $relativeFolder = $sheetMap[$expectedSheetName]
+    $outDir = Join-Path $SectionsOutRoot $relativeFolder
+    Ensure-Path $outDir
+
+    try {
+      $html = New-MtbCanonSectionHtmlFromExcel `
+        -WorkbookPath $WorkbookPath `
+        -WorksheetName $actualSheetName
+
+      $html = Wrap-MtbDocHtml $html "canonical-context"
+      $outPath = Join-Path $outDir "index.html"
+
+      [System.IO.File]::WriteAllText(
+        $outPath,
+        $html,
+        [System.Text.UTF8Encoding]::new($false)
+      )
+
+      $written.Add($outPath)
+
+      Write-Host (
+        "OK   Canon Sections.xlsm [" +
+        $actualSheetName +
+        "] -> " +
+        $relativeFolder +
+        "\index.html"
+      ) -ForegroundColor Green
+    }
+    catch {
+      Write-Host (
+        "FAIL Canon section worksheet: " +
+        $actualSheetName
+      ) -ForegroundColor Red
+      Write-Host $_.Exception.Message -ForegroundColor Red
+    }
+  }
+
+  return ,$written.ToArray()
 }
 
 
@@ -1945,8 +4783,27 @@ $outDir = Join-Path $SITE_ROOT ("books\" + $testament + "\" + $BOOK_SLUG)
   Write-Host "Source: $bookSource"
   Write-Host "Output: $resolvedOut"
   Write-Host ""
+
+  # Validate or rebuild the Strong's NKJV JSON cache at the beginning of BOOK mode.
+  # Previously this ran only when the first bare verse reference was encountered,
+  # which made it look as though nothing was happening during the earlier workbook steps.
+  Write-Host "Checking Strong's NKJV JSON cache..." -ForegroundColor Cyan
+  Ensure-MtbStrongsJsonCurrent
+  Write-Host ""
+
 # Generate the Book Introduction directly from the canonical workbook when present.
-  $bookWorkbook = Join-Path $bookSource ($BOOK_SLUG + ".xlsm")
+  # The canonical authoring workbook now uses .xlsx.
+  # Keep .xlsm as a fallback for older books during migration.
+  $bookWorkbook = Join-Path $bookSource ($BOOK_SLUG + ".xlsx")
+
+  if (-not (Test-Path -LiteralPath $bookWorkbook -PathType Leaf)) {
+    $legacyWorkbook = Join-Path $bookSource ($BOOK_SLUG + ".xlsm")
+
+    if (Test-Path -LiteralPath $legacyWorkbook -PathType Leaf) {
+      $bookWorkbook = $legacyWorkbook
+    }
+  }
+
   $introGeneratedFromExcel = $false
 
   if (Test-Path $bookWorkbook) {
@@ -1984,6 +4841,27 @@ $outDir = Join-Path $SITE_ROOT ("books\" + $testament + "\" + $BOOK_SLUG)
     }
     catch {
       Fail ("Could not generate chapter study content from " + $bookWorkbook + ":`n" + $_.Exception.Message)
+    }
+  }
+
+  if (Test-Path $bookWorkbook) {
+    try {
+      $cultureNames = Write-AllMtbChapterCulturesFromExcel `
+        -WorkbookPath $bookWorkbook `
+        -OutBookDir $outDir `
+        -BookSlug $BOOK_SLUG
+
+      foreach ($cultureName in $cultureNames) {
+        [void]$excelGeneratedOutputNames.Add($cultureName)
+      }
+    }
+    catch {
+      Fail (
+        "Could not generate East Gate Culture content from " +
+        $bookWorkbook +
+        ":`n" +
+        $_.Exception.Message
+      )
     }
   }
 
@@ -2271,7 +5149,7 @@ catch {
   Write-Host ($_.Exception.Message) -ForegroundColor Yellow
 }
 
-$count = (Get-ChildItem $outDir -Filter "*.html" -ErrorAction SilentlyContinue | Measure-Object).Count
+$count = (Get-ChildItem $outDir -Recurse -File -Filter "*.html" -ErrorAction SilentlyContinue | Measure-Object).Count
   Write-Host ""
   Write-Host ("BOOK generation complete. HTML files in output: " + $count) -ForegroundColor Green
   exit 0
@@ -2329,27 +5207,143 @@ if ($Mode -eq "RESOURCES") {
 
   Write-Host ""
   Write-Host "Mode: RESOURCES"
-  if (-not (Test-Path $DEFAULT_RESOURCES_SRC)) { Fail "Resources source not found: $DEFAULT_RESOURCES_SRC" }
 
-  $outDir = Join-Path $SITE_ROOT "resources"
-  Ensure-Path $outDir
+  if (-not (Test-Path -LiteralPath $DEFAULT_RESOURCES_SRC)) {
+    Fail "Resources source not found: $DEFAULT_RESOURCES_SRC"
+  }
 
-  $docxFiles = Get-ChildItem $DEFAULT_RESOURCES_SRC -Filter "*.docx" -ErrorAction SilentlyContinue
+  $resourcesOutRoot = Join-Path $SITE_ROOT "resources"
+  Ensure-Path $resourcesOutRoot
+
+  # -------------------------------------------------------
+  # DOCX resources: recurse through every resource subfolder
+  # -------------------------------------------------------
+  $docxFiles = @(
+    Get-ChildItem `
+      -LiteralPath $DEFAULT_RESOURCES_SRC `
+      -Recurse `
+      -Force `
+      -ErrorAction Stop |
+    Where-Object {
+      -not $_.PSIsContainer -and
+      $_.Extension -ieq ".docx" -and
+      -not $_.Name.StartsWith("~$")
+    }
+  )
+
+  Write-Host ("DOCX resources found: " + $docxFiles.Count) -ForegroundColor Cyan
+
   foreach ($docx in $docxFiles) {
+    Write-Host ("FOUND DOCX: " + $docx.FullName) -ForegroundColor DarkCyan
+
     try {
-      Write-Host ("Processing " + $docx.Name + "...")
+      $relativeDir = $docx.DirectoryName.Substring(
+        $DEFAULT_RESOURCES_SRC.Length
+      ).TrimStart('\', '/')
+
+      $targetDir = if ([string]::IsNullOrWhiteSpace($relativeDir)) {
+        $resourcesOutRoot
+      }
+      else {
+        Join-Path $resourcesOutRoot $relativeDir
+      }
+
+      Ensure-Path $targetDir
+
       $html = Convert-DocxToHtmlFragment $docx.FullName
       $html = Fix-MojibakeHtml $html
+      $html = Wrap-MtbDocHtml $html "generic"
 
       $base = [System.IO.Path]::GetFileNameWithoutExtension($docx.Name)
       $slug = Slugify $base
-      $outPath = Join-Path $outDir ($slug + ".html")
+      $outPath = Join-Path $targetDir ($slug + ".html")
 
-      Set-Content -Path $outPath -Value $html -Encoding UTF8 -Force
-      Write-Host ("OK   " + $docx.Name + "  ->  " + ([System.IO.Path]::GetFileName($outPath))) -ForegroundColor Green
+      Set-Content `
+        -LiteralPath $outPath `
+        -Value $html `
+        -Encoding UTF8 `
+        -Force
+
+      if (-not (Test-Path -LiteralPath $outPath)) {
+        throw "Output file was not created: $outPath"
+      }
+
+      Write-Host ("OK   " + $docx.Name + " -> " + $outPath) -ForegroundColor Green
     }
     catch {
-      Write-Host ("FAIL " + $docx.Name) -ForegroundColor Red
+      Write-Host ("FAIL " + $docx.FullName) -ForegroundColor Red
+      Write-Host ($_.Exception.Message) -ForegroundColor Red
+    }
+  }
+
+  # -------------------------------------------------------
+  # Image resources: copy image and create matching HTML wrapper
+  # -------------------------------------------------------
+  $imageFiles = @(
+    Get-ChildItem `
+      -LiteralPath $DEFAULT_RESOURCES_SRC `
+      -Recurse `
+      -Force `
+      -ErrorAction Stop |
+    Where-Object {
+      -not $_.PSIsContainer -and
+      $_.Extension -match '^\.(png|jpg|jpeg|webp)$'
+    }
+  )
+
+  Write-Host ("Image resources found: " + $imageFiles.Count) -ForegroundColor Cyan
+
+  foreach ($image in $imageFiles) {
+    try {
+      $relativeDir = $image.DirectoryName.Substring(
+        $DEFAULT_RESOURCES_SRC.Length
+      ).TrimStart('\', '/')
+
+      $targetDir = if ([string]::IsNullOrWhiteSpace($relativeDir)) {
+        $resourcesOutRoot
+      }
+      else {
+        Join-Path $resourcesOutRoot $relativeDir
+      }
+
+      Ensure-Path $targetDir
+
+      $base = [System.IO.Path]::GetFileNameWithoutExtension($image.Name)
+      $slug = Slugify $base
+      $targetImageName = $slug + $image.Extension.ToLowerInvariant()
+      $targetImagePath = Join-Path $targetDir $targetImageName
+
+      Copy-Item `
+        -LiteralPath $image.FullName `
+        -Destination $targetImagePath `
+        -Force
+
+      $title = ($base -replace '[-_]+', ' ').Trim()
+      $title = (Get-Culture).TextInfo.ToTitleCase($title.ToLowerInvariant())
+      $imageNameEncoded = [System.Net.WebUtility]::HtmlEncode($targetImageName)
+      $titleEncoded = [System.Net.WebUtility]::HtmlEncode($title)
+
+      $wrapperHtml = @"
+<section class="mtb-doc mtb-resource-image" data-doc-type="resource-image">
+  <h1>$titleEncoded</h1>
+  <figure class="mtb-resource-figure">
+    <img src="$imageNameEncoded" alt="$titleEncoded" loading="lazy">
+  </figure>
+</section>
+"@
+
+      $wrapperPath = Join-Path $targetDir ($slug + ".html")
+      Set-Content `
+        -LiteralPath $wrapperPath `
+        -Value $wrapperHtml `
+        -Encoding UTF8 `
+        -Force
+
+      Write-Host ("COPIED " + $image.Name + " -> " + $targetImagePath) -ForegroundColor Cyan
+      Write-Host ("WRAPPED " + $image.Name + " -> " + $wrapperPath) -ForegroundColor Green
+    }
+    catch {
+      Write-Host ("FAIL " + $image.FullName) -ForegroundColor Red
       Write-Host ($_.Exception.Message) -ForegroundColor Red
     }
   }
@@ -2358,50 +5352,49 @@ if ($Mode -eq "RESOURCES") {
   Write-Host "RESOURCES generation complete." -ForegroundColor Green
   exit 0
 }
+
 if ($Mode -eq "SECTIONS") {
 
   Write-Host ""
   Write-Host "Mode: SECTIONS (Canonical Context)"
-  
+
   $sectionsSrcRoot = Join-Path $MTB_SOURCE_ROOT "sections"
-  if (-not (Test-Path $sectionsSrcRoot)) { Fail "Sections source not found: $sectionsSrcRoot" }
+
+  if (-not (Test-Path -LiteralPath $sectionsSrcRoot)) {
+    Fail "Sections source not found: $sectionsSrcRoot"
+  }
+
+  $canonWorkbook = Join-Path $sectionsSrcRoot "Canon Sections.xlsm"
+
+  if (-not (Test-Path -LiteralPath $canonWorkbook)) {
+    $candidate = Get-ChildItem `
+      -LiteralPath $sectionsSrcRoot `
+      -File `
+      -Filter "*.xlsm" `
+      -ErrorAction SilentlyContinue |
+      Select-Object -First 1
+
+    if ($null -eq $candidate) {
+      Fail "Canon Sections workbook not found in: $sectionsSrcRoot"
+    }
+
+    $canonWorkbook = $candidate.FullName
+  }
 
   $sectionsOutRoot = Join-Path $SITE_ROOT "sections"
   Ensure-Path $sectionsOutRoot
 
-  $docxFiles = Get-ChildItem $sectionsSrcRoot -Recurse -Filter "*.docx" -ErrorAction SilentlyContinue
-
-  foreach ($docx in $docxFiles) {
-    try {
-      # Build output path mirroring folder structure under /sections
-      $rel = $docx.FullName.Substring($sectionsSrcRoot.Length).TrimStart("\","/")
-      $relDir = Split-Path $rel -Parent
-
-      $outDir = if ([string]::IsNullOrWhiteSpace($relDir)) { $sectionsOutRoot } else { Join-Path $sectionsOutRoot $relDir }
-      Ensure-Path $outDir
-
-      # Default to index.html (so /sections/.../ renders clean)
-      $outPath = Join-Path $outDir "index.html"
-
-      Write-Host ("Processing Section: " + $rel + " -> " + ($outDir + "\index.html") + "...")
-
-      $html = Convert-DocxToHtmlFragment $docx.FullName
-      $html = Fix-MojibakeHtml $html
-
-      # Wrap as a canonical-context fragment for stable styling/hooks
-      $html = "<section class=`"mtb-doc mtb-doc--read`" data-doc-type=`"canonical-context`">`n$html`n</section>`n"
-
-      Set-Content -Path $outPath -Value $html -Encoding UTF8 -Force
-      Write-Host ("OK Section: " + $rel + " -> index.html") -ForegroundColor Green
-    }
-    catch {
-      Write-Host ("FAIL Section: " + $docx.FullName) -ForegroundColor Red
-      Write-Host ($_.Exception.Message) -ForegroundColor Red
-    }
-  }
+  $written = Write-AllMtbCanonSectionsFromExcel `
+    -WorkbookPath $canonWorkbook `
+    -SectionsOutRoot $sectionsOutRoot
 
   Write-Host ""
-  Write-Host "SECTIONS generation complete." -ForegroundColor Green
+  Write-Host (
+    "SECTIONS generation complete. Pages written: " +
+    $written.Count
+  ) -ForegroundColor Green
+
   exit 0
 }
+
 Fail "Unknown mode '$Mode'. Use BOOK, ABOUT, RESOURCES, or SECTIONS."

@@ -1,5 +1,11 @@
 <section class="mtb-doc mtb-doc--read" data-doc-type="book-introduction">
 <style>
+/* Widen only the Book Introduction modal when this generated dashboard is present. */
+.book-modal-panel:has(.mtb-book-introduction-dashboard) {
+  width: min(1600px, 96vw);
+  max-width: none;
+}
+
 .mtb-book-introduction-dashboard {
   --mtb-navy: #173a5e;
   --mtb-navy-2: #274f76;
@@ -8,24 +14,20 @@
   --mtb-blue-soft: #eef4f9;
   --mtb-border: #d7e0e8;
   --mtb-text: #1d2935;
-  --mtb-muted: #5f6f7d;
   width: 100%;
-  max-width: 1380px;
+  max-width: 1560px;
   margin: 0 auto;
   padding: 2px 4px 28px;
   color: var(--mtb-text);
   font-family: Arial, Helvetica, sans-serif;
 }
 .mtb-book-introduction-dashboard * { box-sizing: border-box; }
+
 .mtb-book-introduction-dashboard .mtb-intro-hero {
   position: relative;
   overflow: hidden;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 22px;
   margin: 0 0 24px;
-  padding: 24px 28px;
+  padding: 22px 28px;
   border: 1px solid #cbd8e3;
   border-radius: 14px;
   background: linear-gradient(135deg, #f7fafc 0%, #e8f0f7 100%);
@@ -41,6 +43,8 @@
   background: rgba(183, 131, 47, .10);
 }
 .mtb-book-introduction-dashboard .mtb-intro-eyebrow {
+  position: relative;
+  z-index: 1;
   margin: 0 0 5px;
   color: var(--mtb-gold);
   font-size: .78rem;
@@ -49,38 +53,36 @@
   text-transform: uppercase;
 }
 .mtb-book-introduction-dashboard .mtb-intro-title {
-  margin: 0;
-  color: var(--mtb-navy);
-  font-size: clamp(1.65rem, 3vw, 2.45rem);
-  line-height: 1.08;
-}
-.mtb-book-introduction-dashboard .mtb-intro-book-badge {
   position: relative;
   z-index: 1;
-  flex: 0 0 auto;
-  padding: 10px 17px;
-  border: 1px solid rgba(23, 58, 94, .18);
-  border-radius: 999px;
-  background: #fff;
+  margin: 0;
   color: var(--mtb-navy);
-  font-size: 1rem;
-  font-weight: 800;
-  box-shadow: 0 4px 14px rgba(24, 48, 72, .08);
+  font-size: clamp(1.85rem, 3vw, 2.6rem);
+  line-height: 1.05;
 }
+.mtb-book-introduction-dashboard .mtb-intro-subtitle {
+  position: relative;
+  z-index: 1;
+  margin: 6px 0 0;
+  color: #4e6477;
+  font-size: 1rem;
+  font-weight: 700;
+}
+
 .mtb-book-introduction-dashboard .mtb-intro-section {
-  margin: 0 0 27px;
+  margin: 0 0 25px;
 }
 .mtb-book-introduction-dashboard .mtb-intro-section-heading {
   display: flex;
   align-items: center;
   gap: 12px;
-  margin: 0 0 13px;
+  margin: 0 0 12px;
 }
 .mtb-book-introduction-dashboard .mtb-intro-section-heading h2 {
   margin: 0;
   color: var(--mtb-navy);
-  font-size: 1.18rem;
-  letter-spacing: .055em;
+  font-size: 1.08rem;
+  letter-spacing: .05em;
   text-transform: uppercase;
 }
 .mtb-book-introduction-dashboard .mtb-intro-section-heading::after {
@@ -89,13 +91,15 @@
   flex: 1 1 auto;
   background: linear-gradient(to right, #c7d3de, transparent);
 }
+
 .mtb-book-introduction-dashboard .mtb-intro-grid {
   display: grid;
-  grid-template-columns: repeat(12, minmax(0, 1fr));
-  gap: 15px;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 16px;
+  align-items: stretch;
 }
 .mtb-book-introduction-dashboard .mtb-intro-card {
-  grid-column: span 4;
+  grid-column: span 1;
   min-width: 0;
   overflow: hidden;
   border: 1px solid var(--mtb-border);
@@ -103,6 +107,12 @@
   border-radius: 12px;
   background: #fff;
   box-shadow: 0 4px 15px rgba(28, 48, 66, .055);
+}
+.mtb-book-introduction-dashboard .mtb-intro-card.mtb-span-2 {
+  grid-column: span 2;
+}
+.mtb-book-introduction-dashboard .mtb-intro-card.mtb-span-4 {
+  grid-column: span 4;
 }
 .mtb-book-introduction-dashboard .mtb-intro-card-header {
   margin: 0;
@@ -121,7 +131,7 @@
   overflow-wrap: anywhere;
 }
 .mtb-book-introduction-dashboard .mtb-intro-card-body p {
-  margin: 0 0 .86em;
+  margin: 0 0 .8em;
 }
 .mtb-book-introduction-dashboard .mtb-intro-card-body p:last-child { margin-bottom: 0; }
 .mtb-book-introduction-dashboard .mtb-intro-card-body ul {
@@ -129,10 +139,12 @@
   padding-left: 1.24em;
 }
 .mtb-book-introduction-dashboard .mtb-intro-card-body li {
-  margin: 0 0 .48em;
+  margin: 0 0 .45em;
   padding-left: .1em;
 }
 .mtb-book-introduction-dashboard .mtb-intro-card-body li:last-child { margin-bottom: 0; }
+
+/* Keep emphasis inside otherwise-identical panels. */
 .mtb-book-introduction-dashboard .mtb-book-intro-insight {
   margin: 14px 0 0;
   padding: 11px 13px;
@@ -144,54 +156,85 @@
 .mtb-book-introduction-dashboard .mtb-book-intro-insight strong {
   color: #79531b;
 }
-.mtb-book-introduction-dashboard .mtb-card-big-idea {
-  border-top-color: var(--mtb-gold);
-  background: linear-gradient(180deg, #fffdf8 0%, #fff 100%);
+
+/* Inline links to reusable MTB resources. */
+.mtb-book-introduction-dashboard .mtb-resource-link {
+  color: #1f5fae;
+  font-weight: 700;
+  text-decoration-line: underline;
+  text-decoration-style: dotted;
+  text-decoration-thickness: 2px;
+  text-underline-offset: 4px;
+  cursor: pointer;
 }
-.mtb-book-introduction-dashboard .mtb-card-big-idea .mtb-intro-card-header {
-  background: var(--mtb-gold-soft);
-  color: #6f4b16;
+.mtb-book-introduction-dashboard .mtb-resource-link::after {
+  content: " \2197";
+  display: inline-block;
+  margin-left: 2px;
+  font-size: .78em;
+  line-height: 1;
+  opacity: .78;
 }
-.mtb-book-introduction-dashboard .mtb-card-christ {
-  border-top-color: #8a5d25;
-  background: linear-gradient(180deg, #fffaf0 0%, #fff 100%);
+.mtb-book-introduction-dashboard .mtb-resource-link:hover,
+.mtb-book-introduction-dashboard .mtb-resource-link:focus-visible {
+  color: #123f7a;
+  text-decoration-style: solid;
 }
-.mtb-book-introduction-dashboard .mtb-card-christ .mtb-intro-card-header {
-  background: #f7ecd7;
-  color: #684517;
+.mtb-book-introduction-dashboard .mtb-resource-link:focus-visible {
+  outline: 3px solid rgba(31, 95, 174, .28);
+  outline-offset: 3px;
+  border-radius: 3px;
 }
 .mtb-book-introduction-dashboard .mtb-card-key-verses .mtb-intro-card-body p {
   padding-left: 12px;
   border-left: 3px solid #b9cce0;
 }
-.mtb-book-introduction-dashboard .mtb-span-3 { grid-column: span 3; }
-.mtb-book-introduction-dashboard .mtb-span-4 { grid-column: span 4; }
-.mtb-book-introduction-dashboard .mtb-span-5 { grid-column: span 5; }
-.mtb-book-introduction-dashboard .mtb-span-6 { grid-column: span 6; }
-.mtb-book-introduction-dashboard .mtb-span-7 { grid-column: span 7; }
-.mtb-book-introduction-dashboard .mtb-span-8 { grid-column: span 8; }
-.mtb-book-introduction-dashboard .mtb-span-12 { grid-column: span 12; }
-@media (max-width: 1050px) {
-  .mtb-book-introduction-dashboard .mtb-intro-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+
+@media (max-width: 1100px) {
+  .book-modal-panel:has(.mtb-book-introduction-dashboard) {
+    width: min(1100px, 94vw);
+  }
+  .mtb-book-introduction-dashboard .mtb-intro-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
   .mtb-book-introduction-dashboard .mtb-intro-card,
-  .mtb-book-introduction-dashboard [class*='mtb-span-'] { grid-column: span 1; }
-  .mtb-book-introduction-dashboard .mtb-card-historical-setting,
-  .mtb-book-introduction-dashboard .mtb-card-big-idea,
-  .mtb-book-introduction-dashboard .mtb-card-outline,
-  .mtb-book-introduction-dashboard .mtb-card-christ { grid-column: 1 / -1; }
+  .mtb-book-introduction-dashboard .mtb-intro-card.mtb-span-2 {
+    grid-column: span 1;
+  }
+  .mtb-book-introduction-dashboard .mtb-intro-card.mtb-span-4 {
+    grid-column: 1 / -1;
+  }
+  .mtb-book-introduction-dashboard .mtb-card-outline {
+    grid-column: 1 / -1;
+  }
 }
 @media (max-width: 660px) {
-  .mtb-book-introduction-dashboard { padding-left: 0; padding-right: 0; }
+  .book-modal-panel:has(.mtb-book-introduction-dashboard) {
+    width: 94vw;
+    padding-left: 12px;
+    padding-right: 12px;
+  }
+  .mtb-book-introduction-dashboard {
+    padding-left: 0;
+    padding-right: 0;
+  }
   .mtb-book-introduction-dashboard .mtb-intro-hero {
-    align-items: flex-start;
-    flex-direction: column;
-    padding: 20px;
+    padding: 19px;
     border-radius: 10px;
   }
-  .mtb-book-introduction-dashboard .mtb-intro-grid { grid-template-columns: 1fr; gap: 12px; }
+  .mtb-book-introduction-dashboard .mtb-intro-grid {
+    grid-template-columns: 1fr;
+    gap: 12px;
+  }
   .mtb-book-introduction-dashboard .mtb-intro-card,
-  .mtb-book-introduction-dashboard [class*='mtb-span-'] { grid-column: 1 / -1; }
-  .mtb-book-introduction-dashboard .mtb-intro-card-body { padding: 14px 15px 16px; }
+  .mtb-book-introduction-dashboard .mtb-intro-card.mtb-span-2,
+  .mtb-book-introduction-dashboard .mtb-intro-card.mtb-span-4,
+  .mtb-book-introduction-dashboard .mtb-card-outline {
+    grid-column: 1;
+  }
+  .mtb-book-introduction-dashboard .mtb-intro-card-body {
+    padding: 14px 15px 16px;
+  }
 }
-</style><div class="mtb-book-introduction-dashboard"><header class="mtb-intro-hero"><div><p class="mtb-intro-eyebrow">Mastering the Bible</p><h1 class="mtb-intro-title">Book Introduction</h1></div><div class="mtb-intro-book-badge">Obadiah</div></header><section class="mtb-intro-section mtb-intro-section-background"><div class="mtb-intro-section-heading"><h2>Background</h2></div><div class="mtb-intro-grid"><article class="mtb-intro-card mtb-span-3 mtb-card-book"><h3 class="mtb-intro-card-header">Book</h3><div class="mtb-intro-card-body"><p>Obadiah</p></div></article><article class="mtb-intro-card mtb-span-5 mtb-card-author"><h3 class="mtb-intro-card-header">Author</h3><div class="mtb-intro-card-body"><p>Obadiah (&quot;Servant&quot; or &quot;Worshiper of Yahweh&quot;). Nothing certain is known about the prophet beyond this book. His anonymity keeps the focus on God&#39;s message rather than the messenger.</p><div class="mtb-book-intro-insight"><strong>Pastoral Insight:</strong> Faithful servants point people to God rather than themselves. As John the Baptist said, &quot;He must increase, but I must decrease&quot; (John 3:30).</div></div></article><article class="mtb-intro-card mtb-span-4 mtb-card-audience"><h3 class="mtb-intro-card-header">Audience</h3><div class="mtb-intro-card-body"><p>Primarily Edom, with Judah also receiving assurance that God would judge their enemies and restore His people.</p><div class="mtb-book-intro-insight"><strong>Pastoral Insight:</strong> Although addressed to Edom, the message ultimately comforts God&#39;s people by reminding them that He sees injustice and will act in His perfect time.</div></div></article><article class="mtb-intro-card mtb-span-3 mtb-card-date"><h3 class="mtb-intro-card-header">Date</h3><div class="mtb-intro-card-body"><p>c. 586-585 BC, shortly after the fall of Jerusalem (most widely accepted view).</p></div></article><article class="mtb-intro-card mtb-span-6 mtb-card-historical-setting"><h3 class="mtb-intro-card-header">Historical Setting</h3><div class="mtb-intro-card-body"><p>Jerusalem had fallen to Babylon in 586 BC. The city was destroyed, its people were killed or taken into exile, and Judah appeared defeated. Instead of coming to Judah&#39;s aid, the Edomites rejoiced over Jerusalem&#39;s downfall, joined in the plundering, and betrayed fleeing survivors to the Babylonians.</p><p>The Edomites were descendants of Esau, Jacob&#39;s brother. Their shared ancestry with Israel made Edom&#39;s betrayal especially grievous before God.</p><div class="mtb-book-intro-insight"><strong>Pastoral Insight:</strong> God expects His people to help their brothers and sisters in times of need, not ignore them, rejoice over their failures, or take advantage of their weakness.</div></div></article><article class="mtb-intro-card mtb-span-3 mtb-card-occasion"><h3 class="mtb-intro-card-header">Occasion</h3><div class="mtb-intro-card-body"><p>God raised up Obadiah to pronounce judgment against Edom for its pride, violence, and betrayal of Judah while assuring His people that His justice would prevail.</p><div class="mtb-book-intro-insight"><strong>Pastoral Insight:</strong> God may delay judgment, but He never ignores sin or forgets His people.</div></div></article></div></section><section class="mtb-intro-section mtb-intro-section-message"><div class="mtb-intro-section-heading"><h2>Message</h2></div><div class="mtb-intro-grid"><article class="mtb-intro-card mtb-span-5 mtb-card-purpose"><h3 class="mtb-intro-card-header">Purpose</h3><div class="mtb-intro-card-body"><p>To announce God&#39;s judgment on Edom for pride and violence, reassure Judah that divine justice would prevail, and proclaim God&#39;s coming kingdom and the restoration of His people.</p></div></article><article class="mtb-intro-card mtb-span-7 mtb-card-themes"><h3 class="mtb-intro-card-header">Theme(s)</h3><div class="mtb-intro-card-body"><ul><li>The danger and deceptiveness of pride</li><li>God&#39;s concern for how people respond to the suffering of others</li><li>Accountability for indifference, gloating, and exploitation</li><li>The certainty of divine justice</li><li>The hope of restoration and the certainty of the Lord&#39;s reign</li></ul></div></article><article class="mtb-intro-card mtb-span-7 mtb-card-big-idea"><h3 class="mtb-intro-card-header">Big Idea</h3><div class="mtb-intro-card-body"><p>God sovereignly judges the proud, vindicates His people, and ultimately establishes His righteous kingdom over all nations through His promised King.</p><div class="mtb-book-intro-insight"><strong>Pastoral Insight:</strong> Obadiah reminds us that God is holy, just, and faithful. As He exposes the pride, violence, and indifference of Edom, He also invites us to examine our own hearts, especially in the way we treat our brothers and sisters. His desire is not merely to expose sin, but to make us more like Christ.</div></div></article><article class="mtb-intro-card mtb-span-5 mtb-card-key-verses"><h3 class="mtb-intro-card-header">Key Verse(s)</h3><div class="mtb-intro-card-body"><p>Obadiah 15  &quot;For the day of the LORD upon all the nations is near; As you have done, it shall be done to you; Your reprisal shall return upon your own head.&quot; (NKJV)</p><p>Obadiah 21  &quot;Then saviors shall come to Mount Zion To judge the mountains of Esau, And the kingdom shall be the LORD&#39;S.&quot; (NKJV)</p></div></article><article class="mtb-intro-card mtb-span-7 mtb-card-outline"><h3 class="mtb-intro-card-header">Outline</h3><div class="mtb-intro-card-body"><ul><li>The Judgment of Edom Announced (1–9)</li><li>The Reason for the Judgment Explained (10–16)</li><li>The Lord&#39;s Kingdom Established (17–21)</li></ul></div></article><article class="mtb-intro-card mtb-span-5 mtb-card-christ"><h3 class="mtb-intro-card-header">Christ in This Book</h3><div class="mtb-intro-card-body"><p>Points forward to Jesus Christ as the ultimate Savior, Deliverer, and King who judges evil with perfect righteousness, rescues His people, and establishes the everlasting Kingdom of God, fulfilling the promise of Obadiah 21.</p></div></article></div></section></div>
+</style><div class="mtb-book-introduction-dashboard"><header class="mtb-intro-hero"><p class="mtb-intro-eyebrow">Mastering the Bible</p><h1 class="mtb-intro-title">Obadiah</h1><p class="mtb-intro-subtitle">Obadiah - Book Introduction</p></header><section class="mtb-intro-section"><div class="mtb-intro-section-heading"><h2>Background</h2></div><div class="mtb-intro-grid"><article class="mtb-intro-card"><h3 class="mtb-intro-card-header">Author</h3><div class="mtb-intro-card-body"><p>Obadiah (meaning &quot;Servant&quot; or &quot;Worshiper of the LORD&quot;). The book bears his name, but Scripture gives no personal details about the prophet. His anonymity helps keep the focus on God&#39;s message against Edom rather than on the messenger. Faithful servants point people to God more than themselves-&quot;He must increase, but I must decrease&quot; (John 3:30).</p></div></article><article class="mtb-intro-card"><h3 class="mtb-intro-card-header">Audience</h3><div class="mtb-intro-card-body"><p>Primarily directed to the nation of Edom for taking advantage of and betraying their kin in Judah; it also addresses Judah/Israel as the wronged community, assuring them that God sees injustice and will act. Pastoral Insight: Though God&#39;s word confronts proud nations, it ultimately comforts His people with the promise of vindication and restoration.</p></div></article><article class="mtb-intro-card"><h3 class="mtb-intro-card-header">Date</h3><div class="mtb-intro-card-body"><p>c. 586-585 BC, shortly after the fall of Jerusalem (most widely accepted view).</p></div></article><article class="mtb-intro-card"><h3 class="mtb-intro-card-header">Occasion</h3><div class="mtb-intro-card-body"><p>God spoke because Edom took advantage of Judah&#39;s catastrophe-remaining aloof, plundering fleeing people, and even handing over survivors to enemies. Obadiah confronts Edom&#39;s proud betrayal, announces judgment that fits their crimes, and comforts Judah with the assurance of God&#39;s vindication.</p></div></article><article class="mtb-intro-card mtb-span-4"><h3 class="mtb-intro-card-header">Historical Setting</h3><div class="mtb-intro-card-body"><p>When Jerusalem fell to Babylon in 586 BC, Judah was devastated and many people fled or were carried into exile. Instead of helping their kin, the Edomites-relatives descended from Esau who lived on the high, defensible plateaus of Mount Seir (places like Teman and Bozrah)-celebrated, plundered the ruins, and even handed fleeing Judeans to their enemies. Obadiah speaks into this specific betrayal. Pastoral insight: God condemns taking advantage of the vulnerable, especially when it is done to one&#39;s own brother.</p></div></article></div></section><section class="mtb-intro-section"><div class="mtb-intro-section-heading"><h2>Message</h2></div><div class="mtb-intro-grid"><article class="mtb-intro-card"><h3 class="mtb-intro-card-header">Purpose</h3><div class="mtb-intro-card-body"><p>To announce God&#39;s judgment on Edom for pride and violence, reassure Judah that divine justice would prevail, and proclaim God&#39;s coming kingdom and the restoration of His people.</p></div></article><article class="mtb-intro-card"><h3 class="mtb-intro-card-header">Book Summary</h3><div class="mtb-intro-card-body"><p>God pronounces swift judgment on proud Edom for its violence and betrayal of Judah, warning that exploiting kin invites fitting retribution. Alongside that condemnation, God promises vindication and restoration for his people and the establishment of the Lord&#39;s rule on Mount Zion.</p></div></article><article class="mtb-intro-card"><h3 class="mtb-intro-card-header">Major Themes</h3><div class="mtb-intro-card-body"><ul><li>Pride that invites downfall</li><li>Judgment for betrayal, exploitation, and indifference</li><li>Moral responsibility toward suffering kin</li><li>The certainty of the day of the LORD and divine justice</li><li>God&#39;s vindication and restoration of his people</li><li>The LORD&#39;s sovereign reign on Mount Zion</li></ul></div></article><article class="mtb-intro-card"><h3 class="mtb-intro-card-header">Central Message</h3><div class="mtb-intro-card-body"><p>God will not let pride and betrayal go unanswered: he judges the proud, vindicates the oppressed, and will finally establish his righteous rule over his people. It warns believers to hate pride, defend their brothers, and trust God&#39;s faithful vindication.</p></div></article></div></section><section class="mtb-intro-section"><div class="mtb-intro-section-heading"><h2>Study Guide</h2></div><div class="mtb-intro-grid"><article class="mtb-intro-card mtb-card-outline"><h3 class="mtb-intro-card-header">Outline</h3><div class="mtb-intro-card-body"><ul><li>Obadiah 1:1-9 - Part 1: The Announcement of God&#39;s Judgment on Edom</li><li>Obadiah 1:10-14 - Part 2: Edom&#39;s Violence and Betrayal Against Judah</li><li>Obadiah 1:15-21 - Part 3: The Day of the LORD and Kingdom Restoration</li></ul></div></article><article class="mtb-intro-card mtb-card-key-verses"><h3 class="mtb-intro-card-header">Key Verse(s)</h3><div class="mtb-intro-card-body"><ul><li>Obadiah 1:3-4 - &quot;The pride of your heart has deceived you, you who dwell in the clefts of the rock... Though you should ascend as high as the eagle, and though you set your nest among the stars, from there I will bring you down, says the LORD.&quot; (NKJV)</li><li>Obadiah 1:15 - &quot;For the day of the LORD upon all the nations is near; As you have done, it shall be done to you; Your reprisal shall return upon your own head.&quot; (NKJV)</li><li>Obadiah 1:21 - &quot;Then saviors shall come to Mount Zion To judge the mountains of Esau, And the kingdom shall be the LORD&#39;S.&quot; (NKJV)</li></ul></div></article><article class="mtb-intro-card"><h3 class="mtb-intro-card-header">Christ in This Book</h3><div class="mtb-intro-card-body"><p>Obadiah points forward to Jesus Christ as the righteous Judge and King who deals with pride and betrayal, rescues the oppressed, and restores God&#39;s people. The prophet&#39;s promise that the LORD&#39;s rule will be established on Mount Zion finds its fulfillment in Christ, who vindicates the wronged, defeats evil, and brings the everlasting kingdom of justice and peace.</p></div></article><article class="mtb-intro-card"><h3 class="mtb-intro-card-header">Introductory Summary</h3><div class="mtb-intro-card-body"><p>Obadiah is a sharp, compact word from the LORD against proud Edom for violence and the betrayal of their kin. The prophecy moves quickly from accusation to proof, announces judgment that fits their deeds, then lifts its eyes to the &quot;day of the LORD&quot; and the sure promise that God will vindicate his people and establish his rule on Mount Zion. The central tension is human self-security-boasting, exploitation, and gloating-versus the Lord&#39;s righteous sovereignty. Come ready to be confronted by the cost of pride, to grieve betrayal, and to trust God&#39;s faithful vindication and future reign.</p></div></article></div></section></div>
 </section>

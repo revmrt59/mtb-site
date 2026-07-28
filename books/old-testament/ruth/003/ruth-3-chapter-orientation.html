@@ -1,0 +1,97 @@
+<section class="mtb-doc mtb-doc--read" data-doc-type="chapter-orientation">
+<style>
+.mtb-chapter-overview-dashboard {
+  --mtb-navy: #173a5e;
+  --mtb-navy-2: #2b587f;
+  --mtb-gold: #b7832f;
+  --mtb-gold-soft: #fbf4e7;
+  --mtb-blue-soft: #eef4f9;
+  --mtb-border: #d7e0e8;
+  --mtb-text: #1d2935;
+  width: 100%; max-width: 1600px; margin: 0 auto; padding: 2px 4px 30px;
+  color: var(--mtb-text); font-family: Arial, Helvetica, sans-serif;
+}
+.mtb-chapter-overview-dashboard * { box-sizing: border-box; }
+.mtb-chapter-overview-dashboard .mtb-overview-hero {
+  display: flex; align-items: center; justify-content: space-between; gap: 20px;
+  margin: 0 0 24px; padding: 22px 26px; border: 1px solid #cbd8e3; border-radius: 14px;
+  background: linear-gradient(135deg, #f7fafc 0%, #e8f0f7 100%);
+}
+.mtb-chapter-overview-dashboard .mtb-overview-eyebrow {
+  margin: 0 0 5px; color: var(--mtb-gold); font-size: .78rem; font-weight: 800;
+  letter-spacing: .13em; text-transform: uppercase;
+}
+.mtb-chapter-overview-dashboard .mtb-overview-title {
+  margin: 0; color: var(--mtb-navy); font-size: clamp(1.55rem, 3vw, 2.25rem); line-height: 1.1;
+}
+.mtb-chapter-overview-dashboard .mtb-overview-badge {
+  flex: 0 0 auto; padding: 10px 16px; border: 1px solid rgba(23,58,94,.18); border-radius: 999px;
+  background: #fff; color: var(--mtb-navy); font-weight: 800; box-shadow: 0 4px 14px rgba(24,48,72,.08);
+}
+.mtb-chapter-overview-dashboard .mtb-overview-section { margin: 0 0 27px; }
+.mtb-chapter-overview-dashboard .mtb-overview-section-heading {
+  display: flex; align-items: center; gap: 12px; margin: 0 0 13px;
+}
+.mtb-chapter-overview-dashboard .mtb-overview-section-heading h2 {
+  margin: 0; color: var(--mtb-navy); font-size: 1.08rem; letter-spacing: .055em; text-transform: uppercase;
+}
+.mtb-chapter-overview-dashboard .mtb-overview-section-heading::after {
+  content: ''; height: 1px; flex: 1 1 auto; background: linear-gradient(to right,#c7d3de,transparent);
+}
+.mtb-chapter-overview-dashboard .mtb-overview-grid {
+  display: grid; grid-template-columns: repeat(12,minmax(0,1fr)); gap: 15px;
+}
+.mtb-chapter-overview-dashboard .mtb-overview-card {
+  grid-column: span 3; min-width: 0; overflow: hidden; border: 1px solid var(--mtb-border);
+  border-top: 4px solid var(--mtb-navy-2); border-radius: 12px; background: #fff;
+  box-shadow: 0 4px 15px rgba(28,48,66,.055);
+}
+.mtb-chapter-overview-dashboard .mtb-overview-card-header {
+  margin: 0; padding: 12px 16px 10px; border-bottom: 1px solid #e5ebf0;
+  background: var(--mtb-blue-soft); color: var(--mtb-navy); font-size: .94rem; font-weight: 800;
+}
+.mtb-chapter-overview-dashboard .mtb-overview-card-body {
+  padding: 16px 18px 18px; font-size: 1rem; line-height: 1.5; overflow-wrap: anywhere;
+}
+.mtb-chapter-overview-dashboard .mtb-overview-card-body p { margin: 0 0 .9em; }
+.mtb-chapter-overview-dashboard .mtb-overview-card-body p:last-child { margin-bottom: 0; }
+.mtb-chapter-overview-dashboard .mtb-overview-card-body ul { margin: 0; padding-left: 1.25em; }
+.mtb-chapter-overview-dashboard .mtb-overview-card-body li { margin: 0 0 .5em; }
+.mtb-chapter-overview-dashboard .mtb-overview-card-body li:last-child { margin-bottom: 0; }
+.mtb-chapter-overview-dashboard .mtb-overview-card-theme {
+  border-top-color: var(--mtb-gold); background: linear-gradient(180deg,#fffdf8 0%,#fff 100%);
+}
+.mtb-chapter-overview-dashboard .mtb-overview-card-theme .mtb-overview-card-header {
+  background: var(--mtb-gold-soft); color: #6f4b16;
+}
+.mtb-chapter-overview-dashboard .mtb-overview-card-christ {
+  border-top-color: #8a5d25; background: linear-gradient(180deg,#fffaf0 0%,#fff 100%);
+}
+.mtb-chapter-overview-dashboard .mtb-overview-card-christ .mtb-overview-card-header {
+  background: #f7ecd7; color: #684517;
+}
+.mtb-chapter-overview-dashboard .mtb-overview-labeled-block {
+  margin: 0 0 12px; padding: 12px 13px; border-left: 4px solid #89a7c2; border-radius: 0 8px 8px 0; background: #f7fafc;
+}
+.mtb-chapter-overview-dashboard .mtb-overview-labeled-block:last-child { margin-bottom: 0; }
+.mtb-chapter-overview-dashboard .mtb-overview-labeled-block strong { display: block; margin-bottom: 4px; color: var(--mtb-navy); }
+.mtb-chapter-overview-dashboard .mtb-overview-labeled-block p { margin: 0; }
+.mtb-chapter-overview-dashboard .mtb-overview-glossary { margin: 0; }
+.mtb-chapter-overview-dashboard .mtb-overview-glossary-item { padding: 0 0 11px; margin: 0 0 11px; border-bottom: 1px solid #e5ebf0; }
+.mtb-chapter-overview-dashboard .mtb-overview-glossary-item:last-child { padding-bottom: 0; margin-bottom: 0; border-bottom: 0; }
+.mtb-chapter-overview-dashboard .mtb-overview-glossary dt { color: var(--mtb-navy); font-weight: 800; }
+.mtb-chapter-overview-dashboard .mtb-overview-glossary dd { margin: 3px 0 0; }
+@media (max-width: 1100px) {
+  .mtb-chapter-overview-dashboard .mtb-overview-card,
+  .mtb-chapter-overview-dashboard [class*='mtb-overview-card-'] { grid-column: span 6; }
+}
+@media (max-width: 660px) {
+  .mtb-chapter-overview-dashboard .mtb-overview-grid { grid-template-columns: 1fr; }
+  .mtb-chapter-overview-dashboard .mtb-overview-card,
+  .mtb-chapter-overview-dashboard [class*='mtb-overview-card-'] { grid-column: 1 / -1; }
+  .mtb-chapter-overview-dashboard { padding-left: 0; padding-right: 0; }
+  .mtb-chapter-overview-dashboard .mtb-overview-hero { align-items: flex-start; flex-direction: column; padding: 19px; border-radius: 10px; }
+  .mtb-chapter-overview-dashboard .mtb-overview-card-body { padding: 14px 15px 16px; }
+}
+</style><div class="mtb-chapter-overview-dashboard"><header class="mtb-overview-hero"><div><p class="mtb-overview-eyebrow">Chapter Overview</p><h1 class="mtb-overview-title">Ruth Overview Chapter 3</h1></div><div class="mtb-overview-badge">Chapter 3</div></header><section class="mtb-overview-section mtb-overview-section-primary"><div class="mtb-overview-section-heading"><h2>Chapter at a Glance</h2></div><div class="mtb-overview-grid"><article class="mtb-overview-card mtb-overview-card-theme"><h3 class="mtb-overview-card-header">Chapter Theme</h3><div class="mtb-overview-card-body"><p>Ruth 3 reveals how God advances His plan of redemption through faithful obedience, wise counsel, and righteous character. Naomi&#39;s plan, Ruth&#39;s courageous appeal, and Boaz&#39;s integrity prepare the way for the legal redemption that will unfold in the final chapter.</p></div></article><article class="mtb-overview-card mtb-overview-card-purpose"><h3 class="mtb-overview-card-header">Purpose &amp; Importance</h3><div class="mtb-overview-card-body"><p>This chapter moves the story from provision to redemption. Ruth is no longer merely receiving food through Boaz&#39;s kindness; she now appeals to him as her kinsman-redeemer. The chapter demonstrates the biblical principles of redemption, honor, purity, patience, and trust in God&#39;s timing. It also introduces the legal obstacle of a nearer redeemer, showing that God&#39;s purposes unfold according to both righteousness and His perfect timing.</p></div></article><article class="mtb-overview-card mtb-overview-card-flow"><h3 class="mtb-overview-card-header">Chapter Flow</h3><div class="mtb-overview-card-body"><p>Naomi&#39;s Plan (3:1–5) → Ruth at Boaz&#39;s Feet (3:6–9) → Boaz&#39;s Blessing &amp; the Nearer Redeemer (3:10–13) → Ruth Returns with Hope (3:14–18)</p></div></article><article class="mtb-overview-card mtb-overview-card-summary"><h3 class="mtb-overview-card-header">Chapter Summary</h3><div class="mtb-overview-card-body"><p>Naomi instructs Ruth to approach Boaz at the threshing floor and request that he fulfill the role of kinsman-redeemer. Ruth humbly follows Naomi&#39;s instructions and asks Boaz to &quot;spread his wing&quot; over her, symbolically requesting marriage and redemption. Boaz commends Ruth&#39;s noble character and expresses his willingness to redeem her but explains that another man has the first legal right. He promises to resolve the matter righteously and sends Ruth home with six measures of barley as a sign of hope. Naomi confidently assures Ruth that Boaz will not rest until the matter is settled.</p></div></article></div></section><section class="mtb-overview-section mtb-overview-section-secondary"><div class="mtb-overview-section-heading"><h2>Study Foundations</h2></div><div class="mtb-overview-grid"><article class="mtb-overview-card mtb-overview-card-truths"><h3 class="mtb-overview-card-header">Key Truths Taught</h3><div class="mtb-overview-card-body"><ul><li>God&#39;s redemption is accomplished according to His righteous order.• Faith acts with humility while trusting God for the outcome.• Godly character is revealed by integrity when no one is watching.• Patience and trust are essential while waiting for God to complete His work.• God&#39;s purposes are never hindered by unexpected obstacles.• True redemption is motivated by love, not obligation.</li></ul></div></article><article class="mtb-overview-card mtb-overview-card-pastoral"><h3 class="mtb-overview-card-header">Pastoral Insights</h3><div class="mtb-overview-card-body"><ul><li>God&#39;s timing is often as important as God&#39;s promise.• Integrity protects both our testimony and God&#39;s purposes.• Waiting on God is an active expression of faith, not passive resignation.• Faith does what God requires and leaves the results in His hands.• What appears to be a delay may simply be God arranging every detail perfectly.• Godly leaders protect the vulnerable rather than taking advantage of them.</li></ul></div></article><article class="mtb-overview-card mtb-overview-card-words"><h3 class="mtb-overview-card-header">Key Words &amp; Concepts</h3><div class="mtb-overview-card-body"><dl class="mtb-overview-glossary"><div class="mtb-overview-glossary-item"><dd>Rest • Threshing Floor • Redeemer • Wing (Garment) • Redemption • Integrity • Covenant Loyalty (hesed) • Nearer Redeemer • Promise • Waiting</dd></div></dl></div></article><article class="mtb-overview-card mtb-overview-card-christ"><h3 class="mtb-overview-card-header">Christ in This Chapter</h3><div class="mtb-overview-card-body"><p>Ruth&#39;s request that Boaz &quot;spread your wing over your maidservant&quot; (3:9) recalls Boaz&#39;s earlier prayer that Ruth had come to trust under the wings of the Lord (2:12). God now answers that prayer through the kinsman-redeemer. Boaz foreshadows Jesus Christ, who willingly covers His people, redeems them according to righteousness, removes every legal obstacle to their salvation, and does not rest until redemption is complete. The presence of the nearer redeemer highlights that God&#39;s plan of salvation satisfies every requirement of divine justice before extending the full blessings of redemption.</p></div></article></div></section></div>
+</section>

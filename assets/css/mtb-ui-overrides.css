@@ -1263,3 +1263,61 @@ body[data-book][data-chapter][data-active-tab="chapter_orientation"] #doc-target
     border-radius: 10px !important;
   }
 }
+/* =========================================================
+   CHAPTER EG CULTURE — WIDE
+   Must remain at the bottom of this file
+   ========================================================= */
+
+body[data-book][data-chapter][data-active-tab="eg_culture"] #doc-layout,
+body[data-book][data-chapter][data-active-tab="eg_culture"] .doc-layout{
+  width: 100% !important;
+  max-width: none !important;
+  margin: 0 !important;
+  padding: 18px 24px 48px !important;
+  box-sizing: border-box !important;
+}
+
+body[data-book][data-chapter][data-active-tab="eg_culture"] .doc-main{
+  width: 100% !important;
+  max-width: none !important;
+  margin: 0 !important;
+}
+
+body[data-book][data-chapter][data-active-tab="eg_culture"] #doc-target{
+  width: min(1600px, calc(100vw - 48px)) !important;
+  max-width: 1600px !important;
+  margin: 18px auto 40px !important;
+  padding: 28px 32px !important;
+  box-sizing: border-box !important;
+  overflow-x: hidden !important;
+}
+
+body[data-book][data-chapter][data-active-tab="eg_culture"] #doc-target > #doc-root,
+body[data-book][data-chapter][data-active-tab="eg_culture"] #doc-target .mtb-culture-dashboard{
+  width: 100% !important;
+  max-width: none !important;
+  margin-left: auto !important;
+  margin-right: auto !important;
+  box-sizing: border-box !important;
+}
+
+@media (max-width: 1100px){
+  body[data-book][data-chapter][data-active-tab="eg_culture"] #doc-target{
+    width: calc(100vw - 32px) !important;
+    padding: 24px !important;
+  }
+}
+
+@media (max-width: 700px){
+  body[data-book][data-chapter][data-active-tab="eg_culture"] #doc-layout,
+  body[data-book][data-chapter][data-active-tab="eg_culture"] .doc-layout{
+    padding: 12px 8px 32px !important;
+  }
+
+  body[data-book][data-chapter][data-active-tab="eg_culture"] #doc-target{
+    width: calc(100vw - 16px) !important;
+    margin-top: 12px !important;
+    padding: 18px 14px !important;
+    border-radius: 10px !important;
+  }
+}

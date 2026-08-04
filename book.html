@@ -361,7 +361,7 @@ body { margin: 0; }
 
       <div class="book-hero-controls">
          <button id="book-hero-canonical" type="button">Canonical Context</button>
-        <button id="book-hero-intro" type="button">Book Introduction</button>
+        <button id="book-hero-intro" type="button">Book Overview</button>
         <button id="book-hero-resources" type="button">Book Resources</button>
       </div>
     </div>
@@ -663,7 +663,7 @@ if (kind === "canonical_context") {
 } else {
   const docFile = (kind === "book_resources")
     ? `${book}-0-book-resources.html`
-    : `${book}-0-book-introduction.html`;
+    : `${book}-0-book-overview.html`;
 
   candidates = [
     `/books/new-testament/${book}/000-book/${docFile}`,
@@ -786,7 +786,7 @@ if (chapterWrap) {
     }
   }
 // --------------------------------------------------
-// Remove Book Introduction tab on chapter pages
+// Remove Book Overview tab on chapter pages
 // --------------------------------------------------
 (function(){
   const chapterNum = parseInt(params.get("chapter") || "0", 10);

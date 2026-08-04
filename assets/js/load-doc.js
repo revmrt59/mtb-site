@@ -57,8 +57,8 @@
   function parseDocName(docName) {
     const name = String(docName || "");
 
-    const intro = name.match(/^([a-z0-9-]+)-0-book-introduction\.html$/i);
-    if (intro) return { book: intro[1].toLowerCase(), chapter: 0, type: "book-introduction" };
+    const intro = name.match(/^([a-z0-9-]+)-0-book-overview\.html$/i);
+    if (intro) return { book: intro[1].toLowerCase(), chapter: 0, type: "book-overview" };
 
     const chap = name.match(/^([a-z0-9-]+)-(\d+)-chapter-(scripture|orientation|explanation|insights)\.html$/i);
     if (chap) return { book: chap[1].toLowerCase(), chapter: Number(chap[2]), type: "chapter-" + chap[3].toLowerCase() };
@@ -178,7 +178,7 @@
     if (t === "orientation" || t === "chapter_orientation" || t === "chapter-orientation") return "chapter_orientation";
     if (t === "insights" || t === "chapter_insights" || t === "chapter-insights") return "chapter_insights";
     if (t === "eg_culture" || t === "eg-culture" || t === "egculture" || t === "chapter_eg_culture" || t === "chapter-eg-culture") return "eg_culture";
-    if (t === "book_intro" || t === "book-intro" || t === "bookintroduction" || t === "book_introduction" || t === "book-introduction") return "book_introduction";
+    if (t === "book_intro" || t === "book-intro" || t === "bookintroduction" || t === "book_introduction" || t === "book-overview") return "book_introduction";
 
     return DEFAULT_TAB;
   }
@@ -208,14 +208,14 @@
     const t = normalizeTab(tab);
 
     // Safe default if something is missing
-    if (!b) return "titus-0-book-introduction.html";
+    if (!b) return "titus-0-book-overview.html";
 
     // Book-level view (chapter=0) never points at chapter-* docs.
-    // If tab is missing/unrecognized, we still treat it as book introduction.
-    if (ch === "0") return `${b}-0-book-introduction.html`;
+    // If tab is missing/unrecognized, we still treat it as Book Overview.
+    if (ch === "0") return `${b}-0-book-overview.html`;
 
     // Explicit book intro tab (also used as a safe fallback)
-    if (t === "book_introduction") return `${b}-0-book-introduction.html`;
+    if (t === "book_introduction") return `${b}-0-book-overview.html`;
 
     const suffix = tabToDocSuffix(t);
     return `${b}-${ch}-${suffix}.html`;
@@ -704,7 +704,7 @@ if (String(chapterParamRaw) === "0" && String(tabParamRaw) === "book_home") {
       ? safeDoc
       : (bookParam
           ? buildDocNameFromParams(bookParam, chapterParam, tabParam)
-          : "titus-0-book-introduction.html");
+          : "titus-0-book-overview.html");
 
   // Canonicalize URL based on what we now know.
   // - If doc implies book/chapter and they are missing/invalid, add/fix them

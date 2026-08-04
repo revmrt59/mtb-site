@@ -1,0 +1,191 @@
+<section class="mtb-doc mtb-doc--read" data-doc-type="book-overview">
+<style>
+.book-modal-panel:has(.mtb-book-overview-dashboard) {
+  width: min(1600px, 96vw);
+  max-width: none;
+}
+.mtb-book-overview-dashboard {
+  --mtb-navy: #173a5e;
+  --mtb-navy-2: #274f76;
+  --mtb-gold: #b7832f;
+  --mtb-gold-soft: #fbf4e7;
+  --mtb-blue-soft: #eef4f9;
+  --mtb-border: #d7e0e8;
+  --mtb-text: #1d2935;
+  width: 100%;
+  max-width: 1560px;
+  margin: 0 auto;
+  padding: 2px 4px 28px;
+  color: var(--mtb-text);
+  font-family: Arial, Helvetica, sans-serif;
+}
+.mtb-book-overview-dashboard * { box-sizing: border-box; }
+.mtb-book-overview-dashboard .mtb-intro-hero {
+  position: relative;
+  overflow: hidden;
+  margin: 0 0 24px;
+  padding: 22px 28px;
+  border: 1px solid #cbd8e3;
+  border-radius: 14px;
+  background: linear-gradient(135deg, #f7fafc 0%, #e8f0f7 100%);
+}
+.mtb-book-overview-dashboard .mtb-intro-hero::after {
+  content: '';
+  position: absolute;
+  right: -48px;
+  top: -72px;
+  width: 210px;
+  height: 210px;
+  border-radius: 50%;
+  background: rgba(183, 131, 47, .10);
+}
+.mtb-book-overview-dashboard .mtb-intro-eyebrow {
+  position: relative; z-index: 1; margin: 0 0 5px;
+  color: var(--mtb-gold); font-size: .78rem; font-weight: 800;
+  letter-spacing: .13em; text-transform: uppercase;
+}
+.mtb-book-overview-dashboard .mtb-intro-title {
+  position: relative; z-index: 1; margin: 0; color: var(--mtb-navy);
+  font-size: clamp(1.85rem, 3vw, 2.6rem); line-height: 1.05;
+}
+.mtb-book-overview-dashboard .mtb-intro-subtitle {
+  position: relative; z-index: 1; margin: 6px 0 0;
+  color: #4e6477; font-size: 1rem; font-weight: 700;
+}
+.mtb-book-overview-dashboard .mtb-intro-section { margin: 0 0 25px; }
+.mtb-book-overview-dashboard .mtb-intro-section-heading {
+  display: flex; align-items: center; gap: 12px; margin: 0 0 12px;
+}
+.mtb-book-overview-dashboard .mtb-intro-section-heading h2 {
+  margin: 0; color: var(--mtb-navy); font-size: 1.08rem;
+  letter-spacing: .05em; text-transform: uppercase;
+}
+.mtb-book-overview-dashboard .mtb-intro-section-heading::after {
+  content: ''; height: 1px; flex: 1 1 auto;
+  background: linear-gradient(to right, #c7d3de, transparent);
+}
+.mtb-book-overview-dashboard .mtb-intro-grid {
+  display: grid;
+  grid-template-columns: repeat(12, minmax(0, 1fr));
+  gap: 16px;
+  align-items: stretch;
+  grid-auto-rows: auto;
+}
+/* Each implicit grid row grows to the height of its longest card. Every card
+   then stretches to that row height. No fixed or maximum height is used. */
+.mtb-book-overview-dashboard .mtb-intro-card {
+  grid-column: span 1;
+  min-width: 0;
+  min-height: 0;
+  height: 100%;
+  max-height: none !important;
+  overflow: visible !important;
+  display: flex;
+  flex-direction: column;
+  align-self: stretch;
+  border: 1px solid var(--mtb-border);
+  border-top: 4px solid var(--mtb-navy-2);
+  border-radius: 12px;
+  background: #fff;
+  box-shadow: 0 4px 15px rgba(28, 48, 66, .055);
+}
+.mtb-book-overview-dashboard .mtb-intro-card.mtb-span-4 { grid-column: span 4; }
+.mtb-book-overview-dashboard .mtb-intro-card.mtb-span-6 { grid-column: span 6; }
+.mtb-book-overview-dashboard .mtb-intro-card.mtb-span-12 { grid-column: span 12; }
+.mtb-book-overview-dashboard .mtb-intro-card-header {
+  margin: 0; padding: 12px 16px 10px; border-bottom: 1px solid #e5ebf0;
+  background: var(--mtb-blue-soft); color: var(--mtb-navy);
+  font-size: .92rem; font-weight: 800; letter-spacing: .025em;
+}
+.mtb-book-overview-dashboard .mtb-intro-card-body {
+  flex: 1 1 auto;
+  min-height: 0;
+  height: auto !important;
+  max-height: none !important;
+  overflow: visible !important;
+  padding: 15px 17px 17px;
+  font-size: 1rem;
+  line-height: 1.48;
+  overflow-wrap: anywhere;
+}
+.mtb-book-overview-dashboard .mtb-intro-card-body p { margin: 0 0 .8em; }
+.mtb-book-overview-dashboard .mtb-intro-card-body p:last-child { margin-bottom: 0; }
+.mtb-book-overview-dashboard .mtb-intro-card-body ul,
+.mtb-book-overview-dashboard .mtb-intro-card-body ol { margin: 0 0 .8em; padding-left: 1.35em; }
+.mtb-book-overview-dashboard .mtb-intro-card-body li { margin: 0 0 .45em; padding-left: .1em; }
+.mtb-book-overview-dashboard .mtb-intro-card-body h2 {
+  margin: 1.15em 0 .45em; color: var(--mtb-navy); font-size: 1.15rem;
+}
+.mtb-book-overview-dashboard .mtb-intro-card-body h2:first-child { margin-top: 0; }
+.mtb-book-overview-dashboard .mtb-intro-card-body h3 {
+  margin: 1em 0 .35em; color: var(--mtb-navy-2); font-size: 1.02rem;
+}
+.mtb-book-overview-dashboard .mtb-intro-card-body blockquote {
+  margin: .9em 0; padding: .65em 1em; border-left: 4px solid var(--mtb-gold);
+  background: var(--mtb-gold-soft); color: #45371f;
+}
+.mtb-book-overview-dashboard .mtb-resource-link {
+  color: #1f5fae; font-weight: 700; text-decoration-line: underline;
+  text-decoration-style: dotted; text-decoration-thickness: 2px;
+  text-underline-offset: 4px; cursor: pointer;
+}
+.mtb-book-overview-dashboard .mtb-resource-link::after {
+  content: " \2197"; display: inline-block; margin-left: 2px;
+  font-size: .78em; line-height: 1; opacity: .78;
+}
+@media (max-width: 1100px) {
+  .book-modal-panel:has(.mtb-book-overview-dashboard) { width: min(1100px, 94vw); }
+  .mtb-book-overview-dashboard .mtb-intro-grid { grid-template-columns: repeat(12, minmax(0, 1fr)); }
+  .mtb-book-overview-dashboard .mtb-intro-card,
+  .mtb-book-overview-dashboard .mtb-intro-card.mtb-span-4 { grid-column: span 6; }
+  .mtb-book-overview-dashboard .mtb-intro-card.mtb-span-6,
+  .mtb-book-overview-dashboard .mtb-intro-card.mtb-span-12 { grid-column: 1 / -1; }
+}
+@media (max-width: 660px) {
+  .book-modal-panel:has(.mtb-book-overview-dashboard) { width: 94vw; padding-left: 12px; padding-right: 12px; }
+  .mtb-book-overview-dashboard { padding-left: 0; padding-right: 0; }
+  .mtb-book-overview-dashboard .mtb-intro-hero { padding: 19px; border-radius: 10px; }
+  .mtb-book-overview-dashboard .mtb-intro-grid { grid-template-columns: 1fr; gap: 12px; }
+  .mtb-book-overview-dashboard .mtb-intro-card,
+  .mtb-book-overview-dashboard .mtb-intro-card.mtb-span-4,
+  .mtb-book-overview-dashboard .mtb-intro-card.mtb-span-6,
+  .mtb-book-overview-dashboard .mtb-intro-card.mtb-span-12 { grid-column: 1; }
+  .mtb-book-overview-dashboard .mtb-intro-card-body { padding: 14px 15px 16px; }
+}
+</style><div class="mtb-book-overview-dashboard"><header class="mtb-intro-hero"><p class="mtb-intro-eyebrow">Mastering the Bible</p><h1 class="mtb-intro-title">Ruth</h1><p class="mtb-intro-subtitle">Ruth - Book Overview</p></header><section class="mtb-intro-section"><div class="mtb-intro-section-heading"><h2>Background</h2></div><div class="mtb-intro-grid"><article class="mtb-intro-card mtb-span-4"><h3 class="mtb-intro-card-header">Author</h3><div class="mtb-intro-card-body"><p>Traditionally attributed to Samuel.</p></div></article><article class="mtb-intro-card mtb-span-4"><h3 class="mtb-intro-card-header">Audience</h3><div class="mtb-intro-card-body"><p>The people of Israel, demonstrating God's faithful care for His people and preserving the family line through which King David-and ultimately the Messiah-would come.</p></div></article><article class="mtb-intro-card mtb-span-4"><h3 class="mtb-intro-card-header">Date</h3><div class="mtb-intro-card-body"><p>Likely written during the early monarchy, after David became king.</p></div></article><article class="mtb-intro-card mtb-span-6"><h3 class="mtb-intro-card-header">Historical Setting</h3><div class="mtb-intro-card-body"><p>The events of Ruth take place during the time of the Judges, a period marked by spiritual decline and national instability. While the nation often turned away from God, this account shows His quiet faithfulness at work in the lives of ordinary people who trusted Him.</p></div></article><article class="mtb-intro-card mtb-span-6"><h3 class="mtb-intro-card-header">Occasion</h3><div class="mtb-intro-card-body"><p>Ruth was written to demonstrate God's providential care, illustrate the beauty of faithful love and redemption, affirm David's family line, and reveal how God accomplishes His purposes through ordinary people who trust Him.</p></div></article></div></section><section class="mtb-intro-section"><div class="mtb-intro-section-heading"><h2>Understanding the Book</h2></div><div class="mtb-intro-grid"><article class="mtb-intro-card mtb-span-6"><h3 class="mtb-intro-card-header">What This Book Is About</h3><div class="mtb-intro-card-body"><p>Ruth tells the story of God's quiet work in the lives of Naomi, Ruth, and Boaz. What begins with tragedy, loss, and emptiness gradually becomes a story of hope, redemption, restoration, and blessing through God's unseen providence.</p>
+<p>The book shows that even when God seems silent, He is faithfully directing events to accomplish His purposes for His people and ultimately for the world.</p></div></article><article class="mtb-intro-card mtb-span-6"><h3 class="mtb-intro-card-header">Why This Book Matters</h3><div class="mtb-intro-card-body"><p>Ruth reminds us that God is often working most powerfully in the ordinary events of everyday life.</p>
+<p>The book teaches that:</p>
+<ul>
+<li><p>God remains faithful during seasons of suffering.</p></li>
+<li><p>God's providence is often seen only in hindsight.</p></li>
+<li><p>Redemption is at the heart of God's work.</p></li>
+<li><p>Faithfulness in ordinary responsibilities matters to God.</p></li>
+<li><p>God delights in bringing hope out of hopeless situations.</p></li>
+</ul>
+<p>Ruth encourages us to trust God's unseen hand, even when we cannot understand His plan.</p></div></article><article class="mtb-intro-card mtb-span-6"><h3 class="mtb-intro-card-header">Key Themes to Watch For</h3><div class="mtb-intro-card-body"><ul>
+<li><p>God's providence</p></li>
+<li><p>Redemption</p></li>
+<li><p>Faithfulness</p></li>
+<li><p>Kindness</p></li>
+<li><p>Hope and restoration</p></li>
+<li><p>God's sovereign guidance</p></li>
+<li><p>Family and inheritance</p></li>
+<li><p>God's unfolding plan of redemption</p></li>
+</ul></div></article><article class="mtb-intro-card mtb-span-6"><h3 class="mtb-intro-card-header">Key Concepts to Understand Before Reading</h3><div class="mtb-intro-card-body"><p><strong>Providence</strong> - God's unseen guidance of people and events to accomplish His good purposes.</p>
+<p><strong>Redeemer (Kinsman-Redeemer)</strong> - A close relative who had the responsibility to redeem family property or preserve the family line.</p>
+<p><strong>Kindness (Hebrew: hesed)</strong> - Faithful, steadfast love demonstrated through loyal actions.</p>
+<p><strong>Inheritance</strong> - The family land and heritage God gave to Israel.</p>
+<p><strong>Redemption</strong> - Restoring what has been lost by paying the necessary cost.</p>
+<p><strong>Faithfulness</strong> - Remaining loyal to God and to others regardless of circumstances.</p>
+<p><strong>Harvest</strong> - More than a setting for the story, it symbolizes God's provision and blessing.</p></div></article><article class="mtb-intro-card mtb-span-6"><h3 class="mtb-intro-card-header">Book Flow</h3><div class="mtb-intro-card-body"><p><strong>Ruth 1 - From Fullness to Emptiness</strong></p>
+<p>Naomi returns to Bethlehem grieving the loss of her husband and sons, while Ruth demonstrates extraordinary faith by committing herself to Naomi and to the LORD.</p>
+<p><strong>Ruth 2 - God's Providence Begins to Appear</strong></p>
+<p>God quietly directs Ruth to Boaz's field, where unexpected kindness reveals that He has not forgotten Naomi or Ruth.</p>
+<p><strong>Ruth 3 - Redemption Is Sought</strong></p>
+<p>Following Naomi's guidance, Ruth humbly appeals to Boaz to act as her family redeemer, and Boaz willingly accepts the responsibility while honoring God's law.</p>
+<p><strong>Ruth 4 - Redemption Brings Restoration</strong></p>
+<p>Boaz redeems Ruth and Naomi's family, their joy is restored, and the book concludes by revealing God's larger purpose through the birth of Obed, grandfather of King David.</p></div></article><article class="mtb-intro-card mtb-span-6"><h3 class="mtb-intro-card-header">Christ and Life</h3><div class="mtb-intro-card-body"><p>Ruth beautifully points to Jesus Christ through Boaz, the kinsman-redeemer. Just as Boaz willingly redeemed Ruth and restored what had been lost, Jesus willingly gave Himself to redeem us from sin and bring us into God's family. Ruth, a Gentile, also reminds us that God's plan of redemption has always extended beyond Israel to include people from every nation who trust Him.</p>
+<p>For believers today, Ruth reminds us that God is at work even when we cannot see Him. He often accomplishes His greatest purposes through ordinary acts of faithfulness, kindness, and obedience. As His redeemed people, we can trust His providence, knowing that He is working all things together for His glory and our good.</p>
+<p>Nothing in the book happens by accident. Even the "ordinary" details-a famine, a gleaning field, a chance meeting, a legal transaction-become part of God's larger purpose. <strong>God's providence is often quiet, but it is never absent.</strong></p></div></article></div></section><section class="mtb-intro-section"><div class="mtb-intro-section-heading"><h2>Reading Guide</h2></div><div class="mtb-intro-grid"><article class="mtb-intro-card mtb-span-6"><h3 class="mtb-intro-card-header">One-Sentence Summary</h3><div class="mtb-intro-card-body"><p>Ruth reveals God's faithful providence as He brings redemption, restoration, and hope through ordinary people who trust Him.</p></div></article><article class="mtb-intro-card mtb-span-6"><h3 class="mtb-intro-card-header">Read This Book Remembering...</h3><div class="mtb-intro-card-body"><p><strong>God is working even when He seems silent. As you read, watch how His unseen hand turns loss into restoration, weaves ordinary acts of faithfulness into His extraordinary plan of redemption, and forms a people who are wholly His.</strong></p></div></article></div></section><section class="mtb-intro-section"><div class="mtb-intro-section-heading"><h2>Helpful Notes</h2></div><div class="mtb-intro-grid"><article class="mtb-intro-card mtb-span-12"><div class="mtb-intro-card-body"><p><strong>The Kinsman-Redeemer</strong></p>
+<p>A close relative who could redeem family property, protect the family inheritance, or preserve the family line. Boaz's role prepares the reader to understand one of the book's central pictures of redemption.</p></div></article></div></section></div>
+</section>

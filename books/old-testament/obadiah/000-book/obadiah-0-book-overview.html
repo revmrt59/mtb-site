@@ -1,0 +1,174 @@
+<section class="mtb-doc mtb-doc--read" data-doc-type="book-overview">
+<style>
+.book-modal-panel:has(.mtb-book-overview-dashboard) {
+  width: min(1600px, 96vw);
+  max-width: none;
+}
+.mtb-book-overview-dashboard {
+  --mtb-navy: #173a5e;
+  --mtb-navy-2: #274f76;
+  --mtb-gold: #b7832f;
+  --mtb-gold-soft: #fbf4e7;
+  --mtb-blue-soft: #eef4f9;
+  --mtb-border: #d7e0e8;
+  --mtb-text: #1d2935;
+  width: 100%;
+  max-width: 1560px;
+  margin: 0 auto;
+  padding: 2px 4px 28px;
+  color: var(--mtb-text);
+  font-family: Arial, Helvetica, sans-serif;
+}
+.mtb-book-overview-dashboard * { box-sizing: border-box; }
+.mtb-book-overview-dashboard .mtb-intro-hero {
+  position: relative;
+  overflow: hidden;
+  margin: 0 0 24px;
+  padding: 22px 28px;
+  border: 1px solid #cbd8e3;
+  border-radius: 14px;
+  background: linear-gradient(135deg, #f7fafc 0%, #e8f0f7 100%);
+}
+.mtb-book-overview-dashboard .mtb-intro-hero::after {
+  content: '';
+  position: absolute;
+  right: -48px;
+  top: -72px;
+  width: 210px;
+  height: 210px;
+  border-radius: 50%;
+  background: rgba(183, 131, 47, .10);
+}
+.mtb-book-overview-dashboard .mtb-intro-eyebrow {
+  position: relative; z-index: 1; margin: 0 0 5px;
+  color: var(--mtb-gold); font-size: .78rem; font-weight: 800;
+  letter-spacing: .13em; text-transform: uppercase;
+}
+.mtb-book-overview-dashboard .mtb-intro-title {
+  position: relative; z-index: 1; margin: 0; color: var(--mtb-navy);
+  font-size: clamp(1.85rem, 3vw, 2.6rem); line-height: 1.05;
+}
+.mtb-book-overview-dashboard .mtb-intro-subtitle {
+  position: relative; z-index: 1; margin: 6px 0 0;
+  color: #4e6477; font-size: 1rem; font-weight: 700;
+}
+.mtb-book-overview-dashboard .mtb-intro-section { margin: 0 0 25px; }
+.mtb-book-overview-dashboard .mtb-intro-section-heading {
+  display: flex; align-items: center; gap: 12px; margin: 0 0 12px;
+}
+.mtb-book-overview-dashboard .mtb-intro-section-heading h2 {
+  margin: 0; color: var(--mtb-navy); font-size: 1.08rem;
+  letter-spacing: .05em; text-transform: uppercase;
+}
+.mtb-book-overview-dashboard .mtb-intro-section-heading::after {
+  content: ''; height: 1px; flex: 1 1 auto;
+  background: linear-gradient(to right, #c7d3de, transparent);
+}
+.mtb-book-overview-dashboard .mtb-intro-grid {
+  display: grid; grid-template-columns: repeat(12, minmax(0, 1fr));
+  gap: 16px; align-items: stretch;
+}
+.mtb-book-overview-dashboard .mtb-intro-card {
+  grid-column: span 1; min-width: 0; overflow: hidden;
+  border: 1px solid var(--mtb-border); border-top: 4px solid var(--mtb-navy-2);
+  border-radius: 12px; background: #fff;
+  box-shadow: 0 4px 15px rgba(28, 48, 66, .055);
+}
+.mtb-book-overview-dashboard .mtb-intro-card.mtb-span-4 { grid-column: span 4; }
+.mtb-book-overview-dashboard .mtb-intro-card.mtb-span-6 { grid-column: span 6; }
+.mtb-book-overview-dashboard .mtb-intro-card.mtb-span-12 { grid-column: span 12; }
+.mtb-book-overview-dashboard .mtb-intro-card-header {
+  margin: 0; padding: 12px 16px 10px; border-bottom: 1px solid #e5ebf0;
+  background: var(--mtb-blue-soft); color: var(--mtb-navy);
+  font-size: .92rem; font-weight: 800; letter-spacing: .025em;
+}
+.mtb-book-overview-dashboard .mtb-intro-card-body {
+  padding: 15px 17px 17px; font-size: 1rem; line-height: 1.48;
+  overflow-wrap: anywhere;
+}
+.mtb-book-overview-dashboard .mtb-intro-card-body p { margin: 0 0 .8em; }
+.mtb-book-overview-dashboard .mtb-intro-card-body p:last-child { margin-bottom: 0; }
+.mtb-book-overview-dashboard .mtb-intro-card-body ul,
+.mtb-book-overview-dashboard .mtb-intro-card-body ol { margin: 0 0 .8em; padding-left: 1.35em; }
+.mtb-book-overview-dashboard .mtb-intro-card-body li { margin: 0 0 .45em; padding-left: .1em; }
+.mtb-book-overview-dashboard .mtb-intro-card-body h2 {
+  margin: 1.15em 0 .45em; color: var(--mtb-navy); font-size: 1.15rem;
+}
+.mtb-book-overview-dashboard .mtb-intro-card-body h2:first-child { margin-top: 0; }
+.mtb-book-overview-dashboard .mtb-intro-card-body h3 {
+  margin: 1em 0 .35em; color: var(--mtb-navy-2); font-size: 1.02rem;
+}
+.mtb-book-overview-dashboard .mtb-intro-card-body blockquote {
+  margin: .9em 0; padding: .65em 1em; border-left: 4px solid var(--mtb-gold);
+  background: var(--mtb-gold-soft); color: #45371f;
+}
+.mtb-book-overview-dashboard .mtb-resource-link {
+  color: #1f5fae; font-weight: 700; text-decoration-line: underline;
+  text-decoration-style: dotted; text-decoration-thickness: 2px;
+  text-underline-offset: 4px; cursor: pointer;
+}
+.mtb-book-overview-dashboard .mtb-resource-link::after {
+  content: " \2197"; display: inline-block; margin-left: 2px;
+  font-size: .78em; line-height: 1; opacity: .78;
+}
+@media (max-width: 1100px) {
+  .book-modal-panel:has(.mtb-book-overview-dashboard) { width: min(1100px, 94vw); }
+  .mtb-book-overview-dashboard .mtb-intro-grid { grid-template-columns: repeat(12, minmax(0, 1fr)); }
+  .mtb-book-overview-dashboard .mtb-intro-card,
+  .mtb-book-overview-dashboard .mtb-intro-card.mtb-span-4 { grid-column: span 6; }
+  .mtb-book-overview-dashboard .mtb-intro-card.mtb-span-6,
+  .mtb-book-overview-dashboard .mtb-intro-card.mtb-span-12 { grid-column: 1 / -1; }
+}
+@media (max-width: 660px) {
+  .book-modal-panel:has(.mtb-book-overview-dashboard) { width: 94vw; padding-left: 12px; padding-right: 12px; }
+  .mtb-book-overview-dashboard { padding-left: 0; padding-right: 0; }
+  .mtb-book-overview-dashboard .mtb-intro-hero { padding: 19px; border-radius: 10px; }
+  .mtb-book-overview-dashboard .mtb-intro-grid { grid-template-columns: 1fr; gap: 12px; }
+  .mtb-book-overview-dashboard .mtb-intro-card,
+  .mtb-book-overview-dashboard .mtb-intro-card.mtb-span-4,
+  .mtb-book-overview-dashboard .mtb-intro-card.mtb-span-6,
+  .mtb-book-overview-dashboard .mtb-intro-card.mtb-span-12 { grid-column: 1; }
+  .mtb-book-overview-dashboard .mtb-intro-card-body { padding: 14px 15px 16px; }
+}
+</style><div class="mtb-book-overview-dashboard"><header class="mtb-intro-hero"><p class="mtb-intro-eyebrow">Mastering the Bible</p><h1 class="mtb-intro-title">Obadiah</h1><p class="mtb-intro-subtitle">Obadiah - Book Overview</p></header><section class="mtb-intro-section"><div class="mtb-intro-section-heading"><h2>Background</h2></div><div class="mtb-intro-grid"><article class="mtb-intro-card mtb-span-4"><h3 class="mtb-intro-card-header">Author</h3><div class="mtb-intro-card-body"><p>Obadiah.</p></div></article><article class="mtb-intro-card mtb-span-4"><h3 class="mtb-intro-card-header">Audience</h3><div class="mtb-intro-card-body"><p>The people of Judah, and ultimately all God's people who need to understand God's justice, His faithfulness to His covenant people, and His sovereign rule over the nations.</p></div></article><article class="mtb-intro-card mtb-span-4"><h3 class="mtb-intro-card-header">Date</h3><div class="mtb-intro-card-body"><p>Likely written shortly after the destruction of Jerusalem by Babylon (586 BC).</p></div></article><article class="mtb-intro-card mtb-span-6"><h3 class="mtb-intro-card-header">Historical Setting</h3><div class="mtb-intro-card-body"><p>When Babylon destroyed Jerusalem, the nation of Edom did not come to Judah's aid. Instead, they rejoiced over Judah's downfall, participated in plundering the city, and captured fleeing survivors. Through Obadiah, God announces judgment upon Edom while promising the future restoration of His people.</p></div></article><article class="mtb-intro-card mtb-span-6"><h3 class="mtb-intro-card-header">Occasion</h3><div class="mtb-intro-card-body"><p>Obadiah was written to pronounce God's judgment upon Edom for its pride and violence against Judah, assure God's people that He sees injustice, and proclaim the certainty of His coming kingdom.</p></div></article></div></section><section class="mtb-intro-section"><div class="mtb-intro-section-heading"><h2>Understanding the Book</h2></div><div class="mtb-intro-grid"><article class="mtb-intro-card mtb-span-6"><h3 class="mtb-intro-card-header">What This Book Is About</h3><div class="mtb-intro-card-body"><p>Obadiah is the shortest book in the Old Testament, but it delivers a powerful message:</p>
+<p><strong>God opposes pride, judges those who harm His people, and will ultimately establish His kingdom.</strong></p>
+<p>Edom believed its mountain fortresses made it secure and that Judah's destruction presented an opportunity for personal gain. God declared that neither pride nor worldly security could protect them from His judgment.</p>
+<p>While much of the book announces Edom's downfall, it concludes with hope. God promises to restore His people, judge evil, and establish His everlasting kingdom.</p>
+<p>The prophecy is not simply about Edom's downfall-it is about God's reign. Edom's judgment demonstrates that pride cannot stand before God, while Israel's restoration anticipates the day when <strong>"the kingdom shall be the LORD'S."</strong></p></div></article><article class="mtb-intro-card mtb-span-6"><h3 class="mtb-intro-card-header">Why This Book Matters</h3><div class="mtb-intro-card-body"><p>Obadiah reminds us that God sees every act of pride, injustice, and indifference.</p>
+<p>The book teaches that:</p>
+<ul>
+<li><p>Pride leads to destruction.</p></li>
+<li><p>God opposes those who exploit others.</p></li>
+<li><p>God calls His people to compassion rather than rejoicing over another's suffering.</p></li>
+<li><p>The Day of the LORD brings both judgment and deliverance.</p></li>
+<li><p>God's promises to His people remain secure.</p></li>
+<li><p>God's kingdom will ultimately triumph over every earthly kingdom.</p></li>
+</ul>
+<p>Obadiah reminds us that while evil may appear to prosper for a time, God's justice will prevail.</p></div></article><article class="mtb-intro-card mtb-span-6"><h3 class="mtb-intro-card-header">Key Themes to Watch For</h3><div class="mtb-intro-card-body"><ul>
+<li><p>Pride</p></li>
+<li><p>God's justice</p></li>
+<li><p>The Day of the LORD</p></li>
+<li><p>Accountability</p></li>
+<li><p>Compassion</p></li>
+<li><p>God's sovereignty</p></li>
+<li><p>Restoration</p></li>
+<li><p>The Kingdom of God</p></li>
+</ul></div></article><article class="mtb-intro-card mtb-span-6"><h3 class="mtb-intro-card-header">Key Concepts to Understand Before Reading</h3><div class="mtb-intro-card-body"><p><strong>Pride</strong> - Trusting in one's own strength, wisdom, position, or security instead of God.</p>
+<p><strong>The Day of the LORD</strong> - God's decisive intervention to judge evil, deliver His people, and establish His righteous rule.</p>
+<p><strong>Edom</strong> - The descendants of Esau, whose long history of hostility toward Israel culminated in rejoicing over Judah's destruction.</p>
+<p><strong>Justice</strong> - God holds every nation and every person accountable for their actions.</p>
+<p><strong>Restoration</strong> - God's promise to restore His people after judgment.</p>
+<p><strong>The Kingdom of the LORD</strong> - The book concludes by looking beyond Edom's judgment to God's ultimate reign over all the earth.</p></div></article><article class="mtb-intro-card mtb-span-6"><h3 class="mtb-intro-card-header">Book Flow</h3><div class="mtb-intro-card-body"><p><strong>Obadiah 1-9 - Judgment Against Edom's Pride</strong></p>
+<p>God announces that Edom's pride and false security will lead to its downfall.</p>
+<p><strong>Obadiah 10-16 - Edom's Sin Exposed</strong></p>
+<p>God explains why Edom will be judged because of its violence, indifference, and participation in Judah's destruction.</p>
+<p><strong>Obadiah 17-21 - Israel's Restoration and God's Kingdom</strong></p>
+<p>God promises deliverance for His people, judgment upon their enemies, and the establishment of His everlasting kingdom.</p></div></article><article class="mtb-intro-card mtb-span-6"><h3 class="mtb-intro-card-header">Christ and Life</h3><div class="mtb-intro-card-body"><p>Obadiah points to Jesus Christ, the righteous King whose kingdom will never end. While earthly kingdoms rise and fall because of pride and rebellion, Christ's kingdom is founded upon righteousness, humility, and justice.</p>
+<p>Jesus also perfectly fulfills what Edom failed to demonstrate. Rather than taking advantage of those who suffered, He entered into our suffering, bore our judgment, and became our Redeemer. Through Him, God's people receive both deliverance and an everlasting inheritance in His kingdom.</p>
+<p>For believers today, Obadiah reminds us to reject pride, refuse to rejoice in another person's downfall, stand with those who suffer, and live with confidence that Christ will one day make every wrong right.</p></div></article></div></section><section class="mtb-intro-section"><div class="mtb-intro-section-heading"><h2>Reading Guide</h2></div><div class="mtb-intro-grid"><article class="mtb-intro-card mtb-span-6"><h3 class="mtb-intro-card-header">One-Sentence Summary</h3><div class="mtb-intro-card-body"><p>Obadiah reveals that God judges pride, defends His people, and will ultimately establish His everlasting kingdom.</p></div></article><article class="mtb-intro-card mtb-span-6"><h3 class="mtb-intro-card-header">Read This Book Remembering...</h3><div class="mtb-intro-card-body"><p>As you read Obadiah, remember that this book is about far more than Edom. It reveals the character of God, who opposes pride, defends those who belong to Him, and is moving history toward the day when "the kingdom shall be the LORD'S."</p></div></article></div></section><section class="mtb-intro-section"><div class="mtb-intro-section-heading"><h2>Helpful Notes</h2></div><div class="mtb-intro-grid"><article class="mtb-intro-card mtb-span-12"><div class="mtb-intro-card-body"><p><strong>Understanding Edom</strong></p>
+<p>To understand Obadiah, it helps to know the long history between Edom and Israel.</p>
+<p>Edom descended from Esau, while Israel descended from Jacob. Although they were brothers, conflict marked their relationship from the beginning. Over the centuries, Edom repeatedly opposed Israel, and when Jerusalem fell to Babylon, Edom not only refused to help but rejoiced over Judah's destruction, participated in the plundering of the city, and captured fleeing survivors.</p>
+<p>One of the most common mistakes in reading Obadiah is to see it as merely a prophecy against one ancient nation. While Edom is the immediate subject, the book uses Edom as an example of human pride and hostility toward God's purposes. Edom represents those who trust in their own strength, take advantage of the weak, and oppose God's people.</p>
+<p>The second major key to the book is the Day of the LORD. What begins as God's judgment on Edom expands into a promise that God will one day judge all evil, deliver His people, and establish His righteous kingdom.</p>
+<p>As you read Obadiah, remember that this book is about far more than Edom. It reveals the character of God, who opposes pride, defends those who belong to Him, and is moving history toward the day when "the kingdom shall be the LORD'S."</p></div></article></div></section></div>
+</section>

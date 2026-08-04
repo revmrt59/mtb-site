@@ -9,7 +9,7 @@
 
   const TABS = [
   { key: "chapter_scripture", label: "Chapter Scripture" },
-  { key: "book_introduction", label: "Book Introduction" },
+  { key: "book_introduction", label: "Book Overview" },
   { key: "chapter_orientation", label: "Chapter Overview" },
   { key: "chapter_explanation", label: "Chapter Study" },
   { key: "eg_culture", label: "EG Culture" },
@@ -155,7 +155,7 @@
   function tabToSuffix(tabKey) {
     const map = {
       chapter_scripture: "chapter-scripture",
-      book_introduction: "book-introduction",
+      book_introduction: "book-overview",
       chapter_orientation: "chapter-orientation",
       chapter_explanation: "chapter-explanation",
       chapter_insights: "chapter-insights",
@@ -166,10 +166,10 @@
   }
 
   function docNameForTab(book, chapter, tabKey) {
-    if (!book) return "titus-0-book-introduction.html";
+    if (!book) return "titus-0-book-overview.html";
     const b = normalizeBookSlug(book);
 
-    if (tabKey === "book_introduction") return `${b}-0-book-introduction.html`;
+    if (tabKey === "book_introduction") return `${b}-0-book-overview.html`;
 
     const suffix = tabToSuffix(tabKey);
     return `${b}-${chapter}-${suffix}.html`;
@@ -293,7 +293,7 @@
 
 
 // --------------------------------------------------
-// MTB patch: hide Book Introduction tab on chapter pages (chapter >= 1)
+// MTB patch: hide Book Overview tab on chapter pages (chapter >= 1)
 // Keeps book-level hero modal buttons intact.
 // --------------------------------------------------
 document.addEventListener("DOMContentLoaded", function () {
@@ -316,7 +316,7 @@ document.addEventListener("DOMContentLoaded", function () {
       // Also remove by visible text if needed
       document.querySelectorAll("#tabs button, #tabs a").forEach((btn) => {
         const t = (btn.textContent || "").trim().toLowerCase();
-        if (t === "book introduction" || t === "book intro") {
+        if (t === "Book Overview" || t === "book intro") {
           btn.remove();
         }
       });
@@ -324,7 +324,7 @@ document.addEventListener("DOMContentLoaded", function () {
   } catch (_) {}
 });
 // =========================================================
-// MTB: Always hide "Book Introduction" tab on chapter pages
+// MTB: Always hide "Book Overview" tab on chapter pages
 // Works even when tabs re-render dynamically.
 // =========================================================
 (function () {
@@ -357,7 +357,7 @@ document.addEventListener("DOMContentLoaded", function () {
     // Fallback: remove by visible text
     document.querySelectorAll("#tabs button, #tabs a").forEach((btn) => {
       const t = (btn.textContent || "").trim().toLowerCase();
-      if (t === "book introduction" || t === "book intro") {
+      if (t === "Book Overview" || t === "book intro") {
         btn.remove();
       }
     });

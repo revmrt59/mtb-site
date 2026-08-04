@@ -1,0 +1,207 @@
+<section class="mtb-doc mtb-doc--read" data-doc-type="book-overview">
+<style>
+.book-modal-panel:has(.mtb-book-overview-dashboard) {
+  width: min(1600px, 96vw);
+  max-width: none;
+}
+.mtb-book-overview-dashboard {
+  --mtb-navy: #173a5e;
+  --mtb-navy-2: #274f76;
+  --mtb-gold: #b7832f;
+  --mtb-gold-soft: #fbf4e7;
+  --mtb-blue-soft: #eef4f9;
+  --mtb-border: #d7e0e8;
+  --mtb-text: #1d2935;
+  width: 100%;
+  max-width: 1560px;
+  margin: 0 auto;
+  padding: 2px 4px 28px;
+  color: var(--mtb-text);
+  font-family: Arial, Helvetica, sans-serif;
+}
+.mtb-book-overview-dashboard * { box-sizing: border-box; }
+.mtb-book-overview-dashboard .mtb-intro-hero {
+  position: relative;
+  overflow: hidden;
+  margin: 0 0 24px;
+  padding: 22px 28px;
+  border: 1px solid #cbd8e3;
+  border-radius: 14px;
+  background: linear-gradient(135deg, #f7fafc 0%, #e8f0f7 100%);
+}
+.mtb-book-overview-dashboard .mtb-intro-hero::after {
+  content: '';
+  position: absolute;
+  right: -48px;
+  top: -72px;
+  width: 210px;
+  height: 210px;
+  border-radius: 50%;
+  background: rgba(183, 131, 47, .10);
+}
+.mtb-book-overview-dashboard .mtb-intro-eyebrow {
+  position: relative; z-index: 1; margin: 0 0 5px;
+  color: var(--mtb-gold); font-size: .78rem; font-weight: 800;
+  letter-spacing: .13em; text-transform: uppercase;
+}
+.mtb-book-overview-dashboard .mtb-intro-title {
+  position: relative; z-index: 1; margin: 0; color: var(--mtb-navy);
+  font-size: clamp(1.85rem, 3vw, 2.6rem); line-height: 1.05;
+}
+.mtb-book-overview-dashboard .mtb-intro-subtitle {
+  position: relative; z-index: 1; margin: 6px 0 0;
+  color: #4e6477; font-size: 1rem; font-weight: 700;
+}
+.mtb-book-overview-dashboard .mtb-intro-section { margin: 0 0 25px; }
+.mtb-book-overview-dashboard .mtb-intro-section-heading {
+  display: flex; align-items: center; gap: 12px; margin: 0 0 12px;
+}
+.mtb-book-overview-dashboard .mtb-intro-section-heading h2 {
+  margin: 0; color: var(--mtb-navy); font-size: 1.08rem;
+  letter-spacing: .05em; text-transform: uppercase;
+}
+.mtb-book-overview-dashboard .mtb-intro-section-heading::after {
+  content: ''; height: 1px; flex: 1 1 auto;
+  background: linear-gradient(to right, #c7d3de, transparent);
+}
+.mtb-book-overview-dashboard .mtb-intro-grid {
+  display: grid;
+  grid-template-columns: repeat(12, minmax(0, 1fr));
+  gap: 16px;
+  align-items: stretch;
+  grid-auto-rows: auto;
+}
+/* Each implicit grid row grows to the height of its longest card. Every card
+   then stretches to that row height. No fixed or maximum height is used. */
+.mtb-book-overview-dashboard .mtb-intro-card {
+  grid-column: span 1;
+  min-width: 0;
+  min-height: 0;
+  height: 100%;
+  max-height: none !important;
+  overflow: visible !important;
+  display: flex;
+  flex-direction: column;
+  align-self: stretch;
+  border: 1px solid var(--mtb-border);
+  border-top: 4px solid var(--mtb-navy-2);
+  border-radius: 12px;
+  background: #fff;
+  box-shadow: 0 4px 15px rgba(28, 48, 66, .055);
+}
+.mtb-book-overview-dashboard .mtb-intro-card.mtb-span-4 { grid-column: span 4; }
+.mtb-book-overview-dashboard .mtb-intro-card.mtb-span-6 { grid-column: span 6; }
+.mtb-book-overview-dashboard .mtb-intro-card.mtb-span-12 { grid-column: span 12; }
+.mtb-book-overview-dashboard .mtb-intro-card-header {
+  margin: 0; padding: 12px 16px 10px; border-bottom: 1px solid #e5ebf0;
+  background: var(--mtb-blue-soft); color: var(--mtb-navy);
+  font-size: .92rem; font-weight: 800; letter-spacing: .025em;
+}
+.mtb-book-overview-dashboard .mtb-intro-card-body {
+  flex: 1 1 auto;
+  min-height: 0;
+  height: auto !important;
+  max-height: none !important;
+  overflow: visible !important;
+  padding: 15px 17px 17px;
+  font-size: 1rem;
+  line-height: 1.48;
+  overflow-wrap: anywhere;
+}
+.mtb-book-overview-dashboard .mtb-intro-card-body p { margin: 0 0 .8em; }
+.mtb-book-overview-dashboard .mtb-intro-card-body p:last-child { margin-bottom: 0; }
+.mtb-book-overview-dashboard .mtb-intro-card-body ul,
+.mtb-book-overview-dashboard .mtb-intro-card-body ol { margin: 0 0 .8em; padding-left: 1.35em; }
+.mtb-book-overview-dashboard .mtb-intro-card-body li { margin: 0 0 .45em; padding-left: .1em; }
+.mtb-book-overview-dashboard .mtb-intro-card-body h2 {
+  margin: 1.15em 0 .45em; color: var(--mtb-navy); font-size: 1.15rem;
+}
+.mtb-book-overview-dashboard .mtb-intro-card-body h2:first-child { margin-top: 0; }
+.mtb-book-overview-dashboard .mtb-intro-card-body h3 {
+  margin: 1em 0 .35em; color: var(--mtb-navy-2); font-size: 1.02rem;
+}
+.mtb-book-overview-dashboard .mtb-intro-card-body blockquote {
+  margin: .9em 0; padding: .65em 1em; border-left: 4px solid var(--mtb-gold);
+  background: var(--mtb-gold-soft); color: #45371f;
+}
+.mtb-book-overview-dashboard .mtb-resource-link {
+  color: #1f5fae; font-weight: 700; text-decoration-line: underline;
+  text-decoration-style: dotted; text-decoration-thickness: 2px;
+  text-underline-offset: 4px; cursor: pointer;
+}
+.mtb-book-overview-dashboard .mtb-resource-link::after {
+  content: " \2197"; display: inline-block; margin-left: 2px;
+  font-size: .78em; line-height: 1; opacity: .78;
+}
+@media (max-width: 1100px) {
+  .book-modal-panel:has(.mtb-book-overview-dashboard) { width: min(1100px, 94vw); }
+  .mtb-book-overview-dashboard .mtb-intro-grid { grid-template-columns: repeat(12, minmax(0, 1fr)); }
+  .mtb-book-overview-dashboard .mtb-intro-card,
+  .mtb-book-overview-dashboard .mtb-intro-card.mtb-span-4 { grid-column: span 6; }
+  .mtb-book-overview-dashboard .mtb-intro-card.mtb-span-6,
+  .mtb-book-overview-dashboard .mtb-intro-card.mtb-span-12 { grid-column: 1 / -1; }
+}
+@media (max-width: 660px) {
+  .book-modal-panel:has(.mtb-book-overview-dashboard) { width: 94vw; padding-left: 12px; padding-right: 12px; }
+  .mtb-book-overview-dashboard { padding-left: 0; padding-right: 0; }
+  .mtb-book-overview-dashboard .mtb-intro-hero { padding: 19px; border-radius: 10px; }
+  .mtb-book-overview-dashboard .mtb-intro-grid { grid-template-columns: 1fr; gap: 12px; }
+  .mtb-book-overview-dashboard .mtb-intro-card,
+  .mtb-book-overview-dashboard .mtb-intro-card.mtb-span-4,
+  .mtb-book-overview-dashboard .mtb-intro-card.mtb-span-6,
+  .mtb-book-overview-dashboard .mtb-intro-card.mtb-span-12 { grid-column: 1; }
+  .mtb-book-overview-dashboard .mtb-intro-card-body { padding: 14px 15px 16px; }
+}
+</style><div class="mtb-book-overview-dashboard"><header class="mtb-intro-hero"><p class="mtb-intro-eyebrow">Mastering the Bible</p><h1 class="mtb-intro-title">Habakkuk</h1><p class="mtb-intro-subtitle">Habakkuk - Book Overview</p></header><section class="mtb-intro-section"><div class="mtb-intro-section-heading"><h2>Background</h2></div><div class="mtb-intro-grid"><article class="mtb-intro-card mtb-span-4"><h3 class="mtb-intro-card-header">Author</h3><div class="mtb-intro-card-body"><p>Habakkuk.</p></div></article><article class="mtb-intro-card mtb-span-4"><h3 class="mtb-intro-card-header">Audience</h3><div class="mtb-intro-card-body"><p>The people of Judah, and ultimately all God's people who wrestle with suffering, injustice, and trusting God's purposes when life is difficult to understand.</p></div></article><article class="mtb-intro-card mtb-span-4"><h3 class="mtb-intro-card-header">Date</h3><div class="mtb-intro-card-body"><p>Approximately 609-605 BC, shortly before Babylon invaded Judah.</p></div></article><article class="mtb-intro-card mtb-span-6"><h3 class="mtb-intro-card-header">Historical Setting</h3><div class="mtb-intro-card-body"><p>Judah was filled with violence, corruption, injustice, and spiritual decline. Habakkuk questioned why God seemed silent in the face of such evil. God's surprising answer was that He would use Babylon-a nation even more wicked than Judah-to bring judgment. Habakkuk then struggled to understand how a holy God could use such a nation. Through this dialogue, God taught Habakkuk to trust His wisdom, His justice, and His timing.</p></div></article><article class="mtb-intro-card mtb-span-6"><h3 class="mtb-intro-card-header">Occasion</h3><div class="mtb-intro-card-body"><p>Habakkuk was written to answer honest questions about God's justice, reveal His sovereign control over history, and teach God's people to live by faith even when they cannot understand His ways.</p></div></article></div></section><section class="mtb-intro-section"><div class="mtb-intro-section-heading"><h2>Understanding the Book</h2></div><div class="mtb-intro-grid"><article class="mtb-intro-card mtb-span-6"><h3 class="mtb-intro-card-header">What This Book Is About</h3><div class="mtb-intro-card-body"><p>Habakkuk is a conversation between a confused prophet and a faithful God.</p>
+<p>Unlike most of the prophets, Habakkuk does not primarily speak <strong>to</strong> the people on God's behalf. Instead, he speaks <strong>with</strong> God on behalf of the people. He brings honest questions about evil, suffering, and God's apparent silence.</p>
+<p>God does not answer every question Habakkuk asks. Instead, He reveals Himself. Habakkuk learns that while God's ways are sometimes beyond human understanding, His character is always trustworthy. The book concludes not with all of Habakkuk's questions answered, but with his heart transformed from confusion to confident worship.</p>
+<p>Habakkuk reminds us that faith is not having every answer-it is trusting God's character when we do not understand His ways.</p></div></article><article class="mtb-intro-card mtb-span-6"><h3 class="mtb-intro-card-header">Why This Book Matters</h3><div class="mtb-intro-card-body"><p>Habakkuk reminds us that God welcomes honest questions asked in faith.</p>
+<p>The book teaches that:</p>
+<ul>
+<li><p>God is always working, even when we cannot see it.</p></li>
+<li><p>God's timing is perfect.</p></li>
+<li><p>God remains just even when His ways are difficult to understand.</p></li>
+<li><p>The righteous live by faith.</p></li>
+<li><p>Worship can flourish even in difficult circumstances.</p></li>
+<li><p>Joy is found in God, not merely in favorable circumstances.</p></li>
+</ul>
+<p>Habakkuk teaches us to trust God's character when life does not make sense.</p></div></article><article class="mtb-intro-card mtb-span-6"><h3 class="mtb-intro-card-header">Key Themes to Watch For</h3><div class="mtb-intro-card-body"><ul>
+<li><p>Faith</p></li>
+<li><p>Trust</p></li>
+<li><p>God's sovereignty</p></li>
+<li><p>God's justice</p></li>
+<li><p>Waiting on God</p></li>
+<li><p>Worship</p></li>
+<li><p>God's holiness</p></li>
+<li><p>Hope</p></li>
+<li><p>Joy</p></li>
+</ul></div></article><article class="mtb-intro-card mtb-span-6"><h3 class="mtb-intro-card-header">Key Concepts to Understand Before Reading</h3><div class="mtb-intro-card-body"><p><strong>Faith</strong> - Trusting God's character and promises even when His purposes are not fully understood.</p>
+<p><strong>The Just Shall Live by Faith</strong> - One of the Bible's foundational truths, teaching that God's people live in continual dependence upon Him. This verse becomes central to the New Testament's teaching on salvation and the Christian life.</p>
+<p><strong>God's Sovereignty</strong> - God rules over nations, history, and circumstances according to His perfect wisdom.</p>
+<p><strong>Waiting on God</strong> - Trusting God's timing instead of demanding immediate answers.</p>
+<p><strong>The Woes</strong> - God's pronouncements of judgment against Babylon's pride, greed, violence, injustice, and idolatry.</p>
+<p><strong>Rejoicing</strong> - Finding joy in God Himself rather than in changing circumstances.</p></div></article><article class="mtb-intro-card mtb-span-6"><h3 class="mtb-intro-card-header">Book Flow</h3><div class="mtb-intro-card-body"><p><strong>Habakkuk 1 - The Prophet's Questions</strong></p>
+<p>Habakkuk asks why God allows evil in Judah and struggles to understand why God would use Babylon to bring judgment.</p>
+<p><strong>Habakkuk 2 - God's Answer</strong></p>
+<p>God assures Habakkuk that His purposes will be accomplished in His perfect time, declares that "the just shall live by his faith," and pronounces five woes against Babylon.</p>
+<p><strong>Habakkuk 3 - The Prophet's Worship</strong></p>
+<p>Habakkuk responds with a prayer of praise, expressing complete trust in God regardless of his circumstances.</p></div></article><article class="mtb-intro-card mtb-span-6"><h3 class="mtb-intro-card-header">Christ and Life</h3><div class="mtb-intro-card-body"><p>Habakkuk points directly to Jesus Christ through the declaration, <strong>"The just shall live by faith."</strong> This verse is quoted repeatedly in the New Testament as a foundational truth of the gospel. Through Christ, we are declared righteous by faith and are called to continue living by faith every day.</p>
+<p>Habakkuk also points us to Christ by demonstrating complete trust in the Father's purposes even when suffering is involved. Jesus perfectly entrusted Himself to the Father's will, and through His death and resurrection accomplished God's plan of redemption.</p>
+<p>For believers today, Habakkuk reminds us that faith is not dependent upon understanding every circumstance. Our confidence rests in the unchanging character of God, who is always working for His glory and the good of His people.</p></div></article></div></section><section class="mtb-intro-section"><div class="mtb-intro-section-heading"><h2>Reading Guide</h2></div><div class="mtb-intro-grid"><article class="mtb-intro-card mtb-span-6"><h3 class="mtb-intro-card-header">One-Sentence Summary</h3><div class="mtb-intro-card-body"><p>Habakkuk teaches us to trust God's wisdom, live by faith, and worship Him even when life does not make sense.</p></div></article><article class="mtb-intro-card mtb-span-6"><h3 class="mtb-intro-card-header">Read This Book Remembering...</h3><div class="mtb-intro-card-body"><p><strong>As you read Habakkuk, watch the transformation of the prophet's heart. The book begins with honest questions and ends with confident worship-not because every question was answered, but because Habakkuk came to know and trust God more deeply.</strong></p></div></article></div></section><section class="mtb-intro-section"><div class="mtb-intro-section-heading"><h2>Helpful Notes</h2></div><div class="mtb-intro-grid"><article class="mtb-intro-card mtb-span-12"><div class="mtb-intro-card-body"><p><strong>Understanding Habakkuk's Conversation with God</strong></p>
+<p>Habakkuk is unique among the prophets because it is primarily a dialogue between the prophet and God. Rather than delivering long messages to the people, Habakkuk brings his questions directly to the Lord.</p>
+<p>The book unfolds in a simple pattern:</p>
+<ul>
+<li><p><strong>Habakkuk's first question</strong> - Why doesn't God judge Judah's sin?</p></li>
+<li><p><strong>God's first answer</strong> - I am raising up Babylon.</p></li>
+<li><p><strong>Habakkuk's second question</strong> - How can a holy God use a nation more wicked than Judah?</p></li>
+<li><p><strong>God's second answer</strong> - Babylon will also be judged, but My righteous people must trust Me.</p></li>
+<li><p><strong>Habakkuk's response</strong> - Worship and confident faith.</p></li>
+</ul>
+<p>One of the most important lessons of Habakkuk is that <strong>God does not always explain His ways, but He always reveals His character.</strong> The goal of the book is not simply to answer difficult questions about suffering, but to teach God's people to trust Him when those questions remain.</p>
+<p>The book reaches its climax with two foundational truths:</p>
+<p><strong>"The just shall live by his faith."</strong> (Habakkuk 2:4)</p>
+<p>and</p>
+<p><strong>"Though the fig tree may not blossom... yet I will rejoice in the LORD."</strong> (Habakkuk 3:17-18)</p>
+<p>Together, these verses teach that biblical faith is not based on favorable circumstances but on confidence in the unchanging character of God.</p>
+<p>Understanding this progression-from <strong>questions</strong>, to <strong>God's revelation</strong>, to <strong>faith</strong>, to <strong>worship</strong>-is the key to reading Habakkuk. The book invites every believer to bring honest questions to God while learning to trust Him even when His answers are different from what we expected.</p></div></article></div></section></div>
+</section>

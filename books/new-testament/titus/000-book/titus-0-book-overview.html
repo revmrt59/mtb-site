@@ -1,0 +1,229 @@
+<section class="mtb-doc mtb-doc--read" data-doc-type="book-overview">
+<style>
+.book-modal-panel:has(.mtb-book-overview-dashboard) {
+  width: min(1600px, 96vw);
+  max-width: none;
+}
+.mtb-book-overview-dashboard {
+  --mtb-navy: #173a5e;
+  --mtb-navy-2: #274f76;
+  --mtb-gold: #b7832f;
+  --mtb-gold-soft: #fbf4e7;
+  --mtb-blue-soft: #eef4f9;
+  --mtb-border: #d7e0e8;
+  --mtb-text: #1d2935;
+  width: 100%;
+  max-width: 1560px;
+  margin: 0 auto;
+  padding: 2px 4px 28px;
+  color: var(--mtb-text);
+  font-family: Arial, Helvetica, sans-serif;
+}
+.mtb-book-overview-dashboard * { box-sizing: border-box; }
+.mtb-book-overview-dashboard .mtb-intro-hero {
+  position: relative;
+  overflow: hidden;
+  margin: 0 0 24px;
+  padding: 22px 28px;
+  border: 1px solid #cbd8e3;
+  border-radius: 14px;
+  background: linear-gradient(135deg, #f7fafc 0%, #e8f0f7 100%);
+}
+.mtb-book-overview-dashboard .mtb-intro-hero::after {
+  content: '';
+  position: absolute;
+  right: -48px;
+  top: -72px;
+  width: 210px;
+  height: 210px;
+  border-radius: 50%;
+  background: rgba(183, 131, 47, .10);
+}
+.mtb-book-overview-dashboard .mtb-intro-eyebrow {
+  position: relative; z-index: 1; margin: 0 0 5px;
+  color: var(--mtb-gold); font-size: .78rem; font-weight: 800;
+  letter-spacing: .13em; text-transform: uppercase;
+}
+.mtb-book-overview-dashboard .mtb-intro-title {
+  position: relative; z-index: 1; margin: 0; color: var(--mtb-navy);
+  font-size: clamp(1.85rem, 3vw, 2.6rem); line-height: 1.05;
+}
+.mtb-book-overview-dashboard .mtb-intro-subtitle {
+  position: relative; z-index: 1; margin: 6px 0 0;
+  color: #4e6477; font-size: 1rem; font-weight: 700;
+}
+.mtb-book-overview-dashboard .mtb-intro-section { margin: 0 0 25px; }
+.mtb-book-overview-dashboard .mtb-intro-section-heading {
+  display: flex; align-items: center; gap: 12px; margin: 0 0 12px;
+}
+.mtb-book-overview-dashboard .mtb-intro-section-heading h2 {
+  margin: 0; color: var(--mtb-navy); font-size: 1.08rem;
+  letter-spacing: .05em; text-transform: uppercase;
+}
+.mtb-book-overview-dashboard .mtb-intro-section-heading::after {
+  content: ''; height: 1px; flex: 1 1 auto;
+  background: linear-gradient(to right, #c7d3de, transparent);
+}
+.mtb-book-overview-dashboard .mtb-intro-grid {
+  display: grid;
+  grid-template-columns: repeat(12, minmax(0, 1fr));
+  gap: 16px;
+  align-items: stretch;
+  grid-auto-rows: auto;
+}
+/* Each implicit grid row grows to the height of its longest card. Every card
+   then stretches to that row height. No fixed or maximum height is used. */
+.mtb-book-overview-dashboard .mtb-intro-card {
+  grid-column: span 1;
+  min-width: 0;
+  min-height: 0;
+  height: 100%;
+  max-height: none !important;
+  overflow: visible !important;
+  display: flex;
+  flex-direction: column;
+  align-self: stretch;
+  border: 1px solid var(--mtb-border);
+  border-top: 4px solid var(--mtb-navy-2);
+  border-radius: 12px;
+  background: #fff;
+  box-shadow: 0 4px 15px rgba(28, 48, 66, .055);
+}
+.mtb-book-overview-dashboard .mtb-intro-card.mtb-span-4 { grid-column: span 4; }
+.mtb-book-overview-dashboard .mtb-intro-card.mtb-span-6 { grid-column: span 6; }
+.mtb-book-overview-dashboard .mtb-intro-card.mtb-span-12 { grid-column: span 12; }
+.mtb-book-overview-dashboard .mtb-intro-card-header {
+  margin: 0; padding: 12px 16px 10px; border-bottom: 1px solid #e5ebf0;
+  background: var(--mtb-blue-soft); color: var(--mtb-navy);
+  font-size: .92rem; font-weight: 800; letter-spacing: .025em;
+}
+.mtb-book-overview-dashboard .mtb-intro-card-body {
+  flex: 1 1 auto;
+  min-height: 0;
+  height: auto !important;
+  max-height: none !important;
+  overflow: visible !important;
+  padding: 15px 17px 17px;
+  font-size: 1rem;
+  line-height: 1.48;
+  overflow-wrap: anywhere;
+}
+.mtb-book-overview-dashboard .mtb-intro-card-body p { margin: 0 0 .8em; }
+.mtb-book-overview-dashboard .mtb-intro-card-body p:last-child { margin-bottom: 0; }
+.mtb-book-overview-dashboard .mtb-intro-card-body ul,
+.mtb-book-overview-dashboard .mtb-intro-card-body ol { margin: 0 0 .8em; padding-left: 1.35em; }
+.mtb-book-overview-dashboard .mtb-intro-card-body li { margin: 0 0 .45em; padding-left: .1em; }
+.mtb-book-overview-dashboard .mtb-intro-card-body h2 {
+  margin: 1.15em 0 .45em; color: var(--mtb-navy); font-size: 1.15rem;
+}
+.mtb-book-overview-dashboard .mtb-intro-card-body h2:first-child { margin-top: 0; }
+.mtb-book-overview-dashboard .mtb-intro-card-body h3 {
+  margin: 1em 0 .35em; color: var(--mtb-navy-2); font-size: 1.02rem;
+}
+.mtb-book-overview-dashboard .mtb-intro-card-body blockquote {
+  margin: .9em 0; padding: .65em 1em; border-left: 4px solid var(--mtb-gold);
+  background: var(--mtb-gold-soft); color: #45371f;
+}
+.mtb-book-overview-dashboard .mtb-resource-link {
+  color: #1f5fae; font-weight: 700; text-decoration-line: underline;
+  text-decoration-style: dotted; text-decoration-thickness: 2px;
+  text-underline-offset: 4px; cursor: pointer;
+}
+.mtb-book-overview-dashboard .mtb-resource-link::after {
+  content: " \2197"; display: inline-block; margin-left: 2px;
+  font-size: .78em; line-height: 1; opacity: .78;
+}
+@media (max-width: 1100px) {
+  .book-modal-panel:has(.mtb-book-overview-dashboard) { width: min(1100px, 94vw); }
+  .mtb-book-overview-dashboard .mtb-intro-grid { grid-template-columns: repeat(12, minmax(0, 1fr)); }
+  .mtb-book-overview-dashboard .mtb-intro-card,
+  .mtb-book-overview-dashboard .mtb-intro-card.mtb-span-4 { grid-column: span 6; }
+  .mtb-book-overview-dashboard .mtb-intro-card.mtb-span-6,
+  .mtb-book-overview-dashboard .mtb-intro-card.mtb-span-12 { grid-column: 1 / -1; }
+}
+@media (max-width: 660px) {
+  .book-modal-panel:has(.mtb-book-overview-dashboard) { width: 94vw; padding-left: 12px; padding-right: 12px; }
+  .mtb-book-overview-dashboard { padding-left: 0; padding-right: 0; }
+  .mtb-book-overview-dashboard .mtb-intro-hero { padding: 19px; border-radius: 10px; }
+  .mtb-book-overview-dashboard .mtb-intro-grid { grid-template-columns: 1fr; gap: 12px; }
+  .mtb-book-overview-dashboard .mtb-intro-card,
+  .mtb-book-overview-dashboard .mtb-intro-card.mtb-span-4,
+  .mtb-book-overview-dashboard .mtb-intro-card.mtb-span-6,
+  .mtb-book-overview-dashboard .mtb-intro-card.mtb-span-12 { grid-column: 1; }
+  .mtb-book-overview-dashboard .mtb-intro-card-body { padding: 14px 15px 16px; }
+}
+</style><div class="mtb-book-overview-dashboard"><header class="mtb-intro-hero"><p class="mtb-intro-eyebrow">Mastering the Bible</p><h1 class="mtb-intro-title">Titus</h1><p class="mtb-intro-subtitle">Titus - Book Overview</p></header><section class="mtb-intro-section"><div class="mtb-intro-section-heading"><h2>Background</h2></div><div class="mtb-intro-grid"><article class="mtb-intro-card mtb-span-4"><h3 class="mtb-intro-card-header">Author</h3><div class="mtb-intro-card-body"><p>The Apostle Paul.</p></div></article><article class="mtb-intro-card mtb-span-4"><h3 class="mtb-intro-card-header">Audience</h3><div class="mtb-intro-card-body"><p>Titus, Paul's true son in the faith and trusted co-worker serving the churches on Crete, and ultimately all believers and church leaders seeking to build healthy churches through sound doctrine and godly living.</p></div></article><article class="mtb-intro-card mtb-span-4"><h3 class="mtb-intro-card-header">Date</h3><div class="mtb-intro-card-body"><p>Approximately AD 63-66, written after Paul's release from his first Roman imprisonment, probably from Macedonia or Nicopolis.</p></div></article><article class="mtb-intro-card mtb-span-6"><h3 class="mtb-intro-card-header">Historical Setting</h3><div class="mtb-intro-card-body"><p>Titus was one of Paul's most trusted ministry partners. Although never mentioned in Acts, Paul's letters reveal him to be a dependable, courageous, and gifted leader who was repeatedly entrusted with difficult assignments.</p>
+<p>As an uncircumcised Gentile, Titus accompanied Paul to Jerusalem as living proof that salvation comes by grace through faith, not through keeping the Law or circumcision (Galatians 2). Later, Paul entrusted Titus with the difficult task of helping restore the troubled church in Corinth. Titus successfully carried Paul's tearful letter, encouraged the church toward repentance, and later supervised the collection for the poor believers in Jerusalem.</p>
+<p>Afterward, Paul left Titus on the island of Crete to complete the work of organizing the churches. Crete was known in the ancient world for moral corruption and dishonesty. The churches were struggling with false teachers, immature leadership, and a lack of spiritual maturity. Titus was left to strengthen these churches by appointing qualified elders, confronting false teaching, and teaching believers how to live lives that honored Christ.</p></div></article><article class="mtb-intro-card mtb-span-6"><h3 class="mtb-intro-card-header">Occasion</h3><div class="mtb-intro-card-body"><p>Paul left Titus in Crete for a clear purpose: "<em>For this reason I left you in Crete, that you should set in order the things that are lacking..." (Titus 1:5)</em></p>
+<p>Paul therefore wrote to:</p>
+<ul>
+<li><p>Help Titus establish qualified leadership.</p></li>
+<li><p>Instruct him to confront false teachers.</p></li>
+<li><p>Encourage the teaching of sound doctrine.</p></li>
+<li><p>Show that God's grace produces godly living.</p></li>
+<li><p>Urge believers to be devoted to good works.</p></li>
+</ul></div></article></div></section><section class="mtb-intro-section"><div class="mtb-intro-section-heading"><h2>Understanding the Book</h2></div><div class="mtb-intro-grid"><article class="mtb-intro-card mtb-span-6"><h3 class="mtb-intro-card-header">What This Book Is About</h3><div class="mtb-intro-card-body"><p>Titus teaches how healthy churches are built through godly leadership, sound doctrine, and transformed lives.</p>
+<ul>
+<li><div data-custom-style="List Paragraph">
+<p>Paul left Titus in Crete to strengthen immature churches that were being harmed by false teachers and poor leadership.</p>
+</div></li>
+<li><div data-custom-style="List Paragraph">
+<p>The first step in restoring these churches was appointing a plurality of God-called, biblically qualified elders in every church. Healthy churches require healthy leadership.</p>
+</div></li>
+<li><div data-custom-style="List Paragraph">
+<p>The second step was establishing sound doctrine. Throughout the letter Paul repeatedly shows that healthy doctrine produces healthy living. Right belief leads to right character, right relationships, and lives devoted to good works.</p>
+</div></li>
+</ul>
+<p>One of the central themes of Titus is that God's saving grace not only forgives sin-it transforms lives.</p>
+<p>Healthy churches are led by qualified elders, grounded in sound doctrine, and filled with believers whose lives display the transforming power of the gospel.</p></div></article><article class="mtb-intro-card mtb-span-6"><h3 class="mtb-intro-card-header">Why This Book Matters</h3><div class="mtb-intro-card-body"><p>Titus reminds us that Christ builds healthy churches through biblical leadership and biblical truth.</p>
+<p>The book teaches that:</p>
+<ul>
+<li><p>A healthy church should be governed by a plurality of God-called, biblically qualified elders.</p></li>
+<li><p>Sound doctrine is essential because healthy doctrine produces healthy living.</p></li>
+<li><p>God's grace not only saves but transforms believers.</p></li>
+<li><p>Good works are the fruit of salvation, never the cause of salvation.</p></li>
+<li><p>The credibility of the gospel is demonstrated through transformed lives.</p></li>
+</ul></div></article><article class="mtb-intro-card mtb-span-6"><h3 class="mtb-intro-card-header">Key Themes to Watch For</h3><div class="mtb-intro-card-body"><ul>
+<li><p>Sound Doctrine</p></li>
+<li><p>Qualified Elders</p></li>
+<li><p>Healthy Churches</p></li>
+<li><p>God's Grace</p></li>
+<li><p>Godliness</p></li>
+<li><p>Good Works</p></li>
+<li><p>False Teaching</p></li>
+<li><p>Christian Character</p></li>
+</ul></div></article><article class="mtb-intro-card mtb-span-6"><h3 class="mtb-intro-card-header">Key Concepts to Understand Before Reading</h3><div class="mtb-intro-card-body"><p><strong>Sound Doctrine</strong> - Biblical truth that produces lives pleasing to God.</p>
+<p><strong>Grace</strong> - God's undeserved favor that not only saves us but also teaches and empowers us to live godly lives.</p>
+<p><strong>Good Works</strong> - The visible fruit of genuine salvation, demonstrating the transforming work of God in the believer.</p>
+<p><strong>Church Leadership</strong> - Godly men whose character and doctrine qualify them to shepherd God's people.</p>
+<p><strong>Godliness</strong> - A life that increasingly reflects the character of Christ through the transforming work of the Holy Spirit.</p>
+<p><strong>Regeneration</strong> - The new birth by which the Holy Spirit gives new life to those who trust in Christ.</p></div></article><article class="mtb-intro-card mtb-span-6"><h3 class="mtb-intro-card-header">Book Flow</h3><div class="mtb-intro-card-body"><p><strong>Chapter 1 - Establish Healthy Leadership</strong></p>
+<p>Paul instructs Titus to appoint qualified elders and confront false teachers.</p>
+<p><strong>Chapter 2 - Teach Healthy Living</strong></p>
+<p>Paul explains how every group within the church should live and shows that God's grace trains believers to live holy lives.</p>
+<p><strong>Chapter 3 - Display the Gospel</strong></p>
+<p>Paul teaches believers to demonstrate Christ through good works, humility, submission, and gracious relationships while avoiding divisive people.</p></div></article><article class="mtb-intro-card mtb-span-6"><h3 class="mtb-intro-card-header">Christ and Life</h3><div class="mtb-intro-card-body"><p>Titus presents Jesus Christ as both our great Savior and the One who is creating a people who belong entirely to Him.</p>
+<p>He gave Himself to redeem us from every lawless deed. He purifies His people. He teaches us through His grace. He gives us the blessed hope of His glorious appearing. The purpose of salvation is not merely forgiveness but transformation. Christ is forming a people who reflect His character and are eager to do what is good.</p></div></article></div></section><section class="mtb-intro-section"><div class="mtb-intro-section-heading"><h2>Reading Guide</h2></div><div class="mtb-intro-grid"><article class="mtb-intro-card mtb-span-6"><h3 class="mtb-intro-card-header">One-Sentence Summary</h3><div class="mtb-intro-card-body"><p>Titus teaches that God's saving grace transforms believers into godly people who strengthen healthy churches and display the beauty of the gospel through lives devoted to good works.</p></div></article><article class="mtb-intro-card mtb-span-6"><h3 class="mtb-intro-card-header">Read This Book Remembering...</h3><div class="mtb-intro-card-body"><p>As you read Titus, remember that Paul continually connects doctrine with daily living. Truth is never merely something to believe-it is something that transforms how God's people live, serve, lead, and represent Christ before the world.</p></div></article></div></section><section class="mtb-intro-section"><div class="mtb-intro-section-heading"><h2>Helpful Notes</h2></div><div class="mtb-intro-grid"><article class="mtb-intro-card mtb-span-12"><div class="mtb-intro-card-body"><p>Everything in Titus revolves around two foundational principles.</p>
+<p><strong>1. Healthy Churches Require Qualified Leadership</strong></p>
+<ul>
+<li><div data-custom-style="List Paragraph">
+<p>The first responsibility Paul gives Titus is to appoint elders in every city. Paul does not begin with programs, methods, or ministry activities. He begins with leadership.</p>
+</div></li>
+<li><div data-custom-style="List Paragraph">
+<p>Healthy churches are to be governed by <strong>a plurality of God-called, biblically qualified elders</strong> who teach God's Word, protect the flock from false teaching, and model godly living.</p>
+</div></li>
+<li><div data-custom-style="List Paragraph">
+<p>Leadership is the foundation upon which healthy churches are built.</p>
+</div></li>
+</ul>
+<p><strong>2. Healthy Doctrine Produces Healthy Living</strong></p>
+<p>Paul repeatedly connects doctrine with conduct. False teachers professed to know God, but denied Him by their lives. In contrast, sound or healthy doctrine always produces transformed lives.</p>
+<p>Notice the progression throughout the letter:</p>
+<ul>
+<li><p>Healthy leaders teach sound doctrine.</p></li>
+<li><p>Sound doctrine produces godliness.</p></li>
+<li><p>Godliness produces good works.</p></li>
+<li><p>Good works display the beauty of the gospel before the world.</p></li>
+</ul>
+<p>Paul is not merely concerned that believers know correct theology. He wants doctrine to transform homes, churches, workplaces, and communities so that the gospel is adorned by the lives of God's people (Titus 2:10).</p></div></article></div></section></div>
+</section>

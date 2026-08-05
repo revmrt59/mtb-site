@@ -12,6 +12,7 @@
   { key: "book_introduction", label: "Book Overview" },
   { key: "chapter_orientation", label: "Chapter Overview" },
   { key: "chapter_explanation", label: "Chapter Study" },
+  { key: "chapter_insights", label: "Chapter Reflection" },
   { key: "eg_culture", label: "EG Culture" },
   { key: "resources", label: "Resources" }
 ];

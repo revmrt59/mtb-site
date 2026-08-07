@@ -144,12 +144,11 @@ body[data-doc-type] .doc-shell {
   border-radius: 6px;
 }
 
-.hero-content .hero-tagline{
-    font-size: 28px !important;
-    font-style: italic;
-    font-weight: 500;
-    line-height: 1.2;
-    margin: 4px 0 0 0;
+.hero-tagline {
+  white-space: nowrap;
+  max-width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 /* If you have separate book/chapter selects by id or name */

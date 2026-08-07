@@ -1,5 +1,31 @@
 <section class="mtb-doc mtb-doc--read" data-doc-type="chapter-eg-culture">
 <style>
+.mtb-print-controls{display:flex;justify-content:flex-end;gap:8px;margin:0 0 14px;padding:0 4px}
+.mtb-print-button{appearance:none;border:1px solid #b9c8d5;border-radius:8px;background:#fff;padding:9px 14px;color:#173a5e;font:700 14px Arial,Helvetica,sans-serif;cursor:pointer}
+.mtb-print-button:hover{background:#f2f6f9}
+@media print{
+  @page{size:auto;margin:.45in}
+  html,body{background:#fff!important;color:#000!important}
+  .mtb-print-controls,.mtb-study-controls{display:none!important}
+  .mtb-doc{display:block!important;width:100%!important;max-width:none!important;margin:0!important;padding:0!important}
+  .mtb-overview-hero,.mtb-study-hero,.mtb-reflections-hero,.mtb-culture-hero{box-shadow:none!important;background:#fff!important;border-color:#777!important}
+  .mtb-overview-grid,.mtb-reflections-grid,.mtb-culture-grid,.mtb-study-verse-grid{display:block!important}
+  .mtb-overview-card,.mtb-reflections-card,.mtb-culture-card,.mtb-study-verse,.mtb-study-verse-panel,.mtb-intro-card{
+    display:block!important;width:100%!important;max-width:none!important;height:auto!important;margin:0 0 12pt!important;
+    break-inside:avoid;page-break-inside:avoid;box-shadow:none!important;background:#fff!important;color:#000!important
+  }
+  details.mtb-study-verse{display:block!important;overflow:visible!important}
+  details.mtb-study-verse>summary{display:flex!important;background:#fff!important;color:#000!important;border-bottom:1px solid #777!important}
+  details.mtb-study-verse>summary:after{display:none!important}
+  details.mtb-study-verse>.mtb-study-verse-body{display:block!important}
+  h1,h2,h3,h4{break-after:avoid;page-break-after:avoid;color:#000!important}
+  p,li{orphans:3;widows:3}
+  a{color:#000!important;text-decoration:none!important}
+  a[href]::after{content:none!important}
+}
+</style>
+<div class="mtb-print-controls"><button type="button" class="mtb-print-button" onclick="(function(button){var doc=button.closest('.mtb-doc')||document;var panels=Array.prototype.slice.call(doc.querySelectorAll('details'));panels.forEach(function(panel){panel.open=true;});window.print();})(this)">&#128438; Print This Page</button></div>
+<style>
 body[data-doc-type="chapter-eg-culture"] #doc-layout {
   width: min(96vw, 1680px) !important;
   max-width: 1680px !important;
@@ -50,7 +76,7 @@ body[data-doc-type="chapter-eg-culture"] .doc-content {
 .mtb-culture-dashboard .mtb-culture-grid {
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
-  grid-auto-rows: 1fr;
+  grid-auto-rows: auto;
   gap: 20px;
   align-items: stretch;
 }
@@ -62,8 +88,9 @@ body[data-doc-type="chapter-eg-culture"] .doc-content {
   font-size: 1.08rem;
 }
 .mtb-culture-dashboard .mtb-culture-card {
-  display: flex;
-  flex-direction: column;
+  display: grid;
+  grid-template-rows: subgrid;
+  grid-row: span 3;
   min-width: 0;
   height: 100%;
   overflow: hidden;
@@ -74,7 +101,7 @@ body[data-doc-type="chapter-eg-culture"] .doc-content {
   box-shadow: 0 4px 14px rgba(28, 55, 80, .06);
 }
 .mtb-culture-dashboard .mtb-culture-standard {
-  flex: 0 0 250px;
+  min-height: 250px;
   padding: 24px 26px;
   background: linear-gradient(135deg, #edf4fa 0%, #e2edf6 100%);
   border-bottom: 1px solid var(--mtb-culture-border);
@@ -95,7 +122,6 @@ body[data-doc-type="chapter-eg-culture"] .doc-content {
   line-height: 1.58;
 }
 .mtb-culture-dashboard .mtb-culture-application {
-  flex: 1 1 auto;
   padding: 24px 26px 28px;
   background: #ffffff;
 }
@@ -137,8 +163,13 @@ body[data-doc-type="chapter-eg-culture"] .doc-content {
   .mtb-culture-dashboard .mtb-culture-grid {
     grid-template-columns: 1fr;
   }
+  .mtb-culture-dashboard .mtb-culture-card {
+    display: flex;
+    flex-direction: column;
+    grid-row: auto;
+  }
   .mtb-culture-dashboard .mtb-culture-standard {
-    flex-basis: auto;
+    min-height: 0;
   }
   .mtb-culture-dashboard .mtb-culture-hero,
   .mtb-culture-dashboard .mtb-culture-standard,
@@ -147,5 +178,5 @@ body[data-doc-type="chapter-eg-culture"] .doc-content {
     padding-right: 18px;
   }
 }
-</style><div class="mtb-culture-dashboard"><header class="mtb-culture-hero"><p class="mtb-culture-eyebrow">East Gate Bethlehem</p><h1 class="mtb-culture-title">East Gate Culture in Obadiah Chapter 1</h1></header><div class="mtb-culture-grid"><article class="mtb-culture-card"><h2 class="mtb-culture-card-title">HONOR</h2><section class="mtb-culture-standard"><h2 class="mtb-culture-standard-label">Culture Statement</h2><div class="mtb-culture-standard-content"><p>HONOR: Through His Eyes.  Relationships are protected when we ascribe heaven&#39;s value to the people around us. Like Jesus, we choose to interact with others, not as they deserve, but according to their God given value.</p></div></section><section class="mtb-culture-application"><h2 class="mtb-culture-application-label">Living It in Obadiah</h2><div class="mtb-culture-application-content"><p>Obadiah centers its indictment on Edom&#39;s failure to honor kin-Edom watched Jerusalem fall, rejoiced, plundered the helpless, and even handed over fleeing survivors. This chapter calls us to the opposite posture: protect the vulnerable, refuse to celebrate another&#39;s suffering, and treat neighbors (and even rivals) according to the value God places on them rather than by their deserts.</p></div></section></article><article class="mtb-culture-card"><h2 class="mtb-culture-card-title">Israel</h2><section class="mtb-culture-standard"><h2 class="mtb-culture-standard-label">Culture Statement</h2><div class="mtb-culture-standard-content"><p>WE STAND WITH ISRAEL:  We love what the Lord loves.  The Lord loves Israel, and we love Israel. We take seriously, the Lord&#39;s promise to bless hose who bless Israel, and curse those who curse Israel.</p></div></section><section class="mtb-culture-application"><h2 class="mtb-culture-application-label">Living It in Obadiah</h2><div class="mtb-culture-application-content"><p>Obadiah&#39;s heart is the defense and future restoration of Israel-God condemns those who rejoiced over Judah&#39;s fall and promises deliverance for Mount Zion. In light of this chapter, East Gate&#39;s posture toward Israel is to pray for her protection and restoration, to resist any pleasure in her suffering, and to stand with God&#39;s people as He vindicates and preserves them.</p></div></section></article></div></div>
+</style><div class="mtb-culture-dashboard"><header class="mtb-culture-hero"><p class="mtb-culture-eyebrow">East Gate Bethlehem</p><h1 class="mtb-culture-title">EG Culture - Obadiah 1</h1></header><div class="mtb-culture-grid"><article class="mtb-culture-card"><h2 class="mtb-culture-card-title">HONOR</h2><section class="mtb-culture-standard"><h2 class="mtb-culture-standard-label">Culture Statement</h2><div class="mtb-culture-standard-content"><p>HONOR: Through His Eyes.  Relationships are protected when we ascribe heaven&#39;s value to the people around us. Like Jesus, we choose to interact with others, not as they deserve, but according to their God given value.</p></div></section><section class="mtb-culture-application"><h2 class="mtb-culture-application-label">Living It in Obadiah 1</h2><div class="mtb-culture-application-content"><p>Obadiah centers its indictment on Edom&#39;s failure to honor Edom. Their brothers watched Jerusalem fall, rejoiced, plundered the helpless, and even handed over fleeing survivors. This chapter calls us to the opposite posture: protect the vulnerable, refuse to celebrate another&#39;s suffering, and treat neighbors (and even rivals) according to the value God places on them rather than by their deserts.</p></div></section></article><article class="mtb-culture-card"><h2 class="mtb-culture-card-title">Israel</h2><section class="mtb-culture-standard"><h2 class="mtb-culture-standard-label">Culture Statement</h2><div class="mtb-culture-standard-content"><p>WE STAND WITH ISRAEL:  We love what the Lord loves.  The Lord loves Israel, and we love Israel. We take seriously, the Lord&#39;s promise to bless hose who bless Israel, and curse those who curse Israel.</p></div></section><section class="mtb-culture-application"><h2 class="mtb-culture-application-label">Living It in Obadiah 1</h2><div class="mtb-culture-application-content"><p>Obadiah&#39;s heart is the defense and future restoration of Israel.  God condemns those who rejoiced over Judah&#39;s fall and promises deliverance for Mount Zion. In light of this chapter, East Gate&#39;s posture toward Israel is to pray for her protection and restoration, to resist any pleasure in her suffering, and to stand with God&#39;s people as He vindicates and preserves them.</p></div></section></article></div></div>
 </section>

@@ -79,7 +79,7 @@ function isTouchDevice() {
     const el = ensureTooltip();
     if (!el) return;
 
-    el.textContent = text || "";
+   el.innerHTML = text || "";
     el.style.display = "block";
 
     const pad = 12;
@@ -213,14 +213,11 @@ function isTouchDevice() {
   // 1) Preferred: generator wrapper
   const wrapped = temp.querySelector("#ws-summary-text");
 
-  if (wrapped) {
-    const txt = (wrapped.textContent || "")
-      .replace(/\u00A0/g, " ")
-      .replace(/\s+/g, " ")
-      .trim();
+if (wrapped) {
+  const html = wrapped.innerHTML.trim();
 
-    if (txt) return txt;
-  }
+  if (html) return html;
+}
 
   // 2) Paragraph beginning with "Summary:"
   const ps = Array.from(temp.querySelectorAll("p"));
@@ -412,7 +409,7 @@ function isTouchDevice() {
 
         el.addEventListener("mousemove", (e) => {
           if (tooltipEl && tooltipEl.style.display === "block") {
-            showTooltip(tooltipEl.textContent || "", e.clientX, e.clientY);
+            showTooltip(tooltipEl.innerHTML || "", e.clientX, e.clientY);
           }
         });
 

@@ -1,0 +1,182 @@
+<section class="mtb-doc mtb-doc--read" data-doc-type="chapter-eg-culture">
+<style>
+.mtb-print-controls{display:flex;justify-content:flex-end;gap:8px;margin:0 0 14px;padding:0 4px}
+.mtb-print-button{appearance:none;border:1px solid #b9c8d5;border-radius:8px;background:#fff;padding:9px 14px;color:#173a5e;font:700 14px Arial,Helvetica,sans-serif;cursor:pointer}
+.mtb-print-button:hover{background:#f2f6f9}
+@media print{
+  @page{size:auto;margin:.45in}
+  html,body{background:#fff!important;color:#000!important}
+  .mtb-print-controls,.mtb-study-controls{display:none!important}
+  .mtb-doc{display:block!important;width:100%!important;max-width:none!important;margin:0!important;padding:0!important}
+  .mtb-overview-hero,.mtb-study-hero,.mtb-reflections-hero,.mtb-culture-hero{box-shadow:none!important;background:#fff!important;border-color:#777!important}
+  .mtb-overview-grid,.mtb-reflections-grid,.mtb-culture-grid,.mtb-study-verse-grid{display:block!important}
+  .mtb-overview-card,.mtb-reflections-card,.mtb-culture-card,.mtb-study-verse,.mtb-study-verse-panel,.mtb-intro-card{
+    display:block!important;width:100%!important;max-width:none!important;height:auto!important;margin:0 0 12pt!important;
+    break-inside:avoid;page-break-inside:avoid;box-shadow:none!important;background:#fff!important;color:#000!important
+  }
+  details.mtb-study-verse{display:block!important;overflow:visible!important}
+  details.mtb-study-verse>summary{display:flex!important;background:#fff!important;color:#000!important;border-bottom:1px solid #777!important}
+  details.mtb-study-verse>summary:after{display:none!important}
+  details.mtb-study-verse>.mtb-study-verse-body{display:block!important}
+  h1,h2,h3,h4{break-after:avoid;page-break-after:avoid;color:#000!important}
+  p,li{orphans:3;widows:3}
+  a{color:#000!important;text-decoration:none!important}
+  a[href]::after{content:none!important}
+}
+</style>
+<div class="mtb-print-controls"><button type="button" class="mtb-print-button" onclick="(function(button){var doc=button.closest('.mtb-doc')||document;var panels=Array.prototype.slice.call(doc.querySelectorAll('details'));panels.forEach(function(panel){panel.open=true;});window.print();})(this)">&#128438; Print This Page</button></div>
+<style>
+body[data-doc-type="chapter-eg-culture"] #doc-layout {
+  width: min(96vw, 1680px) !important;
+  max-width: 1680px !important;
+  margin-left: auto !important;
+  margin-right: auto !important;
+}
+body[data-doc-type="chapter-eg-culture"] .doc-main,
+body[data-doc-type="chapter-eg-culture"] #doc-target,
+body[data-doc-type="chapter-eg-culture"] .doc-content {
+  width: 100% !important;
+  max-width: none !important;
+}
+.mtb-culture-dashboard {
+  --mtb-culture-navy: #173a5e;
+  --mtb-culture-blue: #2b587f;
+  --mtb-culture-soft: #eef4f9;
+  --mtb-culture-border: #d3dee8;
+  --mtb-culture-gold: #b7832f;
+  width: 100%;
+  max-width: none;
+  margin: 0 auto;
+  padding: 8px 0 34px;
+  color: #1d2935;
+  font-family: Arial, Helvetica, sans-serif;
+}
+.mtb-culture-dashboard * { box-sizing: border-box; }
+.mtb-culture-dashboard .mtb-culture-hero {
+  margin: 0 0 24px;
+  padding: 22px 26px;
+  border: 1px solid #cbd8e3;
+  border-radius: 14px;
+  background: linear-gradient(135deg, #f7fafc 0%, #e8f0f7 100%);
+}
+.mtb-culture-dashboard .mtb-culture-eyebrow {
+  margin: 0 0 6px;
+  color: var(--mtb-culture-gold);
+  font-size: .78rem;
+  font-weight: 800;
+  letter-spacing: .13em;
+  text-transform: uppercase;
+}
+.mtb-culture-dashboard .mtb-culture-title {
+  margin: 0;
+  color: var(--mtb-culture-navy);
+  font-size: clamp(1.55rem, 3vw, 2.2rem);
+  line-height: 1.12;
+}
+.mtb-culture-dashboard .mtb-culture-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  grid-auto-rows: auto;
+  gap: 20px;
+  align-items: stretch;
+}
+.mtb-culture-dashboard .mtb-culture-card-title {
+  margin: 0;
+  padding: 15px 20px;
+  background: var(--mtb-culture-navy);
+  color: #fff;
+  font-size: 1.08rem;
+}
+.mtb-culture-dashboard .mtb-culture-card {
+  display: grid;
+  grid-template-rows: subgrid;
+  grid-row: span 3;
+  min-width: 0;
+  height: 100%;
+  overflow: hidden;
+  border: 1px solid var(--mtb-culture-border);
+  border-top: 4px solid var(--mtb-culture-blue);
+  border-radius: 13px;
+  background: #fff;
+  box-shadow: 0 4px 14px rgba(28, 55, 80, .06);
+}
+.mtb-culture-dashboard .mtb-culture-standard {
+  min-height: 250px;
+  padding: 24px 26px;
+  background: linear-gradient(135deg, #edf4fa 0%, #e2edf6 100%);
+  border-bottom: 1px solid var(--mtb-culture-border);
+}
+.mtb-culture-dashboard .mtb-culture-standard-label,
+.mtb-culture-dashboard .mtb-culture-application-label {
+  margin: 0 0 10px;
+  color: var(--mtb-culture-navy);
+  font-size: .76rem;
+  font-weight: 800;
+  letter-spacing: .09em;
+  text-transform: uppercase;
+}
+.mtb-culture-dashboard .mtb-culture-standard-content {
+  color: var(--mtb-culture-navy);
+  font-size: 1.08rem;
+  font-weight: 700;
+  line-height: 1.58;
+}
+.mtb-culture-dashboard .mtb-culture-application {
+  padding: 24px 26px 28px;
+  background: #ffffff;
+}
+.mtb-culture-dashboard .mtb-culture-application-content {
+  font-size: 1rem;
+  line-height: 1.65;
+}
+.mtb-culture-dashboard p { margin: 0 0 13px; }
+.mtb-culture-dashboard p:last-child { margin-bottom: 0; }
+.mtb-culture-dashboard .mtb-resource-link {
+  color: #1f5fae;
+  font-weight: 700;
+  text-decoration-line: underline;
+  text-decoration-style: dotted;
+  text-decoration-thickness: 2px;
+  text-underline-offset: 4px;
+  cursor: pointer;
+}
+.mtb-culture-dashboard .mtb-resource-link::after {
+  content: " ↗";
+  font-size: .78em;
+  opacity: .78;
+}
+.mtb-culture-dashboard .mtb-resource-link:hover,
+.mtb-culture-dashboard .mtb-resource-link:focus-visible {
+  color: #123f7a;
+  text-decoration-style: solid;
+}
+@media (max-width: 1050px) {
+  .mtb-culture-dashboard .mtb-culture-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+@media (max-width: 680px) {
+  .mtb-culture-dashboard {
+    padding-left: 0;
+    padding-right: 0;
+  }
+  .mtb-culture-dashboard .mtb-culture-grid {
+    grid-template-columns: 1fr;
+  }
+  .mtb-culture-dashboard .mtb-culture-card {
+    display: flex;
+    flex-direction: column;
+    grid-row: auto;
+  }
+  .mtb-culture-dashboard .mtb-culture-standard {
+    min-height: 0;
+  }
+  .mtb-culture-dashboard .mtb-culture-hero,
+  .mtb-culture-dashboard .mtb-culture-standard,
+  .mtb-culture-dashboard .mtb-culture-application {
+    padding-left: 18px;
+    padding-right: 18px;
+  }
+}
+</style><div class="mtb-culture-dashboard"><header class="mtb-culture-hero"><p class="mtb-culture-eyebrow">East Gate Bethlehem</p><h1 class="mtb-culture-title">EG Culture - Psalms 20</h1></header><div class="mtb-culture-grid"><article class="mtb-culture-card"><h2 class="mtb-culture-card-title">We are People of the Word</h2><section class="mtb-culture-standard"><h2 class="mtb-culture-standard-label">Culture Statement</h2><div class="mtb-culture-standard-content"><p>The Holy Bible is the only infallible and final authority for Christian faith and life. The Holy Scriptures are timeless, inerrant and are to be read personally, discerned corporately, and walked out in community. We interpret all Scripture through the life and teachings of Jesus, trusting Holy Spirit to reveal truth and transform us as we submit ourselves fully to God’s revealed Word.</p></div></section><section class="mtb-culture-application"><h2 class="mtb-culture-application-label">Living It in Psalms 20</h2><div class="mtb-culture-application-content"><p>Psalm 20 teaches us to reject the world&#39;s confidence in &quot;chariots and horses&quot; and instead place our trust in the name of the Lord. As People of the Word, we allow Scripture, not  our circumstances, fears, resources or ability, to determine where our confidence and hope is to lie.</p></div></section></article><article class="mtb-culture-card"><h2 class="mtb-culture-card-title">Honor: Through His Eyes</h2><section class="mtb-culture-standard"><h2 class="mtb-culture-standard-label">Culture Statement</h2><div class="mtb-culture-standard-content"><p>Relationships are protected when we ascribe heaven’s value to the people around us. Like Jesus, we choose to interact with people, not as they deserve, but according to their God given value.</p></div></section><section class="mtb-culture-application"><h2 class="mtb-culture-application-label">Living It in Psalms 20</h2><div class="mtb-culture-application-content"><p>Praying for our leaders is a demonstration of honor. It is recognizing God has placed them in a position of authority regardless if we are in agreement and irrespective of their weaknesses and faults.   The people honored their king by surrounding him with prayer before he entered battle. Rather than standing at a distance or waiting to evaluate the outcome, they faithfully interceded for the one God had entrusted with leadership. This Psalm reminds us that one of the greatest ways we honor those in authority is by praying faithfully for them.</p></div></section></article><article class="mtb-culture-card"><h2 class="mtb-culture-card-title">We are a House of Prayer</h2><section class="mtb-culture-standard"><h2 class="mtb-culture-standard-label">Culture Statement</h2><div class="mtb-culture-standard-content"><p>Jesus identified His Father’s house as a House of Prayer. We assemble to seek the heart of the Father and partner with Him in faith, inquiry, intercession, supplication, petition, lament, and thanksgiving. We contend for mercy, righteousness, healing, and justice, believing that God transforms lives, cities, and nations through a praying Church.</p></div></section><section class="mtb-culture-application"><h2 class="mtb-culture-application-label">Living It in Psalms 20</h2><div class="mtb-culture-application-content"><p>Psalm 20 is the prayer of God&#39;s people before the battle begins. Rather than leaving their king to face the conflict alone, they surround him with intercession, asking God to hear him, protect him, strengthen him, answer his prayers, and grant him victory. This chapter reminds us that prayer is one of the primary ways God&#39;s people participate in God&#39;s work. We become a true House of Prayer when we faithfully uphold those God has called to lead and entrust every battle to the Lord before it begins. This Psalm calls East Gate to become a praying community that prepares for every battle in God&#39;s presence rather than relying on human strength, ability and wisdom.</p></div></section></article><article class="mtb-culture-card"><h2 class="mtb-culture-card-title">Daily Secret Place</h2><section class="mtb-culture-standard"><h2 class="mtb-culture-standard-label">Culture Statement</h2><div class="mtb-culture-standard-content"><p>When we set apart time and space to meet with God, Holy Spirit responds to our expectancy with His Presence. When we make the secret place our priority we become the place where Heaven touches Earth.</p></div></section><section class="mtb-culture-application"><h2 class="mtb-culture-application-label">Living It in Psalms 20</h2><div class="mtb-culture-application-content"><p>Before seeking victory over his enemies, the king first sought the Lord through worship and sacrifice. Psalm 20 reminds us that public victories are prepared for, and found in the secret place. Our greatest preparation for life&#39;s battles is not self-confidence or careful planning, but a heart that has first met alone with God.</p></div></section></article><article class="mtb-culture-card"><h2 class="mtb-culture-card-title">We are Presence Driven</h2><section class="mtb-culture-standard"><h2 class="mtb-culture-standard-label">Culture Statement</h2><div class="mtb-culture-standard-content"><p>Holy Spirit is God Himself dwelling within us. He directs our decisions, shapes our communities, and equips us to supernaturally impact our surroundings. We hear, connect, and obey as He leads. We are Spirit-led and unashamed.</p></div></section><section class="mtb-culture-application"><h2 class="mtb-culture-application-label">Living It in Psalms 20</h2><div class="mtb-culture-application-content"><p>Before the king marched into battle, he first sought the Lord. Rather than relying on military strength or human wisdom, God&#39;s people looked to Him for help, direction, and victory. Psalm 20 reminds us that every significant decision should begin by seeking the Lord, trusting His leading above our own understanding or ability. Being Presence Driven means refusing to let human strength determine our confidence, choosing instead to follow God&#39;s leading in every battle we face.</p></div></section></article></div></div>
+</section>

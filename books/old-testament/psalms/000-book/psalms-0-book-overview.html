@@ -1,0 +1,234 @@
+<section class="mtb-doc mtb-doc--read" data-doc-type="book-overview">
+<style>
+.mtb-print-controls{display:flex;justify-content:flex-end;gap:8px;margin:0 0 14px;padding:0 4px}
+.mtb-print-button{appearance:none;border:1px solid #b9c8d5;border-radius:8px;background:#fff;padding:9px 14px;color:#173a5e;font:700 14px Arial,Helvetica,sans-serif;cursor:pointer}
+.mtb-print-button:hover{background:#f2f6f9}
+@media print{
+  @page{size:auto;margin:.45in}
+  html,body{background:#fff!important;color:#000!important}
+  .mtb-print-controls,.mtb-study-controls{display:none!important}
+  .mtb-doc{display:block!important;width:100%!important;max-width:none!important;margin:0!important;padding:0!important}
+  .mtb-overview-hero,.mtb-study-hero,.mtb-reflections-hero,.mtb-culture-hero{box-shadow:none!important;background:#fff!important;border-color:#777!important}
+  .mtb-overview-grid,.mtb-reflections-grid,.mtb-culture-grid,.mtb-study-verse-grid{display:block!important}
+  .mtb-overview-card,.mtb-reflections-card,.mtb-culture-card,.mtb-study-verse,.mtb-study-verse-panel,.mtb-intro-card{
+    display:block!important;width:100%!important;max-width:none!important;height:auto!important;margin:0 0 12pt!important;
+    break-inside:avoid;page-break-inside:avoid;box-shadow:none!important;background:#fff!important;color:#000!important
+  }
+  details.mtb-study-verse{display:block!important;overflow:visible!important}
+  details.mtb-study-verse>summary{display:flex!important;background:#fff!important;color:#000!important;border-bottom:1px solid #777!important}
+  details.mtb-study-verse>summary:after{display:none!important}
+  details.mtb-study-verse>.mtb-study-verse-body{display:block!important}
+  h1,h2,h3,h4{break-after:avoid;page-break-after:avoid;color:#000!important}
+  p,li{orphans:3;widows:3}
+  a{color:#000!important;text-decoration:none!important}
+  a[href]::after{content:none!important}
+}
+</style>
+<div class="mtb-print-controls"><button type="button" class="mtb-print-button" onclick="(function(button){var doc=button.closest('.mtb-doc')||document;var panels=Array.prototype.slice.call(doc.querySelectorAll('details'));panels.forEach(function(panel){panel.open=true;});window.print();})(this)">&#128438; Print This Page</button></div>
+<style>
+.book-modal-panel:has(.mtb-book-overview-dashboard) {
+  width: min(1600px, 96vw);
+  max-width: none;
+}
+.mtb-book-overview-dashboard {
+  --mtb-navy: #173a5e;
+  --mtb-navy-2: #274f76;
+  --mtb-gold: #b7832f;
+  --mtb-gold-soft: #fbf4e7;
+  --mtb-blue-soft: #eef4f9;
+  --mtb-border: #d7e0e8;
+  --mtb-text: #1d2935;
+  width: 100%;
+  max-width: 1560px;
+  margin: 0 auto;
+  padding: 2px 4px 28px;
+  color: var(--mtb-text);
+  font-family: Arial, Helvetica, sans-serif;
+}
+.mtb-book-overview-dashboard * { box-sizing: border-box; }
+.mtb-book-overview-dashboard .mtb-intro-hero {
+  position: relative;
+  overflow: hidden;
+  margin: 0 0 24px;
+  padding: 22px 28px;
+  border: 1px solid #cbd8e3;
+  border-radius: 14px;
+  background: linear-gradient(135deg, #f7fafc 0%, #e8f0f7 100%);
+}
+.mtb-book-overview-dashboard .mtb-intro-hero::after {
+  content: '';
+  position: absolute;
+  right: -48px;
+  top: -72px;
+  width: 210px;
+  height: 210px;
+  border-radius: 50%;
+  background: rgba(183, 131, 47, .10);
+}
+.mtb-book-overview-dashboard .mtb-intro-eyebrow {
+  position: relative; z-index: 1; margin: 0 0 5px;
+  color: var(--mtb-gold); font-size: .78rem; font-weight: 800;
+  letter-spacing: .13em; text-transform: uppercase;
+}
+.mtb-book-overview-dashboard .mtb-intro-title {
+  position: relative; z-index: 1; margin: 0; color: var(--mtb-navy);
+  font-size: clamp(1.85rem, 3vw, 2.6rem); line-height: 1.05;
+}
+.mtb-book-overview-dashboard .mtb-intro-subtitle {
+  position: relative; z-index: 1; margin: 6px 0 0;
+  color: #4e6477; font-size: 1rem; font-weight: 700;
+}
+.mtb-book-overview-dashboard .mtb-intro-section { margin: 0 0 25px; }
+.mtb-book-overview-dashboard .mtb-intro-section-heading {
+  display: flex; align-items: center; gap: 12px; margin: 0 0 12px;
+}
+.mtb-book-overview-dashboard .mtb-intro-section-heading h2 {
+  margin: 0; color: var(--mtb-navy); font-size: 1.08rem;
+  letter-spacing: .05em; text-transform: uppercase;
+}
+.mtb-book-overview-dashboard .mtb-intro-section-heading::after {
+  content: ''; height: 1px; flex: 1 1 auto;
+  background: linear-gradient(to right, #c7d3de, transparent);
+}
+.mtb-book-overview-dashboard .mtb-intro-grid {
+  display: grid;
+  grid-template-columns: repeat(12, minmax(0, 1fr));
+  gap: 16px;
+  align-items: stretch;
+  grid-auto-rows: auto;
+}
+/* Each implicit grid row grows to the height of its longest card. Every card
+   then stretches to that row height. No fixed or maximum height is used. */
+.mtb-book-overview-dashboard .mtb-intro-card {
+  grid-column: span 1;
+  min-width: 0;
+  min-height: 0;
+  height: 100%;
+  max-height: none !important;
+  overflow: visible !important;
+  display: flex;
+  flex-direction: column;
+  align-self: stretch;
+  border: 1px solid var(--mtb-border);
+  border-top: 4px solid var(--mtb-navy-2);
+  border-radius: 12px;
+  background: #fff;
+  box-shadow: 0 4px 15px rgba(28, 48, 66, .055);
+}
+.mtb-book-overview-dashboard .mtb-intro-card.mtb-span-4 { grid-column: span 4; }
+.mtb-book-overview-dashboard .mtb-intro-card.mtb-span-6 { grid-column: span 6; }
+.mtb-book-overview-dashboard .mtb-intro-card.mtb-span-12 { grid-column: span 12; }
+.mtb-book-overview-dashboard .mtb-intro-card-header {
+  margin: 0; padding: 12px 16px 10px; border-bottom: 1px solid #e5ebf0;
+  background: var(--mtb-blue-soft); color: var(--mtb-navy);
+  font-size: .92rem; font-weight: 800; letter-spacing: .025em;
+}
+.mtb-book-overview-dashboard .mtb-intro-card-body {
+  flex: 1 1 auto;
+  min-height: 0;
+  height: auto !important;
+  max-height: none !important;
+  overflow: visible !important;
+  padding: 15px 17px 17px;
+  font-size: 1rem;
+  line-height: 1.48;
+  overflow-wrap: anywhere;
+}
+.mtb-book-overview-dashboard .mtb-intro-card-body p { margin: 0 0 .8em; }
+.mtb-book-overview-dashboard .mtb-intro-card-body p:last-child { margin-bottom: 0; }
+.mtb-book-overview-dashboard .mtb-intro-card-body ul,
+.mtb-book-overview-dashboard .mtb-intro-card-body ol { margin: 0 0 .8em; padding-left: 1.35em; }
+.mtb-book-overview-dashboard .mtb-intro-card-body li { margin: 0 0 .45em; padding-left: .1em; }
+.mtb-book-overview-dashboard .mtb-intro-card-body h2 {
+  margin: 1.15em 0 .45em; color: var(--mtb-navy); font-size: 1.15rem;
+}
+.mtb-book-overview-dashboard .mtb-intro-card-body h2:first-child { margin-top: 0; }
+.mtb-book-overview-dashboard .mtb-intro-card-body h3 {
+  margin: 1em 0 .35em; color: var(--mtb-navy-2); font-size: 1.02rem;
+}
+.mtb-book-overview-dashboard .mtb-intro-card-body blockquote {
+  margin: .9em 0; padding: .65em 1em; border-left: 4px solid var(--mtb-gold);
+  background: var(--mtb-gold-soft); color: #45371f;
+}
+.mtb-book-overview-dashboard .mtb-resource-link {
+  color: #1f5fae; font-weight: 700; text-decoration-line: underline;
+  text-decoration-style: dotted; text-decoration-thickness: 2px;
+  text-underline-offset: 4px; cursor: pointer;
+}
+.mtb-book-overview-dashboard .mtb-resource-link::after {
+  content: " \2197"; display: inline-block; margin-left: 2px;
+  font-size: .78em; line-height: 1; opacity: .78;
+}
+@media (max-width: 1100px) {
+  .book-modal-panel:has(.mtb-book-overview-dashboard) { width: min(1100px, 94vw); }
+  .mtb-book-overview-dashboard .mtb-intro-grid { grid-template-columns: repeat(12, minmax(0, 1fr)); }
+  .mtb-book-overview-dashboard .mtb-intro-card,
+  .mtb-book-overview-dashboard .mtb-intro-card.mtb-span-4 { grid-column: span 6; }
+  .mtb-book-overview-dashboard .mtb-intro-card.mtb-span-6,
+  .mtb-book-overview-dashboard .mtb-intro-card.mtb-span-12 { grid-column: 1 / -1; }
+}
+@media (max-width: 660px) {
+  .book-modal-panel:has(.mtb-book-overview-dashboard) { width: 94vw; padding-left: 12px; padding-right: 12px; }
+  .mtb-book-overview-dashboard { padding-left: 0; padding-right: 0; }
+  .mtb-book-overview-dashboard .mtb-intro-hero { padding: 19px; border-radius: 10px; }
+  .mtb-book-overview-dashboard .mtb-intro-grid { grid-template-columns: 1fr; gap: 12px; }
+  .mtb-book-overview-dashboard .mtb-intro-card,
+  .mtb-book-overview-dashboard .mtb-intro-card.mtb-span-4,
+  .mtb-book-overview-dashboard .mtb-intro-card.mtb-span-6,
+  .mtb-book-overview-dashboard .mtb-intro-card.mtb-span-12 { grid-column: 1; }
+  .mtb-book-overview-dashboard .mtb-intro-card-body { padding: 14px 15px 16px; }
+}
+</style><div class="mtb-book-overview-dashboard"><header class="mtb-intro-hero"><p class="mtb-intro-eyebrow">Mastering the Bible</p><h1 class="mtb-intro-title">Psalms</h1><p class="mtb-intro-subtitle">Psalms - Book Overview</p></header><section class="mtb-intro-section"><div class="mtb-intro-section-heading"><h2>Background</h2></div><div class="mtb-intro-grid"><article class="mtb-intro-card mtb-span-4"><h3 class="mtb-intro-card-header">Author</h3><div class="mtb-intro-card-body"><p>Primarily David, along with Asaph, the Sons of Korah, Solomon, Moses, Ethan, Heman, and other inspired writers. Some psalms are anonymous.</p></div></article><article class="mtb-intro-card mtb-span-4"><h3 class="mtb-intro-card-header">Audience</h3><div class="mtb-intro-card-body"><p>The people of Israel, and ultimately all who worship the Lord.</p></div></article><article class="mtb-intro-card mtb-span-4"><h3 class="mtb-intro-card-header">Date</h3><div class="mtb-intro-card-body"><p>Written over approximately 1,000 years (about 1440-430 BC).</p></div></article><article class="mtb-intro-card mtb-span-6"><h3 class="mtb-intro-card-header">Historical Setting</h3><div class="mtb-intro-card-body"><p>The Psalms were written during many different periods of Israel's history, including the wilderness, the monarchy, times of personal triumph and failure, national crisis, exile, and restoration. They reflect real experiences of God's people as they learned to trust, worship, and walk with Him.</p></div></article><article class="mtb-intro-card mtb-span-6"><h3 class="mtb-intro-card-header">Occasion</h3><div class="mtb-intro-card-body"><p>The Book of Psalms was compiled to give God's people inspired songs and prayers through which they could worship Him, express every human emotion honestly, remember His faithfulness, and grow in their relationship with Him.</p></div></article></div></section><section class="mtb-intro-section"><div class="mtb-intro-section-heading"><h2>Understanding the Book</h2></div><div class="mtb-intro-grid"><article class="mtb-intro-card mtb-span-6"><h3 class="mtb-intro-card-header">What This Book Is About</h3><div class="mtb-intro-card-body"><p>Psalms is the inspired hymnbook and prayer book of God's people. Through songs, prayers, and poems, it teaches us how to worship God, trust Him, bring our deepest joys and sorrows before Him, and celebrate His greatness.</p>
+<p>The Psalms reveal that every part of life-even suffering, fear, doubt, repentance, thanksgiving, and praise-can become an act of worship when brought before God.</p></div></article><article class="mtb-intro-card mtb-span-6"><h3 class="mtb-intro-card-header">Why This Book Matters</h3><div class="mtb-intro-card-body"><p>Psalms teaches us how to live in a growing relationship with God.</p>
+<p>The book reminds us that:</p>
+<ul>
+<li><p>God welcomes honest prayer.</p></li>
+<li><p>Worship is a way of life, not merely an event.</p></li>
+<li><p>God is worthy of praise in every circumstance.</p></li>
+<li><p>God's faithfulness gives hope in every season.</p></li>
+<li><p>Trusting God brings peace even when life is difficult.</p></li>
+</ul>
+<p>Psalms teaches us not only what to believe about God, but how to respond to Him with our hearts.</p></div></article><article class="mtb-intro-card mtb-span-6"><h3 class="mtb-intro-card-header">Key Themes to Watch For</h3><div class="mtb-intro-card-body"><ul>
+<li><p>Worship</p></li>
+<li><p>Prayer</p></li>
+<li><p>Trust in God</p></li>
+<li><p>Praise and thanksgiving</p></li>
+<li><p>God's faithfulness</p></li>
+<li><p>Repentance</p></li>
+<li><p>God's kingship</p></li>
+<li><p>Hope</p></li>
+</ul></div></article><article class="mtb-intro-card mtb-span-6"><h3 class="mtb-intro-card-header">Key Concepts to Understand Before Reading</h3><div class="mtb-intro-card-body"><p><strong>Praise</strong> - Joyfully declaring God's greatness, goodness, and mighty works.</p>
+<p><strong>Lament</strong> - Honest prayer that brings sorrow, confusion, or suffering before God while continuing to trust Him.</p>
+<p><strong>Worship</strong> - Responding to God with reverence, love, trust, obedience, and praise.</p>
+<p><strong>The Fear of the LORD</strong> - Reverent trust that recognizes God's greatness and submits to His ways.</p>
+<p><strong>Messianic Psalm</strong> - A psalm that points forward to the coming Messiah and finds its ultimate fulfillment in Jesus Christ.</p>
+<p><strong>Refuge</strong> - A favorite image describing God as the safe place for those who trust Him.</p>
+<p><strong>The LORD Reigns</strong> - A central truth declaring God's sovereign rule over all creation.</p></div></article><article class="mtb-intro-card mtb-span-6"><h3 class="mtb-intro-card-header">Book Flow</h3><div class="mtb-intro-card-body"><p><strong>Book One (Psalms 1-41) - Trusting the LORD</strong></p>
+<p>Many of David's early psalms emphasize trusting God through personal trials while delighting in His ways.</p>
+<p><strong>Book Two (Psalms 42-72) - Longing for God's Presence</strong></p>
+<p>These psalms express deep dependence on God, confidence in His reign, and hope in His salvation.</p>
+<p><strong>Book Three (Psalms 73-89) - Trusting God in Times of Crisis</strong></p>
+<p>The writers wrestle with suffering, injustice, and national decline while holding onto God's covenant faithfulness.</p>
+<p><strong>Book Four (Psalms 90-106) - The LORD Reigns Forever</strong></p>
+<p>God's eternal kingship becomes the source of hope despite human weakness and changing circumstances.</p>
+<p><strong>Book Five (Psalms 107-150) - Praise the LORD</strong></p>
+<p>The Psalter concludes with increasing praise, thanksgiving, and joyful worship, culminating in the call for everything that has breath to praise the LORD.</p></div></article><article class="mtb-intro-card mtb-span-6"><h3 class="mtb-intro-card-header">Christ and Life</h3><div class="mtb-intro-card-body"><p>The Psalms consistently point to Jesus Christ. They anticipate His birth, suffering, resurrection, ascension, priesthood, kingship, and eternal reign. Jesus quoted the Psalms more than any other Old Testament book, and they reveal both His heart and His mission.</p>
+<p>For believers today, Psalms teaches us how to walk with God through every season of life. Whether we are rejoicing, grieving, struggling, confessing, or celebrating, the Psalms show us how to bring our whole lives before the Lord. As God's people, we are invited to worship Him honestly, trust Him completely, and delight in His presence.</p></div></article></div></section><section class="mtb-intro-section"><div class="mtb-intro-section-heading"><h2>Reading Guide</h2></div><div class="mtb-intro-grid"><article class="mtb-intro-card mtb-span-6"><h3 class="mtb-intro-card-header">One-Sentence Summary</h3><div class="mtb-intro-card-body"><p>Psalms teaches God's people to know Him, trust Him, and worship Him through every season of life.</p></div></article><article class="mtb-intro-card mtb-span-6"><h3 class="mtb-intro-card-header">Read This Book Remembering...</h3><div class="mtb-intro-card-body"><p><strong>Every season of life is an opportunity to know and worship God. As you read, watch how every joy, sorrow, victory, and struggle becomes an invitation to trust the Lord more deeply and delight in His presence.</strong></p></div></article></div></section><section class="mtb-intro-section"><div class="mtb-intro-section-heading"><h2>Helpful Notes</h2></div><div class="mtb-intro-grid"><article class="mtb-intro-card mtb-span-12"><div class="mtb-intro-card-body"><p>The Book of Psalms is <strong>a collection of 150 individual songs and prayers</strong>, not one continuous story. While the psalms are arranged into five books, most can be read independently. As you read, pay attention to the type of psalm-such as praise, lament, thanksgiving, wisdom, or messianic prophecy-as this will help you understand its purpose and message.</p>
+<p>Yes, but I would be selective. I don't think they belong in <strong>Key Concepts</strong>, because they aren't central to understanding the message of Psalms. They fit much better in <strong>Helpful Notes</strong>.</p>
+<p>I would expand the Helpful Notes into two short sections.</p>
+
+<p><strong>Reading the Psalms</strong></p>
+<p>The Book of Psalms is a collection of <strong>150 individual songs and prayers</strong>, not one continuous story. While the psalms are arranged into five books, most can be read independently. As you read, pay attention to the type of psalm-such as praise, lament, thanksgiving, wisdom, or messianic prophecy-as this will help you understand its purpose and message.</p>
+<p><strong>Musical and Literary Terms</strong></p>
+<p>As you read, you will occasionally encounter Hebrew musical or literary terms that are not fully understood today. These were likely instructions for worship leaders or musicians rather than part of the psalm itself. A few of the most common include:</p>
+<ul>
+<li><p><strong>Selah</strong> - Probably a pause for reflection or musical interlude, inviting the reader or singer to stop and consider what has just been said.</p></li>
+<li><p><strong>Shiggaion (Shiggaion/Shiggaionoth)</strong> - A passionate or highly emotional style of song or prayer.</p></li>
+<li><p><strong>Miktam</strong> - Probably a special type of psalm or composition, though its exact meaning is uncertain.</p></li>
+<li><p><strong>Maskil</strong> - A psalm intended to give instruction or impart wisdom.</p></li>
+<li><p><strong>To the Chief Musician</strong> - Indicates the psalm was entrusted to the worship leader for public use.</p></li>
+<li><p><strong>A Song of Ascents</strong> - Psalms sung by worshipers as they traveled to Jerusalem for the annual feasts.</p></li>
+<li><p><strong>According to..."</strong> <em>(e.g., "Do Not Destroy," "The Deer of the Dawn")</em> - Probably references to well-known melodies used for singing the psalm.</p></li>
+</ul>
+<p>Understanding these terms can provide helpful background, but they do not change the central message of the psalms.</p></div></article></div></section></div>
+</section>

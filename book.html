@@ -466,18 +466,7 @@ document.addEventListener("DOMContentLoaded", function () {
     wireBookNav(book);
 }
 
-  /* =========================================================
-     CHAPTER COUNTS (single source for auto chapter buttons)
-     Add books here once, and chapter buttons will just work.
-  ========================================================= */
-  const CHAPTER_COUNTS = {
-    "titus": 3,
-    "3-john": 1,
-    "obadiah": 1,
-    "ruth":4,
-    "isaiah": 66
-    // later: "psalms": 150
-  };
+
 
   // Fetch the canonical book order so Prev/Next book matches your site order
   let __BOOK_INDEX = null;
@@ -765,9 +754,9 @@ if (canonicalBtn) {
 if (chapterWrap) {
     chapterWrap.innerHTML = "";
 
-    const total = CHAPTER_COUNTS[book] || 0;
+const chapters = CHAPTER_AVAILABILITY[book] || [];
 
-    for (let ch = 1; ch <= total; ch++) {
+for (const ch of chapters) {
       const btn = document.createElement("button");
       btn.type = "button";
       btn.textContent = String(ch);
@@ -806,5 +795,6 @@ if (chapterWrap) {
 </script>
 
 <script src="/assets/js/mtb-book-navigation-fix.js"></script>
+<script src="/assets/js/mtb-chapter-availability.js"></script>
 </body>
 </html>

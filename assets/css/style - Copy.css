@@ -240,9 +240,8 @@ body[data-doc-type] .doc-shell {
 
 .hero-content p {
   white-space: nowrap !important;
-  width: 100%;
+  width: max-content;
   max-width: 100%;
-  text-align: center;
 }
 
 .hero-content .buttons a,

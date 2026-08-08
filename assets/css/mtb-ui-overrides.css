@@ -1434,3 +1434,9 @@ body[data-book][data-chapter][data-active-tab="chapter_reflections"] #doc-target
     grid-template-columns: minmax(0, 1fr) !important;
   }
 }
+/* TEMPORARILY HIDE ABOUT NAV LINKS SITE-WIDE */
+
+.main-nav a[href="/aboutthebible.html"],
+.main-nav a[href="/about.html"] {
+  display: none !important;
+}

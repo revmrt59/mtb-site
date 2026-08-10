@@ -1210,8 +1210,8 @@ body[data-book][data-chapter][data-active-tab="chapter_explanation"] #doc-target
    CHAPTER OVERVIEW — WIDE 4-COLUMN LAYOUT
    Keep this block at the VERY END of this file.
    ========================================================= */
-body[data-book][data-chapter][data-active-tab="chapter_orientation"] #doc-layout,
-body[data-book][data-chapter][data-active-tab="chapter_orientation"] .doc-layout{
+body[data-book][data-chapter][data-active-tab="chapter_overview"] #doc-layout,
+body[data-book][data-chapter][data-active-tab="chapter_overview"] .doc-layout{
   width: 100% !important;
   max-width: none !important;
   margin: 0 !important;
@@ -1219,13 +1219,13 @@ body[data-book][data-chapter][data-active-tab="chapter_orientation"] .doc-layout
   box-sizing: border-box !important;
 }
 
-body[data-book][data-chapter][data-active-tab="chapter_orientation"] .doc-main{
+body[data-book][data-chapter][data-active-tab="chapter_overview"] .doc-main{
   width: 100% !important;
   max-width: none !important;
   margin: 0 !important;
 }
 
-body[data-book][data-chapter][data-active-tab="chapter_orientation"] #doc-target{
+body[data-book][data-chapter][data-active-tab="chapter_overview"] #doc-target{
   width: min(1600px, calc(100vw - 48px)) !important;
   max-width: 1600px !important;
   margin: 18px auto 40px !important;
@@ -1234,8 +1234,8 @@ body[data-book][data-chapter][data-active-tab="chapter_orientation"] #doc-target
   overflow-x: hidden !important;
 }
 
-body[data-book][data-chapter][data-active-tab="chapter_orientation"] #doc-target > #doc-root,
-body[data-book][data-chapter][data-active-tab="chapter_orientation"] #doc-target .mtb-chapter-overview-dashboard{
+body[data-book][data-chapter][data-active-tab="chapter_overview"] #doc-target > #doc-root,
+body[data-book][data-chapter][data-active-tab="chapter_overview"] #doc-target .mtb-chapter-overview-dashboard{
   width: 100% !important;
   max-width: none !important;
   margin-left: auto !important;
@@ -1244,19 +1244,19 @@ body[data-book][data-chapter][data-active-tab="chapter_orientation"] #doc-target
 }
 
 @media (max-width: 1100px){
-  body[data-book][data-chapter][data-active-tab="chapter_orientation"] #doc-target{
+  body[data-book][data-chapter][data-active-tab="chapter_overview"] #doc-target{
     width: calc(100vw - 32px) !important;
     padding: 24px !important;
   }
 }
 
 @media (max-width: 700px){
-  body[data-book][data-chapter][data-active-tab="chapter_orientation"] #doc-layout,
-  body[data-book][data-chapter][data-active-tab="chapter_orientation"] .doc-layout{
+  body[data-book][data-chapter][data-active-tab="chapter_overview"] #doc-layout,
+  body[data-book][data-chapter][data-active-tab="chapter_overview"] .doc-layout{
     padding: 12px 8px 32px !important;
   }
 
-  body[data-book][data-chapter][data-active-tab="chapter_orientation"] #doc-target{
+  body[data-book][data-chapter][data-active-tab="chapter_overview"] #doc-target{
     width: calc(100vw - 16px) !important;
     margin-top: 12px !important;
     padding: 18px 14px !important;
@@ -1439,4 +1439,38 @@ body[data-book][data-chapter][data-active-tab="chapter_reflections"] #doc-target
 .main-nav a[href="/aboutthebible.html"],
 .main-nav a[href="/about.html"] {
   display: none !important;
+}
+/* =========================================================
+   HOME PAGE INFORMATION BOXES
+   ========================================================= */
+
+
+
+.home-info-section {
+  width: min(700px, calc(100% - 40px));
+  margin: 14px auto 30px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.home-info-box {
+  width: 100%;
+  box-sizing: border-box;
+  padding: 12px 20px;
+  background: transparent;
+  border: 1px solid var(--line);
+  border-top: 3px solid var(--blue);
+  border-radius: 10px;
+}
+
+.home-info-box h2 {
+  margin: 0 0 6px;
+  color: var(--navy);
+  font-size: 1.1rem;
+}
+
+.home-info-box p {
+  margin: 0;
+  line-height: 1.45;
 }

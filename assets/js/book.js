@@ -10,7 +10,7 @@
   const TABS = [
   { key: "chapter_scripture", label: "Chapter Scripture" },
   { key: "book_introduction", label: "Book Overview" },
-  { key: "chapter_orientation", label: "Chapter Overview" },
+  { key: "chapter_overview", label: "Chapter Overview" },
   { key: "chapter_explanation", label: "Chapter Study" },
   { key: "chapter_insights", label: "Chapter Reflection" },
   { key: "eg_culture", label: "EG Culture" },
@@ -157,7 +157,7 @@
     const map = {
       chapter_scripture: "chapter-scripture",
       book_introduction: "book-overview",
-      chapter_orientation: "chapter-orientation",
+      chapter_overview: "chapter-overview",
       chapter_explanation: "chapter-explanation",
       chapter_insights: "chapter-insights",
       eg_culture: "eg-culture",

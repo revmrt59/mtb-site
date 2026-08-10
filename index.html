@@ -7,6 +7,59 @@
 <link rel="stylesheet" href="/assets/css/style.css">
 <link rel="stylesheet" href="/assets/css/mtb-ui.css">
 <link rel="stylesheet" href="/assets/css/mtb-ui-overrides.css">
+
+<style>
+/* Temporary home-page notices */
+.hero {
+  position: relative;
+}
+
+.home-info-section {
+  position: absolute;
+  left: 50%;
+  bottom: 24px;
+  transform: translateX(-50%);
+  width: min(620px, calc(100% - 40px));
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  z-index: 3;
+}
+
+.home-info-box {
+  width: 100%;
+  box-sizing: border-box;
+  padding: 10px 18px;
+  background: rgba(0, 0, 0, 0.28);
+  border: 1px solid rgba(255, 255, 255, 0.35);
+  border-radius: 8px;
+  text-align: center;
+  color: #fff;
+}
+
+.home-info-box h2 {
+  margin: 0 0 4px;
+  color: #fff;
+  font-size: 1rem;
+}
+
+.home-info-box p {
+  margin: 0;
+  line-height: 1.4;
+}
+
+@media (max-width: 700px) {
+  .home-info-section {
+    bottom: 14px;
+    width: min(92%, 620px);
+  }
+
+  .home-info-box {
+    padding: 9px 14px;
+  }
+}
+</style>
+
 </head>
 
 <body>
@@ -49,8 +102,21 @@
 
       
     </div>
-  </section>
 
+    <section class="home-info-section">
+      <div class="home-info-box">
+        <h2>Use This Material Freely</h2>
+        <p>
+          Feel free to use any or all of the material contained herein as you see fit without giving any credit to the author, as God is the source of every good and perfect gift. Freely you have received, freely you may give. No credit of originality is claimed. As someone once said, “I milk a lot of cows, but churn my own butter.”
+        </p>
+      </div>
+
+      <div class="home-info-box">
+        <h2>New Content</h2>
+        <p>As of Aug. 10: Psalms 19–20 and Obadiah completed.</p>
+      </div>
+    </section>
+  </section>
   <script src="/assets/js/jshero-jump.js"></script>
   
 

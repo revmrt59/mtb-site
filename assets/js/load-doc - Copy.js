@@ -4,9 +4,9 @@
 // - Fixes mojibake
 // - For chapter explanation pages:
 //   - Converts "word (G####/H####)" markers into <span class="ws" data-ws="G####" data-ws-doc="...">
-//   - Points word studies to canonical files: book-chapter-verse-g###.html
+//   - Points word studies to g/h-prefixed files: book-chapter-g###.html (Option A)
 //   - Sets data-ws-json for optional JSON mode (still supported by wordstudy-hover.js)
- const stamp = "LOAD-DOC v2026-08-10-WS-CANONICAL";
+ const stamp = "LOAD-DOC v2026-02-13-01";
   console.log(stamp);
 (function () {
   // ------------------------------------------
@@ -76,17 +76,9 @@
     const resTopic = name.match(/^([a-z0-9-]+)-(\d+)-resources-[a-z0-9-]+\.html$/i);
     if (resTopic) return { book: resTopic[1].toLowerCase(), chapter: Number(resTopic[2]), type: "chapter-resources" };
 
-    // canonical word study pages: {book}-{chapter}-{verse}-g96.html
-    const ws = name.match(/^([a-z0-9-]+)-(\d+)-(\d+)-(g\d{1,5}|h\d{1,5})\.html$/i);
-    if (ws) {
-      return {
-        book: ws[1].toLowerCase(),
-        chapter: Number(ws[2]),
-        verse: Number(ws[3]),
-        strong: ws[4].toUpperCase(),
-        type: "word-study"
-      };
-    }
+    // word study pages: {book}-{ch}-g96.html or {book}-{ch}-h1234.html
+    const ws = name.match(/^([a-z0-9-]+)-(\d+)-(g\d{1,5}|h\d{1,5})\.html$/i);
+    if (ws) return { book: ws[1].toLowerCase(), chapter: Number(ws[2]), type: "word-study" };
 
     return { book: "", chapter: null, type: "" };
   }
@@ -235,7 +227,7 @@
 
   // Allow things like:
   // - titus-1-chapter-explanation.html
-  // - titus-1-2-g96.html
+  // - titus-1-g96.html
   // - titus-1-resources-topic-name.html
   function safeDocName(name) {
     const n = String(name || "").replace(/^\/+/, "");
@@ -320,90 +312,32 @@
   // Turns: disqualified (G96) into:
   //   <span class="ws" data-ws="G96" data-ws-doc="...">disqualified</span>
   // Option A naming:
-  //   data-ws-doc: {book}-{chapter}-{verse}-g96.html (leading zeros removed)
+  //   data-ws-doc: {book}-{chapter}-g96.html  (prefix kept, leading zeros removed)
   // ==========================================
   function enhanceStrongMarkersToWordStudies(rootEl, meta, docPath) {
     if (!rootEl) return;
 
+    // Matches: word (G###) or word (H###) ; allow 1–5 digits (so G96 works)
+    //const re = /(\b[\w’'-]+\b)\s*\((G\d{1,5}|H\d{1,5})\)/g;
     const re = /(\b[\w’'-]+\b)\s*\(([GH]\d{1,5})\)/gi;
+
     const baseDir = docPath ? docPath.slice(0, docPath.lastIndexOf("/") + 1) : "";
 
     function normalizeStrongLower(strong) {
       const s = String(strong || "").trim();
       if (!s) return "";
-      const letter = s[0].toLowerCase();
+      const letter = s[0].toLowerCase(); // g or h
       const digits = s.slice(1).replace(/\D/g, "");
       const n = parseInt(digits, 10);
       if (!Number.isFinite(n)) return "";
-      return `${letter}${n}`;
+      return `${letter}${n}`; // removes leading zeros
     }
 
-    function verseFromString(value) {
-      const s = String(value || "").trim();
-      if (!s) return null;
-
-      // Full Bible reference, e.g. "Psalms 19:2".
-      let m = s.match(/\b(?:[1-3]\s+)?[A-Za-z][A-Za-z ]*\s+\d+\s*:\s*(\d+)\b/i);
-      if (m) return Number(m[1]);
-
-      // Explicit verse labels, e.g. "Verse 2", "v. 2", "v2".
-      m = s.match(/\b(?:verse|v\.?)\s*(\d+)\b/i);
-      if (m) return Number(m[1]);
-
-      return null;
-    }
-
-    function findVerseForNode(node) {
-      const el = node && node.parentElement ? node.parentElement : null;
-      if (!el) return null;
-
-      // Prefer explicit verse metadata if the generated HTML supplies it.
-      const explicit = el.closest("[data-verse],[data-verse-number],[data-verse-ref]");
-      if (explicit) {
-        for (const attr of ["data-verse", "data-verse-number", "data-verse-ref"]) {
-          const raw = explicit.getAttribute(attr);
-          const byRef = verseFromString(raw);
-          if (byRef) return byRef;
-
-          const digitsOnly = String(raw || "").match(/^\s*(\d+)\s*$/);
-          if (digitsOnly) return Number(digitsOnly[1]);
-        }
-      }
-
-      // Search the nearest logical verse/card/table row.
-      const scope = el.closest(
-        ".mtb-verse, .verse, .verse-card, .study-verse, .chapter-study-verse, " +
-        ".mtb-card, .card, tr, section, article, li"
-      );
-      if (scope) {
-        const v = verseFromString(scope.textContent);
-        if (v) return v;
-      }
-
-      // Fall back to preceding elements. Chapter Study normally places
-      // the verse reference before the content belonging to that verse.
-      let cur = el;
-      while (cur && cur !== rootEl) {
-        let prev = cur.previousElementSibling;
-        while (prev) {
-          const v = verseFromString(prev.textContent);
-          if (v) return v;
-          prev = prev.previousElementSibling;
-        }
-        cur = cur.parentElement;
-      }
-
-      return null;
-    }
-
-    function buildWsDocPath(strong, verse) {
-      if (!meta || !meta.book || !meta.chapter || !baseDir || !verse) return null;
-      const strongLower = normalizeStrongLower(strong);
+    function buildWsDocPath(strong) {
+      if (!meta || !meta.book || !meta.chapter || !baseDir) return null;
+      const strongLower = normalizeStrongLower(strong); // e.g., g96
       if (!strongLower) return null;
-
-      // Locked MTB standard:
-      // {book}-{chapter}-{verse}-{g|h}{StrongNumber}.html
-      return `${baseDir}${meta.book}-${meta.chapter}-${verse}-${strongLower}.html`;
+      return `${baseDir}${meta.book}-${meta.chapter}-${strongLower}.html`;
     }
 
     const walker = document.createTreeWalker(rootEl, NodeFilter.SHOW_TEXT, null);
@@ -411,52 +345,45 @@
     while (walker.nextNode()) textNodes.push(walker.currentNode);
 
     textNodes.forEach((node) => {
-      const value = node.nodeValue;
-      if (!value) return;
+      const text = node.nodeValue;
+      if (!text) return;
 
+      // Guard: don't process text already inside a .ws span
       const parentEl = node.parentElement;
       if (parentEl && parentEl.closest && parentEl.closest(".ws")) return;
 
       re.lastIndex = 0;
-      if (!re.test(value)) return;
+      if (!re.test(text)) return;
       re.lastIndex = 0;
-
-      const verse = findVerseForNode(node);
-      if (!verse) {
-        console.warn("MTB Word Study: verse not found for Strong's marker:", value);
-        return;
-      }
 
       const frag = document.createDocumentFragment();
       let last = 0;
       let m;
 
-      while ((m = re.exec(value)) !== null) {
+      while ((m = re.exec(text)) !== null) {
         const full = m[0];
         const word = m[1];
+        // const strong = m[2];
         const strong = m[2].toUpperCase();
         const start = m.index;
 
-        if (start > last) {
-          frag.appendChild(document.createTextNode(value.slice(last, start)));
-        }
+        if (start > last) frag.appendChild(document.createTextNode(text.slice(last, start)));
 
         const span = document.createElement("span");
         span.className = "ws";
-        span.setAttribute("data-ws", strong);
-        span.setAttribute("data-verse", String(verse));
+        span.setAttribute("data-ws", strong); // keep original casing (G96/H####)
         span.textContent = word;
 
-        const wsDoc = buildWsDocPath(strong, verse);
+        const wsDoc = buildWsDocPath(strong);
         if (wsDoc) span.setAttribute("data-ws-doc", wsDoc);
 
         frag.appendChild(span);
+
+        // remove marker from display
         last = start + full.length;
       }
 
-      if (last < value.length) {
-        frag.appendChild(document.createTextNode(value.slice(last)));
-      }
+      if (last < text.length) frag.appendChild(document.createTextNode(text.slice(last)));
 
       node.parentNode.replaceChild(frag, node);
     });

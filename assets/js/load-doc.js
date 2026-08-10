@@ -49,6 +49,9 @@
     proverbs: "old-testament",
     obadiah: "old-testament",
     ruth: "old-testament",
+    hosea: "old-testament",
+    habakkuk: "old-testament",
+
   };
 
   // ==========================================

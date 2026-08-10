@@ -26,31 +26,192 @@
 </style>
 <div class="mtb-print-controls"><button type="button" class="mtb-print-button" onclick="(function(button){var doc=button.closest('.mtb-doc')||document;var panels=Array.prototype.slice.call(doc.querySelectorAll('details'));panels.forEach(function(panel){panel.open=true;});window.print();})(this)">&#128438; Print This Page</button></div>
 <style>
-body:has(.mtb-doc[data-doc-type="chapter-insights"]) #doc-layout {
-  width: min(96vw, 1680px) !important;
-  max-width: 1680px !important;
-  margin-left: auto !important;
-  margin-right: auto !important;
-}
-body:has(.mtb-doc[data-doc-type="chapter-insights"]) .doc-shell,
-body:has(.mtb-doc[data-doc-type="chapter-insights"]) .document-shell,
-body:has(.mtb-doc[data-doc-type="chapter-insights"]) .content-shell {
-  width: min(96vw, 1680px) !important;
-  max-width: 1680px !important;
-}
-body:has(.mtb-doc[data-doc-type="chapter-insights"]) .doc-main,
-body:has(.mtb-doc[data-doc-type="chapter-insights"]) #doc-target,
-body:has(.mtb-doc[data-doc-type="chapter-insights"]) .doc-content,
-body:has(.mtb-doc[data-doc-type="chapter-insights"]) .mtb-doc[data-doc-type="chapter-insights"] {
-  width: 100% !important;
-  max-width: none !important;
-  overflow: visible !important;
-}
-.mtb-chapter-reflections{--navy:#173a5e;--gold:#b7832f;--ink:#1f2b37;--line:#d8e1e8;width:100%;max-width:none;margin:0 auto;padding:2px 0 36px;font-family:Arial,Helvetica,sans-serif;color:var(--ink)}
-.mtb-chapter-reflections *{box-sizing:border-box}.mtb-reflections-hero{display:flex;align-items:center;justify-content:space-between;gap:20px;padding:22px 26px;margin:0 0 18px;border:1px solid #cbd8e3;border-radius:14px;background:linear-gradient(135deg,#f8fafc,#e8f0f7)}
-.mtb-reflections-eyebrow{margin:0 0 4px;color:var(--gold);font-size:.78rem;font-weight:800;letter-spacing:.12em;text-transform:uppercase}.mtb-reflections-title{margin:0;color:var(--navy);font-size:clamp(1.6rem,3vw,2.35rem)}.mtb-reflections-badge{padding:7px 12px;border-radius:999px;background:#fff4df;color:#775219;font-size:.78rem;font-weight:800;white-space:nowrap}
-.mtb-reflections-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px;align-items:stretch}.mtb-reflections-card{display:flex;min-width:0;height:100%;flex-direction:column;border:1px solid var(--line);border-radius:11px;background:#fff;overflow:hidden;box-shadow:0 4px 15px rgba(28,48,66,.05)}.mtb-reflections-card h2{margin:0;padding:12px 16px 10px;border-bottom:1px solid #e2e8ed;background:#f2f6f9;color:var(--navy);font-size:.98rem}.mtb-reflections-body{flex:1;padding:16px 18px 18px;font-size:1rem;line-height:1.55;overflow-wrap:anywhere}.mtb-reflections-body p{margin:0 0 .8em}.mtb-reflections-body p:last-child{margin-bottom:0}.mtb-reflections-body ul,.mtb-reflections-body ol{margin:.15em 0 0;padding-left:1.35em}.mtb-reflections-body li{margin:0 0 .42em}.mtb-reflections-empty{color:#77818a;font-style:italic}
-@media(max-width:1180px){.mtb-reflections-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
-@media(max-width:760px){.mtb-reflections-grid{grid-template-columns:1fr}.mtb-reflections-hero{align-items:flex-start;flex-direction:column;padding:18px}.mtb-reflections-body{padding:14px 15px 16px}}
-</style><div class="mtb-chapter-reflections"><header class="mtb-reflections-hero"><div><p class="mtb-reflections-eyebrow">Chapter Reflections</p><h1 class="mtb-reflections-title">Reflections Psalms 19</h1></div><div class="mtb-reflections-badge">Reflect and Respond</div></header><div class="mtb-reflections-grid"><article class="mtb-reflections-card"><h2>Foundational Truths</h2><div class="mtb-reflections-body"><p>Coming soon</p></div></article><article class="mtb-reflections-card"><h2>Chapter Insights</h2><div class="mtb-reflections-body"><p>Coming soon</p></div></article><article class="mtb-reflections-card"><h2>Christ and Life</h2><div class="mtb-reflections-body"><p>Coming soon</p></div></article><article class="mtb-reflections-card"><h2>Dwelling in the Word</h2><div class="mtb-reflections-body"><p>Coming soon</p></div></article><article class="mtb-reflections-card"><h2>Seeds for the Sower</h2><div class="mtb-reflections-body"><p>Coming soon</p></div></article><article class="mtb-reflections-card"><h2>How Shall We Then Live?</h2><div class="mtb-reflections-body"><p>Coming soon</p></div></article></div></div>
+.mtb-chapter-reflections{--navy:#173a5e;--blue:#2b587f;--gold:#b7832f;--line:#d7e0e8;width:100%;max-width:1600px;margin:0 auto;padding:2px 4px 32px;font-family:Arial,Helvetica,sans-serif;color:#1d2935}.mtb-chapter-reflections *{box-sizing:border-box}.mtb-reflections-hero{display:flex;align-items:center;justify-content:space-between;gap:20px;margin:0 0 22px;padding:22px 26px;border:1px solid #cbd8e3;border-radius:14px;background:linear-gradient(135deg,#f7fafc,#e8f0f7)}.mtb-reflections-eyebrow{margin:0 0 5px;color:var(--gold);font-size:.78rem;font-weight:800;letter-spacing:.13em;text-transform:uppercase}.mtb-reflections-title{margin:0;color:var(--navy);font-size:clamp(1.55rem,3vw,2.25rem)}.mtb-reflections-badge{padding:10px 16px;border:1px solid rgba(23,58,94,.18);border-radius:999px;background:#fff;color:var(--navy);font-weight:800}.mtb-reflections-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:18px;align-items:stretch}.mtb-reflections-card{overflow:hidden;border:1px solid var(--line);border-top:4px solid var(--blue);border-radius:12px;background:#fff;box-shadow:0 4px 15px rgba(28,48,66,.055)}.mtb-reflections-card h2{margin:0;padding:13px 17px;background:#eef4f9;color:var(--navy);font-size:1rem}.mtb-reflections-card-body{padding:18px;line-height:1.58}.mtb-reflections-card-body p{margin:0 0 .8em}.mtb-reflections-card-body p:last-child{margin-bottom:0}.mtb-reflections-card-body ul,.mtb-reflections-card-body ol{padding-left:1.3em}@media(max-width:760px){.mtb-reflections-grid{grid-template-columns:1fr}.mtb-reflections-hero{align-items:flex-start;flex-direction:column;padding:19px}}
+</style><div class="mtb-chapter-reflections"><header class="mtb-reflections-hero"><div><p class="mtb-reflections-eyebrow">Chapter Reflections</p><h1 class="mtb-reflections-title">Obadiah 1</h1></div><div class="mtb-reflections-badge">Reflect and Respond</div></header><div class="mtb-reflections-grid"><article class="mtb-reflections-card"><h2>Foundational Truths</h2><div class="mtb-reflections-card-body"><ol type="1">
+<li><p><strong>God opposes pride.</strong> Pride blinds people to reality, creates false security, and ultimately brings God's judgment. (vv. 3–4).</p></li>
+<li><p><strong>God governs the nations.</strong> Kings, armies, alliances, and world events all remain under His sovereign authority. History unfolds according to His purposes, not merely human decisions (vv. 1–9).</p></li>
+<li><p><strong>God holds people accountable for how they treat others.</strong> Edom was judged not only for violence but for indifference, rejoicing over another's suffering, and exploiting people in their weakness (vv. 10–14).</p></li>
+<li><p><strong>God's justice is perfectly righteous.</strong> The principle, "As you have done, it shall be done to you," reveals that God repays every deed with perfect fairness (v. 15).</p></li>
+<li><p><strong>God disciplines His people without abandoning them.</strong> Though Jerusalem experienced judgment, God still called them "My people" and promised restoration (vv. 13, 17).</p></li>
+<li><p><strong>God restores what He has promised.</strong> Deliverance, holiness, and inheritance belong to God's people because His promises cannot fail (vv. 17–20).</p></li>
+<li><p><strong>God's kingdom is the final reality.</strong> Every earthly kingdom rises and falls, but the Lord's kingdom alone is everlasting (v. 21).</p></li>
+</ol></div></article><article class="mtb-reflections-card"><h2>Chapter Insights</h2><div class="mtb-reflections-card-body"><ol type="1">
+<li><p><strong>Pride is the root; the other sins are its fruit.</strong> Before God condemned Edom's actions, He exposed the pride that produced them. Wrong behavior always begins with a wrong heart.</p></li>
+<li><p><strong>False security has many forms.</strong> Edom trusted its mountain fortress, wealth, political alliances, wise counselors, and military strength. God dismantled every one of them, proving that no earthly security can replace dependence on Him.</p></li>
+<li><p><strong>Sin progresses when left unchecked.</strong> Obadiah traces a deliberate downward spiral: standing by → watching with satisfaction → rejoicing → boasting → plundering → betraying fugitives. Hearts rarely become cruel overnight.</p></li>
+<li><p><strong>Neutrality is sometimes guilt.</strong> Edom's first crime was not attacking Jerusalem but refusing to stand with its suffering brothers. Scripture teaches that failing to do good can itself be sin.</p></li>
+<li><p><strong>God remembers relationships we forget.</strong> Repeatedly calling Judah "your brother Jacob" reminds us that God expects His people to treat one another according to the relationship He has established.</p></li>
+<li><p><strong>God's discipline of His people never cancels His ownership of them.</strong> Even while judging Judah, God still called them "My people." His correction flowed from covenant love, not rejection.</p></li>
+<li><p><strong>The judgment of Edom becomes a pattern for every nation.</strong> The prophecy expands from one historical nation to God's future judgment of all peoples who proudly oppose Him.</p></li>
+<li><p><strong>Restoration follows judgment for God's people.</strong> The chapter does not end with destruction but with deliverance, holiness, inheritance, and the establishment of God's kingdom.</p></li>
+<li><p><strong>The entire chapter moves toward one climactic truth:</strong> <em>"The kingdom shall be the LORD'S."</em> Every section points toward God's ultimate reign over history.</p></li>
+</ol></div></article><article class="mtb-reflections-card"><h2>Christ &amp; Life</h2><div class="mtb-reflections-card-body"><p>Obadiah reveals a God who opposes the proud but faithfully preserves His people. Throughout the chapter, God tears down every false refuge—position, wealth, influence, wisdom, and military power—until only He remains as the true refuge.</p>
+<p>Jesus Christ perfectly fulfills the hope of Obadiah. He is the true Deliverer who rescues His people, restores their inheritance, and establishes God's eternal kingdom. Yet He accomplished this in a surprising way. The judgment that should have fallen upon us fell upon Him instead. At the cross, He drank the cup of God's wrath so that those who trust Him might receive mercy instead of condemnation.</p>
+<p>Because Christ reigns, believers no longer place their confidence in earthly securities. We find our identity in Him, our refuge in Him, our inheritance through Him, and our future in His coming kingdom. The final word over our lives is not judgment, loss, or injustice, but the reign of King Jesus.</p></div></article><article class="mtb-reflections-card"><h2>Dwelling in the Word</h2><div class="mtb-reflections-card-body"><ul>
+<li><p>Where am I tempted to place my confidence instead of trusting the Lord?</p></li>
+<li><p>Do I secretly rejoice when someone I dislike fails or suffers?</p></li>
+<li><p>Have I ever remained silent when God wanted me to stand with someone in need?</p></li>
+<li><p>Is there anyone I have treated more as an enemy than as someone made in God's image?</p></li>
+<li><p>What earthly security would be hardest for me to lose?</p></li>
+<li><p>How does knowing that "the kingdom shall be the LORD'S" change the way I view today's injustice and uncertainty?</p></li>
+<li><p>Am I living as a citizen of Christ's kingdom or merely trying to build my own?</p></li>
+</ul></div></article><article class="mtb-reflections-card"><h2>Seeds for the Sower</h2><div class="mtb-reflections-card-body"><p><strong>Teaching</strong></p>
+<ul>
+<li><p>Pride often hides beneath legitimate strengths. Edom's mountain fortress became a substitute for trusting God.</p></li>
+<li><p>Obadiah shows the anatomy of sin. Trace the progression from a proud heart to outward cruelty.</p></li>
+<li><p>The phrase <strong>"your brother Jacob"</strong> is one of the interpretive keys to the entire book.</p></li>
+<li><p>Verse 15 expands the prophecy from Edom to all nations, making Obadiah a message about God's universal justice.</p></li>
+</ul>
+<p><strong>Discipleship</strong></p>
+<ul>
+<li><p>False security always disappoints; confidence in God never does.</p></li>
+<li><p>Compassion is measured most clearly when others are suffering.</p></li>
+<li><p>God disciplines His children without abandoning them.</p></li>
+<li><p>Waiting for God's restoration requires trusting His timing rather than grasping for our own solutions.</p></li>
+</ul>
+<p><strong>Counseling</strong></p>
+<ul>
+<li><p>Bitterness toward others eventually hardens the heart.</p></li>
+<li><p>Envy and resentment often reveal themselves by taking pleasure in another person's failure.</p></li>
+<li><p>Those who have suffered injustice can entrust their case to God's perfect justice instead of seeking revenge.</p></li>
+</ul>
+<p><strong>Evangelism</strong></p>
+<ul>
+<li><p>Every person will one day answer to the righteous Judge.</p></li>
+<li><p>The gospel offers mercy before the Day of the Lord arrives.</p></li>
+<li><p>The King who will judge the world is the same Savior who invites sinners to receive forgiveness today.</p></li>
+</ul>
+<p><strong>Leadership</strong></p>
+<ul>
+<li><p>Great leaders protect the vulnerable instead of exploiting them.</p></li>
+<li><p>Spiritual authority is expressed through humility, not self-exaltation.</p></li>
+<li><p>Leaders must stand with God's people during difficult seasons rather than distancing themselves for self-preservation.</p></li>
+</ul></div></article><article class="mtb-reflections-card"><h2>How Shall We Then Live?</h2><div class="mtb-reflections-card-body"><p><strong>Walk Humbly Before God:</strong> Edom's downfall began with pride. Hold every success, position, and ability with humility, remembering that every good gift comes from the Lord.</p>
+<p><strong>Stand With People in Their Time of Need:</strong> Refuse the temptation to remain a spectator when others are suffering. Compassion often requires action, not simply sympathy.</p>
+<p><strong>Never Rejoice in Another's Fall:</strong> Guard your heart against finding satisfaction when someone else experiences failure or discipline. Grieve over what grieves God.</p>
+<p><strong>Trust God Rather Than Earthly Security:</strong> Position, possessions, relationships, and personal abilities are blessings, but none of them can replace dependence upon the Lord.</p>
+<p><strong>Leave Justice in God's Hands:</strong> Resist the desire for personal revenge. God sees every injustice and will repay every wrong with perfect righteousness.</p>
+<p><strong>Live for God's Kingdom:</strong> Measure your decisions by what will matter when every earthly kingdom has passed away. Invest your life in the kingdom that will never end.</p>
+<p>After mining the strongest sources (especially Precept Austin's collection of Meyer, Morgan, Ironside, Spurgeon, Biblical Illustrator, etc.) and comparing them with the text itself, here are the reflections I think have the most potential for MTB. I have intentionally omitted the obvious observations ("Pride is bad") and focused on ideas that help readers see the chapter more deeply. (<a href="https://www.preceptaustin.org/obadiah_commentaries?utm_source=chatgpt.com"><u>Precept Austin</u></a>)</p>
+<p><strong>Foundational Truths</strong></p>
+<p>These are timeless truths the chapter teaches.</p>
+<p><strong>1. Pride is self-deception before it becomes self-destruction.</strong></p>
+<p>Obadiah does not first say pride destroys; he says it <strong>deceives</strong> (v.3). The first victim of pride is always the proud person. Once reality is distorted, destruction follows naturally.</p>
+<p><strong>2. God often judges us through the very thing we trusted most.</strong></p>
+<p>This may be the central theological pattern of the chapter.</p>
+<p>Edom trusted:</p>
+<ul>
+<li><p>its position</p></li>
+<li><p>its wealth</p></li>
+<li><p>its allies</p></li>
+<li><p>its wisdom</p></li>
+<li><p>its warriors</p></li>
+</ul>
+<p>God dismantled each one in the same order.</p>
+<p>That pattern is richer than simply saying "God judged pride."</p>
+<p><strong>3. Sin usually progresses rather than remaining isolated.</strong></p>
+<p>Edom did not simply rejoice over Judah.</p>
+<p>The chapter records an escalating progression:</p>
+<ul>
+<li><p>watched</p></li>
+<li><p>rejoiced</p></li>
+<li><p>boasted</p></li>
+<li><p>entered the city</p></li>
+<li><p>looted</p></li>
+<li><p>blocked escape</p></li>
+<li><p>handed over survivors</p></li>
+</ul>
+<p>Sin that is tolerated seldom remains stationary.</p>
+<p><strong>4. God judges not only evil actions but sinful indifference.</strong></p>
+<p>Edom's first sin was simply standing by.</p>
+<p>Failure to love one's brother became participation in his destruction.</p>
+<p>Spurgeon especially develops this idea from verse 11. (<a href="https://www.preceptaustin.org/obadiah_commentaries?utm_source=chatgpt.com"><u>Precept Austin</u></a>)</p>
+<p><strong>5. The Day of the Lord reverses every false confidence.</strong></p>
+<p>Throughout Scripture the Day of the Lord is more than punishment.</p>
+<p>It is God's great reversal.</p>
+<p>The proud become low.</p>
+<p>The plunderers become plundered.</p>
+<p>The secure become exposed.</p>
+<p>The afflicted inherit the kingdom.</p>
+<p><strong>Chapter Insights</strong></p>
+<p>These are the "I never noticed that" observations.</p>
+<p><strong>Pride creates an alternate reality.</strong></p>
+<p>Edom lived in a fortress.</p>
+<p>The fortress was real.</p>
+<p>The deception was believing the fortress made them untouchable.</p>
+<p>Pride does not invent blessings.</p>
+<p>It convinces us blessings are ultimate security.</p>
+<p><strong>Every "Who?" in Obadiah is answered by God.</strong></p>
+<p>Edom asks:</p>
+<p>"Who will bring me down?"</p>
+<p>God answers:</p>
+<p>"I will."</p>
+<p>That simple exchange summarizes the entire book.</p>
+<p><strong>Edom's greatest problem was not geography but theology.</strong></p>
+<p>Their mountain wasn't the problem.</p>
+<p>Their view of God was.</p>
+<p>They believed no one could reach them because they forgot there is no height beyond God's reach.</p>
+<p><strong>Betrayal hurts most when it comes from family.</strong></p>
+<p>The repeated expression "your brother Jacob" is deliberate.</p>
+<p>God reminds Edom that their sin was aggravated because it violated family responsibility.</p>
+<p>The closer the relationship, the greater the accountability.</p>
+<p><strong>The chapter exposes counterfeit security.</strong></p>
+<p>Obadiah systematically removes every false refuge.</p>
+<p>The book quietly asks:</p>
+<p>"What are you trusting besides God?"</p>
+<p><strong>Judgment begins long before consequences appear.</strong></p>
+<p>By the time Babylon arrives,</p>
+<p>Edom has already fallen.</p>
+<p>Pride had conquered them years earlier.</p>
+<p>Their military defeat simply revealed their spiritual condition.</p>
+<p><strong>God sees what everyone else overlooks.</strong></p>
+<p>The surrounding nations saw an impressive mountain kingdom.</p>
+<p>God saw a proud heart.</p>
+<p>His evaluation reaches beneath appearances.</p>
+<p><strong>Christ &amp; Life</strong></p>
+<p>These thoughts seem especially rich.</p>
+<p><strong>Christ became low to accomplish what pride never could.</strong></p>
+<p>Edom exalted itself and was brought low.</p>
+<p>Christ humbled Himself and was exalted.</p>
+<p>Obadiah anticipates Philippians 2 remarkably well.</p>
+<p><strong>Jesus is our only secure refuge.</strong></p>
+<p>Edom trusted cliffs.</p>
+<p>Believers trust Christ.</p>
+<p>Every earthly refuge eventually fails.</p>
+<p>Christ never does.</p>
+<p><strong>Christ reverses the curse of pride.</strong></p>
+<p>Pride seeks life through self-exaltation.</p>
+<p>Jesus gives life through humility, repentance, and grace.</p>
+<p><strong>Dwelling in the Word</strong></p>
+<p>Questions worth lingering over.</p>
+<ul>
+<li><p>What "high place" am I quietly trusting?</p></li>
+<li><p>Where have God's gifts become my confidence instead of reasons for gratitude?</p></li>
+<li><p>Am I merely avoiding evil, or am I actively helping those who suffer?</p></li>
+<li><p>Which is easier for me: committing wrong or remaining silent when wrong is done?</p></li>
+<li><p>If God removed the thing I depend upon most, would my confidence remain?</p></li>
+</ul>
+<p><strong>Seeds for the Sower</strong></p>
+<p>Ideas worth developing.</p>
+<ul>
+<li><p>Pride is the most convincing liar because it speaks with our own voice.</p></li>
+<li><p>Neutrality in the presence of evil eventually becomes participation in evil.</p></li>
+<li><p>God often exposes idols by allowing them to fail.</p></li>
+<li><p>Spiritual blindness usually begins with self-confidence rather than ignorance.</p></li>
+<li><p>Every earthly fortress has a higher Judge.</p></li>
+<li><p>The safest place in the world is not the highest place but the humble place before God.</p></li>
+</ul>
+<p><strong>My favorite discovery</strong></p>
+<p>After working through the chapter and comparing the commentators, the observation I think is most distinctive for MTB is this:</p>
+<p><strong>Obadiah is not merely a prophecy about God's judgment of Edom. It is a systematic demolition of every false source of human confidence.</strong></p>
+<p>That single insight explains almost every movement in the book:</p>
+<ul>
+<li><p>Position cannot save.</p></li>
+<li><p>Wealth cannot save.</p></li>
+<li><p>Allies cannot save.</p></li>
+<li><p>Wisdom cannot save.</p></li>
+<li><p>Strength cannot save.</p></li>
+</ul>
+<p>Only the Lord's kingdom remains (v.21).</p>
+<p>I think that observation is the "spine" of Obadiah. It ties the whole prophecy together while remaining completely rooted in the text, making it an excellent candidate to shape the <strong>Chapter Insights</strong> section.</p></div></article></div></div>
 </section>

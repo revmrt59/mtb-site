@@ -1,121 +1,103 @@
-<body>
-  <header class="site-header">
-    <h1>Mastering the Bible</h1>
-    <p class="tagline">Helping people understand what they are reading.</p>
-  </header>
+﻿<section class="mtb-doc" data-doc-type="generic">
+<style>
+.mtb-print-controls{display:flex;justify-content:flex-end;gap:8px;margin:0 0 14px;padding:0 4px}
+.mtb-print-button{appearance:none;border:1px solid #b9c8d5;border-radius:8px;background:#fff;padding:9px 14px;color:#173a5e;font:700 14px Arial,Helvetica,sans-serif;cursor:pointer}
+.mtb-print-button:hover{background:#f2f6f9}
+@media print{
+  @page{size:auto;margin:.45in}
+  html,body{background:#fff!important;color:#000!important}
+  .mtb-print-controls,.mtb-study-controls{display:none!important}
+  .mtb-doc{display:block!important;width:100%!important;max-width:none!important;margin:0!important;padding:0!important}
+  .mtb-overview-hero,.mtb-study-hero,.mtb-reflections-hero,.mtb-culture-hero{box-shadow:none!important;background:#fff!important;border-color:#777!important}
+  .mtb-overview-grid,.mtb-reflections-grid,.mtb-culture-grid,.mtb-study-verse-grid{display:block!important}
+  .mtb-overview-card,.mtb-reflections-card,.mtb-culture-card,.mtb-study-verse,.mtb-study-verse-panel,.mtb-intro-card{
+    display:block!important;width:100%!important;max-width:none!important;height:auto!important;margin:0 0 12pt!important;
+    break-inside:avoid;page-break-inside:avoid;box-shadow:none!important;background:#fff!important;color:#000!important
+  }
+  details.mtb-study-verse{display:block!important;overflow:visible!important}
+  details.mtb-study-verse>summary{display:flex!important;background:#fff!important;color:#000!important;border-bottom:1px solid #777!important}
+  details.mtb-study-verse>summary:after{display:none!important}
+  details.mtb-study-verse>.mtb-study-verse-body{display:block!important}
+  h1,h2,h3,h4{break-after:avoid;page-break-after:avoid;color:#000!important}
+  p,li{orphans:3;widows:3}
+  a{color:#000!important;text-decoration:none!important}
+  a[href]::after{content:none!important}
+}
+</style>
+<div class="mtb-print-controls"><button type="button" class="mtb-print-button" onclick="(function(button){var doc=button.closest('.mtb-doc')||document;var panels=Array.prototype.slice.call(doc.querySelectorAll('details'));panels.forEach(function(panel){panel.open=true;});window.print();})(this)">&#128438; Print This Page</button></div>
+<h1 id="about-this-resource">About This Resource</h1>
+<div data-custom-style="Normal (Web)">
+<p><span data-custom-style="Strong">Mastering the Bible exists to help you understand what you are reading and discover the life within God's Word.</span></p>
+</div>
+<div data-custom-style="Normal (Web)">
+<p>It is designed for both the everyday reader who wants to understand Scripture more clearly and the pastor, teacher, or leader looking for reliable explanation and useful insights to help teach others.</p>
+</div>
+<div data-custom-style="Normal (Web)">
+<p>Mastering the Bible begins with accurate, honest understanding of the biblical text—but it does not stop there. The goal is not simply to gain more information about the Bible, but to encounter Jesus, receive the Spirit and life contained in His Word, and be transformed by what we read.</p>
+</div>
+<div data-custom-style="Normal (Web)">
+<p>Many believers can read individual verses but struggle to understand books, chapters, and passages as a whole. Others struggle to understand how Old Testament events, laws, sacrifices, and practices relate to their lives today. When Scripture becomes difficult to understand or connect with, Bible reading can become confusing, frustrating, or easy to abandon.</p>
+</div>
+<div data-custom-style="Normal (Web)">
+<p>Others become dependent on pastors and teachers because they do not feel confident reading and understanding Scripture for themselves.</p>
+</div>
+<div data-custom-style="Normal (Web)">
+<p><span data-custom-style="Strong">Mastering the Bible helps bridge that gap</span>—helping you understand what you are reading, see how Scripture fits together, and discover the Spirit and life within God's Word.</p>
+</div>
+<h2 id="how-mastering-the-bible-is-organized">How Mastering the Bible Is Organized</h2>
+<div data-custom-style="Normal (Web)">
+<p><span data-custom-style="Strong">Book Overview</span><br />
+Start here when beginning a biblical book. Book Overviews provide the background, purpose, central message, major themes, structure, and key concepts you need to understand the book as a whole.</p>
+</div>
+<div data-custom-style="Normal (Web)">
+<p><span data-custom-style="Strong">Bible Context</span><br />
+Every book is also part of a larger section of Scripture—such as the Law, Wisdom Books, Prophets, Gospels, or Epistles. Bible Context provides the larger biblical and historical setting that helps you understand how this kind of literature functions and where the book fits within the unfolding story of Scripture.</p>
+</div>
+<div data-custom-style="Normal (Web)">
+<p><span data-custom-style="Strong">Chapter Overview</span><br />
+Read this before studying a chapter. It provides the central idea, chapter flow, major sections, themes, and important concepts so you know what you are about to read and how the pieces fit together.</p>
+</div>
+<div data-custom-style="Normal (Web)">
+<p><span data-custom-style="Strong">Chapter Study</span><br />
+This is the verse-by-verse study of the text. Each verse includes the NKJV and NLT text, a main idea, a clear explanation, and additional remarks when historical, cultural, theological, or teaching insight adds meaningful value.</p>
+</div>
+<div data-custom-style="Normal (Web)">
+<p>Within the <span data-custom-style="Strong">NKJV text</span>, selected words appear with a <span data-custom-style="Strong">dotted underline</span>. Click any of these words to open a <span data-custom-style="Strong">Word Study</span> exploring the underlying Hebrew or Greek word and the meaning, background, biblical usage, or other insights that help illuminate that particular passage.</p>
+</div>
+<div data-custom-style="Normal (Web)">
+<p><span data-custom-style="Strong">Chapter Reflections</span><br />
+This is where we move beyond explanation and consider the truths, insights, and life revealed through the chapter. Reflections include:</p>
+</div>
+<ul>
+<li><div data-custom-style="Normal (Web)">
+<p><span data-custom-style="Strong">Foundational Truths</span> — timeless truths revealed in the chapter.</p>
+</div></li>
+<li><div data-custom-style="Normal (Web)">
+<p><span data-custom-style="Strong">Chapter Insights</span> — important things you might otherwise miss.</p>
+</div></li>
+<li><div data-custom-style="Normal (Web)">
+<p><span data-custom-style="Strong">Christ &amp; Life</span> — how the chapter leads us toward Christ and life in Him.</p>
+</div></li>
+<li><div data-custom-style="Normal (Web)">
+<p><span data-custom-style="Strong">Dwelling in the Word</span> — questions for meditation, prayer, and personal response.</p>
+</div></li>
+<li><div data-custom-style="Normal (Web)">
+<p><span data-custom-style="Strong">Seeds for the Sower</span> — insights worth carrying, developing, or sharing with others.</p>
+</div></li>
+<li><div data-custom-style="Normal (Web)">
+<p><span data-custom-style="Strong">How Shall We Then Live?</span> — practical responses that grow directly from the chapter.</p>
+</div></li>
+</ul>
+<div data-custom-style="Normal (Web)">
+<p><span data-custom-style="Strong">EG Culture</span><br />
+For the East Gate family, this section connects passages of Scripture with specific aspects of our church culture and shows what living those values can look like in light of the chapter.</p>
+</div>
+<h2 id="how-to-use-mastering-the-bible">How to Use Mastering the Bible</h2>
+<div data-custom-style="Normal (Web)">
+<p>You do not need to use every section every time you read. Start with what you need. Get the big picture, understand the context, study a difficult verse, click a word with a dotted underline for a deeper study, explore an insight, or spend time dwelling on a truth God is highlighting.</p>
+</div>
+<div data-custom-style="Normal (Web)">
+<p>Mastering the Bible is not intended to replace Scripture or the Holy Spirit. It is a tool designed to help you <span data-custom-style="Strong">understand the text accurately, see what you might otherwise miss, and ultimately find the Spirit and life within God's Word.</span></p>
+</div>
 
-  <nav class="site-nav">
-    <a href="/">Home</a>
-    <a href="/books/">Books</a>
-  </nav>
-
-  <main class="content">
-    <article>
-      <header class="page-header">
-        <p class="context">About</p>
-        <h2 class="page-title">About This Resource</h2>
-      </header>
-
-      <section class="page-body">
-        <div id="doc-root">
-          <h2 id="about-this-resource">About This Resource</h2>
-          <p><strong>Mastering the Bible exists to help you understand
-          what you are reading and discover the life within God's
-          Word.</strong></p>
-          <p>It is designed for both the everyday reader who wants to
-          understand Scripture more clearly and the pastor, teacher, or
-          leader looking for reliable explanation and useful insights to
-          help teach others.</p>
-          <p>Mastering the Bible begins with accurate, honest
-          understanding of the biblical text—but it does not stop there.
-          The goal is not simply to gain more information about the
-          Bible, but to encounter Jesus, receive the Spirit and life
-          contained in His Word, and be transformed by what we read.</p>
-          <p>Many believers can read individual verses but struggle to
-          understand books, chapters, and passages as a whole. Others
-          struggle to understand how Old Testament events, laws,
-          sacrifices, and practices relate to their lives today. When
-          Scripture becomes difficult to understand or connect with,
-          Bible reading can become confusing, frustrating, or easy to
-          abandon.</p>
-          <p>Others become dependent on pastors and teachers because
-          they do not feel confident reading and understanding Scripture
-          for themselves.</p>
-          <p><strong>Mastering the Bible helps bridge that
-          gap</strong>—helping you understand what you are reading, see
-          how Scripture fits together, and discover the Spirit and life
-          within God's Word.</p>
-          <h3 id="how-mastering-the-bible-is-organized">How Mastering
-          the Bible Is Organized</h3>
-          <p><strong>Book Overview</strong><br />
-          Start here when beginning a biblical book. Book Overviews
-          provide the background, purpose, central message, major
-          themes, structure, and key concepts you need to understand the
-          book as a whole.</p>
-          <p><strong>Bible Context</strong><br />
-          Every book is also part of a larger section of Scripture—such
-          as the Law, Wisdom Books, Prophets, Gospels, or Epistles.
-          Bible Context provides the larger biblical and historical
-          setting that helps you understand how this kind of literature
-          functions and where the book fits within the unfolding story
-          of Scripture.</p>
-          <p><strong>Chapter Overview</strong><br />
-          Read this before studying a chapter. It provides the central
-          idea, chapter flow, major sections, themes, and important
-          concepts so you know what you are about to read and how the
-          pieces fit together.</p>
-          <p><strong>Chapter Study</strong><br />
-          This is the verse-by-verse study of the text. Each verse
-          includes the NKJV and NLT text, a main idea, a clear
-          explanation, and additional remarks when historical, cultural,
-          theological, or teaching insight adds meaningful value.</p>
-          <p>Within the <strong>NKJV text</strong>, selected words
-          appear with a <strong>dotted underline</strong>. Click any of
-          these words to open a <strong>Word Study</strong> exploring
-          the underlying Hebrew or Greek word and the meaning,
-          background, biblical usage, or other insights that help
-          illuminate that particular passage.</p>
-          <p><strong>Chapter Reflections</strong><br />
-          This is where we move beyond explanation and consider the
-          truths, insights, and life revealed through the chapter.
-          Reflections include:</p>
-          <ul>
-          <li><p><strong>Foundational Truths</strong> — timeless truths
-          revealed in the chapter.</p></li>
-          <li><p><strong>Chapter Insights</strong> — important things
-          you might otherwise miss.</p></li>
-          <li><p><strong>Christ &amp; Life</strong> — how the chapter
-          leads us toward Christ and life in Him.</p></li>
-          <li><p><strong>Dwelling in the Word</strong> — questions for
-          meditation, prayer, and personal response.</p></li>
-          <li><p><strong>Seeds for the Sower</strong> — insights worth
-          carrying, developing, or sharing with others.</p></li>
-          <li><p><strong>How Shall We Then Live?</strong> — practical
-          responses that grow directly from the chapter.</p></li>
-          </ul>
-          <p><strong>EG Culture</strong><br />
-          For the East Gate family, this section connects passages of
-          Scripture with specific aspects of our church culture and
-          shows what living those values can look like in light of the
-          chapter.</p>
-          <h3 id="how-to-use-mastering-the-bible">How to Use Mastering
-          the Bible</h3>
-          <p>You do not need to use every section every time you read.
-          Start with what you need. Get the big picture, understand the
-          context, study a difficult verse, click a word with a dotted
-          underline for a deeper study, explore an insight, or spend
-          time dwelling on a truth God is highlighting.</p>
-          <p>Mastering the Bible is not intended to replace Scripture or
-          the Holy Spirit. It is a tool designed to help you
-          <strong>understand the text accurately, see what you might
-          otherwise miss, and ultimately find the Spirit and life within
-          God's Word.</strong></p>
-        </div>
-      </section>
-    </article>
-  </main>
-
-  <footer class="site-footer">
-    <p>© Mastering the Bible</p>
-  </footer>
-</body>
+</section>

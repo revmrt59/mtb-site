@@ -26,12 +26,12 @@
 
   function getDocParam() {
     const params = new URLSearchParams(window.location.search);
-    return params.get("doc") || "about-mastering-the-bible.html";
+   return params.get("doc") || "how-to-use-this-resource.html";
   }
 
   function safeDocName(name) {
     // Only allow simple filenames to prevent path traversal
-    return /^[a-z0-9\-]+\.html$/i.test(name) ? name : "about-mastering-the-bible.html";
+    return /^[a-z0-9\-]+\.html$/i.test(name) ? name : "how-to-use-this-resource.html";
   }
 
   const requested = safeDocName(getDocParam());

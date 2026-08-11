@@ -1474,3 +1474,7 @@ body[data-book][data-chapter][data-active-tab="chapter_reflections"] #doc-target
   margin: 0;
   line-height: 1.45;
 }
+.home-info-box:first-child {
+  background: transparent !important;
+  border: none;
+}

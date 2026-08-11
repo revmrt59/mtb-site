@@ -1437,9 +1437,9 @@ body[data-book][data-chapter][data-active-tab="chapter_reflections"] #doc-target
 /* TEMPORARILY HIDE ABOUT NAV LINKS SITE-WIDE */
 
 /*  .main-nav a[href="/aboutthebible.html"], */
-.main-nav a[href="/about.html"] {
+/* .main-nav a[href="/about.html"] {
   display: none !important;
-}
+} */
 /* =========================================================
    HOME PAGE INFORMATION BOXES
    ========================================================= */

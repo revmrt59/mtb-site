@@ -1329,3 +1329,32 @@ header.site-header{
   top: 0;
   z-index: 9999;
 }
+/* =========================================================
+   HOME PAGE VISITOR COUNTER
+   ========================================================= */
+
+.visitor-stats {
+  width: 100%;
+  padding: 12px 20px;
+  text-align: center;
+  font-size: 14px;
+  color: #666;
+  background: #ffffff;
+  border-top: 1px solid #e5e5e5;
+}
+
+.visitor-stats strong {
+  color: #333;
+  font-weight: 600;
+}
+
+.visitor-divider {
+  margin: 0 8px;
+  color: #aaa;
+}
+
+@media (max-width: 500px) {
+  .visitor-stats {
+    font-size: 13px;
+  }
+}

@@ -125,6 +125,14 @@
 
   function parseBookChapterFromDoc(doc) {
     const d = String(doc || "");
+
+    // Canonical Book Overview filename:
+    // book-overview-ruth.html
+    const intro = d.match(/^book-overview-([a-z0-9-]+)\.html$/i);
+    if (intro) return { book: intro[1].toLowerCase(), chapter: "0" };
+
+    // Standard chapter/resource/word-study filename:
+    // ruth-1-chapter-overview.html, titus-1-resources-xyz.html, etc.
     const m = d.match(/^([a-z0-9-]+)-(\d+)-/i);
     if (!m) return { book: "", chapter: "" };
     return { book: m[1].toLowerCase(), chapter: m[2] };
@@ -167,10 +175,12 @@
   }
 
   function docNameForTab(book, chapter, tabKey) {
-    if (!book) return "titus-0-book-overview.html";
+    if (!book) return "book-overview-titus.html";
     const b = normalizeBookSlug(book);
 
-    if (tabKey === "book_introduction") return `${b}-0-book-overview.html`;
+    // Canonical book overview naming:
+    // book-overview-obadiah.html, book-overview-ruth.html, etc.
+    if (tabKey === "book_introduction") return `book-overview-${b}.html`;
 
     const suffix = tabToSuffix(tabKey);
     return `${b}-${chapter}-${suffix}.html`;
@@ -266,8 +276,8 @@
     if (params.book) {
       setHeader(params.book, params.chapter || "1");
     } else if (params.doc) {
-      const m = params.doc.match(/^([a-z0-9-]+)-(\d+)-/i);
-      if (m) setHeader(m[1], m[2]);
+      const inferred = parseBookChapterFromDoc(params.doc);
+      if (inferred.book) setHeader(inferred.book, inferred.chapter);
     }
 
     renderTabs();
@@ -284,8 +294,8 @@
     if (params.book) {
       setHeader(params.book, params.chapter || "1");
     } else if (params.doc) {
-      const m = params.doc.match(/^([a-z0-9-]+)-(\d+)-/i);
-      if (m) setHeader(m[1], m[2]);
+      const inferred = parseBookChapterFromDoc(params.doc);
+      if (inferred.book) setHeader(inferred.book, inferred.chapter);
     }
   });
 

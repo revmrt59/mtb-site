@@ -1,0 +1,99 @@
+<section class="mtb-doc mtb-doc--read" data-doc-type="chapter-overview">
+<style>
+.mtb-print-controls{display:flex;justify-content:flex-end;gap:8px;margin:0 0 14px;padding:0 4px}
+.mtb-print-button{appearance:none;border:1px solid #b9c8d5;border-radius:8px;background:#fff;padding:9px 14px;color:#173a5e;font:700 14px Arial,Helvetica,sans-serif;cursor:pointer}
+.mtb-print-button:hover{background:#f2f6f9}
+@media print{
+  @page{size:auto;margin:.45in}
+  html,body{background:#fff!important;color:#000!important}
+  .mtb-print-controls,.mtb-study-controls{display:none!important}
+  .mtb-doc{display:block!important;width:100%!important;max-width:none!important;margin:0!important;padding:0!important}
+  .mtb-overview-hero,.mtb-study-hero,.mtb-reflections-hero,.mtb-culture-hero{box-shadow:none!important;background:#fff!important;border-color:#777!important}
+  .mtb-overview-grid,.mtb-reflections-grid,.mtb-culture-grid,.mtb-study-verse-grid{display:block!important}
+  .mtb-overview-card,.mtb-reflections-card,.mtb-culture-card,.mtb-study-verse,.mtb-study-verse-panel,.mtb-intro-card{
+    display:block!important;width:100%!important;max-width:none!important;height:auto!important;margin:0 0 12pt!important;
+    break-inside:avoid;page-break-inside:avoid;box-shadow:none!important;background:#fff!important;color:#000!important
+  }
+  details.mtb-study-verse{display:block!important;overflow:visible!important}
+  details.mtb-study-verse>summary{display:flex!important;background:#fff!important;color:#000!important;border-bottom:1px solid #777!important}
+  details.mtb-study-verse>summary:after{display:none!important}
+  details.mtb-study-verse>.mtb-study-verse-body{display:block!important}
+  h1,h2,h3,h4{break-after:avoid;page-break-after:avoid;color:#000!important}
+  p,li{orphans:3;widows:3}
+  a{color:#000!important;text-decoration:none!important}
+  a[href]::after{content:none!important}
+}
+</style>
+<div class="mtb-print-controls"><button type="button" class="mtb-print-button" onclick="(function(button){var doc=button.closest('.mtb-doc')||document;var panels=Array.prototype.slice.call(doc.querySelectorAll('details'));panels.forEach(function(panel){panel.open=true;});window.print();})(this)">&#128438; Print This Page</button></div>
+<style>
+.mtb-chapter-overview-dashboard{--mtb-navy:#173a5e;--mtb-navy-2:#2b587f;--mtb-gold:#b7832f;--mtb-blue-soft:#eef4f9;--mtb-border:#d7e0e8;--mtb-text:#1d2935;width:100%;max-width:1600px;margin:0 auto;padding:2px 4px 30px;color:var(--mtb-text);font-family:Arial,Helvetica,sans-serif}.mtb-chapter-overview-dashboard *{box-sizing:border-box}.mtb-overview-hero{display:flex;align-items:center;justify-content:space-between;gap:20px;margin:0 0 22px;padding:22px 26px;border:1px solid #cbd8e3;border-radius:14px;background:linear-gradient(135deg,#f7fafc 0%,#e8f0f7 100%)}.mtb-overview-eyebrow{margin:0 0 5px;color:var(--mtb-gold);font-size:.78rem;font-weight:800;letter-spacing:.13em;text-transform:uppercase}.mtb-overview-title{margin:0;color:var(--mtb-navy);font-size:clamp(1.55rem,3vw,2.25rem);line-height:1.1}.mtb-overview-badge{flex:0 0 auto;padding:10px 16px;border:1px solid rgba(23,58,94,.18);border-radius:999px;background:#fff;color:var(--mtb-navy);font-weight:800}.mtb-overview-grid{display:grid;grid-template-columns:repeat(12,minmax(0,1fr));gap:16px;align-items:stretch}.mtb-overview-card{min-width:0;overflow:hidden;border:1px solid var(--mtb-border);border-top:4px solid var(--mtb-navy-2);border-radius:12px;background:#fff;box-shadow:0 4px 15px rgba(28,48,66,.055)}.mtb-overview-card-central{grid-column:1/span 4;grid-row:1}.mtb-overview-card-about{grid-column:5/span 4;grid-row:1}.mtb-overview-card-heart{grid-column:9/span 4;grid-row:1}.mtb-overview-card-sections{grid-column:1/span 6;grid-row:2}.mtb-overview-card-matters{grid-column:7/span 6;grid-row:2}.mtb-overview-card-themes{grid-column:1/span 6;grid-row:3}.mtb-overview-card-words{grid-column:7/span 6;grid-row:3}.mtb-psalms-overview .mtb-overview-card-psalm-author{grid-column:1/span 4;grid-row:1}.mtb-psalms-overview .mtb-overview-card-psalm-occasion{grid-column:5/span 4;grid-row:1}.mtb-psalms-overview .mtb-overview-card-psalm-kind{grid-column:9/span 4;grid-row:1}.mtb-psalms-overview .mtb-overview-card-central{grid-column:1/span 4;grid-row:2}.mtb-psalms-overview .mtb-overview-card-about{grid-column:5/span 4;grid-row:2}.mtb-psalms-overview .mtb-overview-card-heart{grid-column:9/span 4;grid-row:2}.mtb-psalms-overview .mtb-overview-card-sections{grid-column:1/span 6;grid-row:3}.mtb-psalms-overview .mtb-overview-card-matters{grid-column:7/span 6;grid-row:3}.mtb-psalms-overview .mtb-overview-card-themes{grid-column:1/span 6;grid-row:4}.mtb-psalms-overview .mtb-overview-card-words{grid-column:7/span 6;grid-row:4}.mtb-overview-card-header{margin:0;padding:12px 16px 10px;border-bottom:1px solid #e5ebf0;background:var(--mtb-blue-soft);color:var(--mtb-navy);font-size:.96rem;font-weight:800}.mtb-overview-card-body{padding:16px 18px 18px;font-size:1rem;line-height:1.48;overflow-wrap:anywhere}.mtb-overview-card-central .mtb-overview-card-body,.mtb-overview-card-heart .mtb-overview-card-body{font-size:1.06rem}.mtb-overview-card-body p{margin:0 0 .72em}.mtb-overview-card-body p:last-child{margin-bottom:0}.mtb-overview-card-body ul,.mtb-overview-card-body ol{margin:0;padding-left:1.25em}.mtb-overview-card-body li{margin:0 0 .35em}@media(max-width:980px){.mtb-overview-card{grid-column:span 6!important;grid-row:auto!important}}@media(max-width:760px){.mtb-overview-grid{grid-template-columns:1fr}.mtb-overview-card{grid-column:1/-1!important}.mtb-overview-hero{align-items:flex-start;flex-direction:column;padding:19px}}
+</style><div class="mtb-chapter-overview-dashboard"><header class="mtb-overview-hero"><div><p class="mtb-overview-eyebrow">Morning Chapter Explanation</p><h1 class="mtb-overview-title">2 John Chapter 1</h1></div><div class="mtb-overview-badge">Chapter 1</div></header><div class="mtb-overview-grid"><article class="mtb-overview-card mtb-overview-card-central"><h2 class="mtb-overview-card-header">Central Message</h2><div class="mtb-overview-card-body"><h2 id="john-calls-believers-to-continue-walking-in-the-truth-they-have-been-taught-and-to-love-one-another-according-to-what-god-has-commanded.-because-false-teachers-are-spreading-teaching-that-denies-the-truth-about-jesus-christ-believers-must-remain-faithful-to-him-and-refuse-to-support-those-who-are-spreading-this-serious-error-about-who-he-is.">John calls believers to continue walking in the truth they have been taught and to love one another according to what God has commanded. Because false teachers are spreading teaching that denies the truth about Jesus Christ, believers must remain faithful to Him and refuse to support those who are spreading this serious error about who He is.</h2></div></article><article class="mtb-overview-card mtb-overview-card-about"><h2 class="mtb-overview-card-header">What This Chapter Is About</h2><div class="mtb-overview-card-body"><div data-custom-style="Normal (Web)">
+<p>Second John is a short letter about <span data-custom-style="Strong">truth, love, and remaining faithful to Jesus Christ</span><strong>.</strong> John writes to “<strong>the elect lady and her children</strong>,” rejoicing that some of them are walking in truth. He reminds them that the command to love one another is not something new. It has been part of their life with Christ from the beginning.</p>
+</div>
+<div data-custom-style="Normal (Web)">
+<p>John then explains why remaining in the truth matters so much. Deceivers are spreading teaching that denies Jesus Christ as coming in the flesh, meaning they are denying that Jesus is God who truly became human. John tells believers to watch themselves, hold firmly to the truth about Jesus they have been taught, and not be drawn away by teaching presented as greater or more advanced revelation, knowledge, or spiritual truth.<br />
+<br />
+The chapter ends by showing that what believers support also matters. In the first-century church, providing hospitality to a traveling teacher could give that person lodging, resources, credibility, and an opportunity to continue spreading his message. John is not telling believers to withdraw support from every Christian with whom they disagree. His concern is with teachers who are actively spreading teaching that denies the truth about Jesus Christ. Providing support that helps such teaching spread can make us participants in what that support helps accomplish.</p>
+</div></div></article><article class="mtb-overview-card mtb-overview-card-heart"><h2 class="mtb-overview-card-header">The Heart of the Chapter</h2><div class="mtb-overview-card-body"><div data-custom-style="Normal (Web)">
+<p><span data-custom-style="Strong">Walk in truth and love, knowing that genuine love always remains faithful to the truth.</span></p>
+</div>
+<div data-custom-style="Normal (Web)">
+<p>John wants these believers to keep living in what they already know to be true about Jesus. They are to love one another, obey what God has commanded, and refuse to help teaching spread that would lead people away from Christ. Truth does not get in the way of love. <span data-custom-style="Strong">Truth helps us know what love actually requires.</span></p>
+</div></div></article><article class="mtb-overview-card mtb-overview-card-sections"><h2 class="mtb-overview-card-header">Chapter Sections</h2><div class="mtb-overview-card-body"><div data-custom-style="Normal (Web)">
+<p><span data-custom-style="Strong">2 John 1:1–3 — Loved in Truth</span><br />
+John greets the elect lady and her children and speaks of the truth that lives in believers and will remain with them forever. From the opening words, truth and love are joined together.</p>
+</div>
+<div data-custom-style="Normal (Web)">
+<p><span data-custom-style="Strong">2 John 1:4–6 — Walking in Truth and Love</span><br />
+John rejoices that some are walking in truth and reminds his readers of the command to love one another. Genuine love is not left for us to define for ourselves; it walks according to what God has commanded.</p>
+</div>
+<div data-custom-style="Normal (Web)">
+<p><span data-custom-style="Strong">2 John 1:7–9 — Warning Against Deceivers</span><br />
+John warns that many deceivers deny Jesus Christ as coming in the flesh. Believers must watch themselves and remain faithful to the truth about Christ rather than being drawn toward teaching that claims to take them beyond Him.</p>
+</div>
+<div data-custom-style="Normal (Web)">
+<p><span data-custom-style="Strong">2 John 1:10–11 — Do Not Support Those Who Deny the Truth About Christ</span><br />
+John tells believers not to provide the kind of welcome and support that would help teachers continue spreading false teaching about who Jesus Christ is. <span data-custom-style="Strong">John is not addressing every theological disagreement but the serious denial of Christ described in the preceding verses.</span> Providing support that helps such teaching spread can make believers participants in that work.</p>
+</div>
+<div data-custom-style="Normal (Web)">
+<p><span data-custom-style="Strong">2 John 1:12–13 — The Joy of Face-to-Face Fellowship</span><br />
+John has more to say but would rather speak with these believers personally. After addressing serious concerns about false teaching, he closes with the hope of being together and sharing full joy.</p>
+</div></div></article><article class="mtb-overview-card mtb-overview-card-matters"><h2 class="mtb-overview-card-header">Why This Chapter Matters</h2><div class="mtb-overview-card-body"><div data-custom-style="Normal (Web)">
+<p>We live in a world where love can be understood as accepting, affirming, or supporting whatever another person believes. John gives us a different picture. <span data-custom-style="Strong">Genuine love wants what is truly good for people, and that means love cannot lead them away from the truth about Jesus.</span></p>
+</div>
+<div data-custom-style="Normal (Web)">
+<p>John also reminds us that knowing the truth is not enough. Truth is meant to characterize how we live. The believers who brought John joy were not merely people who knew the truth; they were walking in truth, meaning that what they believed about God and Jesus Christ was being lived out in their homes, relationships, work, and everyday lives. In the same way, love is more than an emotion or good intention. Genuine love walks according to what God has commanded.</p>
+</div>
+<div data-custom-style="Normal (Web)"></div></article><article class="mtb-overview-card mtb-overview-card-themes"><h2 class="mtb-overview-card-header">Key Themes to Watch For</h2><div class="mtb-overview-card-body"><p><strong>Truth —</strong> For John, truth is not personal opinion, individual experience, or something each person defines for themselves. God is the source of truth; His Word is truth, and that truth is ultimately revealed in Jesus Christ. Believers do not create the truth; they receive what God has revealed, come to know it, and are called to live according to it. John says this truth abides in believers and will be with them forever. Truth is therefore more than something we believe with our minds; it is meant to characterize how we live.</p>
+<p><strong>Love</strong> — Genuine Christian love cannot be separated from truth. John tells us what love looks like by connecting it with walking according to God's commandments.</p>
+<p><strong>Walking</strong> — John repeatedly speaks about “walking” because Christianity is not merely a collection of beliefs. Walking describes how what we believe about God and Jesus Christ is lived out in our relationships, work, choices, and everyday lives.</p>
+<p><strong>Obedience</strong> — God's commandments help us understand what genuine love requires. Love is not whatever we sincerely believe to be loving; God shows us what love looks like.</p>
+<p><strong>Jesus Christ</strong> — What someone believes about Jesus matters. John specifically confronts teachers who deny Jesus Christ as coming in the flesh, meaning denying that Jesus is God who truly became human. The truth about Jesus stands at the center of the letter.</p>
+<p><strong>Deception</strong> — False teaching can sound spiritual and may even present itself as greater understanding or progress. John tells believers to hold firmly to the truth about Jesus they have learned rather than being drawn away by teaching that claims to move beyond Him.</p>
+<p><strong>Perseverance</strong> — Past faithfulness does not remove the need to continue faithfully. John tells believers who already know the truth to watch themselves and continue faithfully in what they have been taught.</p>
+<p><strong>Participation</strong> — John warns believers not to provide support that helps teachers spread false teaching about who Jesus Christ is. His concern is not ordinary disagreements among Christians but teaching that denies the truth about Christ<strong>.</strong></p>
+<p><strong>Fellowship</strong> — The letter is not only about resisting what is false. John desires genuine fellowship with these believers and looks forward to speaking with them face to face so that their joy may be full.</p>
+<div data-custom-style="Normal (Web)">
+<p>.</p>
+</div></div></article><article class="mtb-overview-card mtb-overview-card-words"><h2 class="mtb-overview-card-header">Key Words &amp; Concepts</h2><div class="mtb-overview-card-body"><div data-custom-style="Normal (Web)">
+<p><span data-custom-style="Strong">Commandment</span> — What God has instructed His people to do. John especially emphasizes the command believers have had from the beginning: love one another.</p>
+</div>
+<div data-custom-style="Normal (Web)">
+<p><span data-custom-style="Strong">Deceiver</span> — Someone who does more than personally believe something false but leads others away from the truth. In this letter, John is especially concerned about those spreading false teaching about Jesus Christ.</p>
+</div>
+<div data-custom-style="Normal (Web)">
+<p><span data-custom-style="Strong">Antichrist</span> — John uses this term for one whose teaching stands against the true Christ. Here it describes those who deny Jesus Christ as coming in the flesh - denying that Jesus is God who truly became human.</p>
+</div>
+<div data-custom-style="Normal (Web)">
+<p><span data-custom-style="Strong">Doctrine of Christ</span> — The teaching about who Jesus Christ truly is. In this letter, John is especially confronting teaching that denies that Jesus is God who truly became human. Spiritual maturity never moves us beyond Jesus. As we grow, the truth about Him should increasingly characterize our lives and draw us closer to Him.</p>
+</div>
+<div data-custom-style="Normal (Web)">
+<p><span data-custom-style="Strong">Abide</span> — To remain, continue, or stay. John contrasts remaining faithful to the truth about Christ with moving away from it in pursuit of something presented as spiritual progress.</p>
+</div>
+<div data-custom-style="Normal (Web)">
+<p><span data-custom-style="Strong">Receive / Greet</span> — In the setting of traveling teachers and house churches, welcoming someone could include lodging, resources, access, and support that helped that person's ministry continue. John is not prohibiting ordinary kindness or addressing every disagreement among Christians. He is warning believers not to support teachers who are spreading serious false teaching about who Jesus Christ is.</p>
+</div>
+<div data-custom-style="Normal (Web)">
+<p><span data-custom-style="Strong">Full Joy</span> — John values written instruction, but he longs to be personally present with these believers. The letter that strongly protects the truth ends with the hope of face-to-face fellowship and shared joy.</p>
+</div></div></article></div></div>
+</section>

@@ -60,8 +60,15 @@
   function parseDocName(docName) {
     const name = String(docName || "");
 
-    const intro = name.match(/^([a-z0-9-]+)-0-book-overview\.html$/i);
+    // Canonical Book Overview filename:
+    // book-overview-ruth.html
+    const intro = name.match(/^book-overview-([a-z0-9-]+)\.html$/i);
     if (intro) return { book: intro[1].toLowerCase(), chapter: 0, type: "book-overview" };
+
+    // Legacy compatibility during transition:
+    // ruth-0-book-overview.html
+    const legacyIntro = name.match(/^([a-z0-9-]+)-0-book-overview\.html$/i);
+    if (legacyIntro) return { book: legacyIntro[1].toLowerCase(), chapter: 0, type: "book-overview" };
 
     const chap = name.match(/^([a-z0-9-]+)-(\d+)-chapter-(scripture|overview|explanation|insights)\.html$/i);
     if (chap) return { book: chap[1].toLowerCase(), chapter: Number(chap[2]), type: "chapter-" + chap[3].toLowerCase() };
@@ -219,14 +226,15 @@
     const t = normalizeTab(tab);
 
     // Safe default if something is missing
-    if (!b) return "titus-0-book-overview.html";
+    if (!b) return "book-overview-titus.html";
 
     // Book-level view (chapter=0) never points at chapter-* docs.
-    // If tab is missing/unrecognized, we still treat it as Book Overview.
-    if (ch === "0") return `${b}-0-book-overview.html`;
+    // The URL may still use chapter=0 internally, while the file itself
+    // follows the canonical book-overview-{book}.html naming convention.
+    if (ch === "0") return `book-overview-${b}.html`;
 
-    // Explicit book intro tab (also used as a safe fallback)
-    if (t === "book_introduction") return `${b}-0-book-overview.html`;
+    // Explicit Book Overview tab.
+    if (t === "book_introduction") return `book-overview-${b}.html`;
 
     const suffix = tabToDocSuffix(t);
     return `${b}-${ch}-${suffix}.html`;
@@ -234,12 +242,20 @@
 
 
   // Allow things like:
+  // - book-overview-titus.html
   // - titus-1-chapter-explanation.html
   // - titus-1-2-g96.html
   // - titus-1-resources-topic-name.html
   function safeDocName(name) {
     const n = String(name || "").replace(/^\/+/, "");
-    return /^[a-z0-9\-]+-(0|\d+)-[a-z0-9\-]+\.html$/i.test(n) ? n : "";
+
+    // Canonical Book Overview filename.
+    if (/^book-overview-[a-z0-9-]+\.html$/i.test(n)) return n;
+
+    // Chapter/resource/word-study filenames.
+    if (/^[a-z0-9\-]+-(0|\d+)-[a-z0-9\-]+\.html$/i.test(n)) return n;
+
+    return "";
   }
 
   // ==========================================
@@ -780,7 +796,7 @@ if (String(chapterParamRaw) === "0" && String(tabParamRaw) === "book_home") {
       ? safeDoc
       : (bookParam
           ? buildDocNameFromParams(bookParam, chapterParam, tabParam)
-          : "titus-0-book-overview.html");
+          : "book-overview-titus.html");
 
   // Canonicalize URL based on what we now know.
   // - If doc implies book/chapter and they are missing/invalid, add/fix them

@@ -652,7 +652,7 @@ if (kind === "canonical_context") {
 } else {
   const docFile = (kind === "book_resources")
     ? `${book}-0-book-resources.html`
-    : `${book}-0-book-overview.html`;
+    : `book-overview-${book}.html`;
 
   candidates = [
     `/books/new-testament/${book}/000-book/${docFile}`,

@@ -1,0 +1,246 @@
+<section class="mtb-doc mtb-doc--read" data-doc-type="book-overview">
+<style>
+.mtb-print-controls{display:flex;justify-content:flex-end;gap:8px;margin:0 0 14px;padding:0 4px}
+.mtb-print-button{appearance:none;border:1px solid #b9c8d5;border-radius:8px;background:#fff;padding:9px 14px;color:#173a5e;font:700 14px Arial,Helvetica,sans-serif;cursor:pointer}
+.mtb-print-button:hover{background:#f2f6f9}
+@media print{
+  @page{size:auto;margin:.45in}
+  html,body{background:#fff!important;color:#000!important}
+  .mtb-print-controls,.mtb-study-controls{display:none!important}
+  .mtb-doc{display:block!important;width:100%!important;max-width:none!important;margin:0!important;padding:0!important}
+  .mtb-overview-hero,.mtb-study-hero,.mtb-reflections-hero,.mtb-culture-hero{box-shadow:none!important;background:#fff!important;border-color:#777!important}
+  .mtb-overview-grid,.mtb-reflections-grid,.mtb-culture-grid,.mtb-study-verse-grid{display:block!important}
+  .mtb-overview-card,.mtb-reflections-card,.mtb-culture-card,.mtb-study-verse,.mtb-study-verse-panel,.mtb-intro-card{
+    display:block!important;width:100%!important;max-width:none!important;height:auto!important;margin:0 0 12pt!important;
+    break-inside:avoid;page-break-inside:avoid;box-shadow:none!important;background:#fff!important;color:#000!important
+  }
+  details.mtb-study-verse{display:block!important;overflow:visible!important}
+  details.mtb-study-verse>summary{display:flex!important;background:#fff!important;color:#000!important;border-bottom:1px solid #777!important}
+  details.mtb-study-verse>summary:after{display:none!important}
+  details.mtb-study-verse>.mtb-study-verse-body{display:block!important}
+  h1,h2,h3,h4{break-after:avoid;page-break-after:avoid;color:#000!important}
+  p,li{orphans:3;widows:3}
+  a{color:#000!important;text-decoration:none!important}
+  a[href]::after{content:none!important}
+}
+</style>
+<div class="mtb-print-controls"><button type="button" class="mtb-print-button" onclick="(function(button){var doc=button.closest('.mtb-doc')||document;var panels=Array.prototype.slice.call(doc.querySelectorAll('details'));panels.forEach(function(panel){panel.open=true;});window.print();})(this)">&#128438; Print This Page</button></div>
+<style>
+.book-modal-panel:has(.mtb-book-overview-dashboard) {
+  width: min(1600px, 96vw);
+  max-width: none;
+}
+.mtb-book-overview-dashboard {
+  --mtb-navy: #173a5e;
+  --mtb-navy-2: #274f76;
+  --mtb-gold: #b7832f;
+  --mtb-gold-soft: #fbf4e7;
+  --mtb-blue-soft: #eef4f9;
+  --mtb-border: #d7e0e8;
+  --mtb-text: #1d2935;
+  width: 100%;
+  max-width: 1560px;
+  margin: 0 auto;
+  padding: 2px 4px 28px;
+  color: var(--mtb-text);
+  font-family: Arial, Helvetica, sans-serif;
+}
+.mtb-book-overview-dashboard * { box-sizing: border-box; }
+.mtb-book-overview-dashboard .mtb-intro-hero {
+  position: relative;
+  overflow: hidden;
+  margin: 0 0 24px;
+  padding: 22px 28px;
+  border: 1px solid #cbd8e3;
+  border-radius: 14px;
+  background: linear-gradient(135deg, #f7fafc 0%, #e8f0f7 100%);
+}
+.mtb-book-overview-dashboard .mtb-intro-hero::after {
+  content: '';
+  position: absolute;
+  right: -48px;
+  top: -72px;
+  width: 210px;
+  height: 210px;
+  border-radius: 50%;
+  background: rgba(183, 131, 47, .10);
+}
+.mtb-book-overview-dashboard .mtb-intro-eyebrow {
+  position: relative; z-index: 1; margin: 0 0 5px;
+  color: var(--mtb-gold); font-size: .78rem; font-weight: 800;
+  letter-spacing: .13em; text-transform: uppercase;
+}
+.mtb-book-overview-dashboard .mtb-intro-title {
+  position: relative; z-index: 1; margin: 0; color: var(--mtb-navy);
+  font-size: clamp(1.85rem, 3vw, 2.6rem); line-height: 1.05;
+}
+.mtb-book-overview-dashboard .mtb-intro-subtitle {
+  position: relative; z-index: 1; margin: 6px 0 0;
+  color: #4e6477; font-size: 1rem; font-weight: 700;
+}
+.mtb-book-overview-dashboard .mtb-intro-section { margin: 0 0 25px; }
+.mtb-book-overview-dashboard .mtb-intro-section-heading {
+  display: flex; align-items: center; gap: 12px; margin: 0 0 12px;
+}
+.mtb-book-overview-dashboard .mtb-intro-section-heading h2 {
+  margin: 0; color: var(--mtb-navy); font-size: 1.08rem;
+  letter-spacing: .05em; text-transform: uppercase;
+}
+.mtb-book-overview-dashboard .mtb-intro-section-heading::after {
+  content: ''; height: 1px; flex: 1 1 auto;
+  background: linear-gradient(to right, #c7d3de, transparent);
+}
+.mtb-book-overview-dashboard .mtb-intro-grid {
+  display: grid;
+  grid-template-columns: repeat(12, minmax(0, 1fr));
+  gap: 16px;
+  align-items: stretch;
+  grid-auto-rows: auto;
+}
+/* Each implicit grid row grows to the height of its longest card. Every card
+   then stretches to that row height. No fixed or maximum height is used. */
+.mtb-book-overview-dashboard .mtb-intro-card {
+  grid-column: span 1;
+  min-width: 0;
+  min-height: 0;
+  height: 100%;
+  max-height: none !important;
+  overflow: visible !important;
+  display: flex;
+  flex-direction: column;
+  align-self: stretch;
+  border: 1px solid var(--mtb-border);
+  border-top: 4px solid var(--mtb-navy-2);
+  border-radius: 12px;
+  background: #fff;
+  box-shadow: 0 4px 15px rgba(28, 48, 66, .055);
+}
+.mtb-book-overview-dashboard .mtb-intro-card.mtb-span-4 { grid-column: span 4; }
+.mtb-book-overview-dashboard .mtb-intro-card.mtb-span-6 { grid-column: span 6; }
+.mtb-book-overview-dashboard .mtb-intro-card.mtb-span-12 { grid-column: span 12; }
+.mtb-book-overview-dashboard .mtb-intro-card-header {
+  margin: 0; padding: 12px 16px 10px; border-bottom: 1px solid #e5ebf0;
+  background: var(--mtb-blue-soft); color: var(--mtb-navy);
+  font-size: .92rem; font-weight: 800; letter-spacing: .025em;
+}
+.mtb-book-overview-dashboard .mtb-intro-card-body {
+  flex: 1 1 auto;
+  min-height: 0;
+  height: auto !important;
+  max-height: none !important;
+  overflow: visible !important;
+  padding: 15px 17px 17px;
+  font-size: 1rem;
+  line-height: 1.48;
+  overflow-wrap: anywhere;
+}
+.mtb-book-overview-dashboard .mtb-intro-card-body p { margin: 0 0 .8em; }
+.mtb-book-overview-dashboard .mtb-intro-card-body p:last-child { margin-bottom: 0; }
+.mtb-book-overview-dashboard .mtb-intro-card-body ul,
+.mtb-book-overview-dashboard .mtb-intro-card-body ol { margin: 0 0 .8em; padding-left: 1.35em; }
+.mtb-book-overview-dashboard .mtb-intro-card-body li { margin: 0 0 .45em; padding-left: .1em; }
+.mtb-book-overview-dashboard .mtb-intro-card-body h2 {
+  margin: 1.15em 0 .45em; color: var(--mtb-navy); font-size: 1.15rem;
+}
+.mtb-book-overview-dashboard .mtb-intro-card-body h2:first-child { margin-top: 0; }
+.mtb-book-overview-dashboard .mtb-intro-card-body h3 {
+  margin: 1em 0 .35em; color: var(--mtb-navy-2); font-size: 1.02rem;
+}
+.mtb-book-overview-dashboard .mtb-intro-card-body blockquote {
+  margin: .9em 0; padding: .65em 1em; border-left: 4px solid var(--mtb-gold);
+  background: var(--mtb-gold-soft); color: #45371f;
+}
+.mtb-book-overview-dashboard .mtb-resource-link {
+  color: #1f5fae; font-weight: 700; text-decoration-line: underline;
+  text-decoration-style: dotted; text-decoration-thickness: 2px;
+  text-underline-offset: 4px; cursor: pointer;
+}
+.mtb-book-overview-dashboard .mtb-resource-link::after {
+  content: " \2197"; display: inline-block; margin-left: 2px;
+  font-size: .78em; line-height: 1; opacity: .78;
+}
+@media (max-width: 1100px) {
+  .book-modal-panel:has(.mtb-book-overview-dashboard) { width: min(1100px, 94vw); }
+  .mtb-book-overview-dashboard .mtb-intro-grid { grid-template-columns: repeat(12, minmax(0, 1fr)); }
+  .mtb-book-overview-dashboard .mtb-intro-card,
+  .mtb-book-overview-dashboard .mtb-intro-card.mtb-span-4 { grid-column: span 6; }
+  .mtb-book-overview-dashboard .mtb-intro-card.mtb-span-6,
+  .mtb-book-overview-dashboard .mtb-intro-card.mtb-span-12 { grid-column: 1 / -1; }
+}
+@media (max-width: 660px) {
+  .book-modal-panel:has(.mtb-book-overview-dashboard) { width: 94vw; padding-left: 12px; padding-right: 12px; }
+  .mtb-book-overview-dashboard { padding-left: 0; padding-right: 0; }
+  .mtb-book-overview-dashboard .mtb-intro-hero { padding: 19px; border-radius: 10px; }
+  .mtb-book-overview-dashboard .mtb-intro-grid { grid-template-columns: 1fr; gap: 12px; }
+  .mtb-book-overview-dashboard .mtb-intro-card,
+  .mtb-book-overview-dashboard .mtb-intro-card.mtb-span-4,
+  .mtb-book-overview-dashboard .mtb-intro-card.mtb-span-6,
+  .mtb-book-overview-dashboard .mtb-intro-card.mtb-span-12 { grid-column: 1; }
+  .mtb-book-overview-dashboard .mtb-intro-card-body { padding: 14px 15px 16px; }
+}
+</style><div class="mtb-book-overview-dashboard"><header class="mtb-intro-hero"><p class="mtb-intro-eyebrow">Mastering the Bible</p><h1 class="mtb-intro-title">2 John</h1><p class="mtb-intro-subtitle">2 John - Book Overview</p></header><section class="mtb-intro-section"><div class="mtb-intro-section-heading"><h2>Background</h2></div><div class="mtb-intro-grid"><article class="mtb-intro-card mtb-span-4"><h3 class="mtb-intro-card-header">Author</h3><div class="mtb-intro-card-body"><p>The apostle John, the son of Zebedee and brother of James. He identifies himself simply as <strong>“the Elder,”</strong> a title that reflects both his age and his recognized spiritual authority among the churches. The vocabulary and themes of 2 John closely resemble 1 John and the Gospel of John, especially the emphasis on truth, love, obedience, and the identity of Jesus Christ.</p></div></article><article class="mtb-intro-card mtb-span-4"><h3 class="mtb-intro-card-header">Audience</h3><div class="mtb-intro-card-body"><p>John addresses <strong>“the elect lady and her children.”</strong> This may refer to a particular Christian woman and her family, but many understand the language as a way of addressing a local church and its members. Either way, the letter was written to believers whom John knew and loved and who were facing the danger of deceptive teachers.</p></div></article><article class="mtb-intro-card mtb-span-4"><h3 class="mtb-intro-card-header">Date</h3><div class="mtb-intro-card-body"><p>Likely around <strong>A.D. 85–95</strong>, during the later years of John’s ministry.</p></div></article><article class="mtb-intro-card mtb-span-6"><h3 class="mtb-intro-card-header">Historical Setting</h3><div class="mtb-intro-card-body"><h2 id="the-early-church-depended-heavily-on-traveling-christian-teachers-and-missionaries.-believers-commonly-welcomed-these-workers-into-their-homes-provided-for-their-needs-and-helped-them-continue-their-ministry.">The early church depended heavily on traveling Christian teachers and missionaries. Believers commonly welcomed these workers into their homes, provided for their needs, and helped them continue their ministry.</h2>
+<h2 id="that-generosity-created-a-vulnerability.-false-teachers-could-also-travel-from-place-to-place-and-seek-the-same-hospitality-and-support.-some-were-spreading-teaching-that-denied-the-true-identity-of-jesus-christ-particularly-that-jesus-christ-had-come-in-the-fleshthat-jesus-is-god-who-truly-became-human.">That generosity created a vulnerability. False teachers could also travel from place to place and seek the same hospitality and support. Some were spreading teaching that denied the true identity of Jesus Christ, particularly that Jesus Christ had come in the flesh—that Jesus is God who truly became human.</h2>
+<h2 id="john-therefore-writes-to-believers-who-need-to-understand-the-inseparable-bond-between-gods-truth-and-genuine-christian-love.-genuine-christian-love-remains-faithful-to-what-god-has-revealed-and-therefore-does-not-support-teachers-who-are-spreading-serious-false-teaching-about-who-jesus-christ-is.">John therefore writes to believers who need to understand the inseparable bond between God’s truth and genuine Christian love. Genuine Christian love remains faithful to what God has revealed and therefore does not support teachers who are spreading serious false teaching about who Jesus Christ is.</h2></div></article><article class="mtb-intro-card mtb-span-6"><h3 class="mtb-intro-card-header">Occasion</h3><div class="mtb-intro-card-body"><p>John had reason to rejoice because some of the believers were <strong>“walking in truth.”</strong> He encourages them to continue walking in love and obedience to God’s commandments.</p>
+<p>At the same time, many deceivers had gone out into the world. John warns the believers not to be drawn away from the teaching of Christ and not to extend ministry support or partnership to those who reject the truth about Him.</p></div></article></div></section><section class="mtb-intro-section"><div class="mtb-intro-section-heading"><h2>Understanding the Book</h2></div><div class="mtb-intro-grid"><article class="mtb-intro-card mtb-span-6"><h3 class="mtb-intro-card-header">What This Book Is About</h3><div class="mtb-intro-card-body"><p>2 John is about <strong>walking in truth and love while refusing partnership with deception</strong>.</p>
+<p>John does not allow truth to be separated from love because love apart from truth is not truly love. Believers are commanded to love one another, but John defines that love by God’s truth and commandments. Love does not affirm, support, or help advance what is false, especially teaching that leads people away from the truth about Jesus Christ.</p>
+<h2 id="christians-should-be-generous-and-hospitable-but-love-does-not-require-us-to-support-what-is-false.-supporting-someone-who-teaches-falsely-about-christ-would-help-spread-deception-and-could-lead-others-away-from-the-truth.-john-therefore-calls-believers-to-a-love-that-seeks-what-is-truly-good-for-others-and-remains-faithful-to-the-truth-god-has-revealed.">Christians should be generous and hospitable, but love does not require us to support what is false. Supporting someone who teaches falsely about Christ would help spread deception and could lead others away from the truth. John therefore calls believers to a love that seeks what is truly good for others and remains faithful to the truth God has revealed.</h2></div></article><article class="mtb-intro-card mtb-span-6"><h3 class="mtb-intro-card-header">Why This Book Matters</h3><div class="mtb-intro-card-body"><div data-custom-style="pdq2pg_selectionanchorcontainer">
+<p>2 John is especially important because it teaches believers <strong>that</strong> <strong>love must remain faithful to the truth</strong><strong>.</strong></p>
+</div>
+<div data-custom-style="Normal (Web)">
+<p>Christians can sometimes assume that being loving means accepting or supporting every teacher, ministry, or spiritual claim. John rejects that idea. What someone teaches about Jesus matters. Truth matters. Doctrine matters. Who and what we support matters. Helping to advance what is false is not an expression of love, because falsehood ultimately harms the people it reaches.</p>
+</div>
+<div data-custom-style="Normal (Web)">
+<p>At the same time, John does not use truth as a reason to abandon love. He repeatedly joins truth, love, and obedience together. <strong>The mature Christian life does not choose between truth and love because biblical love cannot be separated from truth.</strong></p>
+</div></div></article><article class="mtb-intro-card mtb-span-6"><h3 class="mtb-intro-card-header">Key Themes to Watch For</h3><div class="mtb-intro-card-body"><p><strong>Truth</strong> — Truth is not merely something Christians believe; it is something they walk in. John describes truth as abiding in believers and shaping how they live.</p>
+<p><strong>Love</strong> — Christian love is commanded by God and expressed through obedience. John refuses to define love primarily by emotion or unrestricted acceptance.</p>
+<p><strong>Walking</strong> — The repeated picture of “walking” emphasizes an ongoing way of life. Truth and love are meant to characterize everyday Christian conduct.</p>
+<p><strong>Obedience</strong> — Love for God cannot be separated from obedience to His commandments. Biblical love has content and direction.</p>
+<p><strong>The Person of Christ</strong> — The identity of Jesus is central. Denying that Jesus Christ has come in the flesh is not a minor doctrinal disagreement but a rejection of essential Christian truth.</p>
+<p><strong>Deception</strong> — False teaching can appear within religious settings and through people claiming spiritual authority. Believers therefore need discernment.</p>
+<p><strong>Spiritual Partnership</strong> — Christians must consider what their hospitality, resources, encouragement, and support are helping to advance.</p>
+<p><strong>Abiding</strong> — John calls believers to remain within the teaching of Christ rather than moving beyond what they have received in pursuit of supposedly greater spiritual knowledge.</p></div></article><article class="mtb-intro-card mtb-span-6"><h3 class="mtb-intro-card-header">Key Concepts to Understand Before Reading</h3><div class="mtb-intro-card-body"><p><strong>Truth and love belong together.</strong> John does not present truth as harsh and love as permissive. Both come from God, and both must govern and characterize the Christian life.</p>
+<p><strong>Hospitality carried greater significance in the first-century church.</strong> Traveling teachers often depended on believers for lodging, food, financial assistance, and introductions to other Christians. Receiving and sending a teacher onward could therefore amount to active participation in that teacher’s ministry.</p>
+<p><strong>The warning about receiving false teachers is not a prohibition against ordinary kindness.</strong> John is warning believers not to welcome, support, or assist false teachers in ways that help them spread their teaching. Providing that kind of support would make believers participants in advancing what is false about Christ.</p>
+<p><strong>“Jesus Christ as coming in the flesh” confronts false teaching about Jesus.</strong> Some teachers were separating the divine Christ from the genuinely human Jesus or otherwise denying the reality of His incarnation (Jesus is God who came in the flesh). John treats the true identity of Jesus as foundational to Christian faith.</p>
+<p><strong>“The doctrine of Christ” establishes a boundary.</strong> In this context, John is especially concerned with the truth about who Jesus Christ is, including that He truly came in the flesh. Spiritual maturity never moves us beyond the truth about Jesus Christ. Any teaching that moves away from who Jesus is and what God has revealed about Him is not spiritual progress; it is a departure from the truth.</p>
+<h2 id="section"></h2></div></article><article class="mtb-intro-card mtb-span-6"><h3 class="mtb-intro-card-header">Book Flow</h3><div class="mtb-intro-card-body"><p><strong>Verses 1–3 — Greeting in Truth and Love</strong><br />
+John greets the elect lady and her children, emphasizing the truth that lives in believers and will remain with them forever.</p>
+<p><strong>Verses 4–6 — Walking in Truth, Love, and Obedience</strong><br />
+John rejoices that some are walking in truth and reminds them of the command to love one another. He defines love as walking according to God’s commandments.</p>
+<p><strong>Verses 7–9 — Warning Against Deceivers</strong><br />
+John warns that many deceivers deny that Jesus Christ has come in the flesh. Believers must guard themselves and remain in the doctrine of Christ.</p>
+<p><strong>Verses 10–11 — Do Not Participate in False Teaching</strong><br />
+John instructs believers not to provide the kind of welcome and support that would make them participants in the work of false teachers.</p>
+<p><strong>Verses 12–13 — A Personal Conclusion</strong><br />
+John hopes to visit personally so that their joy may be full.</p></div></article><article class="mtb-intro-card mtb-span-6"><h3 class="mtb-intro-card-header">Christ and Life</h3><div class="mtb-intro-card-body"><p>Jesus Christ stands at the center of the letter because He stands at the center of God’s eternal plan and purpose. Christian truth is not merely a collection of correct beliefs; it reveals who Jesus is and brings us into life with Him. John therefore does not treat what we believe about Jesus as an abstract theological issue. To depart from the truth about Christ is to depart from the One to whom the truth points and in whom God’s purpose is revealed.</p>
+<p>Jesus truly came in the flesh. The eternal Son, the fullness of the Godhead, genuinely entered human history. Christian faith is therefore anchored in the real person and work of Jesus Christ, not merely in spiritual ideas about Him.</p>
+<p>Life with Christ also produces a recognizable way of living. Truth leads to obedience. Love expresses itself through obedience. We do not merely believe the truth about Christ; that truth characterizes how we live, what we support, and what we help advance.</p>
+<p>2 John therefore calls believers to love in a way that remains faithful to the truth. We love people, but love does not require us to support what leads people away from Christ. Because Jesus is at the center of God’s purpose, faithfulness to Him must shape both our love for others and what we choose to support.</p></div></article></div></section><section class="mtb-intro-section"><div class="mtb-intro-section-heading"><h2>Reading Guide</h2></div><div class="mtb-intro-grid"><article class="mtb-intro-card mtb-span-6"><h3 class="mtb-intro-card-header">One-Sentence Summary</h3><div class="mtb-intro-card-body"><p><strong>2 John calls believers to walk faithfully in truth and love while refusing to support teaching that denies the truth about Jesus Christ.</strong></p>
+<h2 id="central-message">Central Message</h2>
+<div data-custom-style="pdq2pg_selectionanchorcontainer">
+<p><strong>Walk in truth and love, knowing that genuine love always remains faithful to the truth.</strong></p>
+</div>
+<h2 id="at-the-heart-of-2-john-is-the-inseparable-bond-between-gods-truth-and-genuine-christian-love.-john-does-not-present-truth-and-love-as-competing-concerns-that-must-be-balanced.-truth-is-essential-to-love.-love-that-abandons-what-god-has-revealed-may-appear-compassionate-accepting-or-generous-but-it-is-not-the-love-john-describes.-genuine-christian-love-seeks-what-is-truly-good-for-others-and-therefore-walks-according-to-gods-commandments-and-remains-faithful-to-the-truth-about-jesus-christ.">At the heart of 2 John is the inseparable bond between God’s truth and genuine Christian love. John does not present truth and love as competing concerns that must be balanced. Truth is essential to love. Love that abandons what God has revealed may appear compassionate, accepting, or generous, but it is not the love John describes. Genuine Christian love seeks what is truly good for others and therefore walks according to God’s commandments and remains faithful to the truth about Jesus Christ.</h2>
+<h3 id="section-1"></h3></div></article><article class="mtb-intro-card mtb-span-6"><h3 class="mtb-intro-card-header">Read This Book Remembering...</h3><div class="mtb-intro-card-body"><div data-custom-style="Normal (Web)">
+<p>Coming soon</p>
+</div>
+<h2 id="section-2"></h2></div></article></div></section><section class="mtb-intro-section"><div class="mtb-intro-section-heading"><h2>Helpful Notes</h2></div><div class="mtb-intro-grid"><article class="mtb-intro-card mtb-span-12"><div class="mtb-intro-card-body"><p><strong>The “elect lady”</strong> — Interpreters differ over whether John is writing to an individual Christian woman or using feminine imagery for a local church. The main message of the letter remains the same in either case.</p>
+<p><strong>“Whom I love in truth”</strong> — John immediately joins love and truth. This combination becomes one of the controlling ideas of the entire letter. <strong>Genuine Christian love cannot be separated from truth, because love that abandons the truth is no longer the love John describes.</strong></p>
+<p><strong>“Walking in truth”</strong> — John’s concern is not merely correct belief but <strong>how we live in response to what is true</strong>. Truth is meant to characterize the way we live.</p>
+<p><strong>“This is love, that we walk according to His commandments”</strong> — John tells us what genuine love looks like. Love is more than sincerity or emotion. <strong>Genuine love walks according to what God has commanded because God Himself defines what love is.</strong></p>
+<div data-custom-style="pdq2pg_selectionanchorcontainer">
+<p><strong>“Many deceivers have gone out into the world”</strong> — False teaching was not merely a possible danger. John writes because people were already spreading teaching that denied the truth about Jesus Christ.</p>
+</div>
+<div data-custom-style="Normal (Web)">
+<p><strong>“Look to yourselves”</strong> — Believers must remain watchful about what they believe and follow. Past faithfulness does not guarantee continued faithfulness; they must continue in the truth they have received.</p>
+</div>
+<div data-custom-style="Normal (Web)">
+<p><strong>“Does not abide in the doctrine of Christ”</strong> — John is especially concerned with remaining faithful to the truth about who Jesus Christ is. Spiritual maturity never moves us beyond the truth about Jesus. Teaching that moves away from Him is not spiritual progress but a departure from the truth.</p>
+</div>
+<div data-custom-style="Normal (Web)">
+<p><strong>“Do not receive him into your house”</strong> — In its historical setting, receiving a traveling teacher could include providing lodging and support that enabled his ministry to continue. John is not prohibiting ordinary kindness; he is warning believers not to provide support that helps false teaching spread.</p>
+</div>
+<div data-custom-style="Normal (Web)">
+<p><strong>“That our joy may be full”</strong> — John values face-to-face fellowship more than written communication alone. Even after serious warnings about false teaching, the letter closes with his desire to be personally present with these believers and share in their joy.</p>
+</div></div></article></div></section></div>
+</section>

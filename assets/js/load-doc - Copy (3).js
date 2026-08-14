@@ -70,11 +70,8 @@
     const legacyIntro = name.match(/^([a-z0-9-]+)-0-book-overview\.html$/i);
     if (legacyIntro) return { book: legacyIntro[1].toLowerCase(), chapter: 0, type: "book-overview" };
 
-    const chap = name.match(/^([a-z0-9-]+)-(\d+)-chapter-(scripture|overview|explanation|reflections|insights)\.html$/i);
-    if (chap) {
-      const kind = chap[3].toLowerCase() === "insights" ? "reflections" : chap[3].toLowerCase();
-      return { book: chap[1].toLowerCase(), chapter: Number(chap[2]), type: "chapter-" + kind };
-    }
+    const chap = name.match(/^([a-z0-9-]+)-(\d+)-chapter-(scripture|overview|explanation|insights)\.html$/i);
+    if (chap) return { book: chap[1].toLowerCase(), chapter: Number(chap[2]), type: "chapter-" + chap[3].toLowerCase() };
 
     const eg = name.match(/^([a-z0-9-]+)-(\d+)-(chapter-)?eg-culture\.html$/i);
     if (eg) return { book: eg[1].toLowerCase(), chapter: Number(eg[2]), type: "chapter-eg-culture" };
@@ -197,7 +194,7 @@
     if (t === "scripture" || t === "chapter_scripture" || t === "chapter-scripture") return "chapter_scripture";
     if (t === "explanation" || t === "chapter_explanation" || t === "chapter-explanation") return "chapter_explanation";
     if (t === "overview" || t === "chapter_overview" || t === "chapter-overview") return "chapter_overview";
-    if (t === "reflections" || t === "chapter_reflections" || t === "chapter-reflections" || t === "insights" || t === "chapter_insights" || t === "chapter-insights") return "chapter_reflections";
+    if (t === "insights" || t === "chapter_insights" || t === "chapter-insights") return "chapter_insights";
     if (t === "eg_culture" || t === "eg-culture" || t === "egculture" || t === "chapter_eg_culture" || t === "chapter-eg-culture") return "eg_culture";
     if (t === "book_intro" || t === "book-intro" || t === "bookintroduction" || t === "book_introduction" || t === "book-overview") return "book_introduction";
 
@@ -214,7 +211,7 @@
       case "chapter_scripture": return "chapter-scripture";
       case "chapter_explanation": return "chapter-explanation";
       case "chapter_overview": return "chapter-overview";
-      case "chapter_reflections": return "chapter-reflections";
+      case "chapter_insights": return "chapter-insights";
       case "eg_culture": return "chapter-eg-culture";
       case "chapter_resources": return "chapter-resources";
       default: return "chapter-scripture";

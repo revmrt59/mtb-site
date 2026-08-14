@@ -12,7 +12,7 @@
   { key: "book_introduction", label: "Book Overview" },
   { key: "chapter_overview", label: "Chapter Overview" },
   { key: "chapter_explanation", label: "Chapter Study" },
-  { key: "chapter_reflections", label: "Chapter Reflection" },
+  { key: "chapter_insights", label: "Chapter Reflection" },
   { key: "eg_culture", label: "EG Culture" },
   { key: "resources", label: "Resources" }
 ];
@@ -123,14 +123,16 @@
     return (book || "").toLowerCase().replace(/\s+/g, "-");
   }
 
-  function normalizeTabKey(tab) {
-    const t = String(tab || "").toLowerCase().trim();
-    if (t === "chapter_insights" || t === "chapter-insights" || t === "insights") return "chapter_reflections";
-    return t || "chapter_scripture";
-  }
-
   function parseBookChapterFromDoc(doc) {
     const d = String(doc || "");
+
+    // Canonical Book Overview filename:
+    // book-overview-ruth.html
+    const intro = d.match(/^book-overview-([a-z0-9-]+)\.html$/i);
+    if (intro) return { book: intro[1].toLowerCase(), chapter: "0" };
+
+    // Standard chapter/resource/word-study filename:
+    // ruth-1-chapter-overview.html, titus-1-resources-xyz.html, etc.
     const m = d.match(/^([a-z0-9-]+)-(\d+)-/i);
     if (!m) return { book: "", chapter: "" };
     return { book: m[1].toLowerCase(), chapter: m[2] };
@@ -165,7 +167,7 @@
       book_introduction: "book-overview",
       chapter_overview: "chapter-overview",
       chapter_explanation: "chapter-explanation",
-      chapter_reflections: "chapter-reflections",
+      chapter_insights: "chapter-insights",
       eg_culture: "eg-culture",
       resources: "resources"
     };
@@ -213,7 +215,7 @@
     if (!tabsEl) return;
 
     const params = getParams();
-    const activeTab = normalizeTabKey(params.tab);
+    const activeTab = params.tab || "chapter_scripture";
     document.body.setAttribute("data-active-tab", activeTab);
 
     tabsEl.innerHTML = "";
@@ -249,7 +251,7 @@
 
   function syncActiveTab() {
     const params = getParams();
-    const activeTab = normalizeTabKey(params.tab);
+    const activeTab = params.tab || "chapter_scripture";
     document.body.setAttribute("data-active-tab", activeTab);
     const buttons = Array.from(document.querySelectorAll("#tabs .tab-btn"));
 
@@ -274,8 +276,8 @@
     if (params.book) {
       setHeader(params.book, params.chapter || "1");
     } else if (params.doc) {
-      const m = params.doc.match(/^([a-z0-9-]+)-(\d+)-/i);
-      if (m) setHeader(m[1], m[2]);
+      const inferred = parseBookChapterFromDoc(params.doc);
+      if (inferred.book) setHeader(inferred.book, inferred.chapter);
     }
 
     renderTabs();
@@ -292,8 +294,8 @@
     if (params.book) {
       setHeader(params.book, params.chapter || "1");
     } else if (params.doc) {
-      const m = params.doc.match(/^([a-z0-9-]+)-(\d+)-/i);
-      if (m) setHeader(m[1], m[2]);
+      const inferred = parseBookChapterFromDoc(params.doc);
+      if (inferred.book) setHeader(inferred.book, inferred.chapter);
     }
   });
 

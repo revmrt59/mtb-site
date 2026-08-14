@@ -1324,16 +1324,11 @@ body[data-book][data-chapter][data-active-tab="eg_culture"] #doc-target .mtb-cul
 
 
 /* =========================================================
-   CHAPTER REFLECTIONS — WIDE 3-COLUMN LAYOUT
+   CHAPTER REFLECTIONS — LOCKED 2x2 LAYOUT
    Keep this block at the VERY END of this file.
-   Reuses the former Chapter Insights tab.
    ========================================================= */
 
-/* Remove the general 1100px clamp for the active reflection/insights tab. */
-body[data-book][data-chapter][data-active-tab="chapter_insights"] #doc-layout,
-body[data-book][data-chapter][data-active-tab="chapter_insights"] .doc-layout,
-body[data-book][data-chapter][data-active-tab="chapter_reflection"] #doc-layout,
-body[data-book][data-chapter][data-active-tab="chapter_reflection"] .doc-layout,
+/* Remove the general 1100px clamp for the active Chapter Reflections tab. */
 body[data-book][data-chapter][data-active-tab="chapter_reflections"] #doc-layout,
 body[data-book][data-chapter][data-active-tab="chapter_reflections"] .doc-layout{
   width: 100% !important;
@@ -1343,8 +1338,6 @@ body[data-book][data-chapter][data-active-tab="chapter_reflections"] .doc-layout
   box-sizing: border-box !important;
 }
 
-body[data-book][data-chapter][data-active-tab="chapter_insights"] .doc-main,
-body[data-book][data-chapter][data-active-tab="chapter_reflection"] .doc-main,
 body[data-book][data-chapter][data-active-tab="chapter_reflections"] .doc-main{
   width: 100% !important;
   max-width: none !important;
@@ -1352,8 +1345,6 @@ body[data-book][data-chapter][data-active-tab="chapter_reflections"] .doc-main{
 }
 
 /* Widen the white page container. */
-body[data-book][data-chapter][data-active-tab="chapter_insights"] #doc-target,
-body[data-book][data-chapter][data-active-tab="chapter_reflection"] #doc-target,
 body[data-book][data-chapter][data-active-tab="chapter_reflections"] #doc-target{
   width: min(1600px, calc(100vw - 48px)) !important;
   max-width: 1600px !important;
@@ -1364,14 +1355,6 @@ body[data-book][data-chapter][data-active-tab="chapter_reflections"] #doc-target
 }
 
 /* Let the generated reflection document and grid fill the white page. */
-body[data-book][data-chapter][data-active-tab="chapter_insights"] #doc-target > #doc-root,
-body[data-book][data-chapter][data-active-tab="chapter_insights"] #doc-target > .mtb-doc,
-body[data-book][data-chapter][data-active-tab="chapter_insights"] #doc-target .mtb-reflections-page,
-body[data-book][data-chapter][data-active-tab="chapter_insights"] #doc-target .mtb-reflections-grid,
-body[data-book][data-chapter][data-active-tab="chapter_reflection"] #doc-target > #doc-root,
-body[data-book][data-chapter][data-active-tab="chapter_reflection"] #doc-target > .mtb-doc,
-body[data-book][data-chapter][data-active-tab="chapter_reflection"] #doc-target .mtb-reflections-page,
-body[data-book][data-chapter][data-active-tab="chapter_reflection"] #doc-target .mtb-reflections-grid,
 body[data-book][data-chapter][data-active-tab="chapter_reflections"] #doc-target > #doc-root,
 body[data-book][data-chapter][data-active-tab="chapter_reflections"] #doc-target > .mtb-doc,
 body[data-book][data-chapter][data-active-tab="chapter_reflections"] #doc-target .mtb-reflections-page,
@@ -1383,44 +1366,33 @@ body[data-book][data-chapter][data-active-tab="chapter_reflections"] #doc-target
   box-sizing: border-box !important;
 }
 
-/* Three equal columns on desktop; grid rows automatically match the tallest card. */
-body[data-book][data-chapter][data-active-tab="chapter_insights"] #doc-target .mtb-reflections-grid,
-body[data-book][data-chapter][data-active-tab="chapter_reflection"] #doc-target .mtb-reflections-grid,
+/* Locked MTB Chapter Reflections layout:
+   Row 1: Foundational Truths | Chapter Insights
+   Row 2: Christ & Life | Dwelling in the Word
+*/
 body[data-book][data-chapter][data-active-tab="chapter_reflections"] #doc-target .mtb-reflections-grid{
   display: grid !important;
-  grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
+  grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
   align-items: stretch !important;
   gap: 16px !important;
 }
 
-body[data-book][data-chapter][data-active-tab="chapter_insights"] #doc-target .mtb-reflection-card,
-body[data-book][data-chapter][data-active-tab="chapter_reflection"] #doc-target .mtb-reflection-card,
+body[data-book][data-chapter][data-active-tab="chapter_reflections"] #doc-target .mtb-reflections-card,
 body[data-book][data-chapter][data-active-tab="chapter_reflections"] #doc-target .mtb-reflection-card{
-  height: 100% !important;
   min-width: 0 !important;
+  height: 100% !important;
   overflow: visible !important;
+  grid-column: auto !important;
+  grid-row: auto !important;
 }
 
-@media (max-width: 1180px){
-  body[data-book][data-chapter][data-active-tab="chapter_insights"] #doc-target .mtb-reflections-grid,
-  body[data-book][data-chapter][data-active-tab="chapter_reflection"] #doc-target .mtb-reflections-grid,
-  body[data-book][data-chapter][data-active-tab="chapter_reflections"] #doc-target .mtb-reflections-grid{
-    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
-  }
-}
-
+/* Mobile: stack cards one per row. */
 @media (max-width: 700px){
-  body[data-book][data-chapter][data-active-tab="chapter_insights"] #doc-layout,
-  body[data-book][data-chapter][data-active-tab="chapter_insights"] .doc-layout,
-  body[data-book][data-chapter][data-active-tab="chapter_reflection"] #doc-layout,
-  body[data-book][data-chapter][data-active-tab="chapter_reflection"] .doc-layout,
   body[data-book][data-chapter][data-active-tab="chapter_reflections"] #doc-layout,
   body[data-book][data-chapter][data-active-tab="chapter_reflections"] .doc-layout{
     padding: 12px 8px 32px !important;
   }
 
-  body[data-book][data-chapter][data-active-tab="chapter_insights"] #doc-target,
-  body[data-book][data-chapter][data-active-tab="chapter_reflection"] #doc-target,
   body[data-book][data-chapter][data-active-tab="chapter_reflections"] #doc-target{
     width: calc(100vw - 16px) !important;
     margin-top: 12px !important;
@@ -1428,8 +1400,6 @@ body[data-book][data-chapter][data-active-tab="chapter_reflections"] #doc-target
     border-radius: 10px !important;
   }
 
-  body[data-book][data-chapter][data-active-tab="chapter_insights"] #doc-target .mtb-reflections-grid,
-  body[data-book][data-chapter][data-active-tab="chapter_reflection"] #doc-target .mtb-reflections-grid,
   body[data-book][data-chapter][data-active-tab="chapter_reflections"] #doc-target .mtb-reflections-grid{
     grid-template-columns: minmax(0, 1fr) !important;
   }

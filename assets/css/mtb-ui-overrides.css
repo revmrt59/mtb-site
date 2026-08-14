@@ -1448,3 +1448,454 @@ body[data-book][data-chapter][data-active-tab="chapter_reflections"] #doc-target
   background: transparent !important;
   border: none;
 }
+/* =========================================================
+   CHAPTER STUDY — ONE-ROW VERSE PREVIEW
+   Reference | NKJV | NLT | Main Idea | Toggle
+   ========================================================= */
+
+
+/* =========================================================
+   VERSE CARD / JOINED ROWS
+   ========================================================= */
+
+.mtb-study-verse-card {
+  margin: 0 !important;
+  border: 1px solid #cfdae3;
+  border-radius: 0;
+  overflow: hidden;
+  background: #fff;
+}
+
+
+/* Remove doubled horizontal borders between verses */
+.mtb-study-verse-card + .mtb-study-verse-card {
+  border-top: 0;
+}
+
+
+/* Round only the first row */
+.mtb-study-verses .mtb-study-verse-card:first-child {
+  border-radius: 10px 10px 0 0;
+}
+
+
+/* Round only the last row */
+.mtb-study-verses .mtb-study-verse-card:last-child {
+  border-radius: 0 0 10px 10px;
+}
+
+
+/* If there is only one verse */
+.mtb-study-verses .mtb-study-verse-card:only-child {
+  border-radius: 10px;
+}
+
+
+/* =========================================================
+   COLLAPSED / ALWAYS-VISIBLE ROW
+   ========================================================= */
+
+.mtb-study-row {
+  display: grid;
+
+  grid-template-columns:
+    135px
+    minmax(0, 1.05fr)
+    minmax(0, 1.05fr)
+    minmax(0, 1fr)
+    48px;
+
+  align-items: stretch;
+
+  background: #f3f7fa;
+}
+
+
+/* =========================================================
+   VERSE REFERENCE
+   ========================================================= */
+
+.mtb-study-row-reference {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+
+  padding: 12px 14px;
+
+  border-right: 1px solid #d8e1e8;
+
+  background: #f3f7fa;
+
+  color: #173a5e;
+  font-weight: 800;
+  line-height: 1.35;
+
+  text-align: left;
+
+  cursor: pointer;
+}
+
+
+/* =========================================================
+   NKJV / NLT / MAIN IDEA CELLS
+   ========================================================= */
+
+.mtb-study-row-cell {
+  padding: 12px 14px;
+
+  border-right: 1px solid #d8e1e8;
+
+  background: #fff;
+}
+
+
+/* Labels */
+.mtb-study-row-label {
+  margin: 0 0 6px;
+
+  color: #173a5e;
+
+  font-size: .76rem;
+  font-weight: 800;
+  letter-spacing: .02em;
+  line-height: 1.2;
+
+  text-transform: uppercase;
+}
+
+
+/* Text content */
+.mtb-study-row-content {
+  margin: 0;
+
+  color: #1f2b37;
+
+  font-size: .94rem;
+  line-height: 1.42;
+}
+
+
+/* Remove inherited paragraph / blockquote spacing */
+.mtb-study-row-content p,
+.mtb-study-row-content blockquote {
+  margin: 0 !important;
+  padding: 0;
+}
+
+
+/* Remove old blockquote styling */
+.mtb-study-row-content blockquote {
+  border: 0;
+}
+
+
+/* Prevent stray generated line breaks from pushing
+   Main Idea text downward */
+.mtb-study-row-mainidea .mtb-study-row-content > br:first-child,
+.mtb-study-row-mainidea .mtb-study-row-content > br:first-child + br {
+  display: none;
+}
+
+
+/* Main Idea should begin at the same vertical level
+   as NKJV and NLT text */
+.mtb-study-row-mainidea .mtb-study-row-content {
+  padding-top: 0;
+}
+
+
+/* =========================================================
+   TOGGLE
+   ========================================================= */
+
+.mtb-study-row-toggle {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  width: 100%;
+  min-width: 0;
+
+  padding: 0;
+
+  border: 0;
+
+  background: #f3f7fa;
+
+  color: #173a5e;
+
+  font-size: 1.25rem;
+  font-weight: 800;
+
+  cursor: pointer;
+}
+
+
+.mtb-study-row-toggle:hover {
+  background: #e8f0f7;
+}
+
+
+/* Open state:
+   keep content cells white and only lightly change
+   the reference/toggle areas */
+.mtb-study-verse-card.is-open .mtb-study-row-reference,
+.mtb-study-verse-card.is-open .mtb-study-row-toggle {
+  background: #eaf2f8;
+}
+
+
+.mtb-study-verse-card.is-open .mtb-study-row-cell {
+  background: #fff;
+}
+
+
+/* =========================================================
+   EXPANDED CONTENT
+   ========================================================= */
+
+.mtb-study-verse-deep {
+  display: none;
+
+  padding: 14px;
+
+  border-top: 1px solid #dbe3ea;
+
+  background: #fff;
+}
+
+
+.mtb-study-verse-card.is-open .mtb-study-verse-deep {
+  display: block;
+}
+
+
+.mtb-study-verse-deep-grid {
+  display: grid;
+
+  grid-template-columns: 2fr 1fr;
+
+  gap: 14px;
+
+  align-items: start;
+}
+
+
+.mtb-study-deep-explanation,
+.mtb-study-deep-remarks {
+  height: auto !important;
+  grid-column: auto !important;
+}
+
+
+/* =========================================================
+   MOBILE / TABLET
+   ========================================================= */
+
+@media (max-width: 900px) {
+
+  .mtb-study-row {
+    grid-template-columns: 110px 1fr 44px;
+  }
+
+
+  .mtb-study-row-reference {
+    grid-column: 1;
+    grid-row: 1 / span 3;
+
+    align-items: center;
+  }
+
+
+  .mtb-study-row-nkjv,
+  .mtb-study-row-nlt,
+  .mtb-study-row-mainidea {
+    grid-column: 2;
+  }
+
+
+  .mtb-study-row-toggle {
+    grid-column: 3;
+    grid-row: 1 / span 3;
+  }
+
+
+  .mtb-study-row-nkjv,
+  .mtb-study-row-nlt {
+    border-bottom: 1px solid #d8e1e8;
+  }
+}
+
+
+@media (max-width: 650px) {
+
+  .mtb-study-row {
+    grid-template-columns: 1fr 44px;
+  }
+
+
+  .mtb-study-row-reference {
+    grid-column: 1;
+    grid-row: 1;
+
+    padding: 9px 11px;
+
+    border-bottom: 1px solid #d8e1e8;
+
+    align-items: center;
+  }
+
+
+  .mtb-study-row-toggle {
+    grid-column: 2;
+    grid-row: 1;
+
+    border-bottom: 1px solid #d8e1e8;
+  }
+
+
+  .mtb-study-row-nkjv,
+  .mtb-study-row-nlt,
+  .mtb-study-row-mainidea {
+    grid-column: 1 / -1;
+
+    border-right: 0;
+  }
+
+
+  .mtb-study-row-nkjv,
+  .mtb-study-row-nlt {
+    border-bottom: 1px solid #d8e1e8;
+  }
+
+
+  .mtb-study-verse-deep-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+
+/* =========================================================
+   PRINT
+   ========================================================= */
+
+@media print {
+
+  .mtb-study-row-toggle {
+    display: none !important;
+  }
+
+
+  .mtb-study-verse-deep {
+    display: block !important;
+  }
+
+
+  .mtb-study-row-cell,
+  .mtb-study-row-reference {
+    background: #fff !important;
+  }
+}
+/* =========================================================
+   CHAPTER STUDY — FINAL LAYOUT CLEANUP
+   ========================================================= */
+
+
+/* 1. Remove the large Chapter Study hero box */
+body[data-active-tab="chapter_explanation"] .mtb-study-hero {
+  display: none !important;
+}
+
+
+/* 2. Put Print This Page beside Expand All / Collapse All */
+body[data-active-tab="chapter_explanation"] .mtb-chapter-study {
+  position: relative;
+}
+
+
+/* Make the two control groups sit on one row */
+body[data-active-tab="chapter_explanation"] .mtb-study-controls {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  gap: 8px;
+  margin: 0 0 16px;
+}
+
+
+/* Move the print controls into the same visual row */
+body[data-active-tab="chapter_explanation"] .mtb-print-controls {
+  position: absolute;
+  top: 0;
+  right: 0;
+  margin: 0;
+  padding: 0;
+}
+
+
+/* Make room for the Print button */
+body[data-active-tab="chapter_explanation"] .mtb-study-controls {
+  padding-right: 165px;
+}
+
+
+/* 3. Make Main Idea text line up with NKJV / NLT text */
+body[data-active-tab="chapter_explanation"]
+.mtb-study-row-mainidea .mtb-study-row-content {
+  margin-top: 0 !important;
+  padding-top: 0 !important;
+}
+
+
+/* Remove stray leading BRs in Main Idea */
+body[data-active-tab="chapter_explanation"]
+.mtb-study-row-mainidea .mtb-study-row-content br:first-child,
+body[data-active-tab="chapter_explanation"]
+.mtb-study-row-mainidea .mtb-study-row-content br:first-child + br {
+  display: none !important;
+}
+
+
+/* Normalize all three text areas so they start at same position */
+body[data-active-tab="chapter_explanation"] .mtb-study-row-cell {
+  display: flex;
+  flex-direction: column;
+}
+
+
+body[data-active-tab="chapter_explanation"] .mtb-study-row-content {
+  margin: 0 !important;
+  padding: 0 !important;
+}
+
+
+/* Ensure paragraph starts directly below label */
+body[data-active-tab="chapter_explanation"]
+.mtb-study-row-content > p:first-child {
+  margin-top: 0 !important;
+  padding-top: 0 !important;
+}
+
+
+/* Keep labels identical height/alignment */
+body[data-active-tab="chapter_explanation"] .mtb-study-row-label {
+  margin: 0 0 6px !important;
+  line-height: 1.2;
+}
+
+
+/* Mobile: let controls wrap naturally */
+@media (max-width: 650px) {
+
+  body[data-active-tab="chapter_explanation"] .mtb-study-controls {
+    padding-right: 0;
+    flex-wrap: wrap;
+  }
+
+  body[data-active-tab="chapter_explanation"] .mtb-print-controls {
+    position: static;
+    display: flex;
+    justify-content: flex-end;
+    margin: 0 0 8px;
+  }
+}

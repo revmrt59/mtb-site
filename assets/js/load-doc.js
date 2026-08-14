@@ -586,7 +586,194 @@ function groupVerseDwellBlocks(root) {
     }
   }
 }
+// ==========================================
+// CHAPTER STUDY VERSE CARDS
+// One-row preview:
+// Reference | NKJV | NLT | Main Idea | +/-
+// Expansion shows Verse Explanation + Remarks
+// ==========================================
+function buildChapterStudyVerseCards(root) {
+  if (!root) return;
 
+  const detailsList = Array.from(
+    root.querySelectorAll("details.mtb-study-verse")
+  );
+
+  if (!detailsList.length) return;
+
+  detailsList.forEach((details) => {
+    const summary = details.querySelector(":scope > summary");
+    const grid = details.querySelector(".mtb-study-verse-grid");
+
+    if (!summary || !grid) return;
+
+    const panels = Array.from(
+      grid.querySelectorAll(":scope > .mtb-study-verse-panel")
+    );
+
+    // Expected order:
+    // 0 NKJV
+    // 1 NLT
+    // 2 Main Idea
+    // 3 Verse Explanation
+    // 4 Remark(s)
+    if (panels.length < 5) return;
+
+    const card = document.createElement("div");
+    card.className = "mtb-study-verse-card";
+    card.dataset.verse = details.dataset.verse || "";
+
+    // ---------------------------------------
+    // ONE-ROW PREVIEW
+    // ---------------------------------------
+    const row = document.createElement("div");
+    row.className = "mtb-study-row";
+
+    // Verse reference
+    const refCell = document.createElement("div");
+    refCell.className = "mtb-study-row-reference";
+    refCell.textContent = summary.textContent.trim();
+
+    // Helper to extract panel content
+    function makePreviewCell(panel, label, extraClass) {
+      const cell = document.createElement("div");
+      cell.className = `mtb-study-row-cell ${extraClass || ""}`;
+
+      const labelEl = document.createElement("div");
+      labelEl.className = "mtb-study-row-label";
+      labelEl.textContent = label;
+
+      const content = panel.querySelector(".mtb-study-verse-panel-content");
+
+      const contentEl = document.createElement("div");
+      contentEl.className = "mtb-study-row-content";
+
+      if (content) {
+        while (content.firstChild) {
+          contentEl.appendChild(content.firstChild);
+        }
+      }
+
+      cell.appendChild(labelEl);
+      cell.appendChild(contentEl);
+
+      return cell;
+    }
+
+    const nkjvCell = makePreviewCell(
+      panels[0],
+      "NKJV",
+      "mtb-study-row-nkjv"
+    );
+
+    const nltCell = makePreviewCell(
+      panels[1],
+      "NLT",
+      "mtb-study-row-nlt"
+    );
+
+    const ideaCell = makePreviewCell(
+      panels[2],
+      "Main Idea",
+      "mtb-study-row-mainidea"
+    );
+
+    // Toggle button
+    const toggle = document.createElement("button");
+    toggle.type = "button";
+    toggle.className = "mtb-study-row-toggle";
+    toggle.setAttribute("aria-expanded", "false");
+    toggle.setAttribute(
+      "aria-label",
+      `Expand study for ${summary.textContent.trim()}`
+    );
+    toggle.textContent = "+";
+
+    row.appendChild(refCell);
+    row.appendChild(nkjvCell);
+    row.appendChild(nltCell);
+    row.appendChild(ideaCell);
+    row.appendChild(toggle);
+
+    // ---------------------------------------
+    // EXPANDED CONTENT
+    // ---------------------------------------
+    const deep = document.createElement("div");
+    deep.className = "mtb-study-verse-deep";
+
+    const deepGrid = document.createElement("div");
+    deepGrid.className = "mtb-study-verse-deep-grid";
+
+    const explanation = panels[3];
+    const remarks = panels[4];
+
+    explanation.classList.remove("mtb-study-span-2", "mtb-study-span-4");
+    remarks.classList.remove("mtb-study-span-2", "mtb-study-span-4");
+
+    explanation.classList.add("mtb-study-deep-explanation");
+    remarks.classList.add("mtb-study-deep-remarks");
+
+    deepGrid.appendChild(explanation);
+    deepGrid.appendChild(remarks);
+    deep.appendChild(deepGrid);
+
+    // ---------------------------------------
+    // OPEN / CLOSE
+    // ---------------------------------------
+    function setOpen(open) {
+      card.classList.toggle("is-open", open);
+      toggle.setAttribute("aria-expanded", open ? "true" : "false");
+      toggle.textContent = open ? "−" : "+";
+    }
+
+    toggle.addEventListener("click", () => {
+      setOpen(!card.classList.contains("is-open"));
+    });
+
+    // Clicking reference also expands/collapses
+    refCell.addEventListener("click", () => {
+      setOpen(!card.classList.contains("is-open"));
+    });
+
+    card._mtbSetOpen = setOpen;
+
+    card.appendChild(row);
+    card.appendChild(deep);
+
+    details.replaceWith(card);
+  });
+
+  // ---------------------------------------
+  // EXPAND ALL / COLLAPSE ALL
+  // ---------------------------------------
+  const controls = root.querySelectorAll(".mtb-study-control");
+
+  controls.forEach((button) => {
+    const label = (button.textContent || "").trim().toLowerCase();
+
+    button.removeAttribute("onclick");
+
+    if (label === "expand all") {
+      button.addEventListener("click", () => {
+        root.querySelectorAll(".mtb-study-verse-card").forEach((card) => {
+          if (typeof card._mtbSetOpen === "function") {
+            card._mtbSetOpen(true);
+          }
+        });
+      });
+    }
+
+    if (label === "collapse all") {
+      button.addEventListener("click", () => {
+        root.querySelectorAll(".mtb-study-verse-card").forEach((card) => {
+          if (typeof card._mtbSetOpen === "function") {
+            card._mtbSetOpen(false);
+          }
+        });
+      });
+    }
+  });
+}
   // ==========================================
   // LOADING CORE
   // ==========================================
@@ -612,7 +799,9 @@ target.setAttribute("data-doc-dir", injectedDocDir);
     
     groupDwellBlocks(target);
     wireDocLinks(target);
-
+if (meta.type === "chapter-explanation") {
+  buildChapterStudyVerseCards(target);
+}
 
 /* ==========================================
    GROUP DWELL BLOCKS INTO ONE BOX PER VERSE

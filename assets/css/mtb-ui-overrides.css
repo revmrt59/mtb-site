@@ -1801,45 +1801,76 @@ body[data-book][data-chapter][data-active-tab="chapter_reflections"] #doc-target
    ========================================================= */
 
 
-/* 1. Remove the large Chapter Study hero box */
+/* Remove the large Chapter Study hero box */
 body[data-active-tab="chapter_explanation"] .mtb-study-hero {
   display: none !important;
 }
 
 
-/* 2. Put Print This Page beside Expand All / Collapse All */
+/* Keep Chapter Study positioned normally */
 body[data-active-tab="chapter_explanation"] .mtb-chapter-study {
   position: relative;
 }
 
 
-/* Make the two control groups sit on one row */
+/* Expand All | Collapse All | Print This Page
+   aligned to the right edge */
 body[data-active-tab="chapter_explanation"] .mtb-study-controls {
   display: flex;
+  width: 100%;
+  box-sizing: border-box;
+
   justify-content: flex-end;
   align-items: center;
   gap: 8px;
+
   margin: 0 0 16px;
+  padding: 0 !important;
 }
 
 
-/* Move the print controls into the same visual row */
-body[data-active-tab="chapter_explanation"] .mtb-print-controls {
-  position: absolute;
-  top: 0;
-  right: 0;
+/* Make sure moved Print button behaves like the other controls */
+body[data-active-tab="chapter_explanation"]
+.mtb-study-controls .mtb-print-button {
   margin: 0;
-  padding: 0;
+  flex: 0 0 auto;
 }
 
 
-/* Make room for the Print button */
-body[data-active-tab="chapter_explanation"] .mtb-study-controls {
-  padding-right: 165px;
+/* =========================================================
+   MAIN IDEA / TEXT ALIGNMENT
+   ========================================================= */
+
+/* Normalize all three cells */
+body[data-active-tab="chapter_explanation"] .mtb-study-row-cell {
+  display: flex;
+  flex-direction: column;
 }
 
 
-/* 3. Make Main Idea text line up with NKJV / NLT text */
+/* Keep all labels aligned */
+body[data-active-tab="chapter_explanation"] .mtb-study-row-label {
+  margin: 0 0 6px !important;
+  line-height: 1.2;
+}
+
+
+/* Normalize all content positioning */
+body[data-active-tab="chapter_explanation"] .mtb-study-row-content {
+  margin: 0 !important;
+  padding: 0 !important;
+}
+
+
+/* First paragraph begins immediately below label */
+body[data-active-tab="chapter_explanation"]
+.mtb-study-row-content > p:first-child {
+  margin-top: 0 !important;
+  padding-top: 0 !important;
+}
+
+
+/* Main Idea alignment */
 body[data-active-tab="chapter_explanation"]
 .mtb-study-row-mainidea .mtb-study-row-content {
   margin-top: 0 !important;
@@ -1847,7 +1878,7 @@ body[data-active-tab="chapter_explanation"]
 }
 
 
-/* Remove stray leading BRs in Main Idea */
+/* Remove generated leading BRs in Main Idea */
 body[data-active-tab="chapter_explanation"]
 .mtb-study-row-mainidea .mtb-study-row-content br:first-child,
 body[data-active-tab="chapter_explanation"]
@@ -1856,46 +1887,436 @@ body[data-active-tab="chapter_explanation"]
 }
 
 
-/* Normalize all three text areas so they start at same position */
-body[data-active-tab="chapter_explanation"] .mtb-study-row-cell {
-  display: flex;
-  flex-direction: column;
+/* =========================================================
+   MOBILE
+   ========================================================= */
+
+@media (max-width: 650px) {
+
+  body[data-active-tab="chapter_explanation"] .mtb-study-controls {
+    justify-content: flex-end;
+    flex-wrap: wrap;
+    padding: 0 !important;
+  }
+}
+/* =========================================================
+   CHAPTER SCRIPTURE — VERSE EXPLANATION INFO BUTTON
+   ========================================================= */
+
+.mtb-scripture-verse-cell {
+  text-align: center;
+  vertical-align: middle;
+  white-space: nowrap;
 }
 
 
-body[data-active-tab="chapter_explanation"] .mtb-study-row-content {
+.mtb-scripture-verse-number {
+  display: inline-block;
+  vertical-align: middle;
+}
+
+
+.mtb-verse-info-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  width: 19px;
+  height: 19px;
+
+  margin-left: 7px;
+  padding: 0;
+
+  border: 1px solid #7ea3c7;
+  border-radius: 50%;
+
+  background: #eef5fb;
+
+  color: #173a5e;
+
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: 12px;
+  font-weight: 700;
+  font-style: italic;
+  line-height: 1;
+
+  cursor: pointer;
+  vertical-align: middle;
+}
+
+
+.mtb-verse-info-button:hover {
+  background: #dcebf7;
+  border-color: #4f7faa;
+}
+
+
+/* =========================================================
+   VERSE EXPLANATION MODAL
+   ========================================================= */
+
+body.mtb-verse-explain-open {
+  overflow: hidden;
+}
+
+
+.mtb-verse-explain-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 10000;
+
+  display: none;
+  align-items: center;
+  justify-content: center;
+
+  padding: 28px;
+
+  background: rgba(20, 34, 48, .42);
+}
+
+
+.mtb-verse-explain-overlay.is-open {
+  display: flex;
+}
+
+
+.mtb-verse-explain-modal {
+  position: relative;
+
+  width: min(980px, 94vw);
+  max-height: 86vh;
+
+  overflow: hidden;
+
+  border: 1px solid #c8d6e2;
+  border-radius: 14px;
+
+  background: #fff;
+
+  box-shadow:
+    0 18px 50px rgba(20, 34, 48, .20);
+
+  color: #1f2b37;
+}
+
+
+/* =========================================================
+   MODAL HEADER
+   Reference | NKJV verse | close
+   ========================================================= */
+
+.mtb-verse-explain-header {
+  display: grid;
+
+  grid-template-columns:
+    135px
+    minmax(0, 1fr);
+
+  gap: 18px;
+
+  align-items: start;
+
+  padding: 19px 54px 19px 22px;
+
+  border-bottom: 1px solid #d8e1e8;
+
+  background: #f3f7fa;
+}
+
+
+.mtb-verse-explain-reference {
+  color: #173a5e;
+
+  font-size: 1.05rem;
+  font-weight: 800;
+  line-height: 1.45;
+}
+
+
+.mtb-verse-explain-scripture {
+  color: #1f2b37;
+
+  font-size: 1rem;
+  line-height: 1.55;
+}
+
+
+.mtb-verse-explain-scripture p,
+.mtb-verse-explain-scripture blockquote {
+  margin: 0 !important;
+  padding: 0 !important;
+  border: 0 !important;
+}
+
+
+/* Existing word-study styling remains available.
+   This reinforces the dotted underline inside modal. */
+.mtb-verse-explain-scripture .ws {
+  cursor: pointer;
+  text-decoration-line: underline;
+  text-decoration-style: dotted;
+  text-underline-offset: 3px;
+}
+
+
+/* Close button */
+.mtb-verse-explain-close {
+  position: absolute;
+  top: 13px;
+  right: 15px;
+  z-index: 2;
+
+  width: 32px;
+  height: 32px;
+
+  padding: 0;
+
+  border: 0;
+  border-radius: 50%;
+
+  background: transparent;
+
+  color: #173a5e;
+
+  font-size: 1.65rem;
+  line-height: 1;
+
+  cursor: pointer;
+}
+
+
+.mtb-verse-explain-close:hover {
+  background: #e7eef4;
+}
+
+
+/* =========================================================
+   MODAL BODY
+   ========================================================= */
+
+.mtb-verse-explain-body {
+  max-height: calc(86vh - 95px);
+  overflow-y: auto;
+
+  padding: 20px 24px 26px;
+}
+
+
+.mtb-verse-explain-section {
+  margin: 0 0 22px;
+}
+
+
+.mtb-verse-explain-section:last-child {
+  margin-bottom: 0;
+}
+
+
+.mtb-verse-explain-section h3 {
+  margin: 0 0 8px;
+
+  color: #173a5e;
+
+  font-size: .82rem;
+  font-weight: 800;
+  letter-spacing: .04em;
+  text-transform: uppercase;
+}
+
+
+.mtb-verse-explain-section-content {
+  font-size: .98rem;
+  line-height: 1.58;
+}
+
+
+.mtb-verse-explain-section-content p {
+  margin: 0 0 .9em;
+}
+
+
+.mtb-verse-explain-section-content p:last-child {
+  margin-bottom: 0;
+}
+
+
+/* Main Idea gets a subtle distinction */
+.mtb-verse-explain-mainidea {
+  padding: 13px 15px;
+
+  border: 1px solid #d8e1e8;
+  border-radius: 8px;
+
+  background: #f8fafc;
+}
+
+
+.mtb-verse-explain-loading,
+.mtb-verse-explain-error {
+  color: #66727d;
+  font-style: italic;
+}
+
+
+/* =========================================================
+   MOBILE
+   ========================================================= */
+
+@media (max-width: 700px) {
+
+  .mtb-verse-explain-overlay {
+    padding: 10px;
+  }
+
+
+  .mtb-verse-explain-modal {
+    width: 100%;
+    max-height: 92vh;
+  }
+
+
+  .mtb-verse-explain-header {
+    grid-template-columns: 1fr;
+    gap: 6px;
+
+    padding: 16px 48px 16px 16px;
+  }
+
+
+  .mtb-verse-explain-body {
+    max-height: calc(92vh - 125px);
+    padding: 16px;
+  }
+}
+/* =========================================================
+   VERSE EXPLANATION POPUP — FINAL TUNING
+   ========================================================= */
+
+
+/* 1. Make the explanation popup wider */
+.mtb-verse-explain-modal {
+  width: min(1180px, 96vw) !important;
+  max-width: 1180px !important;
+}
+
+
+/* Keep the modal comfortably inside the viewport */
+.mtb-verse-explain-overlay {
+  padding: 20px !important;
+}
+
+
+/* 2. Make sure Word Study popup appears ABOVE
+      the verse explanation popup */
+.ws-popover,
+.wordstudy-popover,
+.word-study-popover,
+.wordstudy-popup,
+.word-study-popup,
+#wordstudy-popover,
+#word-study-popover,
+#ws-popover {
+  z-index: 20050 !important;
+}
+
+
+/* Explanation popup stays below Word Study popup */
+.mtb-verse-explain-overlay {
+  z-index: 10000 !important;
+}
+
+.mtb-verse-explain-modal {
+  z-index: 10001 !important;
+}
+
+
+/* 3. Pull Main Idea text up directly below heading */
+.mtb-verse-explain-mainidea {
+  padding-top: 11px !important;
+}
+
+
+/* Tighten Main Idea heading spacing */
+.mtb-verse-explain-mainidea h3 {
+  margin: 0 0 4px !important;
+  padding: 0 !important;
+}
+
+
+/* Remove generated blank spacing before first line */
+.mtb-verse-explain-mainidea
+.mtb-verse-explain-section-content {
   margin: 0 !important;
   padding: 0 !important;
 }
 
 
-/* Ensure paragraph starts directly below label */
-body[data-active-tab="chapter_explanation"]
-.mtb-study-row-content > p:first-child {
+.mtb-verse-explain-mainidea
+.mtb-verse-explain-section-content > p:first-child {
   margin-top: 0 !important;
   padding-top: 0 !important;
 }
 
 
-/* Keep labels identical height/alignment */
-body[data-active-tab="chapter_explanation"] .mtb-study-row-label {
-  margin: 0 0 6px !important;
-  line-height: 1.2;
+/* Generated Chapter Study HTML sometimes contains
+   leading BR elements before the Main Idea text */
+.mtb-verse-explain-mainidea
+.mtb-verse-explain-section-content br:first-child,
+.mtb-verse-explain-mainidea
+.mtb-verse-explain-section-content br:first-child + br {
+  display: none !important;
 }
 
 
-/* Mobile: let controls wrap naturally */
-@media (max-width: 650px) {
+/* =========================================================
+   MOBILE
+   ========================================================= */
 
-  body[data-active-tab="chapter_explanation"] .mtb-study-controls {
-    padding-right: 0;
-    flex-wrap: wrap;
+@media (max-width: 700px) {
+  .mtb-verse-explain-modal {
+    width: 100% !important;
+    max-width: none !important;
   }
+}
+/* =========================================================
+   WORD STUDY — ALWAYS ABOVE VERSE EXPLANATION POPUP
+   ========================================================= */
 
-  body[data-active-tab="chapter_explanation"] .mtb-print-controls {
-    position: static;
-    display: flex;
-    justify-content: flex-end;
-    margin: 0 0 8px;
-  }
+/* Verse Explanation popup */
+.mtb-verse-explain-overlay {
+  z-index: 10000 !important;
+}
+
+.mtb-verse-explain-modal {
+  z-index: 10001 !important;
+}
+
+
+/* Word Study hover tooltip */
+.ws-tooltip {
+  position: fixed !important;
+  z-index: 30000 !important;
+}
+
+
+/* Full Word Study modal */
+.ws-modal {
+  position: fixed !important;
+  inset: 0 !important;
+  z-index: 25000 !important;
+}
+
+
+/* Word Study dark backdrop */
+.ws-modal-backdrop {
+  position: fixed !important;
+  inset: 0 !important;
+  z-index: 25001 !important;
+}
+
+
+/* Actual Word Study window */
+.ws-modal-panel {
+  position: relative !important;
+  z-index: 25002 !important;
 }

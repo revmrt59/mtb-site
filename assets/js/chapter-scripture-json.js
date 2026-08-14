@@ -108,7 +108,42 @@
     const tbody = el("tbody");
     verseNums.forEach(vn => {
       const tr = el("tr");
-      tr.appendChild(el("td", { class: "mtb-verse-num", text: vn }));
+
+      const verseCell = el("td", {
+        class: "mtb-verse-num mtb-scripture-verse-cell"
+      });
+
+      const verseNumber = el("span", {
+        class: "mtb-scripture-verse-number",
+        text: vn
+      });
+
+      const infoButton = el("button", {
+        class: "mtb-verse-info-button",
+        type: "button",
+        title: `Explain verse ${vn}`,
+        "aria-label": `Explain verse ${vn}`
+      });
+
+      infoButton.textContent = "i";
+
+      infoButton.addEventListener("click", function (e) {
+        e.preventDefault();
+        e.stopPropagation();
+
+        if (
+          window.MTB &&
+          typeof window.MTB.openVerseExplanation === "function"
+        ) {
+          window.MTB.openVerseExplanation(Number(vn));
+        } else {
+          console.error("MTB verse explanation popup is not available.");
+        }
+      });
+
+      verseCell.appendChild(verseNumber);
+      verseCell.appendChild(infoButton);
+      tr.appendChild(verseCell);
 
       const t1 = (verseTextByTranslation[vn] && verseTextByTranslation[vn][v1]) ? verseTextByTranslation[vn][v1] : "";
       tr.appendChild(el("td", { class: "mtb-col-v1", text: t1 }));

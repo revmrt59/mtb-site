@@ -773,6 +773,382 @@ function buildChapterStudyVerseCards(root) {
       });
     }
   });
+// ---------------------------------------
+// MOVE PRINT BUTTON BESIDE COLLAPSE ALL
+// ---------------------------------------
+const printControls = document.querySelector(".mtb-print-controls");
+const studyControls = root.querySelector(".mtb-study-controls");
+
+if (printControls && studyControls) {
+
+  // Find the actual Print This Page button/link
+  const printButton =
+    printControls.querySelector("button") ||
+    printControls.querySelector("a");
+
+  if (printButton) {
+    // Move it after Collapse All
+    studyControls.appendChild(printButton);
+
+    // Remove the now-empty original wrapper
+    printControls.remove();
+  }
+}
+}
+// ==========================================
+// CHAPTER SCRIPTURE — VERSE EXPLANATION POPUP
+// Adds small "i" buttons beside verse numbers.
+// Pulls content from the existing Chapter Study file.
+// ==========================================
+function addScriptureExplainButtons(root, meta, scriptureDocPath) {
+  if (!root || !meta || meta.type !== "chapter-scripture") return;
+
+  const chapterDir =
+    scriptureDocPath.slice(0, scriptureDocPath.lastIndexOf("/") + 1);
+
+  const explanationFile =
+    `${meta.book}-${meta.chapter}-chapter-explanation.html`;
+
+  const explanationPath = chapterDir + explanationFile;
+
+  let cachedExplanationDoc = null;
+
+  // ---------------------------------------
+  // CREATE MODAL ONCE
+  // ---------------------------------------
+  function ensureModal() {
+    let overlay = document.getElementById("mtb-verse-explain-overlay");
+    if (overlay) return overlay;
+
+    overlay = document.createElement("div");
+    overlay.id = "mtb-verse-explain-overlay";
+    overlay.className = "mtb-verse-explain-overlay";
+    overlay.setAttribute("aria-hidden", "true");
+
+    overlay.innerHTML = `
+      <div class="mtb-verse-explain-modal"
+           role="dialog"
+           aria-modal="true"
+           aria-labelledby="mtb-verse-explain-reference">
+
+        <button type="button"
+                class="mtb-verse-explain-close"
+                aria-label="Close verse explanation">×</button>
+
+        <div class="mtb-verse-explain-header">
+          <div id="mtb-verse-explain-reference"
+               class="mtb-verse-explain-reference"></div>
+
+          <div class="mtb-verse-explain-scripture"></div>
+        </div>
+
+        <div class="mtb-verse-explain-body">
+
+          <section class="mtb-verse-explain-section mtb-verse-explain-mainidea">
+            <h3>Main Idea</h3>
+            <div class="mtb-verse-explain-section-content"></div>
+          </section>
+
+          <section class="mtb-verse-explain-section">
+            <h3>Verse Explanation</h3>
+            <div class="mtb-verse-explain-section-content"></div>
+          </section>
+
+          <section class="mtb-verse-explain-section">
+            <h3>Remark(s)</h3>
+            <div class="mtb-verse-explain-section-content"></div>
+          </section>
+
+        </div>
+      </div>
+    `;
+
+    document.body.appendChild(overlay);
+
+    const closeButton =
+      overlay.querySelector(".mtb-verse-explain-close");
+
+    function closeModal() {
+      overlay.classList.remove("is-open");
+      overlay.setAttribute("aria-hidden", "true");
+      document.body.classList.remove("mtb-verse-explain-open");
+    }
+
+    closeButton.addEventListener("click", closeModal);
+
+    overlay.addEventListener("click", (e) => {
+      if (e.target === overlay) closeModal();
+    });
+
+    document.addEventListener("keydown", (e) => {
+      if (e.key === "Escape" && overlay.classList.contains("is-open")) {
+        closeModal();
+      }
+    });
+
+    return overlay;
+  }
+
+  // ---------------------------------------
+  // REMOVE DUPLICATED REFERENCE / (NKJV)
+  // while preserving Strong's spans
+  // ---------------------------------------
+  function cleanNkJVClone(container, reference) {
+    if (!container) return;
+
+    const walker = document.createTreeWalker(
+      container,
+      NodeFilter.SHOW_TEXT
+    );
+
+    const textNodes = [];
+
+    while (walker.nextNode()) {
+      textNodes.push(walker.currentNode);
+    }
+
+    // Remove leading reference from first appropriate text node.
+    for (const node of textNodes) {
+      const text = node.nodeValue || "";
+      const trimmed = text.trimStart();
+
+      if (trimmed.startsWith(reference)) {
+        const leadingSpaceLength = text.length - trimmed.length;
+
+        node.nodeValue =
+          text.slice(0, leadingSpaceLength) +
+          trimmed.slice(reference.length).replace(/^\s+/, "");
+
+        break;
+      }
+    }
+
+    // Remove trailing "(NKJV)".
+    for (let i = textNodes.length - 1; i >= 0; i--) {
+      const node = textNodes[i];
+      const text = node.nodeValue || "";
+
+      if (/\(NKJV\)\s*$/i.test(text)) {
+        node.nodeValue = text.replace(/\s*\(NKJV\)\s*$/i, "");
+        break;
+      }
+    }
+  }
+
+  // ---------------------------------------
+  // RESOLVE WORD STUDY PATHS
+  // so links still work from modal
+  // ---------------------------------------
+  function prepareWordStudyLinks(container) {
+    if (!container) return;
+
+    container.querySelectorAll(".ws[data-ws-doc]").forEach((span) => {
+      const current = span.getAttribute("data-ws-doc") || "";
+
+      if (!current) return;
+
+      // Already absolute
+      if (current.startsWith("/")) return;
+
+      span.setAttribute(
+        "data-ws-doc",
+        chapterDir + current.replace(/^\/+/, "")
+      );
+    });
+
+    container.setAttribute("data-doc-dir", chapterDir);
+  }
+
+  // ---------------------------------------
+  // FETCH CHAPTER STUDY ON FIRST CLICK
+  // ---------------------------------------
+  async function getExplanationDoc() {
+    if (cachedExplanationDoc) return cachedExplanationDoc;
+
+    const response = await fetch(explanationPath, {
+      cache: "no-store"
+    });
+
+    if (!response.ok) {
+      throw new Error(
+        `Could not load Chapter Study: ${explanationPath}`
+      );
+    }
+
+    const html = await response.text();
+
+    cachedExplanationDoc =
+      new DOMParser().parseFromString(html, "text/html");
+
+    return cachedExplanationDoc;
+  }
+
+  // ---------------------------------------
+  // OPEN ONE VERSE
+  // ---------------------------------------
+  async function openVerseExplanation(verse) {
+    const overlay = ensureModal();
+
+    const refEl =
+      overlay.querySelector(".mtb-verse-explain-reference");
+
+    const scriptureEl =
+      overlay.querySelector(".mtb-verse-explain-scripture");
+
+    const sectionContents =
+      overlay.querySelectorAll(
+        ".mtb-verse-explain-section-content"
+      );
+
+    const reference =
+      `${prettyBookName(meta.book)} ${meta.chapter}:${verse}`;
+
+    refEl.textContent = reference;
+
+    scriptureEl.innerHTML =
+      `<span class="mtb-verse-explain-loading">Loading…</span>`;
+
+    sectionContents.forEach((el) => {
+      el.innerHTML = "";
+    });
+
+    overlay.classList.add("is-open");
+    overlay.setAttribute("aria-hidden", "false");
+    document.body.classList.add("mtb-verse-explain-open");
+
+    try {
+      const studyDoc = await getExplanationDoc();
+
+      const verseBlock =
+        studyDoc.querySelector(
+          `details.mtb-study-verse[data-verse="${verse}"]`
+        );
+
+      if (!verseBlock) {
+        throw new Error(`Verse ${verse} was not found.`);
+      }
+
+      const panels = Array.from(
+        verseBlock.querySelectorAll(
+          ".mtb-study-verse-grid > .mtb-study-verse-panel"
+        )
+      );
+
+      if (panels.length < 5) {
+        throw new Error(
+          `Chapter Study content for verse ${verse} is incomplete.`
+        );
+      }
+
+      // Existing panel order:
+      // 0 NKJV
+      // 1 NLT
+      // 2 Main Idea
+      // 3 Verse Explanation
+      // 4 Remark(s)
+
+      const nkjvSource =
+        panels[0].querySelector(
+          ".mtb-study-verse-panel-content"
+        );
+
+      const mainIdeaSource =
+        panels[2].querySelector(
+          ".mtb-study-verse-panel-content"
+        );
+
+      const explanationSource =
+        panels[3].querySelector(
+          ".mtb-study-verse-panel-content"
+        );
+
+      const remarksSource =
+        panels[4].querySelector(
+          ".mtb-study-verse-panel-content"
+        );
+
+      // NKJV beside reference
+      scriptureEl.innerHTML =
+        nkjvSource ? nkjvSource.innerHTML : "";
+
+      cleanNkJVClone(scriptureEl, reference);
+      prepareWordStudyLinks(scriptureEl);
+
+      // Main Idea
+      sectionContents[0].innerHTML =
+        mainIdeaSource ? mainIdeaSource.innerHTML : "";
+
+      // Verse Explanation
+      sectionContents[1].innerHTML =
+        explanationSource ? explanationSource.innerHTML : "";
+
+      // Remarks
+      sectionContents[2].innerHTML =
+        remarksSource ? remarksSource.innerHTML : "";
+
+      // Clean generated leading blank lines.
+      sectionContents.forEach((content) => {
+        content.querySelectorAll("p").forEach((p) => {
+          while (
+            p.firstChild &&
+            p.firstChild.nodeName === "BR"
+          ) {
+            p.firstChild.remove();
+          }
+        });
+      });
+
+      // Re-bind existing Word Study behavior.
+      try {
+        if (
+          window.MTBWordStudyHover &&
+          typeof window.MTBWordStudyHover.bind === "function"
+        ) {
+          window.MTBWordStudyHover.bind(scriptureEl);
+        }
+      } catch (e) {
+        console.warn(
+          "MTB Word Study binding in verse popup failed:",
+          e
+        );
+      }
+
+    } catch (err) {
+      scriptureEl.innerHTML = `
+        <span class="mtb-verse-explain-error">
+          Verse explanation could not be loaded.
+        </span>
+      `;
+
+      console.error(err);
+    }
+  }
+
+  // ---------------------------------------
+  // EXPOSE POPUP TO CHAPTER SCRIPTURE
+  // ---------------------------------------
+  window.MTB = window.MTB || {};
+
+  window.MTB.openVerseExplanation = function (verse) {
+    const verseNumber = Number(verse);
+    if (!Number.isFinite(verseNumber)) return;
+    openVerseExplanation(verseNumber);
+  };
+
+  // ---------------------------------------
+  // BOOK DISPLAY NAME
+  // ---------------------------------------
+  function prettyBookName(slug) {
+    return String(slug || "")
+      .split("-")
+      .map((word) => {
+        if (!word) return word;
+        return word.charAt(0).toUpperCase() + word.slice(1);
+      })
+      .join(" ");
+  }
+
+
 }
   // ==========================================
   // LOADING CORE
@@ -838,7 +1214,10 @@ if (meta.type === "chapter-explanation") {
       console.warn("MTBWordStudyHover bind failed:", e);
     }
 
-    if (meta.type === "chapter-scripture") addScriptureControls();
+    if (meta.type === "chapter-scripture") {
+  addScriptureControls();
+  addScriptureExplainButtons(target, meta, docPath);
+}
   }
 
   function fetchAndLoadDoc(docName) {

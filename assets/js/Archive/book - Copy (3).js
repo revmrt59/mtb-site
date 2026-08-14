@@ -1,4 +1,4 @@
-﻿(function () {
+(function () {
   "use strict";
 
   // ==========================================
@@ -206,282 +206,46 @@
   }
 
   // ==========================================
-// TAB FILE AVAILABILITY
-// Hide tabs when their generated HTML
-// does not yet exist.
-//
-// Chapter Scripture is the one exception:
-// it always remains visible.
-// ==========================================
-
-function pathForTabFile(book, chapter, tabKey) {
-  const b = normalizeBookSlug(book);
-  if (!b) return "";
-
-  const testament = BOOK_TESTAMENT[b] || "new-testament";
-
-  const chapterNum =
-    parseInt(String(chapter || "1").replace(/[^\d]/g, ""), 10) || 1;
-
-  const folder = String(chapterNum).padStart(3, "0");
-
-  switch (tabKey) {
-
-    case "book_introduction":
-      return `/books/${testament}/${b}/000-book/book-overview-${b}.html`;
-
-    case "chapter_overview":
-      return `/books/${testament}/${b}/${folder}/${b}-${chapterNum}-chapter-overview.html`;
-
-    case "chapter_explanation":
-      return `/books/${testament}/${b}/${folder}/${b}-${chapterNum}-chapter-explanation.html`;
-
-    case "chapter_reflections":
-      return `/books/${testament}/${b}/${folder}/${b}-${chapterNum}-chapter-reflections.html`;
-
-    case "eg_culture":
-      return `/books/${testament}/${b}/${folder}/${b}-${chapterNum}-chapter-eg-culture.html`;
-
-    case "resources":
-      return `/books/${testament}/${b}/${folder}/${b}-${chapterNum}-chapter-resources.html`;
-
-    case "chapter_scripture":
-      return `/books/${testament}/${b}/${folder}/${b}-${chapterNum}-chapter-scripture.html`;
-
-    default:
-      return "";
-  }
-}
-
-
-async function chapterStudyFileIsComplete(path) {
-  if (!path) return false;
-
-  try {
-    const response = await fetch(path, {
-      method: "GET",
-      cache: "no-store"
-    });
-
-    if (!response.ok) return false;
-
-    const html = await response.text();
-
-    // Placeholder files exist for the Scripture "i" popup and Word Studies,
-    // but must NOT make the Chapter Study tab visible.
-    if (/data-mtb-status=["']placeholder["']/i.test(html)) {
-      return false;
-    }
-
-    return true;
-  } catch (err) {
-    console.warn("MTB Chapter Study availability check failed:", path, err);
-    return false;
-  }
-}
-
-async function bookOverviewFileExists(path) {
-  if (!path) return false;
-
-  try {
-    const response = await fetch(path, {
-      method: "GET",
-      cache: "no-store"
-    });
-
-    if (!response.ok) return false;
-
-    const html = await response.text();
-
-    // Some local/static servers may return a fallback page with HTTP 200.
-    // Only count the file as a real Book Overview when its generated
-    // Book Overview markup is actually present.
-    return /data-doc-type=["']book-overview["']/i.test(html) ||
-           /mtb-book-overview-dashboard/i.test(html);
-  } catch (err) {
-    console.warn("MTB Book Overview availability check failed:", path, err);
-    return false;
-  }
-}
-
-async function tabFileExists(path) {
-  if (!path) return false;
-
-  try {
-
-    // HEAD checks whether the file exists
-    // without downloading the entire HTML file.
-    let response = await fetch(path, {
-      method: "HEAD",
-      cache: "no-store"
-    });
-
-    if (response.ok) {
-      return true;
-    }
-
-    // Fallback for servers that do not allow HEAD.
-    if (response.status === 405) {
-      response = await fetch(path, {
-        method: "GET",
-        cache: "no-store"
-      });
-
-      return response.ok;
-    }
-
-    return false;
-
-  } catch (err) {
-    console.warn("MTB tab availability check failed:", path, err);
-    return false;
-  }
-}
-  // ==========================================
   // TABS
   // ==========================================
-let mtbTabRenderToken = 0;
+  function renderTabs() {
+    const tabsEl = document.getElementById("tabs");
+    if (!tabsEl) return;
 
-async function renderTabs() {
-  const tabsEl = document.getElementById("tabs");
-  if (!tabsEl) return;
+    const params = getParams();
+    const activeTab = normalizeTabKey(params.tab);
+    document.body.setAttribute("data-active-tab", activeTab);
 
-  // Prevent an older async render from overwriting
-  // a newer book/chapter navigation.
-  const renderToken = ++mtbTabRenderToken;
+    tabsEl.innerHTML = "";
 
-  const params = getParams();
-  const activeTab = normalizeTabKey(params.tab);
+    TABS.forEach(t => {
+      const btn = document.createElement("button");
+      btn.type = "button";
+      btn.className = "tab-btn";
+      btn.dataset.tab = t.key;
+      btn.textContent = t.label;
 
-  document.body.setAttribute("data-active-tab", activeTab);
-
-  const eff = getEffectiveBookChapter();
-
-  const book = eff.book;
-  const chapter = eff.chapter;
-
-  const chapterNum =
-    parseInt(String(chapter || "0"), 10) || 0;
-
-  // Keep the current tabs visible while availability is checked.
-  // The completed tab set is swapped in all at once below.
-  const availability = await Promise.all(
-    TABS.map(async (tab) => {
-
-      // -------------------------------------
-      // Chapter Scripture ALWAYS appears.
-      // -------------------------------------
-      if (tab.key === "chapter_scripture") {
-        return {
-          tab,
-          show: true
-        };
+      if (t.key === activeTab) {
+        btn.classList.add("active");
+        btn.setAttribute("aria-current", "page");
       }
 
+      btn.addEventListener("click", () => {
+        // Always compute effective book/chapter at click time (do NOT rely on captured values).
+        const eff = getEffectiveBookChapter();
 
-// -------------------------------------
-// BOOK OVERVIEW
-// Show only on the book landing page
-// AND only when the HTML file exists.
-// -------------------------------------
-if (tab.key === "book_introduction") {
-
-  // Never show Book Overview after
-  // a chapter has been selected.
-  if (chapterNum >= 1) {
-    return {
-      tab,
-      show: false
-    };
-  }
-
-  // On the book landing page, show it
-  // only if the generated overview exists.
-  const overviewPath = pathForTabFile(
-    book,
-    0,
-    "book_introduction"
-  );
-
-  const exists = await bookOverviewFileExists(overviewPath);
-
-  return {
-    tab,
-    show: exists
-  };
-}
-
-
-      // -------------------------------------
-      // Everything else requires a real file.
-      // -------------------------------------
-      const path = pathForTabFile(
-        book,
-        chapter,
-        tab.key
-      );
-
-      const exists =
-        tab.key === "chapter_explanation"
-          ? await chapterStudyFileIsComplete(path)
-          : await tabFileExists(path);
-
-      return {
-        tab,
-        show: exists
-      };
-    })
-  );
-
-
-  // User may have changed chapter/book while
-  // the file checks were running.
-  if (renderToken !== mtbTabRenderToken) {
-    return;
-  }
-
-
-  const fragment = document.createDocumentFragment();
-
-  availability.forEach(({ tab: t, show }) => {
-
-    if (!show) return;
-
-    const btn = document.createElement("button");
-
-    btn.type = "button";
-    btn.className = "tab-btn";
-    btn.dataset.tab = t.key;
-    btn.textContent = t.label;
-
-    if (t.key === activeTab) {
-      btn.classList.add("active");
-      btn.setAttribute(
-        "aria-current",
-        "page"
-      );
-    }
-
-    btn.addEventListener("click", () => {
-
-      const current =
-        getEffectiveBookChapter();
-
-      setParams({
-        book: current.book,
-        chapter: current.chapter,
-        tab: t.key,
-        doc: ""
+        // Clearing doc avoids stale resource-topic doc values overriding tab intent.
+        setParams({
+          book: eff.book,
+          chapter: eff.chapter,
+          tab: t.key,
+          doc: ""
+        });
       });
+
+      tabsEl.appendChild(btn);
     });
-
-    fragment.appendChild(btn);
-  });
-
-  // One DOM operation prevents the visible tab bar from
-  // disappearing and rebuilding while file checks complete.
-  tabsEl.replaceChildren(fragment);
-}
+  }
 
   function syncActiveTab() {
     const params = getParams();
@@ -537,6 +301,96 @@ if (tab.key === "book_introduction") {
 
 
 
+// --------------------------------------------------
+// MTB patch: hide Book Overview tab on chapter pages (chapter >= 1)
+// Keeps book-level hero modal buttons intact.
+// --------------------------------------------------
+document.addEventListener("DOMContentLoaded", function () {
+  try {
+    const params = new URLSearchParams(window.location.search);
+    const chapterNum = parseInt(params.get("chapter") || "0", 10);
+    if (chapterNum >= 1) {
+      // Try common selectors used across MTB tab renderers
+      const candidates = [
+        '#tabs [data-tab="book_introduction"]',
+        '#tabs [data-tab="book_intro"]',
+        '#tabs [data-tab="book_introduction"]',
+        '[data-tab="book_introduction"]',
+        '[data-tab="book_intro"]'
+      ];
+      for (const sel of candidates) {
+        const el = document.querySelector(sel);
+        if (el) { el.remove(); break; }
+      }
+      // Also remove by visible text if needed
+      document.querySelectorAll("#tabs button, #tabs a").forEach((btn) => {
+        const t = (btn.textContent || "").trim().toLowerCase();
+        if (t === "Book Overview" || t === "book intro") {
+          btn.remove();
+        }
+      });
+    }
+  } catch (_) {}
+});
+// =========================================================
+// MTB: Always hide "Book Overview" tab on chapter pages
+// Works even when tabs re-render dynamically.
+// =========================================================
+(function () {
+  function chapterNumFromUrl() {
+    try {
+      const p = new URLSearchParams(window.location.search);
+      return parseInt(p.get("chapter") || "0", 10);
+    } catch {
+      return 0;
+    }
+  }
+
+  function removeBookIntroTabIfNeeded() {
+    const ch = chapterNumFromUrl();
+    if (ch < 1) return; // only hide on chapter pages
+
+    // Remove by data-tab if present
+    const selectors = [
+      '#tabs [data-tab="book_introduction"]',
+      '#tabs [data-tab="book_intro"]',
+      '[data-tab="book_introduction"]',
+      '[data-tab="book_intro"]'
+    ];
+
+    for (const sel of selectors) {
+      const el = document.querySelector(sel);
+      if (el) el.remove();
+    }
+
+    // Fallback: remove by visible text
+    document.querySelectorAll("#tabs button, #tabs a").forEach((btn) => {
+      const t = (btn.textContent || "").trim().toLowerCase();
+      if (t === "Book Overview" || t === "book intro") {
+        btn.remove();
+      }
+    });
+  }
+
+  function startWatchingTabs() {
+    // Run once now
+    removeBookIntroTabIfNeeded();
+
+    const tabs = document.getElementById("tabs");
+    if (!tabs) return;
+
+    // Watch for re-renders
+    const obs = new MutationObserver(() => {
+      removeBookIntroTabIfNeeded();
+    });
+    obs.observe(tabs, { childList: true, subtree: true });
+  }
+
+  document.addEventListener("DOMContentLoaded", startWatchingTabs);
+
+  // In case your app changes URL via history without reload
+  window.addEventListener("popstate", removeBookIntroTabIfNeeded);
+})();
 // =========================================================
 // Chapter Prev/Next buttons (wrap across books)
 // - Prev on chapter 1 => last chapter of previous book

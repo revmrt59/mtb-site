@@ -1,4 +1,4 @@
-﻿// load-doc.js
+// load-doc.js
 // Mastering the Bible - document loader + chapter-explanation enhancements
 // - Loads the requested generated HTML into #doc-target
 // - Fixes mojibake
@@ -1133,32 +1133,6 @@ function addScriptureExplainButtons(root, meta, scriptureDocPath) {
     const verseNumber = Number(verse);
     if (!Number.isFinite(verseNumber)) return;
     openVerseExplanation(verseNumber);
-  };
-
-  // Let the Chapter Scripture renderer decide whether the "i" button
-  // should be shown. Placeholder Chapter Study files count as available.
-  window.MTB.hasVerseExplanationFile = async function () {
-    try {
-      let response = await fetch(explanationPath, {
-        method: "HEAD",
-        cache: "no-store"
-      });
-
-      if (response.ok) return true;
-
-      if (response.status === 405) {
-        response = await fetch(explanationPath, {
-          method: "GET",
-          cache: "no-store"
-        });
-        return response.ok;
-      }
-
-      return false;
-    } catch (err) {
-      console.warn("MTB verse explanation availability check failed:", err);
-      return false;
-    }
   };
 
   // ---------------------------------------

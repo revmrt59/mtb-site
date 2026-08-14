@@ -1,4 +1,4 @@
-﻿/* =========================================================
+/* =========================================================
    MTB Chapter Scripture Renderer (JSON Driven)
    Reads: /assets/js/bibles-json/<translationKey>/<bookSlug>.json
    Example: /assets/js/bibles-json/nkjv/titus.json
@@ -76,7 +76,7 @@
     return s;
   }
 
-  function buildTable(verseNums, verseTextByTranslation, v1, v2, twoCols, showInfoButtons) {
+  function buildTable(verseNums, verseTextByTranslation, v1, v2, twoCols) {
     const table = el("table", { class: "mtb-chapter-scripture" });
     // Force stable 3-column layout (Verse + 2 translations) with equal translation columns.
     // This prevents the "right column clipped / uneven columns" behavior across browsers and CSS cascades.
@@ -118,34 +118,31 @@
         text: vn
       });
 
+      const infoButton = el("button", {
+        class: "mtb-verse-info-button",
+        type: "button",
+        title: `Explain verse ${vn}`,
+        "aria-label": `Explain verse ${vn}`
+      });
+
+      infoButton.textContent = "i";
+
+      infoButton.addEventListener("click", function (e) {
+        e.preventDefault();
+        e.stopPropagation();
+
+        if (
+          window.MTB &&
+          typeof window.MTB.openVerseExplanation === "function"
+        ) {
+          window.MTB.openVerseExplanation(Number(vn));
+        } else {
+          console.error("MTB verse explanation popup is not available.");
+        }
+      });
+
       verseCell.appendChild(verseNumber);
-
-      if (showInfoButtons) {
-        const infoButton = el("button", {
-          class: "mtb-verse-info-button",
-          type: "button",
-          title: `Explain verse ${vn}`,
-          "aria-label": `Explain verse ${vn}`
-        });
-
-        infoButton.textContent = "i";
-
-        infoButton.addEventListener("click", function (e) {
-          e.preventDefault();
-          e.stopPropagation();
-
-          if (
-            window.MTB &&
-            typeof window.MTB.openVerseExplanation === "function"
-          ) {
-            window.MTB.openVerseExplanation(Number(vn));
-          } else {
-            console.error("MTB verse explanation popup is not available.");
-          }
-        });
-
-        verseCell.appendChild(infoButton);
-      }
+      verseCell.appendChild(infoButton);
       tr.appendChild(verseCell);
 
       const t1 = (verseTextByTranslation[vn] && verseTextByTranslation[vn][v1]) ? verseTextByTranslation[vn][v1] : "";
@@ -294,13 +291,8 @@ function verseToText(v) {
       if (twoCols) map[vn][v2] = verseToText(c2[vn]);
       });
 
-      let showInfoButtons = false;
-      if (window.MTB && typeof window.MTB.hasVerseExplanationFile === "function") {
-        showInfoButtons = await window.MTB.hasVerseExplanationFile();
-      }
-
       host.innerHTML = "";
-      host.appendChild(buildTable(verseNums, map, v1, v2, twoCols, showInfoButtons));
+      host.appendChild(buildTable(verseNums, map, v1, v2, twoCols));
 
       savePrefs({ mode, v1, v2 });
     }

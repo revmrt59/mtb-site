@@ -10,7 +10,9 @@
    { name: "Ruth", slug: "ruth", chapters: 4 },
   { name: "Psalms", slug: "psalms", chapters: 150 },
   { name: "Obadiah", slug: "obadiah", chapters: 1 },
+  { name: "Habakkuk", slug: "habakkuk", chapters: 3 },
   { name: "2John", slug: "2-john", chapters: 1 },
+  { name: "3 John", slug: "3-john", chapters: 1 },
   
  // { name: "Habakkuk", slug: "habakkuk", chapters: 3 },
  

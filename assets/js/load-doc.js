@@ -602,55 +602,83 @@ function buildChapterStudyVerseCards(root) {
   if (!detailsList.length) return;
 
   detailsList.forEach((details) => {
-    const summary = details.querySelector(":scope > summary");
-    const grid = details.querySelector(".mtb-study-verse-grid");
+    const summary =
+      details.querySelector(":scope > summary");
+
+    const grid =
+      details.querySelector(".mtb-study-verse-grid");
 
     if (!summary || !grid) return;
 
     const panels = Array.from(
-      grid.querySelectorAll(":scope > .mtb-study-verse-panel")
+      grid.querySelectorAll(
+        ":scope > .mtb-study-verse-panel"
+      )
     );
 
-    // Expected order:
+    // Legacy:
     // 0 NKJV
     // 1 NLT
     // 2 Main Idea
     // 3 Verse Explanation
     // 4 Remark(s)
+    //
+    // New:
+    // 4 Study Notes
+    // 5 Spirit & Life
     if (panels.length < 5) return;
 
     const card = document.createElement("div");
     card.className = "mtb-study-verse-card";
-    card.dataset.verse = details.dataset.verse || "";
+    card.dataset.verse =
+      details.dataset.verse || "";
 
     // ---------------------------------------
-    // ONE-ROW PREVIEW
+    // COLLAPSED / ALWAYS-VISIBLE ROW
     // ---------------------------------------
     const row = document.createElement("div");
     row.className = "mtb-study-row";
 
-    // Verse reference
     const refCell = document.createElement("div");
     refCell.className = "mtb-study-row-reference";
-    refCell.textContent = summary.textContent.trim();
+    refCell.textContent =
+      summary.textContent.trim();
 
-    // Helper to extract panel content
-    function makePreviewCell(panel, label, extraClass) {
-      const cell = document.createElement("div");
-      cell.className = `mtb-study-row-cell ${extraClass || ""}`;
+    function makePreviewCell(
+      panel,
+      label,
+      extraClass
+    ) {
+      const cell =
+        document.createElement("div");
 
-      const labelEl = document.createElement("div");
-      labelEl.className = "mtb-study-row-label";
+      cell.className =
+        `mtb-study-row-cell ${extraClass || ""}`;
+
+      const labelEl =
+        document.createElement("div");
+
+      labelEl.className =
+        "mtb-study-row-label";
+
       labelEl.textContent = label;
 
-      const content = panel.querySelector(".mtb-study-verse-panel-content");
+      const content =
+        panel.querySelector(
+          ".mtb-study-verse-panel-content"
+        );
 
-      const contentEl = document.createElement("div");
-      contentEl.className = "mtb-study-row-content";
+      const contentEl =
+        document.createElement("div");
+
+      contentEl.className =
+        "mtb-study-row-content";
 
       if (content) {
         while (content.firstChild) {
-          contentEl.appendChild(content.firstChild);
+          contentEl.appendChild(
+            content.firstChild
+          );
         }
       }
 
@@ -660,33 +688,44 @@ function buildChapterStudyVerseCards(root) {
       return cell;
     }
 
-    const nkjvCell = makePreviewCell(
-      panels[0],
-      "NKJV",
-      "mtb-study-row-nkjv"
-    );
+    const nkjvCell =
+      makePreviewCell(
+        panels[0],
+        "NKJV",
+        "mtb-study-row-nkjv"
+      );
 
-    const nltCell = makePreviewCell(
-      panels[1],
-      "NLT",
-      "mtb-study-row-nlt"
-    );
+    const nltCell =
+      makePreviewCell(
+        panels[1],
+        "NLT",
+        "mtb-study-row-nlt"
+      );
 
-    const ideaCell = makePreviewCell(
-      panels[2],
-      "Main Idea",
-      "mtb-study-row-mainidea"
-    );
+    const ideaCell =
+      makePreviewCell(
+        panels[2],
+        "Main Idea",
+        "mtb-study-row-mainidea"
+      );
 
-    // Toggle button
-    const toggle = document.createElement("button");
+    const toggle =
+      document.createElement("button");
+
     toggle.type = "button";
-    toggle.className = "mtb-study-row-toggle";
-    toggle.setAttribute("aria-expanded", "false");
+    toggle.className =
+      "mtb-study-row-toggle";
+
+    toggle.setAttribute(
+      "aria-expanded",
+      "false"
+    );
+
     toggle.setAttribute(
       "aria-label",
       `Expand study for ${summary.textContent.trim()}`
     );
+
     toggle.textContent = "+";
 
     row.appendChild(refCell);
@@ -698,42 +737,128 @@ function buildChapterStudyVerseCards(root) {
     // ---------------------------------------
     // EXPANDED CONTENT
     // ---------------------------------------
-    const deep = document.createElement("div");
-    deep.className = "mtb-study-verse-deep";
+    const deep =
+      document.createElement("div");
 
-    const deepGrid = document.createElement("div");
-    deepGrid.className = "mtb-study-verse-deep-grid";
+    deep.className =
+      "mtb-study-verse-deep";
 
+    const deepGrid =
+      document.createElement("div");
+
+    deepGrid.className =
+      "mtb-study-verse-deep-grid";
+
+    // Left column
     const explanation = panels[3];
-    const remarks = panels[4];
 
-    explanation.classList.remove("mtb-study-span-2", "mtb-study-span-4");
-    remarks.classList.remove("mtb-study-span-2", "mtb-study-span-4");
+    explanation.classList.remove(
+      "mtb-study-span-2",
+      "mtb-study-span-4"
+    );
 
-    explanation.classList.add("mtb-study-deep-explanation");
-    remarks.classList.add("mtb-study-deep-remarks");
+    explanation.classList.add(
+      "mtb-study-deep-explanation"
+    );
+
+    // Right column wrapper
+    const right =
+      document.createElement("div");
+
+    right.className =
+      "mtb-study-deep-right";
+
+    // Study Notes / legacy Remarks
+    const studyNotes = panels[4];
+
+    studyNotes.classList.remove(
+      "mtb-study-span-2",
+      "mtb-study-span-4"
+    );
+
+    studyNotes.classList.add(
+      "mtb-study-deep-study-notes"
+    );
+
+    const studyNotesHeading =
+      studyNotes.querySelector("h4");
+
+    if (studyNotesHeading) {
+      const headingText =
+        (studyNotesHeading.textContent || "")
+          .trim();
+
+      if (
+        /^remark(?:s|\(s\))?$/i.test(
+          headingText
+        )
+      ) {
+        studyNotesHeading.textContent =
+          "Study Notes";
+      }
+    }
+
+    right.appendChild(studyNotes);
+
+    // Spirit & Life
+    if (panels.length >= 6) {
+      const spiritLife = panels[5];
+
+      spiritLife.classList.remove(
+        "mtb-study-span-2",
+        "mtb-study-span-4"
+      );
+
+      spiritLife.classList.add(
+        "mtb-study-deep-spirit-life"
+      );
+
+      right.appendChild(spiritLife);
+    }
 
     deepGrid.appendChild(explanation);
-    deepGrid.appendChild(remarks);
+    deepGrid.appendChild(right);
     deep.appendChild(deepGrid);
 
     // ---------------------------------------
     // OPEN / CLOSE
     // ---------------------------------------
     function setOpen(open) {
-      card.classList.toggle("is-open", open);
-      toggle.setAttribute("aria-expanded", open ? "true" : "false");
-      toggle.textContent = open ? "−" : "+";
+      card.classList.toggle(
+        "is-open",
+        open
+      );
+
+      toggle.setAttribute(
+        "aria-expanded",
+        open ? "true" : "false"
+      );
+
+      toggle.textContent =
+        open ? "−" : "+";
     }
 
-    toggle.addEventListener("click", () => {
-      setOpen(!card.classList.contains("is-open"));
-    });
+    toggle.addEventListener(
+      "click",
+      () => {
+        setOpen(
+          !card.classList.contains(
+            "is-open"
+          )
+        );
+      }
+    );
 
-    // Clicking reference also expands/collapses
-    refCell.addEventListener("click", () => {
-      setOpen(!card.classList.contains("is-open"));
-    });
+    refCell.addEventListener(
+      "click",
+      () => {
+        setOpen(
+          !card.classList.contains(
+            "is-open"
+          )
+        );
+      }
+    );
 
     card._mtbSetOpen = setOpen;
 
@@ -746,54 +871,86 @@ function buildChapterStudyVerseCards(root) {
   // ---------------------------------------
   // EXPAND ALL / COLLAPSE ALL
   // ---------------------------------------
-  const controls = root.querySelectorAll(".mtb-study-control");
+  const controls =
+    root.querySelectorAll(
+      ".mtb-study-control"
+    );
 
   controls.forEach((button) => {
-    const label = (button.textContent || "").trim().toLowerCase();
+    const label =
+      (button.textContent || "")
+        .trim()
+        .toLowerCase();
 
     button.removeAttribute("onclick");
 
     if (label === "expand all") {
-      button.addEventListener("click", () => {
-        root.querySelectorAll(".mtb-study-verse-card").forEach((card) => {
-          if (typeof card._mtbSetOpen === "function") {
-            card._mtbSetOpen(true);
-          }
-        });
-      });
+      button.addEventListener(
+        "click",
+        () => {
+          root
+            .querySelectorAll(
+              ".mtb-study-verse-card"
+            )
+            .forEach((card) => {
+              if (
+                typeof card._mtbSetOpen ===
+                "function"
+              ) {
+                card._mtbSetOpen(true);
+              }
+            });
+        }
+      );
     }
 
     if (label === "collapse all") {
-      button.addEventListener("click", () => {
-        root.querySelectorAll(".mtb-study-verse-card").forEach((card) => {
-          if (typeof card._mtbSetOpen === "function") {
-            card._mtbSetOpen(false);
-          }
-        });
-      });
+      button.addEventListener(
+        "click",
+        () => {
+          root
+            .querySelectorAll(
+              ".mtb-study-verse-card"
+            )
+            .forEach((card) => {
+              if (
+                typeof card._mtbSetOpen ===
+                "function"
+              ) {
+                card._mtbSetOpen(false);
+              }
+            });
+        }
+      );
     }
   });
-// ---------------------------------------
-// MOVE PRINT BUTTON BESIDE COLLAPSE ALL
-// ---------------------------------------
-const printControls = document.querySelector(".mtb-print-controls");
-const studyControls = root.querySelector(".mtb-study-controls");
 
-if (printControls && studyControls) {
+  // ---------------------------------------
+  // MOVE PRINT BUTTON BESIDE COLLAPSE ALL
+  // ---------------------------------------
+  const printControls =
+    document.querySelector(
+      ".mtb-print-controls"
+    );
 
-  // Find the actual Print This Page button/link
-  const printButton =
-    printControls.querySelector("button") ||
-    printControls.querySelector("a");
+  const studyControls =
+    root.querySelector(
+      ".mtb-study-controls"
+    );
 
-  if (printButton) {
-    // Move it after Collapse All
-    studyControls.appendChild(printButton);
+  if (printControls && studyControls) {
+    const printButton =
+      printControls.querySelector("button") ||
+      printControls.querySelector("a");
 
-    // Remove the now-empty original wrapper
-    printControls.remove();
+    if (printButton) {
+      studyControls.appendChild(
+        printButton
+      );
+
+      printControls.remove();
+    }
   }
-}
 }
 // ==========================================
 // CHAPTER SCRIPTURE — VERSE EXPLANATION POPUP
@@ -849,15 +1006,24 @@ function addScriptureExplainButtons(root, meta, scriptureDocPath) {
             <div class="mtb-verse-explain-section-content"></div>
           </section>
 
-          <section class="mtb-verse-explain-section">
+          <section class="mtb-verse-explain-section mtb-verse-explain-explanation">
             <h3>Verse Explanation</h3>
             <div class="mtb-verse-explain-section-content"></div>
           </section>
 
-          <section class="mtb-verse-explain-section">
-            <h3>Remark(s)</h3>
-            <div class="mtb-verse-explain-section-content"></div>
-          </section>
+          <div class="mtb-verse-explain-notes-row">
+
+            <section class="mtb-verse-explain-section mtb-verse-explain-study-notes">
+              <h3>Study Notes</h3>
+              <div class="mtb-verse-explain-section-content"></div>
+            </section>
+
+            <section class="mtb-verse-explain-section mtb-verse-explain-spirit-life">
+              <h3>Spirit &amp; Life</h3>
+              <div class="mtb-verse-explain-section-content"></div>
+            </section>
+
+          </div>
 
         </div>
       </div>
@@ -1040,12 +1206,13 @@ function addScriptureExplainButtons(root, meta, scriptureDocPath) {
         );
       }
 
-      // Existing panel order:
+      // Panel order:
       // 0 NKJV
       // 1 NLT
       // 2 Main Idea
       // 3 Verse Explanation
-      // 4 Remark(s)
+      // 4 Study Notes / legacy Remark(s)
+      // 5 Spirit & Life (new files)
 
       const nkjvSource =
         panels[0].querySelector(
@@ -1062,10 +1229,17 @@ function addScriptureExplainButtons(root, meta, scriptureDocPath) {
           ".mtb-study-verse-panel-content"
         );
 
-      const remarksSource =
+      const studyNotesSource =
         panels[4].querySelector(
           ".mtb-study-verse-panel-content"
         );
+
+      const spiritLifeSource =
+        panels.length >= 6
+          ? panels[5].querySelector(
+              ".mtb-study-verse-panel-content"
+            )
+          : null;
 
       // NKJV beside reference
       scriptureEl.innerHTML =
@@ -1076,15 +1250,41 @@ function addScriptureExplainButtons(root, meta, scriptureDocPath) {
 
       // Main Idea
       sectionContents[0].innerHTML =
-        mainIdeaSource ? mainIdeaSource.innerHTML : "";
+        mainIdeaSource
+          ? mainIdeaSource.innerHTML
+          : "";
 
       // Verse Explanation
       sectionContents[1].innerHTML =
-        explanationSource ? explanationSource.innerHTML : "";
+        explanationSource
+          ? explanationSource.innerHTML
+          : "";
 
-      // Remarks
+      // Study Notes
       sectionContents[2].innerHTML =
-        remarksSource ? remarksSource.innerHTML : "";
+        studyNotesSource
+          ? studyNotesSource.innerHTML
+          : "";
+
+      // Spirit & Life
+      sectionContents[3].innerHTML =
+        spiritLifeSource
+          ? spiritLifeSource.innerHTML
+          : "";
+
+      // Hide Spirit & Life entirely for older five-panel
+      // Chapter Study files.
+      const spiritLifeSection =
+        overlay.querySelector(
+          ".mtb-verse-explain-spirit-life"
+        );
+
+      if (spiritLifeSection) {
+        spiritLifeSection.style.display =
+          spiritLifeSource
+            ? ""
+            : "none";
+      }
 
       // Clean generated leading blank lines.
       sectionContents.forEach((content) => {

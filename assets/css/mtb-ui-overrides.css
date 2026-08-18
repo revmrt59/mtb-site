@@ -2320,3 +2320,229 @@ body.mtb-verse-explain-open {
   position: relative !important;
   z-index: 25002 !important;
 }
+/* =========================================================
+   CHAPTER STUDY — EXPANDED CARD BORDERS
+   Verse Explanation | Study Notes
+                     | Spirit & Life
+   ========================================================= */
+
+.mtb-study-verse-deep {
+  display: none;
+  padding: 14px;
+  border-top: 1px solid #d8e1e8;
+  background: #fff;
+}
+
+.mtb-study-verse-card.is-open .mtb-study-verse-deep {
+  display: block;
+}
+
+
+.mtb-study-verse-deep-grid {
+  display: grid;
+  grid-template-columns:
+    minmax(0, 2fr)
+    minmax(300px, 1fr);
+  gap: 14px;
+  align-items: start;
+}
+
+
+/* Right-hand vertical stack */
+.mtb-study-deep-right {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  min-width: 0;
+  align-self: start;
+}
+
+
+/* =========================================================
+   THREE EXPANDED CARDS
+   ========================================================= */
+
+.mtb-study-deep-explanation,
+.mtb-study-deep-study-notes,
+.mtb-study-deep-spirit-life {
+  width: 100%;
+  height: auto !important;
+  box-sizing: border-box;
+
+  border: 1px solid #d8e1e8 !important;
+  border-radius: 8px;
+
+  overflow: hidden;
+  background: #fff;
+
+  grid-column: auto !important;
+  align-self: start;
+}
+
+
+/* =========================================================
+   CARD HEADINGS
+   ========================================================= */
+
+.mtb-study-deep-explanation > h4,
+.mtb-study-deep-study-notes > h4,
+.mtb-study-deep-spirit-life > h4 {
+  margin: 0 !important;
+  padding: 10px 14px !important;
+
+  border-bottom: 1px solid #d8e1e8 !important;
+
+  background: #f3f7fa !important;
+
+  color: #173a5e;
+  font-size: .92rem;
+  font-weight: 800;
+  line-height: 1.3;
+}
+
+
+/* =========================================================
+   CARD CONTENT
+   ========================================================= */
+
+.mtb-study-deep-explanation .mtb-study-verse-panel-content,
+.mtb-study-deep-study-notes .mtb-study-verse-panel-content,
+.mtb-study-deep-spirit-life .mtb-study-verse-panel-content {
+  padding: 14px 16px !important;
+  background: #fff;
+  box-sizing: border-box;
+}
+
+
+/* Paragraph spacing */
+.mtb-study-deep-explanation .mtb-study-verse-panel-content p,
+.mtb-study-deep-study-notes .mtb-study-verse-panel-content p,
+.mtb-study-deep-spirit-life .mtb-study-verse-panel-content p {
+  margin-top: 0;
+  margin-bottom: 1em;
+}
+
+.mtb-study-deep-explanation .mtb-study-verse-panel-content p:last-child,
+.mtb-study-deep-study-notes .mtb-study-verse-panel-content p:last-child,
+.mtb-study-deep-spirit-life .mtb-study-verse-panel-content p:last-child {
+  margin-bottom: 0;
+}
+
+
+/* =========================================================
+   MOBILE
+   ========================================================= */
+
+@media (max-width: 900px) {
+  .mtb-study-verse-deep-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .mtb-study-deep-right {
+    width: 100%;
+  }
+}
+/* =========================================================
+   VERSE EXPLANATION "i" POPUP
+   Study Notes | Spirit & Life
+   ========================================================= */
+
+.mtb-verse-explain-notes-row {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  gap: 14px;
+  align-items: start;
+}
+
+
+/* Both cards grow naturally with their own content */
+.mtb-verse-explain-study-notes,
+.mtb-verse-explain-spirit-life {
+  min-width: 0;
+  height: auto !important;
+  align-self: start;
+}
+
+
+/* Mobile */
+@media (max-width: 800px) {
+  .mtb-verse-explain-notes-row {
+    grid-template-columns: 1fr;
+  }
+}
+/* =========================================================
+   VERSE EXPLANATION "i" POPUP
+   Study Notes / Spirit & Life card borders
+   ========================================================= */
+
+.mtb-verse-explain-study-notes,
+.mtb-verse-explain-spirit-life {
+  border: 1px solid #d8e1e8 !important;
+  border-radius: 8px;
+  overflow: hidden;
+  background: #fff;
+}
+
+
+/* Card headings */
+.mtb-verse-explain-study-notes > h3,
+.mtb-verse-explain-spirit-life > h3 {
+  margin: 0 !important;
+  padding: 10px 14px !important;
+
+  border-bottom: 1px solid #d8e1e8 !important;
+
+  background: #f3f7fa !important;
+
+  color: #173a5e;
+  font-size: .92rem;
+  font-weight: 800;
+  line-height: 1.3;
+}
+
+
+/* Card content */
+.mtb-verse-explain-study-notes
+.mtb-verse-explain-section-content,
+
+.mtb-verse-explain-spirit-life
+.mtb-verse-explain-section-content {
+  padding: 14px 16px !important;
+  background: #fff;
+}
+
+
+/* Keep the two-card row aligned naturally */
+.mtb-verse-explain-notes-row {
+  display: grid;
+  grid-template-columns:
+    minmax(0, 1fr)
+    minmax(0, 1fr);
+
+  gap: 14px;
+  align-items: stretch;
+
+  margin-top: 14px;
+}
+
+
+@media (max-width: 800px) {
+  .mtb-verse-explain-notes-row {
+    grid-template-columns: 1fr;
+  }
+}
+/* Equal height Study Notes / Spirit & Life cards */
+
+.mtb-verse-explain-study-notes,
+.mtb-verse-explain-spirit-life {
+  min-width: 0;
+  height: 100% !important;
+  align-self: stretch;
+}
+
+@media (max-width: 800px) {
+  .mtb-verse-explain-study-notes,
+  .mtb-verse-explain-spirit-life {
+    height: auto !important;
+  }
+}

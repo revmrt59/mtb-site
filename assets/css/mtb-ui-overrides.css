@@ -2557,3 +2557,51 @@ body.mtb-verse-explain-open {
   }
 
 }
+/* =========================================================
+   MOBILE — Book popup positioning + hide Print button
+   ========================================================= */
+@media (max-width: 700px) {
+
+  /* Center book popup safely inside phone viewport */
+  .book-modal {
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    padding: 10px !important;
+  }
+
+  .book-modal.hidden {
+    display: none !important;
+  }
+
+  .book-modal-panel {
+    width: 100% !important;
+    max-width: none !important;
+    max-height: calc(100vh - 20px) !important;
+    margin: 0 !important;
+    padding: 14px 14px 20px !important;
+    overflow-y: auto !important;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  /* Keep Close visible at top while scrolling */
+  #book-modal-close,
+  .book-modal-close {
+    position: sticky !important;
+    top: 0 !important;
+    z-index: 100 !important;
+  }
+
+  /* Hide Print This Page on phones */
+  .mtb-print-controls,
+  .mtb-print-button {
+    display: none !important;
+  }
+
+  /* Hide previous / next book arrows on phones */
+  #book-nav,
+  #book-prev,
+  #book-next {
+    display: none !important;
+  }
+}

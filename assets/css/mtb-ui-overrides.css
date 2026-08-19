@@ -2717,3 +2717,83 @@ body.mtb-verse-explain-open {
   }
 
 }
+/* =========================================================
+   MOBILE — WORD STUDY POPUP FIX
+   Keep AFTER all book-popup mobile rules
+   ========================================================= */
+
+@media screen and (max-width: 700px) {
+
+  /* When Word Study JS opens the modal, center its panel */
+  .ws-modal[style*="display: block"] {
+    position: fixed !important;
+    inset: 0 !important;
+
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+
+    width: 100vw !important;
+    height: 100dvh !important;
+
+    margin: 0 !important;
+    padding: 10px !important;
+
+    overflow: hidden !important;
+
+    z-index: 40000 !important;
+    box-sizing: border-box !important;
+  }
+
+  /* Dark background stays BEHIND the white window */
+  .ws-modal .ws-modal-backdrop {
+    position: absolute !important;
+    inset: 0 !important;
+    z-index: 1 !important;
+    background: rgba(0,0,0,.40) !important;
+  }
+
+  /* Actual Word Study window */
+  .ws-modal .ws-modal-panel {
+    position: relative !important;
+    z-index: 2 !important;
+
+    display: flex !important;
+    flex-direction: column !important;
+
+    width: calc(100vw - 20px) !important;
+    max-width: calc(100vw - 20px) !important;
+
+    height: auto !important;
+    max-height: calc(100dvh - 20px) !important;
+
+    margin: 0 !important;
+
+    overflow: hidden !important;
+
+    background: #ffffff !important;
+    border-radius: 12px !important;
+
+    box-sizing: border-box !important;
+    transform: none !important;
+  }
+
+  /* Keep Close visible */
+  .ws-modal .ws-modal-header {
+    flex: 0 0 auto !important;
+    position: relative !important;
+    top: auto !important;
+    z-index: 3 !important;
+  }
+
+  /* Only the study content scrolls */
+  .ws-modal .ws-modal-body {
+    flex: 1 1 auto !important;
+    min-height: 0 !important;
+
+    overflow-y: auto !important;
+    overflow-x: hidden !important;
+
+    -webkit-overflow-scrolling: touch;
+  }
+}

@@ -2725,25 +2725,27 @@ body.mtb-verse-explain-open {
 @media screen and (max-width: 700px) {
 
   /* When Word Study JS opens the modal, center its panel */
-  .ws-modal[style*="display: block"] {
-    position: fixed !important;
-    inset: 0 !important;
+.ws-modal[style*="display: block"] {
+  position: fixed !important;
+  inset: 0 !important;
 
-    display: flex !important;
-    align-items: center !important;
-    justify-content: center !important;
+  display: flex !important;
+  align-items: flex-start !important;
+  justify-content: center !important;
 
-    width: 100vw !important;
-    height: 100dvh !important;
+  width: 100vw !important;
+  height: 100dvh !important;
 
-    margin: 0 !important;
-    padding: 10px !important;
+  margin: 0 !important;
+  padding: 10px !important;
 
-    overflow: hidden !important;
+  overflow: hidden !important;
 
-    z-index: 40000 !important;
-    box-sizing: border-box !important;
-  }
+  z-index: 40000 !important;
+  box-sizing: border-box !important;
+}
+
+
 
   /* Dark background stays BEHIND the white window */
   .ws-modal .ws-modal-backdrop {
@@ -2754,29 +2756,24 @@ body.mtb-verse-explain-open {
   }
 
   /* Actual Word Study window */
-  .ws-modal .ws-modal-panel {
-    position: relative !important;
-    z-index: 2 !important;
+.ws-modal .ws-modal-panel {
+  position: relative !important;
+  z-index: 2 !important;
 
-    display: flex !important;
-    flex-direction: column !important;
+  width: calc(100vw - 20px) !important;
+  max-width: calc(100vw - 20px) !important;
 
-    width: calc(100vw - 20px) !important;
-    max-width: calc(100vw - 20px) !important;
+  height: auto !important;
+  max-height: calc(100dvh - 70px) !important;
 
-    height: auto !important;
-    max-height: calc(100dvh - 20px) !important;
+  margin: 42px 0 0 !important;
 
-    margin: 0 !important;
+  overflow: hidden !important;
 
-    overflow: hidden !important;
-
-    background: #ffffff !important;
-    border-radius: 12px !important;
-
-    box-sizing: border-box !important;
-    transform: none !important;
-  }
+  background: #ffffff !important;
+  border-radius: 12px !important;
+  box-sizing: border-box !important;
+}
 
   /* Keep Close visible */
   .ws-modal .ws-modal-header {

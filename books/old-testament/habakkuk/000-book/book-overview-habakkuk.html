@@ -1,0 +1,315 @@
+<section class="mtb-doc mtb-doc--read" data-doc-type="book-overview">
+<style>
+.mtb-print-controls{display:flex;justify-content:flex-end;gap:8px;margin:0 0 14px;padding:0 4px}
+.mtb-print-button{appearance:none;border:1px solid #b9c8d5;border-radius:8px;background:#fff;padding:9px 14px;color:#173a5e;font:700 14px Arial,Helvetica,sans-serif;cursor:pointer}
+.mtb-print-button:hover{background:#f2f6f9}
+@media print{
+  @page{size:auto;margin:.45in}
+  html,body{background:#fff!important;color:#000!important}
+  .mtb-print-controls,.mtb-study-controls{display:none!important}
+  .mtb-doc{display:block!important;width:100%!important;max-width:none!important;margin:0!important;padding:0!important}
+  .mtb-overview-hero,.mtb-study-hero,.mtb-reflections-hero,.mtb-culture-hero{box-shadow:none!important;background:#fff!important;border-color:#777!important}
+  .mtb-overview-grid,.mtb-reflections-grid,.mtb-culture-grid,.mtb-study-verse-grid{display:block!important}
+  .mtb-overview-card,.mtb-reflections-card,.mtb-culture-card,.mtb-study-verse,.mtb-study-verse-panel,.mtb-intro-card{
+    display:block!important;width:100%!important;max-width:none!important;height:auto!important;margin:0 0 12pt!important;
+    break-inside:avoid;page-break-inside:avoid;box-shadow:none!important;background:#fff!important;color:#000!important
+  }
+  details.mtb-study-verse{display:block!important;overflow:visible!important}
+  details.mtb-study-verse>summary{display:flex!important;background:#fff!important;color:#000!important;border-bottom:1px solid #777!important}
+  details.mtb-study-verse>summary:after{display:none!important}
+  details.mtb-study-verse>.mtb-study-verse-body{display:block!important}
+  h1,h2,h3,h4{break-after:avoid;page-break-after:avoid;color:#000!important}
+  p,li{orphans:3;widows:3}
+  a{color:#000!important;text-decoration:none!important}
+  a[href]::after{content:none!important}
+}
+</style>
+<div class="mtb-print-controls"><button type="button" class="mtb-print-button" onclick="(function(button){var doc=button.closest('.mtb-doc')||document;var panels=Array.prototype.slice.call(doc.querySelectorAll('details'));panels.forEach(function(panel){panel.open=true;});window.print();})(this)">&#128438; Print This Page</button></div>
+<style>
+.book-modal-panel:has(.mtb-book-overview-dashboard) {
+  width: min(1600px, 96vw);
+  max-width: none;
+}
+.mtb-book-overview-dashboard {
+  --mtb-navy: #173a5e;
+  --mtb-navy-2: #274f76;
+  --mtb-gold: #b7832f;
+  --mtb-gold-soft: #fbf4e7;
+  --mtb-blue-soft: #eef4f9;
+  --mtb-border: #d7e0e8;
+  --mtb-text: #1d2935;
+  width: 100%;
+  max-width: 1560px;
+  margin: 0 auto;
+  padding: 2px 4px 28px;
+  color: var(--mtb-text);
+  font-family: Arial, Helvetica, sans-serif;
+}
+.mtb-book-overview-dashboard * { box-sizing: border-box; }
+.mtb-book-overview-dashboard .mtb-intro-hero {
+  position: relative;
+  overflow: hidden;
+  margin: 0 0 24px;
+  padding: 22px 28px;
+  border: 1px solid #cbd8e3;
+  border-radius: 14px;
+  background: linear-gradient(135deg, #f7fafc 0%, #e8f0f7 100%);
+}
+.mtb-book-overview-dashboard .mtb-intro-hero::after {
+  content: '';
+  position: absolute;
+  right: -48px;
+  top: -72px;
+  width: 210px;
+  height: 210px;
+  border-radius: 50%;
+  background: rgba(183, 131, 47, .10);
+}
+.mtb-book-overview-dashboard .mtb-intro-eyebrow {
+  position: relative; z-index: 1; margin: 0 0 5px;
+  color: var(--mtb-gold); font-size: .78rem; font-weight: 800;
+  letter-spacing: .13em; text-transform: uppercase;
+}
+.mtb-book-overview-dashboard .mtb-intro-title {
+  position: relative; z-index: 1; margin: 0; color: var(--mtb-navy);
+  font-size: clamp(1.85rem, 3vw, 2.6rem); line-height: 1.05;
+}
+.mtb-book-overview-dashboard .mtb-intro-subtitle {
+  position: relative; z-index: 1; margin: 6px 0 0;
+  color: #4e6477; font-size: 1rem; font-weight: 700;
+}
+.mtb-book-overview-dashboard .mtb-intro-section { margin: 0 0 25px; }
+.mtb-book-overview-dashboard .mtb-intro-section-heading {
+  display: flex; align-items: center; gap: 12px; margin: 0 0 12px;
+}
+.mtb-book-overview-dashboard .mtb-intro-section-heading h2 {
+  margin: 0; color: var(--mtb-navy); font-size: 1.08rem;
+  letter-spacing: .05em; text-transform: uppercase;
+}
+.mtb-book-overview-dashboard .mtb-intro-section-heading::after {
+  content: ''; height: 1px; flex: 1 1 auto;
+  background: linear-gradient(to right, #c7d3de, transparent);
+}
+.mtb-book-overview-dashboard .mtb-intro-grid {
+  display: grid;
+  grid-template-columns: repeat(12, minmax(0, 1fr));
+  gap: 16px;
+  align-items: stretch;
+  grid-auto-rows: auto;
+}
+/* Each implicit grid row grows to the height of its longest card. Every card
+   then stretches to that row height. No fixed or maximum height is used. */
+.mtb-book-overview-dashboard .mtb-intro-card {
+  grid-column: span 1;
+  min-width: 0;
+  min-height: 0;
+  height: 100%;
+  max-height: none !important;
+  overflow: visible !important;
+  display: flex;
+  flex-direction: column;
+  align-self: stretch;
+  border: 1px solid var(--mtb-border);
+  border-top: 4px solid var(--mtb-navy-2);
+  border-radius: 12px;
+  background: #fff;
+  box-shadow: 0 4px 15px rgba(28, 48, 66, .055);
+}
+.mtb-book-overview-dashboard .mtb-intro-card.mtb-span-4 { grid-column: span 4; }
+.mtb-book-overview-dashboard .mtb-intro-card.mtb-span-6 { grid-column: span 6; }
+.mtb-book-overview-dashboard .mtb-intro-card.mtb-span-12 { grid-column: span 12; }
+.mtb-book-overview-dashboard .mtb-intro-card-header {
+  margin: 0; padding: 12px 16px 10px; border-bottom: 1px solid #e5ebf0;
+  background: var(--mtb-blue-soft); color: var(--mtb-navy);
+  font-size: .92rem; font-weight: 800; letter-spacing: .025em;
+}
+.mtb-book-overview-dashboard .mtb-intro-card-body {
+  flex: 1 1 auto;
+  min-height: 0;
+  height: auto !important;
+  max-height: none !important;
+  overflow: visible !important;
+  padding: 15px 17px 17px;
+  font-size: 1rem;
+  line-height: 1.48;
+  overflow-wrap: anywhere;
+}
+.mtb-book-overview-dashboard .mtb-intro-card-body p { margin: 0 0 .8em; }
+.mtb-book-overview-dashboard .mtb-intro-card-body p:last-child { margin-bottom: 0; }
+.mtb-book-overview-dashboard .mtb-intro-card-body ul,
+.mtb-book-overview-dashboard .mtb-intro-card-body ol { margin: 0 0 .8em; padding-left: 1.35em; }
+.mtb-book-overview-dashboard .mtb-intro-card-body li { margin: 0 0 .45em; padding-left: .1em; }
+.mtb-book-overview-dashboard .mtb-intro-card-body h2 {
+  margin: 1.15em 0 .45em; color: var(--mtb-navy); font-size: 1.15rem;
+}
+.mtb-book-overview-dashboard .mtb-intro-card-body h2:first-child { margin-top: 0; }
+.mtb-book-overview-dashboard .mtb-intro-card-body h3 {
+  margin: 1em 0 .35em; color: var(--mtb-navy-2); font-size: 1.02rem;
+}
+.mtb-book-overview-dashboard .mtb-intro-card-body blockquote {
+  margin: .9em 0; padding: .65em 1em; border-left: 4px solid var(--mtb-gold);
+  background: var(--mtb-gold-soft); color: #45371f;
+}
+.mtb-book-overview-dashboard .mtb-resource-link {
+  color: #1f5fae; font-weight: 700; text-decoration-line: underline;
+  text-decoration-style: dotted; text-decoration-thickness: 2px;
+  text-underline-offset: 4px; cursor: pointer;
+}
+.mtb-book-overview-dashboard .mtb-resource-link::after {
+  content: " \2197"; display: inline-block; margin-left: 2px;
+  font-size: .78em; line-height: 1; opacity: .78;
+}
+@media (max-width: 1100px) {
+  .book-modal-panel:has(.mtb-book-overview-dashboard) { width: min(1100px, 94vw); }
+  .mtb-book-overview-dashboard .mtb-intro-grid { grid-template-columns: repeat(12, minmax(0, 1fr)); }
+  .mtb-book-overview-dashboard .mtb-intro-card,
+  .mtb-book-overview-dashboard .mtb-intro-card.mtb-span-4 { grid-column: span 6; }
+  .mtb-book-overview-dashboard .mtb-intro-card.mtb-span-6,
+  .mtb-book-overview-dashboard .mtb-intro-card.mtb-span-12 { grid-column: 1 / -1; }
+}
+@media (max-width: 660px) {
+  .book-modal-panel:has(.mtb-book-overview-dashboard) { width: 94vw; padding-left: 12px; padding-right: 12px; }
+  .mtb-book-overview-dashboard { padding-left: 0; padding-right: 0; }
+  .mtb-book-overview-dashboard .mtb-intro-hero { padding: 19px; border-radius: 10px; }
+  .mtb-book-overview-dashboard .mtb-intro-grid { grid-template-columns: 1fr; gap: 12px; }
+  .mtb-book-overview-dashboard .mtb-intro-card,
+  .mtb-book-overview-dashboard .mtb-intro-card.mtb-span-4,
+  .mtb-book-overview-dashboard .mtb-intro-card.mtb-span-6,
+  .mtb-book-overview-dashboard .mtb-intro-card.mtb-span-12 { grid-column: 1; }
+  .mtb-book-overview-dashboard .mtb-intro-card-body { padding: 14px 15px 16px; }
+}
+</style><div class="mtb-book-overview-dashboard"><header class="mtb-intro-hero"><p class="mtb-intro-eyebrow">Mastering the Bible</p><h1 class="mtb-intro-title">Habakkuk</h1><p class="mtb-intro-subtitle">Habakkuk - Book Overview</p></header><section class="mtb-intro-section"><div class="mtb-intro-section-heading"><h2>Background</h2></div><div class="mtb-intro-grid"><article class="mtb-intro-card mtb-span-4"><h3 class="mtb-intro-card-header">Author</h3><div class="mtb-intro-card-body"><div data-custom-style="Normal (Web)">
+<p>Habakkuk the prophet. Very little is known about him personally. Unlike many prophets, Habakkuk does not primarily speak to the people on God’s behalf. Much of the book records a conversation between Habakkuk and God as the prophet wrestles with what he sees happening around him and with the troubling answer God gives him.</p>
+</div></div></article><article class="mtb-intro-card mtb-span-4"><h3 class="mtb-intro-card-header">Audience</h3><div class="mtb-intro-card-body"><div data-custom-style="Normal (Web)">
+<p>The people of Judah, particularly those trying to remain faithful to God during a time of spiritual decline, injustice, and approaching judgment. Habakkuk gives voice to questions faithful people could easily have been asking: Why does God allow evil to continue? Why does He sometimes seem silent? And how can His people trust Him when His ways are difficult to understand?</p>
+</div></div></article><article class="mtb-intro-card mtb-span-4"><h3 class="mtb-intro-card-header">Date</h3><div class="mtb-intro-card-body"><div data-custom-style="Normal (Web)">
+<p>Likely around 609-605 BC, during the final decades of the kingdom of Judah and before the Babylonian invasion of Jerusalem.</p>
+</div></div></article><article class="mtb-intro-card mtb-span-6"><h3 class="mtb-intro-card-header">Historical Setting</h3><div class="mtb-intro-card-body"><div data-custom-style="Normal (Web)">
+<p>Judah was deteriorating spiritually and morally. Violence, injustice, strife, and disregard for God’s law had become widespread. Habakkuk was deeply troubled because he saw these things continuing among God’s own people and could not understand why God appeared to tolerate them.</p>
+</div>
+<div data-custom-style="Normal (Web)">
+<p>At the same time, Babylon was rapidly becoming the dominant power of the ancient Near East. The Assyrian Empire was collapsing, and Babylon would soon become the great military threat to Judah. Habakkuk stands at the unsettling intersection of Judah’s internal corruption and Babylon’s growing power.</p>
+</div></div></article><article class="mtb-intro-card mtb-span-6"><h3 class="mtb-intro-card-header">Occasion</h3><div class="mtb-intro-card-body"><div data-custom-style="Normal (Web)">
+<p>Habakkuk cries out to God because wickedness in Judah seems to be going unanswered. God responds that He is already at work: He is raising up the Babylonians to bring judgment upon Judah.</p>
+</div>
+<div data-custom-style="Normal (Web)">
+<p>That answer creates an even greater problem for Habakkuk. Babylon is more violent and wicked than Judah. How can a holy God use such a nation to judge His people?</p>
+</div>
+<div data-custom-style="Normal (Web)">
+<p>God does not explain every mystery, but He assures Habakkuk that Babylon will also be judged and that His purposes will ultimately prevail. Habakkuk is brought from questioning God’s ways to resting in God Himself.</p>
+</div>
+<hr /></div></article></div></section><section class="mtb-intro-section"><div class="mtb-intro-section-heading"><h2>Understanding the Book</h2></div><div class="mtb-intro-grid"><article class="mtb-intro-card mtb-span-6"><h3 class="mtb-intro-card-header">What This Book Is About</h3><div class="mtb-intro-card-body"><div data-custom-style="Normal (Web)">
+<p>Habakkuk is about learning to trust God when what He is doing does not make sense.</p>
+</div>
+<div data-custom-style="Normal (Web)">
+<p>The book begins with a prophet looking at his world and asking, <strong>“O LORD, how long shall I cry, And You will not hear?”</strong> (1:2). Habakkuk knows God is righteous, but what he sees around him does not seem consistent with what he knows about God.</p>
+</div>
+<div data-custom-style="Normal (Web)">
+<p>God’s first answer does not make the problem easier. God is going to deal with Judah’s wickedness, but He will do it through Babylon. Habakkuk then has to wrestle with something harder than God’s apparent inactivity: God is working, but He is working in a way Habakkuk cannot understand.</p>
+</div>
+<div data-custom-style="Normal (Web)">
+<p>The turning point comes when Habakkuk stops demanding that circumstances make sense before he will trust God. He takes his place as a watchman and waits for God to speak. God answers with one of the great declarations of Scripture: <strong>“But the just shall live by his faith”</strong> (2:4).</p>
+</div>
+<div data-custom-style="Normal (Web)">
+<p>By chapter 3, Habakkuk’s circumstances have not yet improved. Babylon is still coming. Judgment is still approaching. Yet Habakkuk has changed. The prophet who began with <strong>“How long?”</strong> ends by declaring that even if the fields produce nothing and the stalls are empty, <strong>“Yet I will rejoice in the LORD, I will joy in the God of my salvation”</strong> (3:18).</p>
+</div>
+<div data-custom-style="Normal (Web)">
+<p>Habakkuk is therefore not merely a book about unanswered questions. It is the story of faith learning to stand when the answers are difficult.</p>
+</div>
+<hr />
+<h2 id="central-message">Central Message</h2>
+<div data-custom-style="Normal (Web)">
+<p>God can be trusted even when His ways cannot yet be understood.</p>
+</div>
+<div data-custom-style="Normal (Web)">
+<p>Habakkuk discovers that faith does not require having every question answered or every circumstance resolved. The righteous person lives by trusting the character, word, and purposes of God. God remains holy when evil seems unchecked, sovereign when nations rage, and faithful when everything visible appears to be falling apart.</p>
+</div>
+<hr /></div></article><article class="mtb-intro-card mtb-span-6"><h3 class="mtb-intro-card-header">Why This Book Matters</h3><div class="mtb-intro-card-body"><div data-custom-style="Normal (Web)">
+<p>Habakkuk speaks directly to one of the hardest experiences of faith: knowing what is true about God while seeing circumstances that seem to contradict it.</p>
+</div>
+<div data-custom-style="Normal (Web)">
+<p>The book does not rebuke Habakkuk simply for asking difficult questions. He brings those questions directly to God. But God also does not allow the prophet to remain where he began. Habakkuk must learn that his understanding is limited while God sees the whole course of history.</p>
+</div>
+<div data-custom-style="Normal (Web)">
+<p>That makes Habakkuk especially valuable in seasons when prayer seems unanswered, injustice appears to prevail, the future is uncertain, or God’s activity is difficult to recognize. The book shows that mature faith is not pretending that difficulties do not exist. It is learning to anchor ourselves in God when they do.</p>
+</div>
+<hr /></div></article><article class="mtb-intro-card mtb-span-6"><h3 class="mtb-intro-card-header">Key Themes to Watch For</h3><div class="mtb-intro-card-body"><ul>
+<li><p><strong>Faith when God’s ways are difficult to understand</strong> — Habakkuk moves from questioning what God is doing to trusting who God is.</p></li>
+<li><p><strong>The righteousness and justice of God</strong> — Neither Judah’s sin nor Babylon’s cruelty escapes His notice or judgment.</p></li>
+<li><p><strong>God’s sovereignty over nations</strong> — Babylon appears unstoppable, but it is never outside God’s authority.</p></li>
+<li><p><strong>Waiting for God</strong> — Faith sometimes means standing at the watchtower and trusting God’s word before its fulfillment can be seen.</p></li>
+<li><p><strong>The danger of pride</strong> — Habakkuk 2 contrasts the proud person with the one who lives by faith.</p></li>
+<li><p><strong>God’s glory filling the earth</strong> — Babylon’s glory is temporary; God promises that <strong>“the earth will be filled with the knowledge of the glory of the LORD”</strong> (2:14).</p></li>
+<li><p><strong>Joy that survives loss</strong> — Habakkuk ends with a joy rooted not in favorable circumstances but in the LORD Himself.</p></li>
+</ul></div></article><article class="mtb-intro-card mtb-span-6"><h3 class="mtb-intro-card-header">Key Concepts to Understand Before Reading</h3><div class="mtb-intro-card-body"><div data-custom-style="Normal (Web)">
+<p><strong>Habakkuk speaks to God more than he speaks for God.</strong> Much of the book is a conversation between the prophet and the LORD. Habakkuk brings God the questions troubling him and then waits for God to answer.</p>
+</div>
+<div data-custom-style="Normal (Web)">
+<p><strong>The Chaldeans are the Babylonians.</strong> These names refer to the people God was raising up to judge Judah. Their growing military power forms the historical background for Habakkuk’s struggle.</p>
+</div>
+<div data-custom-style="Normal (Web)">
+<p><strong>Habakkuk’s problem changes after God answers him.</strong> At first he cannot understand why God seems to tolerate Judah’s violence and injustice. When God tells him that Babylon is coming, Habakkuk faces an even harder question: How can a holy God use a nation more wicked than Judah to judge His people?</p>
+</div>
+<div data-custom-style="Normal (Web)">
+<p><strong>“The just shall live by his faith” is central to the book.</strong> The proud person trusts in himself and his own strength, but the righteous person continues to trust God. Habakkuk must learn to live by faith while he waits for what God has spoken to come to pass.</p>
+</div>
+<div data-custom-style="Normal (Web)">
+<p><strong>The five woes of chapter 2 show that God’s use of Babylon does not mean His approval of Babylon.</strong> Its greed, violence, exploitation, drunkenness, and idolatry will also come under judgment. God can use a nation for His purposes without overlooking its wickedness.</p>
+</div>
+<div data-custom-style="Normal (Web)">
+<p><strong>Habakkuk 3 is a prayer and song.</strong> Habakkuk remembers God’s mighty acts and asks Him to act again. Remembering what God has done helps him face what is still ahead.</p>
+</div></div></article><article class="mtb-intro-card mtb-span-6"><h3 class="mtb-intro-card-header">Book Flow</h3><div class="mtb-intro-card-body"><h3 id="habakkuk-11-4---habakkuks-first-complaint">Habakkuk 1:1-4 - Habakkuk’s First Complaint</h3>
+<div data-custom-style="Normal (Web)">
+<p>Habakkuk sees violence, injustice, strife, and the failure of justice in Judah. He cries out because God seems to be doing nothing about it.</p>
+</div>
+<h3 id="habakkuk-15-11---gods-first-answer">Habakkuk 1:5-11 - God’s First Answer</h3>
+<div data-custom-style="Normal (Web)">
+<p>God tells Habakkuk that He is already working in a way the prophet would scarcely believe. He is raising up the Chaldeans-the Babylonians-as an instrument of judgment against Judah.</p>
+</div>
+<h3 id="habakkuk-112-17---habakkuks-second-complaint">Habakkuk 1:12-17 - Habakkuk’s Second Complaint</h3>
+<div data-custom-style="Normal (Web)">
+<p>God’s answer creates another question. Habakkuk knows that God is holy and cannot approve evil, so how can He use Babylon, a nation even more wicked and violent than Judah?</p>
+</div>
+<h3 id="habakkuk-21-20---gods-second-answer">Habakkuk 2:1-20 - God’s Second Answer</h3>
+<div data-custom-style="Normal (Web)">
+<p>Habakkuk waits for God’s response. God tells him that the vision has an appointed time and will certainly come. The proud will not endure, <strong>“But the just shall live by his faith”</strong> (2:4). A series of woes then declares that Babylon itself will eventually face God’s judgment.</p>
+</div>
+<h3 id="habakkuk-31-15---habakkuk-remembers-god">Habakkuk 3:1-15 - Habakkuk Remembers God</h3>
+<div data-custom-style="Normal (Web)">
+<p>Habakkuk responds in prayer. He remembers God’s mighty acts and pictures the Lord coming in power to save His people. Instead of staring only at Babylon, Habakkuk begins looking again at the greatness of God.</p>
+</div>
+<h3 id="habakkuk-316-19---habakkuk-chooses-trust">Habakkuk 3:16-19 - Habakkuk Chooses Trust</h3>
+<div data-custom-style="Normal (Web)">
+<p>Habakkuk trembles at what is coming, but fear no longer has the final word. Even if every visible source of provision disappears, he will rejoice in God. The Lord Himself has become Habakkuk’s strength.</p>
+</div>
+<hr /></div></article><article class="mtb-intro-card mtb-span-6"><h3 class="mtb-intro-card-header">Christ and Life</h3><div class="mtb-intro-card-body"><div data-custom-style="Normal (Web)">
+<p>Habakkuk gives us one of Scripture’s great statements about faith: <strong>“the just shall live by his faith”</strong> (2:4). The New Testament returns to these words in Romans 1:17, Galatians 3:11, and Hebrews 10:38. In Christ, we see fully the righteousness that comes through faith and the life of continuing trust in God.</p>
+</div>
+<div data-custom-style="Normal (Web)">
+<p>Habakkuk also points beyond the temporary kingdoms of this world. Babylon may dominate the nations for a time, but <strong>“the earth will be filled with the knowledge of the glory of the LORD, as the waters cover the sea”</strong> (2:14). Human kingdoms rise and fall; the glory and rule of God will remain.</p>
+</div>
+<div data-custom-style="Normal (Web)">
+<p>There is also something deeply important in Habakkuk’s final confession. He does not say that he will rejoice only when the fig tree blossoms again, the fields produce food, and the stalls are filled. He says that if those things fail, <strong>“Yet I will rejoice in the LORD, I will joy in the God of my salvation”</strong> (3:18). His joy has moved beyond what God provides to God Himself.</p>
+</div>
+<div data-custom-style="Normal (Web)">
+<p>That is where faith ultimately brings us. Jesus is not merely the One who improves our circumstances. He is our life, our salvation, and our strength. Habakkuk begins by struggling to understand what God is doing and ends standing upon who God is.</p>
+</div></div></article></div></section><section class="mtb-intro-section"><div class="mtb-intro-section-heading"><h2>Reading Guide</h2></div><div class="mtb-intro-grid"><article class="mtb-intro-card mtb-span-6"><h3 class="mtb-intro-card-header">One-Sentence Summary</h3><div class="mtb-intro-card-body"><div data-custom-style="Normal (Web)">
+<p>Habakkuk shows a troubled prophet learning that when God’s ways cannot be understood, the righteous can still live by faith, wait for His word, and rejoice in the God of their salvation.</p>
+</div></div></article><article class="mtb-intro-card mtb-span-6"><h3 class="mtb-intro-card-header">Read This Book Remembering...</h3><div class="mtb-intro-card-body"><div data-custom-style="Normal (Web)">
+<p>Habakkuk begins with <strong>“How long?”</strong> and ends with <strong>“Yet I will rejoice in the LORD.”</strong> Between those two statements, his circumstances do not become easier. Judah is still facing judgment, Babylon is still coming, and Habakkuk still knows that severe loss lies ahead.</p>
+</div>
+<div data-custom-style="Normal (Web)">
+<p>What changes is where Habakkuk is looking. He begins by looking at the violence around him and wondering why God is not acting. He then looks at Babylon and struggles with the way God has chosen to act. Finally, he remembers the greatness of God and comes to rest in Him.</p>
+</div>
+<div data-custom-style="Normal (Web)">
+<p>As you read, follow Habakkuk’s journey from questioning, to waiting, to remembering, to trusting. The book does not teach us that faith always receives an explanation that makes everything understandable. It shows us that we can know God well enough to trust Him when we do not understand.</p>
+</div></div></article></div></section><section class="mtb-intro-section"><div class="mtb-intro-section-heading"><h2>Helpful Notes</h2></div><div class="mtb-intro-grid"><article class="mtb-intro-card mtb-span-12"><div class="mtb-intro-card-body"><ul>
+<li><p>Habakkuk probably ministered shortly before Babylon began its invasions of Judah, when the collapse of Assyria and the rapid rise of Babylon were changing the political world around Judah.</p></li>
+<li><p><strong>Chaldeans</strong> and <strong>Babylonians</strong> refer to the same people in Habakkuk.</p></li>
+<li><p>Habakkuk 2:4, <strong>“the just shall live by his faith,”</strong> becomes an important statement in the New Testament and is quoted in Romans 1:17, Galatians 3:11, and Hebrews 10:38.</p></li>
+<li><p>The five <strong>“woes”</strong> in Habakkuk 2:6–20 answer an important part of Habakkuk’s concern. Babylon will be used to judge Judah, but Babylon will not escape judgment for its own wickedness.</p></li>
+<li><p>Habakkuk 2:14 looks far beyond Babylon: <strong>“the earth will be filled with the knowledge of the glory of the LORD, as the waters cover the sea.”</strong> Babylon’s power is temporary; God’s glory is the greater reality.</p></li>
+<li><p>Habakkuk 3 contains musical features, including <strong>Shigionoth</strong>, <strong>Selah</strong>, and a closing instruction to the Chief Musician. The book that begins with Habakkuk’s troubled questions ends as a song of trust.</p></li>
+<li><p>The agricultural losses described in Habakkuk 3:17 are comprehensive: figs, grapes, olives, grain, sheep, and cattle. Habakkuk imagines the collapse of virtually every visible source of food and livelihood and still declares, <strong>“Yet I will rejoice in the LORD.”</strong></p></li>
+</ul></div></article></div></section></div>
+</section>

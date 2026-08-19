@@ -1,0 +1,82 @@
+<section class="mtb-doc mtb-doc--read" data-doc-type="chapter-overview">
+<style>
+.mtb-print-controls{display:flex;justify-content:flex-end;gap:8px;margin:0 0 14px;padding:0 4px}
+.mtb-print-button{appearance:none;border:1px solid #b9c8d5;border-radius:8px;background:#fff;padding:9px 14px;color:#173a5e;font:700 14px Arial,Helvetica,sans-serif;cursor:pointer}
+.mtb-print-button:hover{background:#f2f6f9}
+@media print{
+  @page{size:auto;margin:.45in}
+  html,body{background:#fff!important;color:#000!important}
+  .mtb-print-controls,.mtb-study-controls{display:none!important}
+  .mtb-doc{display:block!important;width:100%!important;max-width:none!important;margin:0!important;padding:0!important}
+  .mtb-overview-hero,.mtb-study-hero,.mtb-reflections-hero,.mtb-culture-hero{box-shadow:none!important;background:#fff!important;border-color:#777!important}
+  .mtb-overview-grid,.mtb-reflections-grid,.mtb-culture-grid,.mtb-study-verse-grid{display:block!important}
+  .mtb-overview-card,.mtb-reflections-card,.mtb-culture-card,.mtb-study-verse,.mtb-study-verse-panel,.mtb-intro-card{
+    display:block!important;width:100%!important;max-width:none!important;height:auto!important;margin:0 0 12pt!important;
+    break-inside:avoid;page-break-inside:avoid;box-shadow:none!important;background:#fff!important;color:#000!important
+  }
+  details.mtb-study-verse{display:block!important;overflow:visible!important}
+  details.mtb-study-verse>summary{display:flex!important;background:#fff!important;color:#000!important;border-bottom:1px solid #777!important}
+  details.mtb-study-verse>summary:after{display:none!important}
+  details.mtb-study-verse>.mtb-study-verse-body{display:block!important}
+  h1,h2,h3,h4{break-after:avoid;page-break-after:avoid;color:#000!important}
+  p,li{orphans:3;widows:3}
+  a{color:#000!important;text-decoration:none!important}
+  a[href]::after{content:none!important}
+}
+</style>
+<div class="mtb-print-controls"><button type="button" class="mtb-print-button" onclick="(function(button){var doc=button.closest('.mtb-doc')||document;var panels=Array.prototype.slice.call(doc.querySelectorAll('details'));panels.forEach(function(panel){panel.open=true;});window.print();})(this)">&#128438; Print This Page</button></div>
+<style>
+.mtb-chapter-overview-dashboard{--mtb-navy:#173a5e;--mtb-navy-2:#2b587f;--mtb-gold:#b7832f;--mtb-blue-soft:#eef4f9;--mtb-border:#d7e0e8;--mtb-text:#1d2935;width:100%;max-width:1600px;margin:0 auto;padding:2px 4px 30px;color:var(--mtb-text);font-family:Arial,Helvetica,sans-serif}.mtb-chapter-overview-dashboard *{box-sizing:border-box}.mtb-overview-hero{display:flex;align-items:center;justify-content:space-between;gap:20px;margin:0 0 22px;padding:22px 26px;border:1px solid #cbd8e3;border-radius:14px;background:linear-gradient(135deg,#f7fafc 0%,#e8f0f7 100%)}.mtb-overview-eyebrow{margin:0 0 5px;color:var(--mtb-gold);font-size:.78rem;font-weight:800;letter-spacing:.13em;text-transform:uppercase}.mtb-overview-title{margin:0;color:var(--mtb-navy);font-size:clamp(1.55rem,3vw,2.25rem);line-height:1.1}.mtb-overview-badge{flex:0 0 auto;padding:10px 16px;border:1px solid rgba(23,58,94,.18);border-radius:999px;background:#fff;color:var(--mtb-navy);font-weight:800}.mtb-overview-grid{display:grid;grid-template-columns:repeat(12,minmax(0,1fr));gap:16px;align-items:stretch}.mtb-overview-card{min-width:0;overflow:hidden;border:1px solid var(--mtb-border);border-top:4px solid var(--mtb-navy-2);border-radius:12px;background:#fff;box-shadow:0 4px 15px rgba(28,48,66,.055)}.mtb-overview-card-central{grid-column:1/span 4;grid-row:1}.mtb-overview-card-about{grid-column:5/span 4;grid-row:1}.mtb-overview-card-heart{grid-column:9/span 4;grid-row:1}.mtb-overview-card-sections{grid-column:1/span 6;grid-row:2}.mtb-overview-card-matters{grid-column:7/span 6;grid-row:2}.mtb-overview-card-themes{grid-column:1/span 6;grid-row:3}.mtb-overview-card-words{grid-column:7/span 6;grid-row:3}.mtb-psalms-overview .mtb-overview-card-psalm-author{grid-column:1/span 4;grid-row:1}.mtb-psalms-overview .mtb-overview-card-psalm-occasion{grid-column:5/span 4;grid-row:1}.mtb-psalms-overview .mtb-overview-card-psalm-kind{grid-column:9/span 4;grid-row:1}.mtb-psalms-overview .mtb-overview-card-central{grid-column:1/span 4;grid-row:2}.mtb-psalms-overview .mtb-overview-card-about{grid-column:5/span 4;grid-row:2}.mtb-psalms-overview .mtb-overview-card-heart{grid-column:9/span 4;grid-row:2}.mtb-psalms-overview .mtb-overview-card-sections{grid-column:1/span 6;grid-row:3}.mtb-psalms-overview .mtb-overview-card-matters{grid-column:7/span 6;grid-row:3}.mtb-psalms-overview .mtb-overview-card-themes{grid-column:1/span 6;grid-row:4}.mtb-psalms-overview .mtb-overview-card-words{grid-column:7/span 6;grid-row:4}.mtb-overview-card-header{margin:0;padding:12px 16px 10px;border-bottom:1px solid #e5ebf0;background:var(--mtb-blue-soft);color:var(--mtb-navy);font-size:.96rem;font-weight:800}.mtb-overview-card-body{padding:16px 18px 18px;font-size:1rem;line-height:1.48;overflow-wrap:anywhere}.mtb-overview-card-central .mtb-overview-card-body,.mtb-overview-card-heart .mtb-overview-card-body{font-size:1.06rem}.mtb-overview-card-body p{margin:0 0 .72em}.mtb-overview-card-body p:last-child{margin-bottom:0}.mtb-overview-card-body ul,.mtb-overview-card-body ol{margin:0;padding-left:1.25em}.mtb-overview-card-body li{margin:0 0 .35em}@media(max-width:980px){.mtb-overview-card{grid-column:span 6!important;grid-row:auto!important}}@media(max-width:760px){.mtb-overview-grid{grid-template-columns:1fr}.mtb-overview-card{grid-column:1/-1!important}.mtb-overview-hero{align-items:flex-start;flex-direction:column;padding:19px}}
+</style><div class="mtb-chapter-overview-dashboard"><header class="mtb-overview-hero"><div><p class="mtb-overview-eyebrow">Morning Chapter Explanation</p><h1 class="mtb-overview-title">Habakkuk Chapter 3</h1></div><div class="mtb-overview-badge">Chapter 3</div></header><div class="mtb-overview-grid"><article class="mtb-overview-card mtb-overview-card-central"><h2 class="mtb-overview-card-header">Central Message</h2><div class="mtb-overview-card-body"><div data-custom-style="Normal (Web)">
+<p>Habakkuk responds to God’s revelation with prayer, reverence, and determined trust. Remembering God’s mighty acts in the past, he asks Him to act again in his own day, yet ultimately rests his confidence not in changed circumstances but in the LORD Himself.</p>
+</div></div></article><article class="mtb-overview-card mtb-overview-card-about"><h2 class="mtb-overview-card-header">What This Chapter Is About</h2><div class="mtb-overview-card-body"><div data-custom-style="Normal (Web)">
+<p>Habakkuk begins with a prayer that God would revive His work and remember mercy in the midst of judgment. He then describes the LORD coming in majesty and power, drawing on imagery from God’s past acts of deliverance as He goes forth for the salvation of His people. Faced with the coming invasion, Habakkuk trembles at what lies ahead, yet he reaches a remarkable place of faith: even if the land produces nothing and the flocks and herds disappear, he will rejoice in the LORD and find his strength in God.</p>
+</div></div></article><article class="mtb-overview-card mtb-overview-card-heart"><h2 class="mtb-overview-card-header">The Heart of the Chapter</h2><div class="mtb-overview-card-body"><div data-custom-style="Normal (Web)">
+<p>Habakkuk’s circumstances have not changed, but Habakkuk has. He began the book asking how long God would allow evil to continue and then struggled with God’s answer that Babylon was coming. He now knows that difficult days still lie ahead, yet his confidence rests in the God whose character and saving acts he has remembered. Faith does not require him to pretend the coming trouble is small; it enables him to rejoice in God even when everything else is stripped away.</p>
+</div></div></article><article class="mtb-overview-card mtb-overview-card-sections"><h2 class="mtb-overview-card-header">Chapter Sections</h2><div class="mtb-overview-card-body"><h3 id="habakkuk-31-2---a-prayer-for-god-to-act-again">Habakkuk 3:1-2 - A Prayer for God to Act Again</h3>
+<div data-custom-style="Normal (Web)">
+<p>Habakkuk has heard what God has revealed and responds with reverence. He asks the LORD to revive His work <span data-custom-style="Strong">“in the midst of the years”</span> and, even as judgment comes, to <span data-custom-style="Strong">“remember mercy.”</span></p>
+</div>
+<h3 id="habakkuk-33-15---the-lord-comes-in-power-and-salvation">Habakkuk 3:3-15 - The LORD Comes in Power and Salvation</h3>
+<div data-custom-style="Normal (Web)">
+<p>Habakkuk poetically recalls the LORD appearing in overwhelming glory and power. Mountains tremble, waters respond, and creation itself seems shaken before Him. The emphasis is not power for its own sake: <span data-custom-style="Strong">“You went forth for the salvation of Your people.”</span> The God who acted mightily in the past remains the God upon whom Habakkuk can depend.</p>
+</div>
+<h3 id="habakkuk-316-19---rejoicing-in-god-when-everything-else-fails">Habakkuk 3:16-19 - Rejoicing in God When Everything Else Fails</h3>
+<div data-custom-style="Normal (Web)">
+<p>Habakkuk trembles as he anticipates the coming invasion and chooses to <span data-custom-style="Strong">“quietly wait for the day of trouble.”</span> He then describes the collapse of the agricultural world on which life depended-no figs, grapes, olives, grain, sheep, or cattle. Even then he declares, <span data-custom-style="Strong">“Yet I will rejoice in the LORD, I will joy in the God of my salvation.”</span> The LORD Himself is his strength.</p>
+</div></div></article><article class="mtb-overview-card mtb-overview-card-matters"><h2 class="mtb-overview-card-header">Why This Chapter Matters</h2><div class="mtb-overview-card-body"><div data-custom-style="Normal (Web)">
+<p>Habakkuk 3 shows where the prophet’s wrestling with God has brought him. He does not receive a promise that Judah will avoid the coming devastation. Instead, remembering who God is and what He has done gives him a foundation for facing what is coming. His final confidence is not that the fig tree will eventually blossom or the fields will quickly produce again, but that the LORD remains <span data-custom-style="Strong">“the God of my salvation”</span> and <span data-custom-style="Strong">“my strength.”</span></p>
+</div></div></article><article class="mtb-overview-card mtb-overview-card-themes"><h2 class="mtb-overview-card-header">Key Themes to Watch For</h2><div class="mtb-overview-card-body"><p>• <span data-custom-style="Strong">Prayer in response to God’s word</span> — Habakkuk responds to what God has revealed by turning to Him in prayer and asking Him to act again.</p>
+<p>• <span data-custom-style="Strong">Reverence before God</span> — Having heard what God will do, Habakkuk approaches Him with awe and a renewed awareness of His greatness.</p>
+<p>• <span data-custom-style="Strong">Mercy in the midst of judgment</span> — Habakkuk knows judgment is coming but asks God, <span data-custom-style="Strong">“In wrath remember mercy.”</span></p>
+<p>• <span data-custom-style="Strong">Remembering God’s mighty acts</span> — Habakkuk looks back to God’s powerful acts in Israel’s history as he prepares to face what lies ahead.</p>
+<p>• <span data-custom-style="Strong">God’s power over creation and nations</span> — Mountains, waters, and nations tremble before the LORD as He comes in majesty and power.</p>
+<p>• <span data-custom-style="Strong">God going forth to save His people</span> — God’s mighty intervention is not power without purpose; He goes forth <span data-custom-style="Strong">“for the salvation of Your people.”</span></p>
+<p>• <span data-custom-style="Strong">Waiting quietly in trouble</span> — Though Habakkuk physically trembles at the coming invasion, he chooses to wait quietly for the day of trouble.</p>
+<p>• <span data-custom-style="Strong">Rejoicing when earthly provision disappears</span> — Habakkuk determines to rejoice in the LORD even if the crops fail and the flocks and herds are gone.</p>
+<p>• <span data-custom-style="Strong">Finding strength in the LORD Himself</span> — Habakkuk’s final confidence rests not in restored circumstances but in his declaration, <span data-custom-style="Strong">“The LORD God is my strength.”</span></p></div></article><article class="mtb-overview-card mtb-overview-card-words"><h2 class="mtb-overview-card-header">Key Words &amp; Concepts</h2><div class="mtb-overview-card-body"><div data-custom-style="Normal (Web)">
+<p><span data-custom-style="Strong">Revive Your work</span> - Habakkuk asks God to make His work known and active in his own time. Having heard what God intends to do, his response is not merely to understand it but to pray.</p>
+</div>
+<div data-custom-style="Normal (Web)">
+<p><span data-custom-style="Strong">Remember mercy</span> - Habakkuk does not deny the justice of the coming judgment. He asks that even in wrath God would show mercy, bringing together two realities that have occupied him throughout the book.</p>
+</div>
+<div data-custom-style="Normal (Web)">
+<p><span data-custom-style="Strong">Teman and Mount Paran</span> - Locations south of Judah associated with the region from which God came when He revealed Himself to Israel. Their mention helps connect Habakkuk’s vision with God’s mighty acts in Israel’s past.</p>
+</div>
+<div data-custom-style="Normal (Web)">
+<p><span data-custom-style="Strong">The God of my salvation</span> - Habakkuk’s confidence becomes deeply personal. Salvation is not merely something God has done in history; Habakkuk knows the LORD as the God upon whom his own hope depends.</p>
+</div>
+<div data-custom-style="Normal (Web)">
+<p><span data-custom-style="Strong">“The LORD God is my strength”</span> - The final confession of the book. Habakkuk’s strength does not come from favorable circumstances or material security but from the LORD Himself.</p>
+</div>
+<h2 id="helpful-notes">Helpful Notes</h2>
+<div data-custom-style="Normal (Web)">
+<p>Habakkuk 3 is written as a prayer or psalm and includes musical notations such as <span data-custom-style="Strong">“Shigionoth,” “Selah,”</span> and the closing direction <span data-custom-style="Strong">“To the Chief Musician. With my stringed instruments.”</span> The precise meaning of <span data-custom-style="Emphasis">Shigionoth</span> is uncertain, but these features show that Habakkuk’s prayer was shaped for worship.</p>
+</div>
+<div data-custom-style="Normal (Web)">
+<p>The description of God in verses 3-15 draws heavily on the language and imagery of God’s earlier appearances and saving acts, particularly events associated with the exodus, Sinai, and Israel’s journey into the land. Habakkuk strengthens his faith for an uncertain future by remembering the God who has already shown Himself faithful and powerful in the past.</p>
+</div>
+<div data-custom-style="Normal (Web)">
+<p>Verses 17-19 are especially important because Habakkuk does not make his joy dependent upon circumstances improving. He names the losses plainly and then says <span data-custom-style="Strong">“Yet I will rejoice in the LORD.”</span> That is the destination of the book’s movement from questioning to waiting and finally to trusting God Himself.</p>
+</div></div></article></div></div>
+</section>

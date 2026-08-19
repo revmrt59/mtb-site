@@ -1,0 +1,229 @@
+<section class="mtb-doc mtb-doc--read" data-doc-type="book-overview">
+<style>
+.mtb-print-controls{display:flex;justify-content:flex-end;gap:8px;margin:0 0 14px;padding:0 4px}
+.mtb-print-button{appearance:none;border:1px solid #b9c8d5;border-radius:8px;background:#fff;padding:9px 14px;color:#173a5e;font:700 14px Arial,Helvetica,sans-serif;cursor:pointer}
+.mtb-print-button:hover{background:#f2f6f9}
+@media print{
+  @page{size:auto;margin:.45in}
+  html,body{background:#fff!important;color:#000!important}
+  .mtb-print-controls,.mtb-study-controls{display:none!important}
+  .mtb-doc{display:block!important;width:100%!important;max-width:none!important;margin:0!important;padding:0!important}
+  .mtb-overview-hero,.mtb-study-hero,.mtb-reflections-hero,.mtb-culture-hero{box-shadow:none!important;background:#fff!important;border-color:#777!important}
+  .mtb-overview-grid,.mtb-reflections-grid,.mtb-culture-grid,.mtb-study-verse-grid{display:block!important}
+  .mtb-overview-card,.mtb-reflections-card,.mtb-culture-card,.mtb-study-verse,.mtb-study-verse-panel,.mtb-intro-card{
+    display:block!important;width:100%!important;max-width:none!important;height:auto!important;margin:0 0 12pt!important;
+    break-inside:avoid;page-break-inside:avoid;box-shadow:none!important;background:#fff!important;color:#000!important
+  }
+  details.mtb-study-verse{display:block!important;overflow:visible!important}
+  details.mtb-study-verse>summary{display:flex!important;background:#fff!important;color:#000!important;border-bottom:1px solid #777!important}
+  details.mtb-study-verse>summary:after{display:none!important}
+  details.mtb-study-verse>.mtb-study-verse-body{display:block!important}
+  h1,h2,h3,h4{break-after:avoid;page-break-after:avoid;color:#000!important}
+  p,li{orphans:3;widows:3}
+  a{color:#000!important;text-decoration:none!important}
+  a[href]::after{content:none!important}
+}
+</style>
+<div class="mtb-print-controls"><button type="button" class="mtb-print-button" onclick="(function(button){var doc=button.closest('.mtb-doc')||document;var panels=Array.prototype.slice.call(doc.querySelectorAll('details'));panels.forEach(function(panel){panel.open=true;});window.print();})(this)">&#128438; Print This Page</button></div>
+<style>
+.book-modal-panel:has(.mtb-book-overview-dashboard) {
+  width: min(1600px, 96vw);
+  max-width: none;
+}
+.mtb-book-overview-dashboard {
+  --mtb-navy: #173a5e;
+  --mtb-navy-2: #274f76;
+  --mtb-gold: #b7832f;
+  --mtb-gold-soft: #fbf4e7;
+  --mtb-blue-soft: #eef4f9;
+  --mtb-border: #d7e0e8;
+  --mtb-text: #1d2935;
+  width: 100%;
+  max-width: 1560px;
+  margin: 0 auto;
+  padding: 2px 4px 28px;
+  color: var(--mtb-text);
+  font-family: Arial, Helvetica, sans-serif;
+}
+.mtb-book-overview-dashboard * { box-sizing: border-box; }
+.mtb-book-overview-dashboard .mtb-intro-hero {
+  position: relative;
+  overflow: hidden;
+  margin: 0 0 24px;
+  padding: 22px 28px;
+  border: 1px solid #cbd8e3;
+  border-radius: 14px;
+  background: linear-gradient(135deg, #f7fafc 0%, #e8f0f7 100%);
+}
+.mtb-book-overview-dashboard .mtb-intro-hero::after {
+  content: '';
+  position: absolute;
+  right: -48px;
+  top: -72px;
+  width: 210px;
+  height: 210px;
+  border-radius: 50%;
+  background: rgba(183, 131, 47, .10);
+}
+.mtb-book-overview-dashboard .mtb-intro-eyebrow {
+  position: relative; z-index: 1; margin: 0 0 5px;
+  color: var(--mtb-gold); font-size: .78rem; font-weight: 800;
+  letter-spacing: .13em; text-transform: uppercase;
+}
+.mtb-book-overview-dashboard .mtb-intro-title {
+  position: relative; z-index: 1; margin: 0; color: var(--mtb-navy);
+  font-size: clamp(1.85rem, 3vw, 2.6rem); line-height: 1.05;
+}
+.mtb-book-overview-dashboard .mtb-intro-subtitle {
+  position: relative; z-index: 1; margin: 6px 0 0;
+  color: #4e6477; font-size: 1rem; font-weight: 700;
+}
+.mtb-book-overview-dashboard .mtb-intro-section { margin: 0 0 25px; }
+.mtb-book-overview-dashboard .mtb-intro-section-heading {
+  display: flex; align-items: center; gap: 12px; margin: 0 0 12px;
+}
+.mtb-book-overview-dashboard .mtb-intro-section-heading h2 {
+  margin: 0; color: var(--mtb-navy); font-size: 1.08rem;
+  letter-spacing: .05em; text-transform: uppercase;
+}
+.mtb-book-overview-dashboard .mtb-intro-section-heading::after {
+  content: ''; height: 1px; flex: 1 1 auto;
+  background: linear-gradient(to right, #c7d3de, transparent);
+}
+.mtb-book-overview-dashboard .mtb-intro-grid {
+  display: grid;
+  grid-template-columns: repeat(12, minmax(0, 1fr));
+  gap: 16px;
+  align-items: stretch;
+  grid-auto-rows: auto;
+}
+/* Each implicit grid row grows to the height of its longest card. Every card
+   then stretches to that row height. No fixed or maximum height is used. */
+.mtb-book-overview-dashboard .mtb-intro-card {
+  grid-column: span 1;
+  min-width: 0;
+  min-height: 0;
+  height: 100%;
+  max-height: none !important;
+  overflow: visible !important;
+  display: flex;
+  flex-direction: column;
+  align-self: stretch;
+  border: 1px solid var(--mtb-border);
+  border-top: 4px solid var(--mtb-navy-2);
+  border-radius: 12px;
+  background: #fff;
+  box-shadow: 0 4px 15px rgba(28, 48, 66, .055);
+}
+.mtb-book-overview-dashboard .mtb-intro-card.mtb-span-4 { grid-column: span 4; }
+.mtb-book-overview-dashboard .mtb-intro-card.mtb-span-6 { grid-column: span 6; }
+.mtb-book-overview-dashboard .mtb-intro-card.mtb-span-12 { grid-column: span 12; }
+.mtb-book-overview-dashboard .mtb-intro-card-header {
+  margin: 0; padding: 12px 16px 10px; border-bottom: 1px solid #e5ebf0;
+  background: var(--mtb-blue-soft); color: var(--mtb-navy);
+  font-size: .92rem; font-weight: 800; letter-spacing: .025em;
+}
+.mtb-book-overview-dashboard .mtb-intro-card-body {
+  flex: 1 1 auto;
+  min-height: 0;
+  height: auto !important;
+  max-height: none !important;
+  overflow: visible !important;
+  padding: 15px 17px 17px;
+  font-size: 1rem;
+  line-height: 1.48;
+  overflow-wrap: anywhere;
+}
+.mtb-book-overview-dashboard .mtb-intro-card-body p { margin: 0 0 .8em; }
+.mtb-book-overview-dashboard .mtb-intro-card-body p:last-child { margin-bottom: 0; }
+.mtb-book-overview-dashboard .mtb-intro-card-body ul,
+.mtb-book-overview-dashboard .mtb-intro-card-body ol { margin: 0 0 .8em; padding-left: 1.35em; }
+.mtb-book-overview-dashboard .mtb-intro-card-body li { margin: 0 0 .45em; padding-left: .1em; }
+.mtb-book-overview-dashboard .mtb-intro-card-body h2 {
+  margin: 1.15em 0 .45em; color: var(--mtb-navy); font-size: 1.15rem;
+}
+.mtb-book-overview-dashboard .mtb-intro-card-body h2:first-child { margin-top: 0; }
+.mtb-book-overview-dashboard .mtb-intro-card-body h3 {
+  margin: 1em 0 .35em; color: var(--mtb-navy-2); font-size: 1.02rem;
+}
+.mtb-book-overview-dashboard .mtb-intro-card-body blockquote {
+  margin: .9em 0; padding: .65em 1em; border-left: 4px solid var(--mtb-gold);
+  background: var(--mtb-gold-soft); color: #45371f;
+}
+.mtb-book-overview-dashboard .mtb-resource-link {
+  color: #1f5fae; font-weight: 700; text-decoration-line: underline;
+  text-decoration-style: dotted; text-decoration-thickness: 2px;
+  text-underline-offset: 4px; cursor: pointer;
+}
+.mtb-book-overview-dashboard .mtb-resource-link::after {
+  content: " \2197"; display: inline-block; margin-left: 2px;
+  font-size: .78em; line-height: 1; opacity: .78;
+}
+@media (max-width: 1100px) {
+  .book-modal-panel:has(.mtb-book-overview-dashboard) { width: min(1100px, 94vw); }
+  .mtb-book-overview-dashboard .mtb-intro-grid { grid-template-columns: repeat(12, minmax(0, 1fr)); }
+  .mtb-book-overview-dashboard .mtb-intro-card,
+  .mtb-book-overview-dashboard .mtb-intro-card.mtb-span-4 { grid-column: span 6; }
+  .mtb-book-overview-dashboard .mtb-intro-card.mtb-span-6,
+  .mtb-book-overview-dashboard .mtb-intro-card.mtb-span-12 { grid-column: 1 / -1; }
+}
+@media (max-width: 660px) {
+  .book-modal-panel:has(.mtb-book-overview-dashboard) { width: 94vw; padding-left: 12px; padding-right: 12px; }
+  .mtb-book-overview-dashboard { padding-left: 0; padding-right: 0; }
+  .mtb-book-overview-dashboard .mtb-intro-hero { padding: 19px; border-radius: 10px; }
+  .mtb-book-overview-dashboard .mtb-intro-grid { grid-template-columns: 1fr; gap: 12px; }
+  .mtb-book-overview-dashboard .mtb-intro-card,
+  .mtb-book-overview-dashboard .mtb-intro-card.mtb-span-4,
+  .mtb-book-overview-dashboard .mtb-intro-card.mtb-span-6,
+  .mtb-book-overview-dashboard .mtb-intro-card.mtb-span-12 { grid-column: 1; }
+  .mtb-book-overview-dashboard .mtb-intro-card-body { padding: 14px 15px 16px; }
+}
+</style><div class="mtb-book-overview-dashboard"><header class="mtb-intro-hero"><p class="mtb-intro-eyebrow">Mastering the Bible</p><h1 class="mtb-intro-title">Philemon</h1><p class="mtb-intro-subtitle">Philemon - Book Overview</p></header><section class="mtb-intro-section"><div class="mtb-intro-section-heading"><h2>Background</h2></div><div class="mtb-intro-grid"><article class="mtb-intro-card mtb-span-4"><h3 class="mtb-intro-card-header">Author</h3><div class="mtb-intro-card-body"><p>Paul the Apostle, with Timothy included in the opening greeting. Paul writes from prison and makes the appeal deeply personal, even promising in his own handwriting to repay anything Onesimus owes Philemon.</p></div></article><article class="mtb-intro-card mtb-span-4"><h3 class="mtb-intro-card-header">Audience</h3><div class="mtb-intro-card-body"><p>Primarily Philemon, a Christian believer and fellow worker whose home served as a gathering place for a church. Paul also addresses Apphia, Archippus, and the church meeting in Philemon’s house.</p></div></article><article class="mtb-intro-card mtb-span-4"><h3 class="mtb-intro-card-header">Date</h3><div class="mtb-intro-card-body"><p>Likely around AD 60-62, during Paul’s imprisonment in Rome.</p></div></article><article class="mtb-intro-card mtb-span-6"><h3 class="mtb-intro-card-header">Historical Setting</h3><div class="mtb-intro-card-body"><p>Philemon was a Christian and a man of means whose home was large enough for a church to meet there. Onesimus was one of his slaves who had run away and apparently had wronged Philemon or left owing him something. Somehow Onesimus made his way to Rome, where he encountered the imprisoned Paul and became a believer through his ministry.</p>
+<p>Onesimus became deeply precious and useful to Paul. Paul would gladly have kept him nearby, but he knew the broken relationship with Philemon needed to be faced. He therefore sent Onesimus home, describing the act as sending <strong>“my own heart.”</strong> Onesimus was returning to the same household he had left, but he was returning as a changed man and a brother in Christ.</p></div></article><article class="mtb-intro-card mtb-span-6"><h3 class="mtb-intro-card-header">Occasion</h3><div class="mtb-intro-card-body"><p>Paul writes to ask Philemon to forgive and receive Onesimus. He does not simply ask him to take back a runaway slave. He asks him to receive Onesimus <strong>“no longer as a slave but more than a slave-a beloved brother.”</strong></p>
+<p>Paul also addresses whatever debt or wrong may stand between them. <strong>“If he has wronged you or owes anything,”</strong> Paul says, <strong>“put that on my account.”</strong> He places his own relationship with Philemon behind Onesimus and asks, <strong>“receive him as you would me.”</strong></p></div></article></div></section><section class="mtb-intro-section"><div class="mtb-intro-section-heading"><h2>Understanding the Book</h2></div><div class="mtb-intro-grid"><article class="mtb-intro-card mtb-span-6"><h3 class="mtb-intro-card-header">What This Book Is About</h3><div class="mtb-intro-card-body"><p>Philemon is the story of a runaway slave coming home, with another man standing between him and the master he has wronged. In that story is a beautiful picture of the gospel.</p>
+<p>Onesimus had run away from his master, Philemon, and apparently had wronged him or left owing him something. While away, however, he encountered Paul, came to Christ, and became so dear to Paul that the apostle calls him <strong>“my son”</strong> and <strong>“my own heart.”</strong></p>
+<p>Now the runaway must go home. Onesimus cannot undo what he has done or simply erase whatever debt remains. But he does not return alone. Paul stands for him. He sends Onesimus back with his own appeal and tells Philemon, <strong>“receive him as you would me.”</strong> Then Paul goes even further: <strong>“If he has wronged you or owes anything, put that on my account.”</strong></p>
+<p>There is a beautiful picture of Christ here. Onesimus stands where we stood-estranged, guilty, and owing a debt. Philemon is the one against whom the wrong has been committed. Paul steps between them, identifies himself with Onesimus, assumes his debt, and asks that Onesimus be received on the basis of Paul’s own standing.</p>
+<p>Jesus has done infinitely more for us. We had sinned against God and could not repair what our sin had broken. Christ came between, identified Himself with us, bore our sin Himself, and became the reason we can be received by God.</p>
+<p>Onesimus does not merely come home with his debt addressed. He comes home with a new identity: <strong>“no longer as a slave but more than a slave-a beloved brother.”</strong> The gospel does not merely settle our account; through Christ, it reconciles us to God and brings us home with a new standing and a new relationship</p>
+<p><strong>Central Message</strong></p>
+<p>The grace of Christ changes people, and it changes how believers relate to one another. Onesimus is no longer merely the man who ran away or the slave who may owe a debt. He has become a brother in Christ. Paul therefore calls Philemon to let the grace he himself has received shape the way he receives Onesimus.</p>
+<p>At the center of the letter stands Paul’s willingness to identify himself with Onesimus: <strong>“receive him as you would me”</strong> and <strong>“put that on my account.”</strong> Those words give us a beautiful human picture of what Jesus has done for us. Christ took what belonged to us and gave us a standing we could never have gained for ourselves.</p></div></article><article class="mtb-intro-card mtb-span-6"><h3 class="mtb-intro-card-header">Why This Book Matters</h3><div class="mtb-intro-card-body"><p>Philemon brings the gospel into a difficult real-life relationship. There has been wrong, separation, possible financial loss, and a painful history. Paul does not pretend those things never happened. But something greater has now happened: Onesimus has come to Christ.</p>
+<p>That means Philemon cannot see Onesimus only through the lens of what he did before. The man returning to him is Paul’s spiritual son, useful in ministry, deeply loved, and now <strong>“a beloved brother.”</strong> His past is real, but grace has written something new into his life.</p>
+<p>The same grace has also been at work in Philemon. Paul reminds him of his love and of how he has refreshed the hearts of other believers. Now that grace is being tested in a much more personal way. Will he extend to Onesimus the kind of grace he himself has received?</p></div></article><article class="mtb-intro-card mtb-span-6"><h3 class="mtb-intro-card-header">Key Themes to Watch For</h3><div class="mtb-intro-card-body"><ul>
+<li><p><strong>Grace and reconciliation</strong> - Paul seeks the restoration of a broken relationship and asks Philemon to receive Onesimus in light of the grace that has changed him.</p></li>
+<li><p><strong>Forgiveness</strong> - Whatever wrong or debt stands between Philemon and Onesimus must now be faced in a relationship transformed by Christ.</p></li>
+<li><p><strong>A new identity in Christ</strong> - Onesimus returns with a real past, but he also returns as a changed man and <strong>“a beloved brother.”</strong></p></li>
+<li><p><strong>Receiving one another as brothers</strong> - Paul asks Philemon to see Onesimus as more than a returning slave; they now share a new relationship in the Lord.</p></li>
+<li><p><strong>Love rather than compulsion</strong> - Although Paul could command Philemon, he appeals <strong>“for love’s sake,”</strong> wanting his response to be willing rather than forced.</p></li>
+<li><p><strong>Paul standing for Onesimus</strong> - Paul places himself alongside Onesimus, speaks on his behalf, and uses his own relationship with Philemon to help bring reconciliation.</p></li>
+<li><p><strong>“Receive him as you would me”</strong> - Paul asks Philemon to receive Onesimus on the basis of Paul’s own standing and relationship with him.</p></li>
+<li><p><strong>“Put that on my account”</strong> - Paul willingly assumes responsibility for whatever Onesimus owes, offering to repay the debt himself.</p></li>
+<li><p><strong>Grace changing human relationships</strong> - The grace believers receive in Christ is meant to reshape how they see, forgive, receive, and relate to one another.</p></li>
+</ul></div></article><article class="mtb-intro-card mtb-span-6"><h3 class="mtb-intro-card-header">Key Concepts to Understand Before Reading</h3><div class="mtb-intro-card-body"><p><strong>Onesimus was a runaway slave.</strong> Understanding this gives the letter much of its weight. He is returning to the master he left, facing whatever consequences might await him. Paul sends him back with an appeal that Philemon receive him not merely according to the old relationship but as a brother in Christ.</p>
+<p><strong>Onesimus has genuinely changed.</strong> Paul calls him his son, says that he has become useful, and describes sending him as sending <strong>“my own heart.”</strong> This is not simply Paul asking Philemon to overlook bad behavior. He is asking Philemon to recognize the work Christ has done in Onesimus.</p>
+<p><strong>Paul does not force Philemon’s response.</strong> Although he has authority to command what is fitting, Paul appeals <strong>“for love’s sake.”</strong> He wants Philemon’s goodness to be voluntary rather than compelled.</p>
+<p><strong>Paul takes the debt seriously.</strong> Whatever Onesimus may owe is not simply dismissed. Paul personally says, <strong>“put that on my account”</strong> and <strong>“I will repay.”</strong></p>
+<p><strong>The letter should also be read alongside Colossians.</strong> Colossians 4:9 calls Onesimus <strong>“a faithful and beloved brother.”</strong> The runaway slave has become a trusted member of the believing community.</p></div></article><article class="mtb-intro-card mtb-span-6"><h3 class="mtb-intro-card-header">Book Flow</h3><div class="mtb-intro-card-body"><ul>
+<li><p><strong>Verses 1-3 - Greeting:</strong> Paul addresses Philemon, Apphia, Archippus, and the church in Philemon’s house and extends grace and peace to them.</p></li>
+<li><p><strong>Verses 4-7 - Philemon’s Faith and Love:</strong> Paul thanks God for Philemon’s faith and love and remembers how he has refreshed the hearts of the saints.</p></li>
+<li><p><strong>Verses 8-14 - Paul Appeals for Onesimus:</strong> Paul could command Philemon, but instead appeals <strong>“for love’s sake.”</strong> Onesimus has become Paul’s spiritual son and has gone from being unprofitable to profitable.</p></li>
+<li><p><strong>Verses 15-16 - More Than a Slave:</strong> Paul suggests that the separation may result in Philemon receiving Onesimus back forever, <strong>“no longer as a slave but more than a slave-a beloved brother.”</strong></p></li>
+<li><p><strong>Verses 17-19 - Put That on My Account:</strong> Paul asks Philemon to receive Onesimus as he would receive Paul. Whatever Onesimus owes is to be charged to Paul.</p></li>
+<li><p><strong>Verses 20-21 - Paul’s Confidence in Philemon:</strong> Paul trusts Philemon to respond rightly and believes he will do even more than Paul has requested.</p></li>
+<li><p><strong>Verses 22-25 - Final Requests and Greetings:</strong> Paul hopes to visit Philemon after his release, sends greetings from his fellow workers, and closes with the grace of Jesus Christ.</p></li>
+</ul></div></article><article class="mtb-intro-card mtb-span-6"><h3 class="mtb-intro-card-header">Christ and Life</h3><div class="mtb-intro-card-body"><p>There is a beautiful picture of Christ in the way Paul stands with Onesimus.</p>
+<p><strong>“Receive him as you would me.”</strong> Onesimus comes before Philemon with Paul standing for him. He is asking to be received on the basis of another person’s relationship and standing. In a far greater way, we are received by God because we are in Christ. Our acceptance rests not upon making ourselves worthy but upon Jesus.</p>
+<p>Then Paul says, <strong>“If he has wronged you or owes anything, put that on my account.”</strong> Onesimus has a debt he cannot simply wish away, and Paul willingly places himself between Onesimus and what he owes. Jesus has done infinitely more for us. Our sin was truly ours, but He <strong>“bore our sins in His own body on the tree”</strong> (1 Peter 2:24).</p>
+<p>But Onesimus is not merely having a debt paid. He is being brought home with a new standing: <strong>“a beloved brother.”</strong> Christ does more than forgive our sins. He reconciles us to God, brings us near, and gives us a place in His family.</p>
+<p>Philemon must now live out the grace he has received. The person standing before him has genuinely wronged him, but that person has also genuinely been changed by Christ. Grace does not call evil good or pretend the past never happened. It makes reconciliation possible and teaches us to see people in light of what Christ is doing in their lives.</p></div></article></div></section><section class="mtb-intro-section"><div class="mtb-intro-section-heading"><h2>Reading Guide</h2></div><div class="mtb-intro-grid"><article class="mtb-intro-card mtb-span-6"><h3 class="mtb-intro-card-header">One-Sentence Summary</h3><div class="mtb-intro-card-body"><p>Philemon shows a runaway slave returning home as a beloved brother, with Paul standing for him and assuming his debt, giving us a beautiful picture of Christ’s grace and the reconciliation that grace produces.</p></div></article><article class="mtb-intro-card mtb-span-6"><h3 class="mtb-intro-card-header">Read This Book Remembering...</h3><div class="mtb-intro-card-body"><p>Watch Onesimus come home. He left as a runaway slave, but he returns as Paul’s spiritual son and <strong>“a beloved brother.”</strong> His past has not disappeared, but Christ has changed who he is.</p>
+<p>And watch what Paul does for him. Paul loves him, stands with him, speaks on his behalf, asks that he be received as Paul himself would be received, and offers to take his debt upon himself. Those simple actions open a beautiful window into the gospel and into the grace Christ calls us to extend to one another.</p></div></article></div></section><section class="mtb-intro-section"><div class="mtb-intro-section-heading"><h2>Helpful Notes</h2></div><div class="mtb-intro-grid"><article class="mtb-intro-card mtb-span-12"><div class="mtb-intro-card-body"><ul>
+<li><p>Philemon is one of Paul’s shortest letters, containing only 25 verses, but an entire story of grace, forgiveness, and reconciliation lies behind those few verses.</p></li>
+<li><p>Paul wrote from prison, probably in Rome, where Onesimus had encountered him and become a believer.</p></li>
+<li><p>Philemon appears to have been a man of means, and a church met in his home. Paul speaks warmly of his love, faith, generosity, and history of refreshing other believers.</p></li>
+<li><p>Apphia may have been Philemon’s wife and Archippus may have been part of his household, though their precise relationships are not stated.</p></li>
+<li><p>Onesimus’s name carried the idea of being useful or beneficial. Paul makes a deliberate wordplay when he describes the man who was once <strong>“unprofitable”</strong> as now <strong>“profitable”</strong> to both Philemon and himself.</p></li>
+<li><p>Paul says he knows Philemon will <strong>“do even more than I say.”</strong> This may suggest that Paul hoped Philemon would free Onesimus or perhaps allow him to return to Paul, although Paul does not tell us specifically what he expects.</p></li>
+<li><p>Pay attention to the relational words throughout the letter: beloved friend, fellow laborer, brother, son, <strong>“my own heart,” “a beloved brother,”</strong> and partner. Onesimus’s position in the household matters, but Paul keeps bringing Philemon back to the deeper relationship they now share in Christ.</p></li>
+</ul></div></article></div></section></div>
+</section>

@@ -2557,78 +2557,162 @@ body.mtb-verse-explain-open {
   }
 
 }
+
 /* =========================================================
-   MOBILE — POPUPS + NAV CLEANUP
+   MOBILE — FINAL POPUP + NAV FIX
+   MUST BE LAST IN mtb-ui-overrides.css
    ========================================================= */
-@media (max-width: 700px) {
 
-  .book-modal {
-    position: fixed !important;
-    inset: 0 !important;
-    align-items: center !important;
-    justify-content: center !important;
-    padding: 10px !important;
-    margin: 0 !important;
-    overflow: hidden !important;
-  }
+@media screen and (max-width: 700px) {
 
-  .book-modal:not(.hidden) {
-    display: flex !important;
-  }
+  /* =======================================================
+     HIDE ALL PREVIOUS / NEXT NAVIGATION ARROWS ON PHONE
+     ======================================================= */
 
-  .book-modal.hidden {
-    display: none !important;
-  }
-
-  .book-modal-panel {
-    position: relative !important;
-
-    width: calc(100vw - 20px) !important;
-    max-width: calc(100vw - 20px) !important;
-
-    height: auto !important;
-    max-height: calc(100dvh - 20px) !important;
-
-    margin: 0 !important;
-    padding: 14px !important;
-
-    overflow-x: hidden !important;
-    overflow-y: auto !important;
-
-    box-sizing: border-box !important;
-    transform: none !important;
-
-    -webkit-overflow-scrolling: touch;
-  }
-
-  .book-modal-panel,
-  .book-modal-panel *,
-  .mtb-book-overview-dashboard,
-  .mtb-book-overview-dashboard * {
-    max-width: 100% !important;
-    box-sizing: border-box !important;
-  }
-
-  #book-modal-close,
-  .book-modal-close {
-    position: sticky !important;
-    top: 0 !important;
-    z-index: 200 !important;
-  }
-
-  .mtb-print-controls,
-  .mtb-print-button {
-    display: none !important;
-  }
-
+  body[data-book][data-chapter] #tabs .chapter-nav,
+  body[data-book][data-chapter] #tabs #chapter-prev,
+  body[data-book][data-chapter] #tabs #chapter-next,
+  body[data-book][data-chapter] #tabs .chapter-nav-btn,
   #book-nav,
   #book-prev,
   #book-next {
     display: none !important;
   }
 
-  body[data-doc-type="chapter-scripture"] .chapter-nav,
-  body[data-doc-type="chapter-scripture"] .chapter-nav-btn {
+  /* Remove the space previously reserved for chapter arrows */
+  body[data-book][data-chapter] #tabs {
+    padding-right: 0 !important;
+  }
+
+
+  /* =======================================================
+     BOOK OVERVIEW / BOOK POPUPS
+     ======================================================= */
+
+  #book-modal.book-modal {
+    position: fixed !important;
+    inset: 0 !important;
+
+    width: 100vw !important;
+    height: 100dvh !important;
+
+    margin: 0 !important;
+    padding: 12px !important;
+
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+
+    overflow: hidden !important;
+
+    box-sizing: border-box !important;
+  }
+
+  #book-modal.book-modal.hidden {
+    display: none !important;
+  }
+
+  #book-modal .book-modal-backdrop {
+    position: absolute !important;
+    inset: 0 !important;
+  }
+
+  #book-modal .book-modal-panel,
+  #book-modal .book-modal-panel:has(.mtb-book-overview-dashboard) {
+    position: relative !important;
+
+    width: calc(100vw - 24px) !important;
+    max-width: calc(100vw - 24px) !important;
+
+    height: auto !important;
+    max-height: calc(100dvh - 24px) !important;
+
+    margin: 0 !important;
+    padding: 12px !important;
+
+    overflow-x: hidden !important;
+    overflow-y: auto !important;
+
+    border-radius: 10px !important;
+    box-sizing: border-box !important;
+
+    transform: none !important;
+
+    -webkit-overflow-scrolling: touch;
+  }
+
+
+  /* =======================================================
+     FORCE EVERYTHING INSIDE POPUP TO SHRINK TO PHONE WIDTH
+     ======================================================= */
+
+  #book-modal .book-modal-content,
+  #book-modal .mtb-doc,
+  #book-modal .mtb-book-overview-dashboard,
+  #book-modal .mtb-intro-section,
+  #book-modal .mtb-intro-grid,
+  #book-modal .mtb-intro-card,
+  #book-modal .mtb-intro-card-body {
+    width: 100% !important;
+    max-width: 100% !important;
+    min-width: 0 !important;
+
+    margin-left: 0 !important;
+    margin-right: 0 !important;
+
+    box-sizing: border-box !important;
+  }
+
+  /* One card per row on phone */
+  #book-modal .mtb-book-overview-dashboard .mtb-intro-grid {
+    display: grid !important;
+    grid-template-columns: minmax(0, 1fr) !important;
+  }
+
+  #book-modal .mtb-book-overview-dashboard .mtb-intro-card,
+  #book-modal .mtb-book-overview-dashboard .mtb-intro-card.mtb-span-4,
+  #book-modal .mtb-book-overview-dashboard .mtb-intro-card.mtb-span-6,
+  #book-modal .mtb-book-overview-dashboard .mtb-intro-card.mtb-span-12 {
+    grid-column: 1 !important;
+  }
+
+  /* Prevent long text from making modal wider */
+  #book-modal p,
+  #book-modal li,
+  #book-modal h1,
+  #book-modal h2,
+  #book-modal h3,
+  #book-modal a {
+    max-width: 100% !important;
+    overflow-wrap: anywhere !important;
+    word-break: normal !important;
+  }
+
+
+  /* =======================================================
+     CLOSE BUTTON — ALWAYS VISIBLE
+     ======================================================= */
+
+  #book-modal #book-modal-close {
+    position: sticky !important;
+    top: 0 !important;
+    right: 0 !important;
+    float: right !important;
+
+    z-index: 999 !important;
+
+    margin: 0 0 8px 8px !important;
+  }
+
+
+  /* =======================================================
+     HIDE PRINT ON PHONE
+     ======================================================= */
+
+  #book-modal .mtb-print-controls,
+  #book-modal .mtb-print-button,
+  .mtb-print-controls,
+  .mtb-print-button {
     display: none !important;
   }
 

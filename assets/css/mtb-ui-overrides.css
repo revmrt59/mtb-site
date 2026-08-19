@@ -2546,3 +2546,14 @@ body.mtb-verse-explain-open {
     height: auto !important;
   }
 }
+/* =========================================================
+   MOBILE — Hide previous/next book navigation arrows
+   ========================================================= */
+@media (max-width: 700px) {
+
+  #book-prev,
+  #book-next {
+    display: none !important;
+  }
+
+}

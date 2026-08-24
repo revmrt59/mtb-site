@@ -1,0 +1,91 @@
+<section class="mtb-doc mtb-doc--read" data-doc-type="chapter-overview">
+<style>
+.mtb-print-controls{display:flex;justify-content:flex-end;gap:8px;margin:0 0 14px;padding:0 4px}
+.mtb-print-button{appearance:none;border:1px solid #b9c8d5;border-radius:8px;background:#fff;padding:9px 14px;color:#173a5e;font:700 14px Arial,Helvetica,sans-serif;cursor:pointer}
+.mtb-print-button:hover{background:#f2f6f9}
+@media print{
+  @page{size:auto;margin:.45in}
+  html,body{background:#fff!important;color:#000!important}
+  .mtb-print-controls,.mtb-study-controls{display:none!important}
+  .mtb-doc{display:block!important;width:100%!important;max-width:none!important;margin:0!important;padding:0!important}
+  .mtb-overview-hero,.mtb-study-hero,.mtb-reflections-hero,.mtb-culture-hero{box-shadow:none!important;background:#fff!important;border-color:#777!important}
+  .mtb-overview-grid,.mtb-reflections-grid,.mtb-culture-grid,.mtb-study-verse-grid{display:block!important}
+  .mtb-overview-card,.mtb-reflections-card,.mtb-culture-card,.mtb-study-verse,.mtb-study-verse-panel,.mtb-intro-card{
+    display:block!important;width:100%!important;max-width:none!important;height:auto!important;margin:0 0 12pt!important;
+    break-inside:avoid;page-break-inside:avoid;box-shadow:none!important;background:#fff!important;color:#000!important
+  }
+  details.mtb-study-verse{display:block!important;overflow:visible!important}
+  details.mtb-study-verse>summary{display:flex!important;background:#fff!important;color:#000!important;border-bottom:1px solid #777!important}
+  details.mtb-study-verse>summary:after{display:none!important}
+  details.mtb-study-verse>.mtb-study-verse-body{display:block!important}
+  h1,h2,h3,h4{break-after:avoid;page-break-after:avoid;color:#000!important}
+  p,li{orphans:3;widows:3}
+  a{color:#000!important;text-decoration:none!important}
+  a[href]::after{content:none!important}
+}
+</style>
+<div class="mtb-print-controls"><button type="button" class="mtb-print-button" onclick="(function(button){var doc=button.closest('.mtb-doc')||document;var panels=Array.prototype.slice.call(doc.querySelectorAll('details'));panels.forEach(function(panel){panel.open=true;});window.print();})(this)">&#128438; Print This Page</button></div>
+<style>
+.mtb-chapter-overview-dashboard{--mtb-navy:#173a5e;--mtb-navy-2:#2b587f;--mtb-gold:#b7832f;--mtb-blue-soft:#eef4f9;--mtb-border:#d7e0e8;--mtb-text:#1d2935;width:100%;max-width:1600px;margin:0 auto;padding:2px 4px 30px;color:var(--mtb-text);font-family:Arial,Helvetica,sans-serif}.mtb-chapter-overview-dashboard *{box-sizing:border-box}.mtb-overview-hero{display:flex;align-items:center;justify-content:space-between;gap:20px;margin:0 0 22px;padding:22px 26px;border:1px solid #cbd8e3;border-radius:14px;background:linear-gradient(135deg,#f7fafc 0%,#e8f0f7 100%)}.mtb-overview-eyebrow{margin:0 0 5px;color:var(--mtb-gold);font-size:.78rem;font-weight:800;letter-spacing:.13em;text-transform:uppercase}.mtb-overview-title{margin:0;color:var(--mtb-navy);font-size:clamp(1.55rem,3vw,2.25rem);line-height:1.1}.mtb-overview-badge{flex:0 0 auto;padding:10px 16px;border:1px solid rgba(23,58,94,.18);border-radius:999px;background:#fff;color:var(--mtb-navy);font-weight:800}.mtb-overview-grid{display:grid;grid-template-columns:repeat(12,minmax(0,1fr));gap:16px;align-items:stretch}.mtb-overview-card{min-width:0;overflow:hidden;border:1px solid var(--mtb-border);border-top:4px solid var(--mtb-navy-2);border-radius:12px;background:#fff;box-shadow:0 4px 15px rgba(28,48,66,.055)}.mtb-overview-card-central{grid-column:1/span 4;grid-row:1}.mtb-overview-card-about{grid-column:5/span 4;grid-row:1}.mtb-overview-card-heart{grid-column:9/span 4;grid-row:1}.mtb-overview-card-sections{grid-column:1/span 6;grid-row:2}.mtb-overview-card-matters{grid-column:7/span 6;grid-row:2}.mtb-overview-card-themes{grid-column:1/span 6;grid-row:3}.mtb-overview-card-words{grid-column:7/span 6;grid-row:3}.mtb-psalms-overview .mtb-overview-card-psalm-author{grid-column:1/span 4;grid-row:1}.mtb-psalms-overview .mtb-overview-card-psalm-occasion{grid-column:5/span 4;grid-row:1}.mtb-psalms-overview .mtb-overview-card-psalm-kind{grid-column:9/span 4;grid-row:1}.mtb-psalms-overview .mtb-overview-card-central{grid-column:1/span 4;grid-row:2}.mtb-psalms-overview .mtb-overview-card-about{grid-column:5/span 4;grid-row:2}.mtb-psalms-overview .mtb-overview-card-heart{grid-column:9/span 4;grid-row:2}.mtb-psalms-overview .mtb-overview-card-sections{grid-column:1/span 6;grid-row:3}.mtb-psalms-overview .mtb-overview-card-matters{grid-column:7/span 6;grid-row:3}.mtb-psalms-overview .mtb-overview-card-themes{grid-column:1/span 6;grid-row:4}.mtb-psalms-overview .mtb-overview-card-words{grid-column:7/span 6;grid-row:4}.mtb-overview-card-header{margin:0;padding:12px 16px 10px;border-bottom:1px solid #e5ebf0;background:var(--mtb-blue-soft);color:var(--mtb-navy);font-size:.96rem;font-weight:800}.mtb-overview-card-body{padding:16px 18px 18px;font-size:1rem;line-height:1.48;overflow-wrap:anywhere}.mtb-overview-card-central .mtb-overview-card-body,.mtb-overview-card-heart .mtb-overview-card-body{font-size:1.06rem}.mtb-overview-card-body p{margin:0 0 .72em}.mtb-overview-card-body p:last-child{margin-bottom:0}.mtb-overview-card-body ul,.mtb-overview-card-body ol{margin:0;padding-left:1.25em}.mtb-overview-card-body li{margin:0 0 .35em}@media(max-width:980px){.mtb-overview-card{grid-column:span 6!important;grid-row:auto!important}}@media(max-width:760px){.mtb-overview-grid{grid-template-columns:1fr}.mtb-overview-card{grid-column:1/-1!important}.mtb-overview-hero{align-items:flex-start;flex-direction:column;padding:19px}}
+</style><div class="mtb-chapter-overview-dashboard"><header class="mtb-overview-hero"><div><p class="mtb-overview-eyebrow">Morning Chapter Explanation</p><h1 class="mtb-overview-title">3 John Chapter 1</h1></div><div class="mtb-overview-badge">Chapter 1</div></header><div class="mtb-overview-grid"><article class="mtb-overview-card mtb-overview-card-central"><h2 class="mtb-overview-card-header">Central Message</h2><div class="mtb-overview-card-body"><div data-custom-style="Normal (Web)">
+<p>John commends Gaius for faithfully walking in the truth and showing generous hospitality to fellow believers, while confronting the pride and controlling behavior of Diotrephes. The letter shows that truth is not merely something Christians believe; it is something they walk in, and that walk becomes visible in love, hospitality, faithfulness, and the way believers treat one another.</p>
+</div></div></article><article class="mtb-overview-card mtb-overview-card-about"><h2 class="mtb-overview-card-header">What This Chapter Is About</h2><div class="mtb-overview-card-body"><div data-custom-style="Normal (Web)">
+<p>John writes warmly to Gaius, rejoicing over reports that he is walking in the truth and faithfully caring for traveling believers. He encourages Gaius to continue supporting those who have gone out <strong>“for His name’s sake.”</strong> In sharp contrast, Diotrephes loves to have the preeminence, rejects John’s authority, speaks maliciously, refuses to receive the brethren, and interferes with those who want to receive them. John then points to Demetrius as a man with a good testimony and closes with the hope of speaking with Gaius face to face.</p>
+</div></div></article><article class="mtb-overview-card mtb-overview-card-heart"><h2 class="mtb-overview-card-header">The Heart of the Chapter</h2><div class="mtb-overview-card-body"><div data-custom-style="Normal (Web)">
+<p>The heart of 3 John is the connection between truth and conduct. Gaius walks in the truth, and his life demonstrates it through faithful love and generous support of others who are serving Christ. Diotrephes provides the opposite picture: his desire for prominence produces rejection, harmful words, and controlling behavior. John makes the distinction plain: <strong>“He who does good is of God, but he who does evil has not seen God.”</strong></p>
+</div></div></article><article class="mtb-overview-card mtb-overview-card-sections"><h2 class="mtb-overview-card-header">Chapter Sections</h2><div class="mtb-overview-card-body"><h3 id="john-11-4---gaius-walking-in-the-truth">3 John 1:1-4 - Gaius Walking in the Truth</h3>
+<div data-custom-style="Normal (Web)">
+<p>John expresses his love for Gaius and his joy over the testimony he has heard about him. His greatest joy is <strong>“to hear that my children walk in truth.”</strong> Gaius’s life agrees with the truth he professes.</p>
+</div>
+<h3 id="john-15-8---faithfully-supporting-those-who-go-forth-for-his-name">3 John 1:5-8 - Faithfully Supporting Those Who Go Forth for His Name</h3>
+<div data-custom-style="Normal (Web)">
+<p>Gaius has shown hospitality to traveling believers, including those personally unknown to him. John encourages him to continue sending such workers forward <strong>“in a manner worthy of God.”</strong> Because they have gone out for Christ’s name and do not depend upon unbelievers for support, Christians who help them become <strong>“fellow workers for the truth.”</strong></p>
+</div>
+<h3 id="john-19-12---diotrephes-and-demetrius-two-contrasting-examples">3 John 1:9-12 - Diotrephes and Demetrius: Two Contrasting Examples</h3>
+<div data-custom-style="Normal (Web)">
+<p>Diotrephes <strong>“loves to have the preeminence.”</strong> His desire for position is seen in his rejection of John, malicious words, refusal to receive fellow believers, and efforts to prevent others from doing so. John tells Gaius not to imitate evil but good, then presents Demetrius as a man whose good testimony is widely recognized.</p>
+</div>
+<h3 id="john-113-14---face-to-face-fellowship">3 John 1:13-14 - Face to Face Fellowship</h3>
+<div data-custom-style="Normal (Web)">
+<p>John has more to communicate but prefers not to do it with pen and ink. He hopes to see Gaius personally so they can <strong>“speak face to face,”</strong> and he ends with peace and greetings among friends.</p>
+</div></div></article><article class="mtb-overview-card mtb-overview-card-matters"><h2 class="mtb-overview-card-header">Why This Chapter Matters</h2><div class="mtb-overview-card-body"><div data-custom-style="Normal (Web)">
+<p>3 John shows that spiritual health becomes visible in ordinary relationships and choices. Gaius demonstrates truth through faithful service and generosity, while Diotrephes exposes the danger of making position and personal importance more valuable than the good of God’s people. The letter also shows that supporting faithful servants of Christ is genuine participation in their work: those who help them go forward become <strong>“fellow workers for the truth.”</strong></p>
+</div></div></article><article class="mtb-overview-card mtb-overview-card-themes"><h2 class="mtb-overview-card-header">Key Themes to Watch For</h2><div class="mtb-overview-card-body"><ul>
+<li><p>Walking in the truth</p></li>
+<li><p>Truth expressed through conduct</p></li>
+<li><p>Faithful hospitality</p></li>
+<li><p>Supporting those who serve Christ</p></li>
+<li><p>Fellow workers for the truth</p></li>
+<li><p>The danger of loving preeminence</p></li>
+<li><p>Spiritual authority and accountability</p></li>
+<li><p>Imitating good rather than evil</p></li>
+<li><p>A good testimony</p></li>
+</ul></div></article><article class="mtb-overview-card mtb-overview-card-words"><h2 class="mtb-overview-card-header">Key Words &amp; Concepts</h2><div class="mtb-overview-card-body"><div data-custom-style="Normal (Web)">
+<p><strong>Walking in truth</strong> - Living in a way that agrees with the truth of God. John’s joy comes not merely from knowing that Gaius believes the truth but from hearing that he consistently walks in it.</p>
+</div>
+<div data-custom-style="Normal (Web)">
+<p><strong>Hospitality</strong> - Gaius receives and assists traveling believers, even though some are strangers to him. In a setting where Christian workers depended heavily upon the hospitality of other believers, this was an important expression of partnership and love.</p>
+</div>
+<div data-custom-style="Normal (Web)">
+<p><strong>“For His name’s sake”</strong> - These believers have gone out in service to Christ. His name-who He is and the cause that belongs to Him-is the reason for their work and sacrifice.</p>
+</div>
+<div data-custom-style="Normal (Web)">
+<p><strong>Fellow workers for the truth</strong> - Those who support faithful Christian workers share meaningfully in their service. Gaius may not travel with them, but his hospitality and provision make him a participant in their work.</p>
+</div>
+<div data-custom-style="Normal (Web)">
+<p><strong>Preeminence</strong> - Diotrephes loves being first or holding the place of prominence. John shows that this is more than an inward attitude; it produces controlling and destructive behavior toward others.</p>
+</div>
+<div data-custom-style="Normal (Web)">
+<p><strong>Good testimony</strong> - Demetrius is commended not simply by John but <strong>“by all, and by the truth itself.”</strong> His life has established a reputation consistent with the truth he professes.</p>
+</div>
+<h2 id="helpful-notes">Helpful Notes</h2>
+<div data-custom-style="Normal (Web)">
+<p>Hospitality in 3 John involves more than inviting someone into a home for a meal. Traveling Christian workers needed places to stay, food, protection, and practical help as they continued their ministry. John’s instruction to send them forward <strong>“in a manner worthy of God”</strong> points to generous, thoughtful support for their ongoing work.</p>
+</div>
+<div data-custom-style="Normal (Web)">
+<p>Diotrephes is especially instructive because John connects his actions with his desire <strong>“to have the preeminence.”</strong> His treatment of others reveals what that desire has produced. He rejects legitimate authority, attacks others with words, refuses hospitality, and uses his influence to control those who disagree with him. The issue is therefore not simply a difficult personality but a desire for prominence that is damaging the life of the church.</p>
+</div>
+<div data-custom-style="Normal (Web)">
+<p>Gaius, Diotrephes, and Demetrius provide three different pictures within one brief letter: faithful service, self-promoting leadership, and a well-established good testimony. John’s instruction, <strong>“Do not imitate what is evil, but what is good,”</strong> encourages the reader not merely to identify the difference but to choose which kind of life is worth following.</p>
+</div></div></article></div></div>
+</section>

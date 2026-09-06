@@ -1,0 +1,134 @@
+<section class="mtb-doc mtb-doc--read" data-doc-type="chapter-overview" data-mtb-status="draft">
+<style>
+.mtb-print-controls{display:flex;justify-content:flex-end;gap:8px;margin:0 0 14px;padding:0 4px}
+.mtb-print-button{appearance:none;border:1px solid #b9c8d5;border-radius:8px;background:#fff;padding:9px 14px;color:#173a5e;font:700 14px Arial,Helvetica,sans-serif;cursor:pointer}
+.mtb-print-button:hover{background:#f2f6f9}
+@media print{
+  @page{size:auto;margin:.45in}
+  html,body{background:#fff!important;color:#000!important}
+  .mtb-print-controls,.mtb-study-controls{display:none!important}
+  .mtb-doc{display:block!important;width:100%!important;max-width:none!important;margin:0!important;padding:0!important}
+  .mtb-overview-hero,.mtb-study-hero,.mtb-reflections-hero,.mtb-culture-hero{box-shadow:none!important;background:#fff!important;border-color:#777!important}
+  .mtb-overview-grid,.mtb-reflections-grid,.mtb-culture-grid,.mtb-study-verse-grid{display:block!important}
+  .mtb-overview-card,.mtb-reflections-card,.mtb-culture-card,.mtb-study-verse,.mtb-study-verse-panel,.mtb-intro-card{
+    display:block!important;width:100%!important;max-width:none!important;height:auto!important;margin:0 0 12pt!important;
+    break-inside:avoid;page-break-inside:avoid;box-shadow:none!important;background:#fff!important;color:#000!important
+  }
+  details.mtb-study-verse{display:block!important;overflow:visible!important}
+  details.mtb-study-verse>summary{display:flex!important;background:#fff!important;color:#000!important;border-bottom:1px solid #777!important}
+  details.mtb-study-verse>summary:after{display:none!important}
+  details.mtb-study-verse>.mtb-study-verse-body{display:block!important}
+  h1,h2,h3,h4{break-after:avoid;page-break-after:avoid;color:#000!important}
+  p,li{orphans:3;widows:3}
+  a{color:#000!important;text-decoration:none!important}
+  a[href]::after{content:none!important}
+}
+</style>
+<div class="mtb-print-controls"><button type="button" class="mtb-print-button" onclick="(function(button){var doc=button.closest('.mtb-doc')||document;var panels=Array.prototype.slice.call(doc.querySelectorAll('details'));panels.forEach(function(panel){panel.open=true;});window.print();})(this)">&#128438; Print This Page</button></div>
+<style>
+.mtb-chapter-overview-dashboard{--mtb-navy:#173a5e;--mtb-navy-2:#2b587f;--mtb-gold:#b7832f;--mtb-blue-soft:#eef4f9;--mtb-border:#d7e0e8;--mtb-text:#1d2935;width:100%;max-width:1600px;margin:0 auto;padding:2px 4px 30px;color:var(--mtb-text);font-family:Arial,Helvetica,sans-serif}.mtb-chapter-overview-dashboard *{box-sizing:border-box}.mtb-overview-hero{display:flex;align-items:center;justify-content:space-between;gap:20px;margin:0 0 22px;padding:22px 26px;border:1px solid #cbd8e3;border-radius:14px;background:linear-gradient(135deg,#f7fafc 0%,#e8f0f7 100%)}.mtb-overview-eyebrow{margin:0 0 5px;color:var(--mtb-gold);font-size:.78rem;font-weight:800;letter-spacing:.13em;text-transform:uppercase}.mtb-overview-title{margin:0;color:var(--mtb-navy);font-size:clamp(1.55rem,3vw,2.25rem);line-height:1.1}.mtb-overview-badge{flex:0 0 auto;padding:10px 16px;border:1px solid rgba(23,58,94,.18);border-radius:999px;background:#fff;color:var(--mtb-navy);font-weight:800}.mtb-overview-grid{display:grid;grid-template-columns:repeat(12,minmax(0,1fr));gap:16px;align-items:stretch}.mtb-overview-card{min-width:0;overflow:hidden;border:1px solid var(--mtb-border);border-top:4px solid var(--mtb-navy-2);border-radius:12px;background:#fff;box-shadow:0 4px 15px rgba(28,48,66,.055)}.mtb-overview-card-central{grid-column:1/span 4;grid-row:1}.mtb-overview-card-about{grid-column:5/span 4;grid-row:1}.mtb-overview-card-heart{grid-column:9/span 4;grid-row:1}.mtb-overview-card-sections{grid-column:1/span 6;grid-row:2}.mtb-overview-card-matters{grid-column:7/span 6;grid-row:2}.mtb-overview-card-themes{grid-column:1/span 6;grid-row:3}.mtb-overview-card-words{grid-column:7/span 6;grid-row:3}.mtb-psalms-overview .mtb-overview-card-psalm-author{grid-column:1/span 4;grid-row:1}.mtb-psalms-overview .mtb-overview-card-psalm-occasion{grid-column:5/span 4;grid-row:1}.mtb-psalms-overview .mtb-overview-card-psalm-kind{grid-column:9/span 4;grid-row:1}.mtb-psalms-overview .mtb-overview-card-central{grid-column:1/span 4;grid-row:2}.mtb-psalms-overview .mtb-overview-card-about{grid-column:5/span 4;grid-row:2}.mtb-psalms-overview .mtb-overview-card-heart{grid-column:9/span 4;grid-row:2}.mtb-psalms-overview .mtb-overview-card-sections{grid-column:1/span 6;grid-row:3}.mtb-psalms-overview .mtb-overview-card-matters{grid-column:7/span 6;grid-row:3}.mtb-psalms-overview .mtb-overview-card-themes{grid-column:1/span 6;grid-row:4}.mtb-psalms-overview .mtb-overview-card-words{grid-column:7/span 6;grid-row:4}.mtb-overview-card-header{margin:0;padding:12px 16px 10px;border-bottom:1px solid #e5ebf0;background:var(--mtb-blue-soft);color:var(--mtb-navy);font-size:.96rem;font-weight:800}.mtb-overview-card-body{padding:16px 18px 18px;font-size:1rem;line-height:1.48;overflow-wrap:anywhere}.mtb-overview-card-central .mtb-overview-card-body,.mtb-overview-card-heart .mtb-overview-card-body{font-size:1.06rem}.mtb-overview-card-body p{margin:0 0 .72em}.mtb-overview-card-body p:last-child{margin-bottom:0}.mtb-overview-card-body ul,.mtb-overview-card-body ol{margin:0;padding-left:1.25em}.mtb-overview-card-body li{margin:0 0 .35em}@media(max-width:980px){.mtb-overview-card{grid-column:span 6!important;grid-row:auto!important}}@media(max-width:760px){.mtb-overview-grid{grid-template-columns:1fr}.mtb-overview-card{grid-column:1/-1!important}.mtb-overview-hero{align-items:flex-start;flex-direction:column;padding:19px}}
+</style><div class="mtb-chapter-overview-dashboard"><header class="mtb-overview-hero"><div><p class="mtb-overview-eyebrow">Morning Chapter Explanation</p><h1 class="mtb-overview-title">Jonah Chapter 3</h1></div><div class="mtb-overview-badge">Chapter 3</div></header><div class="mtb-overview-grid"><article class="mtb-overview-card mtb-overview-card-central"><h2 class="mtb-overview-card-header">Central Message</h2><div class="mtb-overview-card-body"><div data-custom-style="Normal (Web)">
+<p>God’s mercy reaches beyond Israel to the nations. When Jonah finally obeys and proclaims God’s warning to Nineveh, the city responds with repentance, and God withholds the judgment He had announced.</p>
+</div></div></article><article class="mtb-overview-card mtb-overview-card-about"><h2 class="mtb-overview-card-header">What This Chapter Is About</h2><div class="mtb-overview-card-body"><div data-custom-style="Normal (Web)">
+<p>Jonah 3 begins with a second call from the LORD. God again commands Jonah to go to Nineveh and preach the message He gives him. This time Jonah obeys.</p>
+</div>
+<div data-custom-style="Normal (Web)">
+<p>Jonah enters the great Assyrian city and announces that Nineveh will be overthrown in forty days. The response is immediate and widespread. The people believe God, proclaim a fast, and put on sackcloth. The movement reaches the king, who humbles himself and issues a decree calling the entire city to turn from its evil ways and violence.</p>
+</div>
+<div data-custom-style="Normal (Web)">
+<p>The king does not presume upon God’s mercy. He asks, “Who can tell if God will turn and relent?” God sees what the Ninevites do—that they turn from their evil way—and He relents from the disaster He had said He would bring upon them.</p>
+</div>
+<div data-custom-style="Normal (Web)">
+<p>The chapter reveals both the seriousness of God’s judgment and the wideness of His mercy. Nineveh deserves judgment, but God responds compassionately when its people turn from their evil.</p>
+</div></div></article><article class="mtb-overview-card mtb-overview-card-heart"><h2 class="mtb-overview-card-header">The Heart of the Chapter</h2><div class="mtb-overview-card-body"><div data-custom-style="Normal (Web)">
+<p>The heart of Jonah 3 is found in the remarkable sequence of God’s word, human repentance, and divine mercy.</p>
+</div>
+<div data-custom-style="Normal (Web)">
+<p>God does not abandon His purpose because Jonah previously ran away. “The word of the LORD came to Jonah the second time.” Jonah’s failure has consequences, but it does not prevent God from sending him again.</p>
+</div>
+<div data-custom-style="Normal (Web)">
+<p>Jonah’s message is brief and severe: judgment is coming. Yet the people of Nineveh respond by believing God. Their response moves beyond outward sorrow. The king specifically commands them to “turn every one from his evil way and from the violence that is in his hands.”</p>
+</div>
+<div data-custom-style="Normal (Web)">
+<p>Verse 10 brings the chapter to its climax: “God saw their works, that they turned from their evil way.” The emphasis is not that their actions earned mercy, but that their actions demonstrated genuine turning. The threatened judgment was real, but it was not God’s delight to destroy people who turned from their wickedness.</p>
+</div>
+<div data-custom-style="Normal (Web)">
+<p>Jonah 3 therefore displays a God who warns because judgment is serious and relents because mercy is part of His character.</p>
+</div></div></article><article class="mtb-overview-card mtb-overview-card-sections"><h2 class="mtb-overview-card-header">Chapter Sections</h2><div class="mtb-overview-card-body"><div data-custom-style="Normal (Web)">
+<p><strong>Jonah 3:1–2 — Jonah Called a Second Time</strong><br />
+The word of the LORD comes again to Jonah, commanding him to arise, go to Nineveh, and preach the message God gives him.</p>
+</div>
+<div data-custom-style="Normal (Web)">
+<p><strong>Jonah 3:3–4 — Jonah Obeys and Proclaims God’s Warning</strong><br />
+Jonah goes to Nineveh and announces that the city has forty days before it will be overthrown.</p>
+</div>
+<div data-custom-style="Normal (Web)">
+<p><strong>Jonah 3:5–9 — Nineveh Responds with Repentance</strong><br />
+The people believe God and humble themselves. The response reaches the king, who calls the entire city to fasting, earnest prayer, and a turning away from evil and violence.</p>
+</div>
+<div data-custom-style="Normal (Web)">
+<p><strong>Jonah 3:10 — God Relents from Judgment</strong><br />
+God sees that the Ninevites have turned from their evil way and does not bring upon them the disaster He had announced.</p>
+</div></div></article><article class="mtb-overview-card mtb-overview-card-matters"><h2 class="mtb-overview-card-header">Why This Chapter Matters</h2><div class="mtb-overview-card-body"><div data-custom-style="Normal (Web)">
+<p>Jonah 3 shows that God’s desire to reach Nineveh was not interrupted by Jonah’s failure. God calls His servant again and continues His purpose of confronting a wicked city with His word.</p>
+</div>
+<div data-custom-style="Normal (Web)">
+<p>The chapter also demonstrates the power of God’s message. Jonah does not manipulate the people or soften the warning. He delivers what God has given him, and an extraordinary response follows. From ordinary citizens to the king, Nineveh humbles itself before God.</p>
+</div>
+<div data-custom-style="Normal (Web)">
+<p>Most importantly, the chapter reveals why God sent Jonah in the first place. The warning of judgment created an opportunity to repent. God was not merely announcing Nineveh’s destruction; He was confronting Nineveh with its evil while leaving room for the city to turn.</p>
+</div>
+<div data-custom-style="Normal (Web)">
+<p>This prepares for the tension of chapter 4. God is pleased to show mercy to repentant Nineveh, but Jonah will struggle with the very mercy his preaching helped bring about.</p>
+</div></div></article><article class="mtb-overview-card mtb-overview-card-themes"><h2 class="mtb-overview-card-header">Key Themes to Watch For</h2><div class="mtb-overview-card-body"><ul>
+<li><p><strong>The God of second opportunities</strong> — After Jonah’s rebellion, God speaks to him again and recommissions him for the same assignment.</p></li>
+<li><p><strong>Obedience to God’s word</strong> — Jonah now goes where God sends him and speaks the message God gives him.</p></li>
+<li><p><strong>The seriousness of judgment</strong> — Nineveh’s evil is not ignored; God confronts the city and announces approaching destruction.</p></li>
+<li><p><strong>Believing God</strong> — The Ninevites respond to Jonah’s warning by believing God and taking His word seriously.</p></li>
+<li><p><strong>Repentance demonstrated by turning</strong> — Their response includes humility, fasting, prayer, and turning from evil and violence.</p></li>
+<li><p><strong>God’s mercy toward the nations</strong> — God’s compassion is not restricted to Israel; even wicked Nineveh becomes the object of His mercy when its people repent.</p></li>
+<li><p><strong>God sees the response of the heart expressed in action</strong> — Verse 10 specifically emphasizes that God saw that the people had turned from their evil way.</p></li>
+</ul></div></article><article class="mtb-overview-card mtb-overview-card-words"><h2 class="mtb-overview-card-header">Key Words &amp; Concepts</h2><div class="mtb-overview-card-body"><div data-custom-style="Normal (Web)">
+<p><strong>“The second time”</strong> — God recommissions Jonah after his rebellion and deliverance. The mission to Nineveh remains because God’s purpose for the city has not changed.</p>
+</div>
+<div data-custom-style="Normal (Web)">
+<p><strong>“Preach to it the message that I tell you”</strong> — Jonah is not free to invent or modify the message. His responsibility is to faithfully communicate what God gives him.</p>
+</div>
+<div data-custom-style="Normal (Web)">
+<p><strong>“Yet forty days”</strong> — Nineveh receives a defined period before the announced overthrow. The warning itself provides time in which the people can respond.</p>
+</div>
+<div data-custom-style="Normal (Web)">
+<p><strong>“Believed God”</strong> — Nineveh’s response begins here. The people treat Jonah’s warning as a genuine word from God and respond accordingly.</p>
+</div>
+<div data-custom-style="Normal (Web)">
+<p><strong>Sackcloth and fasting</strong> — These were outward expressions of mourning, humility, and repentance. In this chapter, they accompany a deeper call to turn from evil behavior.</p>
+</div>
+<div data-custom-style="Normal (Web)">
+<p><strong>“Violence”</strong> — The king specifically identifies violence as part of Nineveh’s wickedness. Repentance therefore requires more than religious activity; the people must abandon the evil being practiced.</p>
+</div>
+<div data-custom-style="Normal (Web)">
+<p><strong>“Who can tell if God will turn and relent?”</strong> — The king expresses hope rather than presumption. He does not claim that their actions obligate God to spare them.</p>
+</div>
+<div data-custom-style="Normal (Web)">
+<p><strong>“God saw their works”</strong> — The following phrase explains what God saw: “that they turned from their evil way.” Their actions demonstrate the reality of their repentance.</p>
+</div>
+<div data-custom-style="Normal (Web)">
+<p><strong>“God relented”</strong> — God does not carry out the announced disaster because Nineveh turns from its evil. The passage does not portray God as discovering that His original judgment was mistaken. His warning accomplishes its intended purpose by bringing the city to repentance.</p>
+</div>
+<h1 id="helpful-notes">Helpful Notes</h1>
+<div data-custom-style="Normal (Web)">
+<p>Nineveh was a major city of Assyria, the empire that would become infamous for military aggression, brutality, and violence. God’s concern for such a city makes His mercy in this chapter especially striking.</p>
+</div>
+<div data-custom-style="Normal (Web)">
+<p>The description of Nineveh as “an exceedingly great city” emphasizes its importance and scale. The statement that it was “a three-day journey in extent” has been understood in several ways, including the time required to traverse the city or to move through the larger urban area while carrying out Jonah’s preaching mission. The text’s primary emphasis is the magnitude of Jonah’s assignment.</p>
+</div>
+<div data-custom-style="Normal (Web)">
+<p>The proclamation involving both people and animals reflects the depth and public nature of Nineveh’s mourning. The animals are not being portrayed as morally repentant; their participation intensifies the picture of citywide humiliation and fasting.</p>
+</div>
+<div data-custom-style="Normal (Web)">
+<p>Jonah 3:10 should be read carefully. God responds to Nineveh’s changed course exactly as His merciful character allows. The chapter holds judgment and mercy together: Nineveh’s evil is serious enough to deserve destruction, yet God is willing to withhold that destruction when the people genuinely turn from their evil.</p>
+</div>
+<div data-custom-style="Normal (Web)">
+<p>Jesus later points to the people of Nineveh as an example of repentance because “they repented at the preaching of Jonah” (Matthew 12:41). Their response becomes a lasting testimony to the responsibility of people to take God’s warning seriously and turn to Him when His word confronts their sin.</p>
+</div></div></article></div></div>
+</section>

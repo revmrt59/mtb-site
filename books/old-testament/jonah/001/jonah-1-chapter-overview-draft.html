@@ -1,0 +1,144 @@
+<section class="mtb-doc mtb-doc--read" data-doc-type="chapter-overview" data-mtb-status="draft">
+<style>
+.mtb-print-controls{display:flex;justify-content:flex-end;gap:8px;margin:0 0 14px;padding:0 4px}
+.mtb-print-button{appearance:none;border:1px solid #b9c8d5;border-radius:8px;background:#fff;padding:9px 14px;color:#173a5e;font:700 14px Arial,Helvetica,sans-serif;cursor:pointer}
+.mtb-print-button:hover{background:#f2f6f9}
+@media print{
+  @page{size:auto;margin:.45in}
+  html,body{background:#fff!important;color:#000!important}
+  .mtb-print-controls,.mtb-study-controls{display:none!important}
+  .mtb-doc{display:block!important;width:100%!important;max-width:none!important;margin:0!important;padding:0!important}
+  .mtb-overview-hero,.mtb-study-hero,.mtb-reflections-hero,.mtb-culture-hero{box-shadow:none!important;background:#fff!important;border-color:#777!important}
+  .mtb-overview-grid,.mtb-reflections-grid,.mtb-culture-grid,.mtb-study-verse-grid{display:block!important}
+  .mtb-overview-card,.mtb-reflections-card,.mtb-culture-card,.mtb-study-verse,.mtb-study-verse-panel,.mtb-intro-card{
+    display:block!important;width:100%!important;max-width:none!important;height:auto!important;margin:0 0 12pt!important;
+    break-inside:avoid;page-break-inside:avoid;box-shadow:none!important;background:#fff!important;color:#000!important
+  }
+  details.mtb-study-verse{display:block!important;overflow:visible!important}
+  details.mtb-study-verse>summary{display:flex!important;background:#fff!important;color:#000!important;border-bottom:1px solid #777!important}
+  details.mtb-study-verse>summary:after{display:none!important}
+  details.mtb-study-verse>.mtb-study-verse-body{display:block!important}
+  h1,h2,h3,h4{break-after:avoid;page-break-after:avoid;color:#000!important}
+  p,li{orphans:3;widows:3}
+  a{color:#000!important;text-decoration:none!important}
+  a[href]::after{content:none!important}
+}
+</style>
+<div class="mtb-print-controls"><button type="button" class="mtb-print-button" onclick="(function(button){var doc=button.closest('.mtb-doc')||document;var panels=Array.prototype.slice.call(doc.querySelectorAll('details'));panels.forEach(function(panel){panel.open=true;});window.print();})(this)">&#128438; Print This Page</button></div>
+<style>
+.mtb-chapter-overview-dashboard{--mtb-navy:#173a5e;--mtb-navy-2:#2b587f;--mtb-gold:#b7832f;--mtb-blue-soft:#eef4f9;--mtb-border:#d7e0e8;--mtb-text:#1d2935;width:100%;max-width:1600px;margin:0 auto;padding:2px 4px 30px;color:var(--mtb-text);font-family:Arial,Helvetica,sans-serif}.mtb-chapter-overview-dashboard *{box-sizing:border-box}.mtb-overview-hero{display:flex;align-items:center;justify-content:space-between;gap:20px;margin:0 0 22px;padding:22px 26px;border:1px solid #cbd8e3;border-radius:14px;background:linear-gradient(135deg,#f7fafc 0%,#e8f0f7 100%)}.mtb-overview-eyebrow{margin:0 0 5px;color:var(--mtb-gold);font-size:.78rem;font-weight:800;letter-spacing:.13em;text-transform:uppercase}.mtb-overview-title{margin:0;color:var(--mtb-navy);font-size:clamp(1.55rem,3vw,2.25rem);line-height:1.1}.mtb-overview-badge{flex:0 0 auto;padding:10px 16px;border:1px solid rgba(23,58,94,.18);border-radius:999px;background:#fff;color:var(--mtb-navy);font-weight:800}.mtb-overview-grid{display:grid;grid-template-columns:repeat(12,minmax(0,1fr));gap:16px;align-items:stretch}.mtb-overview-card{min-width:0;overflow:hidden;border:1px solid var(--mtb-border);border-top:4px solid var(--mtb-navy-2);border-radius:12px;background:#fff;box-shadow:0 4px 15px rgba(28,48,66,.055)}.mtb-overview-card-central{grid-column:1/span 4;grid-row:1}.mtb-overview-card-about{grid-column:5/span 4;grid-row:1}.mtb-overview-card-heart{grid-column:9/span 4;grid-row:1}.mtb-overview-card-sections{grid-column:1/span 6;grid-row:2}.mtb-overview-card-matters{grid-column:7/span 6;grid-row:2}.mtb-overview-card-themes{grid-column:1/span 6;grid-row:3}.mtb-overview-card-words{grid-column:7/span 6;grid-row:3}.mtb-psalms-overview .mtb-overview-card-psalm-author{grid-column:1/span 4;grid-row:1}.mtb-psalms-overview .mtb-overview-card-psalm-occasion{grid-column:5/span 4;grid-row:1}.mtb-psalms-overview .mtb-overview-card-psalm-kind{grid-column:9/span 4;grid-row:1}.mtb-psalms-overview .mtb-overview-card-central{grid-column:1/span 4;grid-row:2}.mtb-psalms-overview .mtb-overview-card-about{grid-column:5/span 4;grid-row:2}.mtb-psalms-overview .mtb-overview-card-heart{grid-column:9/span 4;grid-row:2}.mtb-psalms-overview .mtb-overview-card-sections{grid-column:1/span 6;grid-row:3}.mtb-psalms-overview .mtb-overview-card-matters{grid-column:7/span 6;grid-row:3}.mtb-psalms-overview .mtb-overview-card-themes{grid-column:1/span 6;grid-row:4}.mtb-psalms-overview .mtb-overview-card-words{grid-column:7/span 6;grid-row:4}.mtb-overview-card-header{margin:0;padding:12px 16px 10px;border-bottom:1px solid #e5ebf0;background:var(--mtb-blue-soft);color:var(--mtb-navy);font-size:.96rem;font-weight:800}.mtb-overview-card-body{padding:16px 18px 18px;font-size:1rem;line-height:1.48;overflow-wrap:anywhere}.mtb-overview-card-central .mtb-overview-card-body,.mtb-overview-card-heart .mtb-overview-card-body{font-size:1.06rem}.mtb-overview-card-body p{margin:0 0 .72em}.mtb-overview-card-body p:last-child{margin-bottom:0}.mtb-overview-card-body ul,.mtb-overview-card-body ol{margin:0;padding-left:1.25em}.mtb-overview-card-body li{margin:0 0 .35em}@media(max-width:980px){.mtb-overview-card{grid-column:span 6!important;grid-row:auto!important}}@media(max-width:760px){.mtb-overview-grid{grid-template-columns:1fr}.mtb-overview-card{grid-column:1/-1!important}.mtb-overview-hero{align-items:flex-start;flex-direction:column;padding:19px}}
+</style><div class="mtb-chapter-overview-dashboard"><header class="mtb-overview-hero"><div><p class="mtb-overview-eyebrow">Morning Chapter Explanation</p><h1 class="mtb-overview-title">Jonah Chapter 1</h1></div><div class="mtb-overview-badge">Chapter 1</div></header><div class="mtb-overview-grid"><article class="mtb-overview-card mtb-overview-card-central"><h2 class="mtb-overview-card-header">Central Message</h2><div class="mtb-overview-card-body"><div data-custom-style="Normal (Web)">
+<p>Jonah 1 reveals the seriousness of running from God and the relentless sovereignty of God in pursuing His purposes. Jonah attempts to flee from the LORD’s presence and assignment, but God sends a storm that exposes his disobedience, affects everyone around him, and ultimately brings him into the sea. The chapter shows that no distance, ship, storm, or human plan can place someone beyond God’s reach.</p>
+</div></div></article><article class="mtb-overview-card mtb-overview-card-about"><h2 class="mtb-overview-card-header">What This Chapter Is About</h2><div class="mtb-overview-card-body"><div data-custom-style="Normal (Web)">
+<p>God commands Jonah to go to Nineveh and proclaim His message against the city’s wickedness. Instead, Jonah deliberately travels in the opposite direction, boarding a ship headed for Tarshish.</p>
+</div>
+<div data-custom-style="Normal (Web)">
+<p>The LORD responds by sending a powerful storm. While experienced sailors desperately work to save the ship, Jonah sleeps below deck. The sailors eventually cast lots to discover who is responsible for the calamity, and the lot falls on Jonah. He admits that he is fleeing from the LORD, the God who made the sea and the dry land.</p>
+</div>
+<div data-custom-style="Normal (Web)">
+<p>Jonah tells the sailors that the storm will cease if they throw him into the sea. They initially resist and attempt to row back to land, but when their efforts fail, they cry out to the LORD and finally cast Jonah overboard. The sea immediately becomes calm.</p>
+</div>
+<div data-custom-style="Normal (Web)">
+<p>The chapter ends with two striking developments: the sailors respond to the LORD with great fear, sacrifice, and vows, while God appoints a great fish to swallow Jonah. What appears to be Jonah’s destruction becomes the means God uses to preserve him.</p>
+</div></div></article><article class="mtb-overview-card mtb-overview-card-heart"><h2 class="mtb-overview-card-header">The Heart of the Chapter</h2><div class="mtb-overview-card-body"><div data-custom-style="Normal (Web)">
+<p>The heart of Jonah 1 is the contrast between Jonah’s attempt to escape God and God’s sovereign pursuit of Jonah.</p>
+</div>
+<div data-custom-style="Normal (Web)">
+<p>Jonah repeatedly moves “down”—down to Joppa, down into the ship, and eventually down into the sea. His outward journey reflects the consequences of his inward resistance to God. Yet every stage of Jonah’s flight remains under God’s authority.</p>
+</div>
+<div data-custom-style="Normal (Web)">
+<p>The LORD sends the wind. The lot exposes Jonah. The sea responds when Jonah is thrown overboard. The storm stops at precisely the right moment. Finally, the LORD prepares the great fish.</p>
+</div>
+<div data-custom-style="Normal (Web)">
+<p>Jonah can reject God’s command, but he cannot escape God’s presence or overturn God’s purpose.</p>
+</div>
+<div data-custom-style="Normal (Web)">
+<p>At the same time, God is already working among the pagan sailors. The prophet who should be calling Gentiles to the LORD is running from his mission, yet the sailors themselves move from fear of the storm to fear of the LORD. Even Jonah’s rebellion cannot prevent God from making Himself known.</p>
+</div></div></article><article class="mtb-overview-card mtb-overview-card-sections"><h2 class="mtb-overview-card-header">Chapter Sections</h2><div class="mtb-overview-card-body"><div data-custom-style="Normal (Web)">
+<p><strong>Jonah 1:1–3 — Jonah Runs from God’s Command</strong><br />
+The word of the LORD comes to Jonah with a clear assignment: go to Nineveh and cry out against its wickedness. Jonah instead heads toward Tarshish, deliberately moving away from the mission God has given him.</p>
+</div>
+<div data-custom-style="Normal (Web)">
+<p><strong>Jonah 1:4–6 — The LORD Sends the Storm</strong><br />
+God sends a violent wind against the sea. The terrified sailors cry to their gods and throw cargo overboard, while Jonah sleeps below deck. The captain awakens him and urges him to call upon his God.</p>
+</div>
+<div data-custom-style="Normal (Web)">
+<p><strong>Jonah 1:7–10 — Jonah’s Disobedience Is Exposed</strong><br />
+The sailors cast lots, and the lot falls on Jonah. Under questioning, Jonah identifies himself as a Hebrew who fears the LORD, the Creator of the sea and dry land. The sailors become even more afraid when they learn that Jonah is fleeing from Him.</p>
+</div>
+<div data-custom-style="Normal (Web)">
+<p><strong>Jonah 1:11–16 — Jonah Is Thrown into the Sea</strong><br />
+Jonah tells the sailors to throw him overboard. They first attempt to reach land, but the storm only grows worse. After crying out to the LORD for mercy, they cast Jonah into the sea, and the raging waters immediately become calm. The sailors respond with great fear of the LORD, sacrifice, and vows.</p>
+</div>
+<div data-custom-style="Normal (Web)">
+<p><strong>Jonah 1:17 — The LORD Prepares a Great Fish</strong><br />
+God appoints a great fish to swallow Jonah. Jonah remains inside it for three days and three nights. The chapter closes not with Jonah beyond God’s reach, but completely dependent upon God’s intervention.</p>
+</div></div></article><article class="mtb-overview-card mtb-overview-card-matters"><h2 class="mtb-overview-card-header">Why This Chapter Matters</h2><div class="mtb-overview-card-body"><div data-custom-style="Normal (Web)">
+<p>Jonah 1 confronts the illusion that we can obey God selectively while still claiming to fear Him. Jonah knows who God is and openly confesses that the LORD made the sea and the dry land, yet his actions contradict what he says he believes.</p>
+</div>
+<div data-custom-style="Normal (Web)">
+<p>The chapter also demonstrates that disobedience rarely remains isolated. Jonah’s rebellion places an entire ship and crew in danger. His private decision produces public consequences.</p>
+</div>
+<div data-custom-style="Normal (Web)">
+<p>Yet God’s sovereignty is greater than Jonah’s rebellion. God does not abandon His prophet or surrender His purpose. He pursues Jonah through circumstances Jonah cannot control.</p>
+</div>
+<div data-custom-style="Normal (Web)">
+<p>Most importantly, the great fish should first be understood as an act of divine preservation, not merely punishment. Jonah has been thrown into a deadly sea, but God provides a means of keeping him alive. Discipline and mercy meet in the same event.</p>
+</div></div></article><article class="mtb-overview-card mtb-overview-card-themes"><h2 class="mtb-overview-card-header">Key Themes to Watch For</h2><div class="mtb-overview-card-body"><ul>
+<li><p><strong>The Word of the LORD</strong> — The chapter begins with God speaking. Everything that follows results from Jonah’s response to that word.</p></li>
+<li><p><strong>Running from God</strong> — Jonah deliberately attempts to escape the assignment God has given him, but every stage of his flight remains under God’s authority.</p></li>
+<li><p><strong>God’s Sovereignty</strong> — The LORD commands circumstances Jonah cannot control: wind, sea, lot, and fish all serve His purpose.</p></li>
+<li><p><strong>The Consequences of Disobedience</strong> — Jonah’s rebellion endangers not only himself but everyone traveling with him.</p></li>
+<li><p><strong>Knowing God vs. Obeying God</strong> — Jonah can correctly describe the LORD while simultaneously resisting Him.</p></li>
+<li><p><strong>God’s Concern for the Nations</strong> — God’s activity is not limited to Israel. Even aboard the ship, Gentile sailors are being confronted with the reality of the LORD.</p></li>
+<li><p><strong>Mercy within Discipline</strong> — The great fish is part of God’s correction of Jonah, but it is also the means by which God saves him from death.</p></li>
+</ul></div></article><article class="mtb-overview-card mtb-overview-card-words"><h2 class="mtb-overview-card-header">Key Words &amp; Concepts</h2><div class="mtb-overview-card-body"><div data-custom-style="Normal (Web)">
+<p><strong>“Arise, go”</strong> — God’s command gives Jonah both direction and purpose. Jonah’s problem is not uncertainty about what God wants; it is unwillingness to do it.</p>
+</div>
+<div data-custom-style="Normal (Web)">
+<p><strong>Nineveh</strong> — A major Assyrian city and representative of a powerful Gentile people known for wickedness and violence. Jonah is being sent beyond Israel to people he does not want to receive God’s warning and possible mercy.</p>
+</div>
+<div data-custom-style="Normal (Web)">
+<p><strong>Tarshish</strong> — Jonah’s intended destination in the opposite direction from Nineveh. The geographical movement emphasizes the deliberate nature of his flight.</p>
+</div>
+<div data-custom-style="Normal (Web)">
+<p><strong>“From the presence of the LORD”</strong> — Jonah is not necessarily denying that God is everywhere. He is attempting to leave the place of his prophetic assignment and withdraw from actively serving before the LORD.</p>
+</div>
+<div data-custom-style="Normal (Web)">
+<p><strong>“The LORD sent out a great wind”</strong> — The storm is not presented as accidental weather. The narrative explicitly identifies God as the One acting through it.</p>
+</div>
+<div data-custom-style="Normal (Web)">
+<p><strong>“I fear the LORD”</strong> — Jonah’s confession is deeply ironic. He claims allegiance to the LORD while actively fleeing His command.</p>
+</div>
+<div data-custom-style="Normal (Web)">
+<p><strong>“The God of heaven, who made the sea and the dry land”</strong> — Jonah’s own theology exposes the futility of his escape. He is attempting to flee from the Creator while traveling across the Creator’s sea.</p>
+</div>
+<div data-custom-style="Normal (Web)">
+<p><strong>“Feared the LORD exceedingly”</strong> — The sailors’ fear changes character. They begin by fearing the storm and ultimately respond in reverence toward the LORD.</p>
+</div>
+<div data-custom-style="Normal (Web)">
+<p><strong>“The LORD had prepared a great fish”</strong> — The fish is under divine appointment. Scripture does not identify its species. The emphasis is not on explaining the creature biologically but on God’s sovereign provision.</p>
+</div>
+<div data-custom-style="Normal (Web)">
+<p><strong>Three days and three nights</strong> — Jonah’s time in the fish becomes significant later in Scripture when Jesus uses Jonah’s experience as a sign pointing toward His own death, burial, and resurrection (Matthew 12:40).</p>
+</div>
+<h1 id="helpful-notes">Helpful Notes</h1>
+<div data-custom-style="Normal (Web)">
+<p>Jonah 1 contains deliberate movement language. Jonah is commanded to “arise” and go to Nineveh, but instead he repeatedly descends—toward Joppa, into the ship, and eventually into the sea. This downward movement reinforces the spiritual direction of his rebellion.</p>
+</div>
+<div data-custom-style="Normal (Web)">
+<p>The sailors provide an intentional contrast with Jonah. Jonah knows the LORD but disobeys Him. The sailors initially do not know the LORD, yet they become increasingly responsive as God reveals Himself through the crisis.</p>
+</div>
+<div data-custom-style="Normal (Web)">
+<p>The sailors are also portrayed sympathetically. They do not immediately throw Jonah overboard. They attempt to save him by rowing toward land and only surrender that effort when the storm becomes overwhelming. Before throwing Jonah into the sea, they appeal directly to the LORD.</p>
+</div>
+<div data-custom-style="Normal (Web)">
+<p>The immediate calm after Jonah enters the sea confirms that the storm was directly connected to God’s dealings with Jonah. This produces a profound response among the sailors: they fear the LORD, offer sacrifice, and make vows.</p>
+</div>
+<div data-custom-style="Normal (Web)">
+<p>Jonah 1:17 should not be separated from what immediately precedes it. Jonah has entered a sea severe enough to threaten an entire ship. The great fish therefore functions as both discipline and rescue. God has not finished dealing with Jonah.</p>
+</div>
+<div data-custom-style="Normal (Web)">
+<p>Jesus later identifies Jonah’s three days and three nights in the fish as a sign corresponding to His own burial and resurrection (Matthew 12:40). Jonah’s experience therefore becomes part of a larger biblical pattern that ultimately points beyond the prophet to Christ.</p>
+</div></div></article></div></div>
+</section>

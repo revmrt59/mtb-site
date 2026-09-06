@@ -1,0 +1,679 @@
+﻿(function () {
+  "use strict";
+
+  // ==========================================
+  // CONFIG (LOCKED TAB ORDER)
+  // ==========================================
+  
+
+
+  const TABS = [
+  { key: "chapter_scripture", label: "Chapter Scripture" },
+  { key: "book_introduction", label: "Book Overview" },
+  { key: "chapter_overview", label: "Chapter Overview" },
+  { key: "chapter_explanation", label: "Chapter Study" },
+  { key: "chapter_reflections", label: "Chapter Reflection" },
+  { key: "eg_culture", label: "EG Culture" },
+  { key: "resources", label: "Resources" }
+];
+
+  // ==========================================
+  // BOOK → TESTAMENT MAP (same as load-doc.js)
+  // ==========================================
+  const BOOK_TESTAMENT = {
+    // New Testament
+    "matthew": "new-testament",
+    "mark": "new-testament",
+    "luke": "new-testament",
+    "john": "new-testament",
+    "acts": "new-testament",
+    "romans": "new-testament",
+    "1-corinthians": "new-testament",
+    "2-corinthians": "new-testament",
+    "galatians": "new-testament",
+    "ephesians": "new-testament",
+    "philippians": "new-testament",
+    "colossians": "new-testament",
+    "1-thessalonians": "new-testament",
+    "2-thessalonians": "new-testament",
+    "1-timothy": "new-testament",
+    "2-timothy": "new-testament",
+    "titus": "new-testament",
+    "philemon": "new-testament",
+    "hebrews": "new-testament",
+    "james": "new-testament",
+    "1-peter": "new-testament",
+    "2-peter": "new-testament",
+    "1-john": "new-testament",
+    "2-john": "new-testament",
+    "3-john": "new-testament",
+    "jude": "new-testament",
+    "revelation": "new-testament",
+
+    // Old Testament
+    "genesis": "old-testament",
+    "exodus": "old-testament",
+    "leviticus": "old-testament",
+    "numbers": "old-testament",
+    "deuteronomy": "old-testament",
+    "joshua": "old-testament",
+    "judges": "old-testament",
+    "ruth": "old-testament",
+    "1-samuel": "old-testament",
+    "2-samuel": "old-testament",
+    "1-kings": "old-testament",
+    "2-kings": "old-testament",
+    "1-chronicles": "old-testament",
+    "2-chronicles": "old-testament",
+    "ezra": "old-testament",
+    "nehemiah": "old-testament",
+    "esther": "old-testament",
+    "job": "old-testament",
+    "psalms": "old-testament",
+    "proverbs": "old-testament",
+    "ecclesiastes": "old-testament",
+    "song-of-solomon": "old-testament",
+    "isaiah": "old-testament",
+    "jeremiah": "old-testament",
+    "lamentations": "old-testament",
+    "ezekiel": "old-testament",
+    "daniel": "old-testament",
+    "hosea": "old-testament",
+    "joel": "old-testament",
+    "amos": "old-testament",
+    "obadiah": "old-testament",
+    "jonah": "old-testament",
+    "micah": "old-testament",
+    "nahum": "old-testament",
+    "habakkuk": "old-testament",
+    "zephaniah": "old-testament",
+    "haggai": "old-testament",
+    "zechariah": "old-testament",
+    "malachi": "old-testament"
+  };
+
+  // ==========================================
+  // HELPERS
+  // ==========================================
+  function getParams() {
+    const p = new URLSearchParams(window.location.search);
+    return {
+      book: (p.get("book") || "").trim(),
+      chapter: (p.get("chapter") || "1").trim(),
+      tab: (p.get("tab") || "chapter_scripture").trim(),
+      doc: (p.get("doc") || "").trim()
+    };
+  }
+
+  function setParams(next) {
+    const p = new URLSearchParams(window.location.search);
+    Object.keys(next).forEach(k => {
+      if (next[k] === null || next[k] === undefined || next[k] === "") p.delete(k);
+      else p.set(k, String(next[k]));
+    });
+
+    const url = `${window.location.pathname}?${p.toString()}`;
+    history.pushState({}, "", url);
+
+    // Tell load-doc.js to reload content
+    window.dispatchEvent(new PopStateEvent("popstate"));
+  }
+
+  function normalizeBookSlug(book) {
+    return (book || "").toLowerCase().replace(/\s+/g, "-");
+  }
+
+  function normalizeTabKey(tab) {
+    const t = String(tab || "").toLowerCase().trim();
+    if (t === "chapter_insights" || t === "chapter-insights" || t === "insights") return "chapter_reflections";
+    return t || "chapter_scripture";
+  }
+
+  function parseBookChapterFromDoc(doc) {
+    const d = String(doc || "");
+    const m = d.match(/^([a-z0-9-]+)-(\d+)-/i);
+    if (!m) return { book: "", chapter: "" };
+    return { book: m[1].toLowerCase(), chapter: m[2] };
+  }
+
+  // This is the critical robustness change:
+  // If book/chapter are missing (often after deep resource topic navigation),
+  // fall back to inferring them from doc=... (e.g., titus-1-resources-xyz.html).
+  function getEffectiveBookChapter() {
+    const params = getParams();
+    const book = normalizeBookSlug(params.book);
+    const chapter = (params.chapter || "1").trim();
+
+    if (book) return { book, chapter };
+
+    if (params.doc) {
+      const inferred = parseBookChapterFromDoc(params.doc);
+      if (inferred.book) return { book: inferred.book, chapter: inferred.chapter || "1" };
+    }
+
+    // Final fallback: try body data attributes (set by load-doc.js)
+    const bodyBook = (document.body.dataset.book || "").trim();
+    const bodyChapter = (document.body.dataset.chapter || "").trim();
+    if (bodyBook) return { book: normalizeBookSlug(bodyBook), chapter: bodyChapter || "1" };
+
+    return { book: "", chapter: "1" };
+  }
+
+  function tabToSuffix(tabKey) {
+    const map = {
+      chapter_scripture: "chapter-scripture",
+      book_introduction: "book-overview",
+      chapter_overview: "chapter-overview",
+      chapter_explanation: "chapter-explanation",
+      chapter_reflections: "chapter-reflections",
+      eg_culture: "eg-culture",
+      resources: "resources"
+    };
+    return map[tabKey] || "chapter-scripture";
+  }
+
+  function docNameForTab(book, chapter, tabKey) {
+    if (!book) return "book-overview-titus.html";
+    const b = normalizeBookSlug(book);
+
+    // Canonical book overview naming:
+    // book-overview-obadiah.html, book-overview-ruth.html, etc.
+    if (tabKey === "book_introduction") return `book-overview-${b}.html`;
+
+    const suffix = tabToSuffix(tabKey);
+    return `${b}-${chapter}-${suffix}.html`;
+  }
+
+  // (Not used directly here, but keeping because you had it and it’s helpful)
+  function buildDocPath(docName) {
+    const m = docName.match(/^([a-z0-9-]+)-/);
+    const book = m ? m[1] : "";
+    const testament = BOOK_TESTAMENT[book] || "new-testament";
+    return `/books/${testament}/${book}/${docName}`;
+  }
+
+  function prettyTitleFromSlug(slug) {
+    if (!slug) return "";
+    return slug.replace(/-/g, " ").replace(/\b\w/g, c => c.toUpperCase());
+  }
+
+  function setHeader(book, chapter) {
+    const titleEl = document.getElementById("book-title");
+    const subtitleEl = document.getElementById("book-subtitle");
+
+    if (titleEl) titleEl.textContent = prettyTitleFromSlug(book);
+    if (subtitleEl) subtitleEl.textContent = chapter ? `Chapter ${chapter}` : "";
+  }
+
+  // ==========================================
+// TAB FILE AVAILABILITY
+// Hide tabs when their generated HTML
+// does not yet exist.
+//
+// Chapter Scripture is the one exception:
+// it always remains visible.
+// ==========================================
+
+function pathForTabFile(book, chapter, tabKey) {
+  const b = normalizeBookSlug(book);
+  if (!b) return "";
+
+  const testament = BOOK_TESTAMENT[b] || "new-testament";
+
+  const chapterNum =
+    parseInt(String(chapter || "1").replace(/[^\d]/g, ""), 10) || 1;
+
+  const folder = String(chapterNum).padStart(3, "0");
+
+  switch (tabKey) {
+
+    case "book_introduction":
+      return `/books/${testament}/${b}/000-book/book-overview-${b}.html`;
+
+    case "chapter_overview":
+      return `/books/${testament}/${b}/${folder}/${b}-${chapterNum}-chapter-overview.html`;
+
+    case "chapter_explanation":
+      return `/books/${testament}/${b}/${folder}/${b}-${chapterNum}-chapter-explanation.html`;
+
+    case "chapter_reflections":
+      return `/books/${testament}/${b}/${folder}/${b}-${chapterNum}-chapter-reflections.html`;
+
+    case "eg_culture":
+      return `/books/${testament}/${b}/${folder}/${b}-${chapterNum}-chapter-eg-culture.html`;
+
+    case "resources":
+      return `/books/${testament}/${b}/${folder}/${b}-${chapterNum}-chapter-resources.html`;
+
+    case "chapter_scripture":
+      return `/books/${testament}/${b}/${folder}/${b}-${chapterNum}-chapter-scripture.html`;
+
+    default:
+      return "";
+  }
+}
+
+
+async function chapterStudyFileIsComplete(path) {
+  if (!path) return false;
+
+  try {
+    const response = await fetch(path, {
+      method: "GET",
+      cache: "no-store"
+    });
+
+    if (!response.ok) return false;
+
+    const html = await response.text();
+
+    // Placeholder files exist for the Scripture "i" popup and Word Studies,
+    // but must NOT make the Chapter Study tab visible.
+    if (/data-mtb-status=["']placeholder["']/i.test(html)) {
+      return false;
+    }
+
+    return true;
+  } catch (err) {
+    console.warn("MTB Chapter Study availability check failed:", path, err);
+    return false;
+  }
+}
+
+async function bookOverviewFileExists(path) {
+  if (!path) return false;
+
+  try {
+    const response = await fetch(path, {
+      method: "GET",
+      cache: "no-store"
+    });
+
+    if (!response.ok) return false;
+
+    const html = await response.text();
+
+    // Some local/static servers may return a fallback page with HTTP 200.
+    // Only count the file as a real Book Overview when its generated
+    // Book Overview markup is actually present.
+    return /data-doc-type=["']book-overview["']/i.test(html) ||
+           /mtb-book-overview-dashboard/i.test(html);
+  } catch (err) {
+    console.warn("MTB Book Overview availability check failed:", path, err);
+    return false;
+  }
+}
+
+async function tabFileExists(path) {
+  if (!path) return false;
+
+  try {
+
+    // HEAD checks whether the file exists
+    // without downloading the entire HTML file.
+    let response = await fetch(path, {
+      method: "HEAD",
+      cache: "no-store"
+    });
+
+    if (response.ok) {
+      return true;
+    }
+
+    // Fallback for servers that do not allow HEAD.
+    if (response.status === 405) {
+      response = await fetch(path, {
+        method: "GET",
+        cache: "no-store"
+      });
+
+      return response.ok;
+    }
+
+    return false;
+
+  } catch (err) {
+    console.warn("MTB tab availability check failed:", path, err);
+    return false;
+  }
+}
+  // ==========================================
+  // TABS
+  // ==========================================
+let mtbTabRenderToken = 0;
+
+async function renderTabs() {
+  const tabsEl = document.getElementById("tabs");
+  if (!tabsEl) return;
+
+  // Prevent an older async render from overwriting
+  // a newer book/chapter navigation.
+  const renderToken = ++mtbTabRenderToken;
+
+  const params = getParams();
+  const activeTab = normalizeTabKey(params.tab);
+
+  document.body.setAttribute("data-active-tab", activeTab);
+
+  const eff = getEffectiveBookChapter();
+
+  const book = eff.book;
+  const chapter = eff.chapter;
+
+  const chapterNum =
+    parseInt(String(chapter || "0"), 10) || 0;
+
+  // Keep the current tabs visible while availability is checked.
+  // The completed tab set is swapped in all at once below.
+  const availability = await Promise.all(
+    TABS.map(async (tab) => {
+
+      // -------------------------------------
+      // Chapter Scripture ALWAYS appears.
+      // -------------------------------------
+      if (tab.key === "chapter_scripture") {
+        return {
+          tab,
+          show: true
+        };
+      }
+
+
+// -------------------------------------
+// BOOK OVERVIEW
+// Show only on the book landing page
+// AND only when the HTML file exists.
+// -------------------------------------
+if (tab.key === "book_introduction") {
+
+  // Never show Book Overview after
+  // a chapter has been selected.
+  if (chapterNum >= 1) {
+    return {
+      tab,
+      show: false
+    };
+  }
+
+  // On the book landing page, show it
+  // only if the generated overview exists.
+  const overviewPath = pathForTabFile(
+    book,
+    0,
+    "book_introduction"
+  );
+
+  const exists = await bookOverviewFileExists(overviewPath);
+
+  return {
+    tab,
+    show: exists
+  };
+}
+
+
+      // -------------------------------------
+      // Everything else requires a real file.
+      // -------------------------------------
+      const path = pathForTabFile(
+        book,
+        chapter,
+        tab.key
+      );
+
+      const exists =
+        tab.key === "chapter_explanation"
+          ? await chapterStudyFileIsComplete(path)
+          : await tabFileExists(path);
+
+      return {
+        tab,
+        show: exists
+      };
+    })
+  );
+
+
+  // User may have changed chapter/book while
+  // the file checks were running.
+  if (renderToken !== mtbTabRenderToken) {
+    return;
+  }
+
+
+  const fragment = document.createDocumentFragment();
+
+  availability.forEach(({ tab: t, show }) => {
+
+    if (!show) return;
+
+    const btn = document.createElement("button");
+
+    btn.type = "button";
+    btn.className = "tab-btn";
+    btn.dataset.tab = t.key;
+    btn.textContent = t.label;
+
+    if (t.key === activeTab) {
+      btn.classList.add("active");
+      btn.setAttribute(
+        "aria-current",
+        "page"
+      );
+    }
+
+    btn.addEventListener("click", () => {
+
+      const current =
+        getEffectiveBookChapter();
+
+      setParams({
+        book: current.book,
+        chapter: current.chapter,
+        tab: t.key,
+        doc: ""
+      });
+    });
+
+    fragment.appendChild(btn);
+  });
+
+  // One DOM operation prevents the visible tab bar from
+  // disappearing and rebuilding while file checks complete.
+  tabsEl.replaceChildren(fragment);
+}
+
+  function syncActiveTab() {
+    const params = getParams();
+    const activeTab = normalizeTabKey(params.tab);
+    document.body.setAttribute("data-active-tab", activeTab);
+    const buttons = Array.from(document.querySelectorAll("#tabs .tab-btn"));
+
+    buttons.forEach(b => {
+      b.classList.remove("active");
+      b.removeAttribute("aria-current");
+    });
+
+    const current = buttons.find(b => b.dataset.tab === activeTab);
+    if (current) {
+      current.classList.add("active");
+      current.setAttribute("aria-current", "page");
+    }
+  }
+
+  // ==========================================
+  // INIT
+  // ==========================================
+  function init() {
+    const params = getParams();
+
+    if (params.book) {
+      setHeader(params.book, params.chapter || "1");
+    } else if (params.doc) {
+      const m = params.doc.match(/^([a-z0-9-]+)-(\d+)-/i);
+      if (m) setHeader(m[1], m[2]);
+    }
+
+    renderTabs();
+  }
+
+  init();
+
+  window.addEventListener("popstate", () => {
+    // If book/doc changes, rerender so click handlers always use current context
+    renderTabs();
+    syncActiveTab();
+
+    const params = getParams();
+    if (params.book) {
+      setHeader(params.book, params.chapter || "1");
+    } else if (params.doc) {
+      const m = params.doc.match(/^([a-z0-9-]+)-(\d+)-/i);
+      if (m) setHeader(m[1], m[2]);
+    }
+  });
+
+})();
+
+
+
+// =========================================================
+// Chapter Prev/Next buttons (wrap across books)
+// - Prev on chapter 1 => last chapter of previous book
+// - Next on last chapter => chapter 1 of next book
+// Requires window.MTB_CONTENT (loaded via jshero-jump.js)
+// =========================================================
+(function () {
+  function getParams() {
+    const p = new URLSearchParams(window.location.search);
+    return {
+      book: p.get("book") || "",
+      chapter: parseInt(p.get("chapter") || "0", 10),
+      tab: p.get("tab") || "chapter_scripture"
+    };
+  }
+
+  function buildUrl(bookSlug, chapterNum) {
+    const u = new URL(window.location.href);
+    u.searchParams.set("book", bookSlug);
+    u.searchParams.set("chapter", String(chapterNum));
+
+    let tab = u.searchParams.get("tab") || "chapter_scripture";
+    if (tab === "book_home") tab = "chapter_scripture";
+    u.searchParams.set("tab", tab);
+
+    // close any modal state
+    u.searchParams.delete("modal");
+
+    return u.pathname + "?" + u.searchParams.toString();
+  }
+function prettyBook(slug) {
+  if (!slug) return "";
+  return slug
+    .split("-")
+    .map(w => w ? (w[0].toUpperCase() + w.slice(1)) : w)
+    .join(" ");
+}
+
+  function computePrevNext(bookSlug, chapterNum) {
+    const list = window.MTB_CONTENT || [];
+    const idx = list.findIndex(b => b.slug === bookSlug);
+    if (idx < 0) return null;
+
+    const currentChCount = parseInt(list[idx].chapters || 1, 10);
+
+    // prev
+    let prevBook = bookSlug;
+    let prevCh = chapterNum - 1;
+    if (chapterNum <= 1) {
+      const pidx = (idx - 1 + list.length) % list.length;
+      prevBook = list[pidx].slug;
+      prevCh = parseInt(list[pidx].chapters || 1, 10);
+    }
+
+    // next
+    let nextBook = bookSlug;
+    let nextCh = chapterNum + 1;
+    if (chapterNum >= currentChCount) {
+      const nidx = (idx + 1) % list.length;
+      nextBook = list[nidx].slug;
+      nextCh = 1;
+    }
+
+    return { prev: { book: prevBook, ch: prevCh }, next: { book: nextBook, ch: nextCh } };
+  }
+
+  function disableChapterNav(navEl) {
+    if (!navEl) return;
+    navEl.classList.add("is-loading");
+    navEl.querySelectorAll("button").forEach(b => { b.disabled = true; });
+  }
+
+  function ensureChapterNav() {
+    const { book, chapter } = getParams();
+
+    // Only show on real chapter pages
+    if (!book || !Number.isFinite(chapter) || chapter < 1) return;
+
+    const tabs = document.getElementById("tabs");
+    if (!tabs) return;
+
+    // already present
+    if (tabs.querySelector(".chapter-nav")) return;
+
+    // Must have MTB_CONTENT for cross-book wrap
+    if (!window.MTB_CONTENT || !Array.isArray(window.MTB_CONTENT) || window.MTB_CONTENT.length === 0) return;
+
+    const plan = computePrevNext(book, chapter);
+    if (!plan) return;
+
+    const nav = document.createElement("div");
+    nav.className = "chapter-nav";
+    nav.innerHTML = `
+      <button type="button" class="chapter-nav-btn" id="chapter-prev" aria-label="Previous chapter">
+        <span aria-hidden="true">◀</span>
+      </button>
+      <button type="button" class="chapter-nav-btn" id="chapter-next" aria-label="Next chapter">
+        <span aria-hidden="true">▶</span>
+      </button>
+    `;
+
+    tabs.appendChild(nav);
+// Hover tooltips (show destination)
+const prevBtn = nav.querySelector("#chapter-prev");
+const nextBtn = nav.querySelector("#chapter-next");
+
+if (prevBtn) {
+  prevBtn.title = `${prettyBook(plan.prev.book)} ${plan.prev.ch}`;
+  prevBtn.setAttribute("aria-label", `Previous: ${prettyBook(plan.prev.book)} chapter ${plan.prev.ch}`);
+}
+
+if (nextBtn) {
+  nextBtn.title = `${prettyBook(plan.next.book)} ${plan.next.ch}`;
+  nextBtn.setAttribute("aria-label", `Next: ${prettyBook(plan.next.book)} chapter ${plan.next.ch}`);
+}
+
+    nav.querySelector("#chapter-prev").addEventListener("click", function () {
+      disableChapterNav(nav);
+      window.location.href = buildUrl(plan.prev.book, plan.prev.ch);
+    });
+
+    nav.querySelector("#chapter-next").addEventListener("click", function () {
+      disableChapterNav(nav);
+      window.location.href = buildUrl(plan.next.book, plan.next.ch);
+    });
+  }
+
+  document.addEventListener("DOMContentLoaded", function () {
+    ensureChapterNav();
+
+    // If tabs are re-rendered dynamically, re-attach
+    const tabs = document.getElementById("tabs");
+    if (tabs) {
+      const obs = new MutationObserver(() => ensureChapterNav());
+      obs.observe(tabs, { childList: true, subtree: true });
+    }
+
+    window.addEventListener("popstate", ensureChapterNav);
+  });
+})();

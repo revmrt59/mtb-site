@@ -122,6 +122,35 @@ body { margin: 0; }
   transition: all 0.15s ease;
 }
 
+/* Editorial status: amber means the available Book Overview is a draft. */
+.book-hero-controls button.mtb-draft{
+  background:#f59e0b;
+  color:#111111;
+  border-color:#d97706;
+  box-shadow:0 0 0 3px rgba(245,158,11,0.28);
+}
+.book-hero-controls button.mtb-draft:hover{
+  background:#d97706;
+  color:#111111;
+  border-color:#b45309;
+}
+
+/* Draft Book Overview content is blue to distinguish it from approved copy. */
+.book-modal-content.mtb-draft-content,
+.book-modal-content.mtb-draft-content p,
+.book-modal-content.mtb-draft-content li,
+.book-modal-content.mtb-draft-content h1,
+.book-modal-content.mtb-draft-content h2,
+.book-modal-content.mtb-draft-content h3,
+.book-modal-content.mtb-draft-content h4,
+.book-modal-content.mtb-draft-content h5,
+.book-modal-content.mtb-draft-content h6,
+.book-modal-content.mtb-draft-content strong,
+.book-modal-content.mtb-draft-content em,
+.book-modal-content.mtb-draft-content span{
+  color:#2563eb !important;
+}
+
 
 
     /* Book navigation (Prev / Next book) */
@@ -361,7 +390,7 @@ body { margin: 0; }
 
       <div class="book-hero-controls">
          <button id="book-hero-canonical" type="button">Overall Bible Context</button>
-        <button id="book-hero-intro" type="button">Book Overview</button>
+        <button id="book-hero-intro" type="button" style="display:none" disabled>Book Overview</button>
       <!--   <button id="book-hero-resources" type="button">Book Resources</button>  -->
       </div>
     </div>
@@ -547,6 +576,97 @@ document.addEventListener("DOMContentLoaded", function () {
     return null;
   }
 
+  // Book Overview draft support.
+  // Approved always wins. Draft is used only when approved is absent.
+  function getBookOverviewCandidates(bookSlug) {
+    const approved = `book-overview-${bookSlug}.html`;
+    const draft = `book-overview-${bookSlug}-draft.html`;
+
+    return {
+      approved: [
+        `/books/new-testament/${bookSlug}/000-book/${approved}`,
+        `/books/old-testament/${bookSlug}/000-book/${approved}`
+      ],
+      draft: [
+        `/books/new-testament/${bookSlug}/000-book/${draft}`,
+        `/books/old-testament/${bookSlug}/000-book/${draft}`
+      ],
+      approvedFile: approved,
+      draftFile: draft
+    };
+  }
+
+  async function realBookOverviewExists(url) {
+    try {
+      const res = await fetch(url, { method: "GET", cache: "no-store" });
+      if (!res.ok) return false;
+
+      const html = await res.text();
+      const parsed = new DOMParser().parseFromString(html, "text/html");
+
+      // Some local/static servers return book.html with HTTP 200 when the
+      // requested generated file does not exist. Reject that shell.
+      if (
+        parsed.querySelector("#book-hero") ||
+        parsed.querySelector("#book-hero-chapters") ||
+        parsed.title.trim().toLowerCase() === "mastering the bible - book"
+      ) {
+        return false;
+      }
+
+      // A Book Overview exists only when the returned document contains
+      // an actual generated Book Overview element.
+      return !!parsed.querySelector('[data-doc-type="book-overview"]');
+    } catch (_) {
+      return false;
+    }
+  }
+
+  async function getBookOverviewStatus(bookSlug) {
+    const c = getBookOverviewCandidates(bookSlug);
+
+    for (const u of c.approved) {
+      if (await realBookOverviewExists(u)) {
+        return { status: "complete", url: u };
+      }
+    }
+
+    for (const u of c.draft) {
+      if (await realBookOverviewExists(u)) {
+        return { status: "draft", url: u };
+      }
+    }
+
+    return { status: "missing", url: "" };
+  }
+
+  async function updateBookOverviewButtonStatus() {
+    if (!introBtn) return;
+
+    // Hidden unless a real approved or draft Book Overview is confirmed.
+    introBtn.style.display = "none";
+    introBtn.disabled = true;
+    introBtn.classList.remove("mtb-draft");
+    introBtn.removeAttribute("data-mtb-status");
+    introBtn.removeAttribute("title");
+
+    const result = await getBookOverviewStatus(book);
+
+    if (result.status === "draft") {
+      introBtn.classList.add("mtb-draft");
+      introBtn.setAttribute("data-mtb-status", "draft");
+      introBtn.title = "Draft — editorial review needed";
+      introBtn.disabled = false;
+      introBtn.style.display = "";
+    } else if (result.status === "complete") {
+      introBtn.setAttribute("data-mtb-status", "complete");
+      introBtn.disabled = false;
+      introBtn.style.display = "";
+    } else {
+      introBtn.setAttribute("data-mtb-status", "missing");
+    }
+  }
+
   function setUrlParam(key, value) {
     const u = new URL(window.location.href);
     if (value == null) u.searchParams.delete(key);
@@ -618,6 +738,18 @@ function getCanonicalContextForBook(bookSlug) {
 }
 
   async function openBookModal(kind) {
+    if (kind === "book_intro") {
+      const overviewStatus = await getBookOverviewStatus(book);
+      if (overviewStatus.status === "missing") {
+        if (introBtn) {
+          introBtn.style.display = "none";
+          introBtn.disabled = true;
+          introBtn.setAttribute("data-mtb-status", "missing");
+        }
+        return;
+      }
+    }
+
     const modal = document.getElementById("book-modal");
     const content = document.getElementById("book-modal-content");
     const closeBtn = document.getElementById("book-modal-close");
@@ -649,10 +781,8 @@ if (kind === "canonical_context") {
 
   missingLabel = candidates[0];
 
-} else {
-  const docFile = (kind === "book_resources")
-    ? `${book}-0-book-resources.html`
-    : `book-overview-${book}.html`;
+} else if (kind === "book_resources") {
+  const docFile = `${book}-0-book-resources.html`;
 
   candidates = [
     `/books/new-testament/${book}/000-book/${docFile}`,
@@ -660,16 +790,38 @@ if (kind === "canonical_context") {
   ];
 
   missingLabel = docFile;
+
+} else {
+  const overview = getBookOverviewCandidates(book);
+
+  // Approved paths are deliberately first. If no approved file exists,
+  // the matching -draft.html file is the fallback.
+  candidates = [
+    ...overview.approved,
+    ...overview.draft
+  ];
+
+  missingLabel = `${overview.approvedFile} or ${overview.draftFile}`;
 }
 
   const loaded = await fetchFirstOk(candidates);
   if (loaded) {
+    content.classList.remove("mtb-draft-content");
+
+    const loadedIsDraft =
+      kind === "book_intro" &&
+      /-draft\.html(?:$|[?#])/i.test(loaded.url);
+
+    if (loadedIsDraft) {
+      content.classList.add("mtb-draft-content");
+    }
+
     content.innerHTML = loaded.html;
 
-    // ✅ ADD THIS LINE
     wireModalLinks(content);
 
   } else {
+    content.classList.remove("mtb-draft-content");
     content.innerHTML =
       `<p><strong>Could not load:</strong> ${missingLabel}</p>` +
       `<p>Expected one of these paths:</p>` +
@@ -684,6 +836,7 @@ if (kind === "canonical_context") {
     function closeModal() {
       modal.classList.add("hidden");
       modal.setAttribute("aria-hidden", "true");
+      content.classList.remove("mtb-draft-content");
       setUrlParam("modal", null);
     }
 
@@ -736,7 +889,14 @@ function wireModalLinks_DUPLICATE_1(modalContentEl) {
 
 
     if (introBtn) {
-    introBtn.onclick = function(){
+    introBtn.onclick = async function(){
+      const result = await getBookOverviewStatus(book);
+      if (result.status === "missing") {
+        introBtn.style.display = "none";
+        introBtn.disabled = true;
+        introBtn.setAttribute("data-mtb-status", "missing");
+        return;
+      }
       openBookModal("book_intro");
     };
   }
@@ -750,6 +910,9 @@ if (canonicalBtn) {
       openBookModal("book_resources");
     };
   }
+
+  // Color Book Overview blue when only the draft version is available.
+  updateBookOverviewButtonStatus();
 
 if (chapterWrap) {
     chapterWrap.innerHTML = "";

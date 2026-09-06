@@ -6,14 +6,55 @@
 //   - Converts "word (G####/H####)" markers into <span class="ws" data-ws="G####" data-ws-doc="...">
 //   - Points word studies to canonical files: book-chapter-verse-g###.html
 //   - Sets data-ws-json for optional JSON mode (still supported by wordstudy-hover.js)
- const stamp = "LOAD-DOC v2026-08-10-WS-CANONICAL";
+ const stamp = "LOAD-DOC v2026-09-06-DRAFT-SUPPORT-FULL-TESTAMENT-MAP";
   console.log(stamp);
 (function () {
   // ------------------------------------------
   // BOOK TESTAMENT LOOKUP (extend as needed)
   // ------------------------------------------
   const BOOK_TESTAMENT = {
-    // NT
+    // Old Testament
+    genesis: "old-testament",
+    exodus: "old-testament",
+    leviticus: "old-testament",
+    numbers: "old-testament",
+    deuteronomy: "old-testament",
+    joshua: "old-testament",
+    judges: "old-testament",
+    ruth: "old-testament",
+    "1-samuel": "old-testament",
+    "2-samuel": "old-testament",
+    "1-kings": "old-testament",
+    "2-kings": "old-testament",
+    "1-chronicles": "old-testament",
+    "2-chronicles": "old-testament",
+    ezra: "old-testament",
+    nehemiah: "old-testament",
+    esther: "old-testament",
+    job: "old-testament",
+    psalms: "old-testament",
+    proverbs: "old-testament",
+    ecclesiastes: "old-testament",
+    "song-of-solomon": "old-testament",
+    isaiah: "old-testament",
+    jeremiah: "old-testament",
+    lamentations: "old-testament",
+    ezekiel: "old-testament",
+    daniel: "old-testament",
+    hosea: "old-testament",
+    joel: "old-testament",
+    amos: "old-testament",
+    obadiah: "old-testament",
+    jonah: "old-testament",
+    micah: "old-testament",
+    nahum: "old-testament",
+    habakkuk: "old-testament",
+    zephaniah: "old-testament",
+    haggai: "old-testament",
+    zechariah: "old-testament",
+    malachi: "old-testament",
+
+    // New Testament
     matthew: "new-testament",
     mark: "new-testament",
     luke: "new-testament",
@@ -40,18 +81,7 @@
     "2-john": "new-testament",
     "3-john": "new-testament",
     jude: "new-testament",
-    revelation: "new-testament",
-
-    // OT (examples)
-    genesis: "old-testament",
-    exodus: "old-testament",
-    psalms: "old-testament",
-    proverbs: "old-testament",
-    obadiah: "old-testament",
-    ruth: "old-testament",
-    hosea: "old-testament",
-    habakkuk: "old-testament",
-
+    revelation: "new-testament"
   };
 
   // ==========================================
@@ -62,21 +92,21 @@
 
     // Canonical Book Overview filename:
     // book-overview-ruth.html
-    const intro = name.match(/^book-overview-([a-z0-9-]+)\.html$/i);
+    const intro = name.match(/^book-overview-([a-z0-9-]+)(?:-draft)?\.html$/i);
     if (intro) return { book: intro[1].toLowerCase(), chapter: 0, type: "book-overview" };
 
     // Legacy compatibility during transition:
     // ruth-0-book-overview.html
-    const legacyIntro = name.match(/^([a-z0-9-]+)-0-book-overview\.html$/i);
+    const legacyIntro = name.match(/^([a-z0-9-]+)-0-book-overview(?:-draft)?\.html$/i);
     if (legacyIntro) return { book: legacyIntro[1].toLowerCase(), chapter: 0, type: "book-overview" };
 
-    const chap = name.match(/^([a-z0-9-]+)-(\d+)-chapter-(scripture|overview|explanation|reflections|insights)\.html$/i);
+    const chap = name.match(/^([a-z0-9-]+)-(\d+)-chapter-(scripture|overview|explanation|reflections|insights)(?:-draft)?\.html$/i);
     if (chap) {
       const kind = chap[3].toLowerCase() === "insights" ? "reflections" : chap[3].toLowerCase();
       return { book: chap[1].toLowerCase(), chapter: Number(chap[2]), type: "chapter-" + kind };
     }
 
-    const eg = name.match(/^([a-z0-9-]+)-(\d+)-(chapter-)?eg-culture\.html$/i);
+    const eg = name.match(/^([a-z0-9-]+)-(\d+)-(chapter-)?eg-culture(?:-draft)?\.html$/i);
     if (eg) return { book: eg[1].toLowerCase(), chapter: Number(eg[2]), type: "chapter-eg-culture" };
 
     const res = name.match(/^([a-z0-9-]+)-(\d+)-(chapter-)?resources\.html$/i);
@@ -253,7 +283,7 @@
     const n = String(name || "").replace(/^\/+/, "");
 
     // Canonical Book Overview filename.
-    if (/^book-overview-[a-z0-9-]+\.html$/i.test(n)) return n;
+    if (/^book-overview-[a-z0-9-]+(?:-draft)?\.html$/i.test(n)) return n;
 
     // Chapter/resource/word-study filenames.
     if (/^[a-z0-9\-]+-(0|\d+)-[a-z0-9\-]+\.html$/i.test(n)) return n;
@@ -966,14 +996,41 @@ function addScriptureExplainButtons(root, meta, scriptureDocPath) {
   const explanationFile =
     `${meta.book}-${meta.chapter}-chapter-explanation.html`;
 
-  const explanationPath = chapterDir + explanationFile;
+  const explanationDraftFile =
+    `${meta.book}-${meta.chapter}-chapter-explanation-draft.html`;
 
+  const explanationPath = chapterDir + explanationFile;
+  const explanationDraftPath = chapterDir + explanationDraftFile;
+
+  let resolvedExplanationPath = null;
   let cachedExplanationDoc = null;
 
   // ---------------------------------------
   // CREATE MODAL ONCE
   // ---------------------------------------
+  function ensureVersePopupDraftStyle() {
+    if (document.getElementById("mtb-verse-popup-draft-style")) return;
+
+    const style = document.createElement("style");
+    style.id = "mtb-verse-popup-draft-style";
+    style.textContent = `
+      #mtb-verse-explain-overlay.mtb-draft-popup .mtb-verse-explain-scripture,
+      #mtb-verse-explain-overlay.mtb-draft-popup .mtb-verse-explain-section-content,
+      #mtb-verse-explain-overlay.mtb-draft-popup .mtb-verse-explain-section-content p,
+      #mtb-verse-explain-overlay.mtb-draft-popup .mtb-verse-explain-section-content li,
+      #mtb-verse-explain-overlay.mtb-draft-popup .mtb-verse-explain-section-content strong,
+      #mtb-verse-explain-overlay.mtb-draft-popup .mtb-verse-explain-section-content em,
+      #mtb-verse-explain-overlay.mtb-draft-popup .mtb-verse-explain-section-content span,
+      #mtb-verse-explain-overlay.mtb-draft-popup .mtb-verse-explain-section-content a {
+        color:#2563eb !important;
+      }
+    `;
+    document.head.appendChild(style);
+  }
+
   function ensureModal() {
+    ensureVersePopupDraftStyle();
+
     let overlay = document.getElementById("mtb-verse-explain-overlay");
     if (overlay) return overlay;
 
@@ -1131,22 +1188,66 @@ function addScriptureExplainButtons(root, meta, scriptureDocPath) {
   async function getExplanationDoc() {
     if (cachedExplanationDoc) return cachedExplanationDoc;
 
-    const response = await fetch(explanationPath, {
-      cache: "no-store"
-    });
+    async function fetchStudy(path) {
+      try {
+        const response = await fetch(path, { cache: "no-store" });
+        if (!response.ok) return null;
 
-    if (!response.ok) {
-      throw new Error(
-        `Could not load Chapter Study: ${explanationPath}`
-      );
+        const html = await response.text();
+        if (htmlLooksLikeMissingFallback(html)) return null;
+
+        const doc = new DOMParser().parseFromString(html, "text/html");
+        const statusEl = doc.querySelector("[data-mtb-status]");
+        const status = statusEl
+          ? String(statusEl.getAttribute("data-mtb-status") || "").toLowerCase()
+          : "";
+
+        return {
+          path,
+          doc,
+          isPlaceholder: status === "placeholder"
+        };
+      } catch (_) {
+        return null;
+      }
     }
 
-    const html = await response.text();
+    // Review workflow:
+    // 1. A real approved Chapter Study always wins.
+    // 2. An approved placeholder must NOT block a real draft Chapter Study.
+    // 3. If no real approved study exists, use the draft when present.
+    // 4. Only fall back to the approved placeholder when no draft exists.
+    const approved = await fetchStudy(explanationPath);
 
-    cachedExplanationDoc =
-      new DOMParser().parseFromString(html, "text/html");
+    if (approved && !approved.isPlaceholder) {
+      resolvedExplanationPath = approved.path;
+      cachedExplanationDoc = approved.doc;
+      return cachedExplanationDoc;
+    }
 
-    return cachedExplanationDoc;
+    const draft = await fetchStudy(explanationDraftPath);
+
+    if (draft && !draft.isPlaceholder) {
+      resolvedExplanationPath = draft.path;
+      cachedExplanationDoc = draft.doc;
+      return cachedExplanationDoc;
+    }
+
+    if (approved) {
+      resolvedExplanationPath = approved.path;
+      cachedExplanationDoc = approved.doc;
+      return cachedExplanationDoc;
+    }
+
+    if (draft) {
+      resolvedExplanationPath = draft.path;
+      cachedExplanationDoc = draft.doc;
+      return cachedExplanationDoc;
+    }
+
+    throw new Error(
+      `Could not load Chapter Study: ${explanationPath} or ${explanationDraftPath}`
+    );
   }
 
   // ---------------------------------------
@@ -1178,12 +1279,21 @@ function addScriptureExplainButtons(root, meta, scriptureDocPath) {
       el.innerHTML = "";
     });
 
+    overlay.classList.remove("mtb-draft-popup");
+    overlay.removeAttribute("data-mtb-status");
+
     overlay.classList.add("is-open");
     overlay.setAttribute("aria-hidden", "false");
     document.body.classList.add("mtb-verse-explain-open");
 
     try {
       const studyDoc = await getExplanationDoc();
+
+      const popupIsDraft =
+        /-draft\.html(?:$|[?#])/i.test(resolvedExplanationPath || "");
+
+      overlay.classList.toggle("mtb-draft-popup", popupIsDraft);
+      overlay.dataset.mtbStatus = popupIsDraft ? "draft" : "complete";
 
       const verseBlock =
         studyDoc.querySelector(
@@ -1338,8 +1448,8 @@ function addScriptureExplainButtons(root, meta, scriptureDocPath) {
   // Let the Chapter Scripture renderer decide whether the "i" button
   // should be shown. Placeholder Chapter Study files count as available.
   window.MTB.hasVerseExplanationFile = async function () {
-    try {
-      let response = await fetch(explanationPath, {
+    async function exists(path) {
+      let response = await fetch(path, {
         method: "HEAD",
         cache: "no-store"
       });
@@ -1347,7 +1457,7 @@ function addScriptureExplainButtons(root, meta, scriptureDocPath) {
       if (response.ok) return true;
 
       if (response.status === 405) {
-        response = await fetch(explanationPath, {
+        response = await fetch(path, {
           method: "GET",
           cache: "no-store"
         });
@@ -1355,6 +1465,11 @@ function addScriptureExplainButtons(root, meta, scriptureDocPath) {
       }
 
       return false;
+    }
+
+    try {
+      if (await exists(explanationPath)) return true;
+      return await exists(explanationDraftPath);
     } catch (err) {
       console.warn("MTB verse explanation availability check failed:", err);
       return false;
@@ -1376,6 +1491,145 @@ function addScriptureExplainButtons(root, meta, scriptureDocPath) {
 
 
 }
+  // ==========================================
+  // DRAFT SUPPORT
+  // Approved HTML is always preferred. If it does not exist,
+  // the loader automatically tries the matching -draft.html file.
+  // ==========================================
+  function approvedDocName(docName) {
+    return String(docName || "").replace(/-draft\.html$/i, ".html");
+  }
+
+  function draftDocName(docName) {
+    const approved = approvedDocName(docName);
+    return approved.replace(/\.html$/i, "-draft.html");
+  }
+
+  function isDraftDocName(docName) {
+    return /-draft\.html$/i.test(String(docName || ""));
+  }
+
+  function htmlLooksLikeMissingFallback(html) {
+    const text = String(html || "");
+
+    return (
+      /<title>\s*Mastering the Bible\s*-\s*Book\s*<\/title>/i.test(text) ||
+      /id=["']book-hero["']/i.test(text) ||
+      /id=["']book-hero-chapters["']/i.test(text)
+    );
+  }
+
+  async function fetchGeneratedDoc(path, expectedType) {
+    const response = await fetch(path, { cache: "no-store" });
+    if (!response.ok) return null;
+
+    const html = await response.text();
+
+    // Accept legacy generated MTB documents that predate data-doc-type/status.
+    // Reject only the known book-page shell returned by the server for a
+    // missing generated file.
+    if (htmlLooksLikeMissingFallback(html)) {
+      return null;
+    }
+
+    return html;
+  }
+
+  async function fetchDocWithDraftFallback(docName) {
+    const requested = String(docName || "");
+    const approvedName = approvedDocName(requested);
+
+    // Resources, Scripture, word studies, and other non-editorial documents
+    // keep their existing single-file behavior.
+    const meta = parseDocName(approvedName);
+    const supportsDraft =
+      meta.type === "book-overview" ||
+      meta.type === "chapter-overview" ||
+      meta.type === "chapter-explanation" ||
+      meta.type === "chapter-reflections" ||
+      meta.type === "chapter-eg-culture";
+
+    if (!supportsDraft) {
+      const path = buildDocPath(requested);
+      const response = await fetch(path, { cache: "no-store" });
+      if (!response.ok) throw new Error("Failed to load: " + path);
+      return {
+        docName: requested,
+        docPath: path,
+        html: await response.text(),
+        isDraft: isDraftDocName(requested)
+      };
+    }
+
+    const approvedPath = buildDocPath(approvedName);
+    const approvedHtml = await fetchGeneratedDoc(approvedPath, meta.type);
+
+    if (approvedHtml !== null) {
+      return {
+        docName: approvedName,
+        docPath: approvedPath,
+        html: approvedHtml,
+        isDraft: false
+      };
+    }
+
+    const draftName = draftDocName(approvedName);
+    const draftPath = buildDocPath(draftName);
+    const draftHtml = await fetchGeneratedDoc(draftPath, meta.type);
+
+    if (draftHtml !== null) {
+      return {
+        docName: draftName,
+        docPath: draftPath,
+        html: draftHtml,
+        isDraft: true
+      };
+    }
+
+    throw new Error(
+      "Failed to load approved or draft document: " +
+      approvedPath + " | " + draftPath
+    );
+  }
+
+  function ensureDraftDocumentStyle() {
+    if (document.getElementById("mtb-draft-document-style")) return;
+
+    const style = document.createElement("style");
+    style.id = "mtb-draft-document-style";
+    style.textContent = `
+      body.mtb-document-is-draft #doc-target,
+      body.mtb-document-is-draft #doc-target p,
+      body.mtb-document-is-draft #doc-target li,
+      body.mtb-document-is-draft #doc-target h1,
+      body.mtb-document-is-draft #doc-target h2,
+      body.mtb-document-is-draft #doc-target h3,
+      body.mtb-document-is-draft #doc-target h4,
+      body.mtb-document-is-draft #doc-target h5,
+      body.mtb-document-is-draft #doc-target h6,
+      body.mtb-document-is-draft #doc-target strong,
+      body.mtb-document-is-draft #doc-target em,
+      body.mtb-document-is-draft #doc-target span,
+      body.mtb-document-is-draft #doc-target a{
+        color:#2563eb !important;
+      }
+    `;
+    document.head.appendChild(style);
+  }
+
+  function setLoadedDraftState(isDraft) {
+    ensureDraftDocumentStyle();
+
+    document.body.classList.toggle("mtb-document-is-draft", !!isDraft);
+    document.body.dataset.mtbStatus = isDraft ? "draft" : "complete";
+
+    const target = document.getElementById("doc-target");
+    if (target) {
+      target.classList.toggle("mtb-draft-content", !!isDraft);
+      target.dataset.mtbStatus = isDraft ? "draft" : "complete";
+    }
+  }
+
   // ==========================================
   // LOADING CORE
   // ==========================================
@@ -1414,13 +1668,13 @@ if (meta.type === "chapter-explanation") {
 
    
     const isExplanation =
-      meta.type === "chapter-explanation" || /chapter[-_]?explanation\.html$/i.test(docName);
+      meta.type === "chapter-explanation" || /chapter[-_]?explanation(?:-draft)?\.html$/i.test(docName);
 
     if (isExplanation) {
       enhanceStrongMarkersToWordStudies(target, meta, docPath);
 
       // Optional JSON mode support (backward compatibility)
-      const wsJsonName = docName.replace(/chapter[-_]?explanation\.html$/i, "wordstudies.json");
+      const wsJsonName = docName.replace(/chapter[-_]?explanation(?:-draft)?\.html$/i, "wordstudies.json");
       const baseDir = docPath.slice(0, docPath.lastIndexOf("/") + 1);
       const wsJsonPath = baseDir + wsJsonName;
 
@@ -1456,22 +1710,13 @@ if (meta.type === "chapter-explanation") {
       return;
     }
 
-    const docPath = buildDocPath(docName);
-    if (!docPath) {
-      const target = document.getElementById("doc-target");
-      if (target) target.innerHTML = `<p>Could not build document path.</p>`;
-      return;
-    }
-
-    fetch(docPath, { cache: "no-store" })
-      .then((r) => {
-        if (!r.ok) throw new Error("Failed to load: " + docPath);
-        return r.text();
-      })
-      .then((html) => {
-        applyLoadedHtml(docName, docPath, html);
+    fetchDocWithDraftFallback(docName)
+      .then((result) => {
+        setLoadedDraftState(result.isDraft);
+        applyLoadedHtml(result.docName, result.docPath, result.html);
       })
       .catch((err) => {
+        setLoadedDraftState(false);
         const target = document.getElementById("doc-target");
         if (!target) return;
         target.innerHTML = `<p>Content failed to load.</p><pre>${err.message}</pre>`;

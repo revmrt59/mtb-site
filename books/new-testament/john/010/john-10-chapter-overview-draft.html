@@ -1,0 +1,151 @@
+<section class="mtb-doc mtb-doc--read" data-doc-type="chapter-overview" data-mtb-status="draft">
+<style>
+.mtb-print-controls{display:flex;justify-content:flex-end;gap:8px;margin:0 0 14px;padding:0 4px}
+.mtb-print-button{appearance:none;border:1px solid #b9c8d5;border-radius:8px;background:#fff;padding:9px 14px;color:#173a5e;font:700 14px Arial,Helvetica,sans-serif;cursor:pointer}
+.mtb-print-button:hover{background:#f2f6f9}
+@media print{
+  @page{size:auto;margin:.45in}
+  html,body{background:#fff!important;color:#000!important}
+  .mtb-print-controls,.mtb-study-controls{display:none!important}
+  .mtb-doc{display:block!important;width:100%!important;max-width:none!important;margin:0!important;padding:0!important}
+  .mtb-overview-hero,.mtb-study-hero,.mtb-reflections-hero,.mtb-culture-hero{box-shadow:none!important;background:#fff!important;border-color:#777!important}
+  .mtb-overview-grid,.mtb-reflections-grid,.mtb-culture-grid,.mtb-study-verse-grid{display:block!important}
+  .mtb-overview-card,.mtb-reflections-card,.mtb-culture-card,.mtb-study-verse,.mtb-study-verse-panel,.mtb-intro-card{
+    display:block!important;width:100%!important;max-width:none!important;height:auto!important;margin:0 0 12pt!important;
+    break-inside:avoid;page-break-inside:avoid;box-shadow:none!important;background:#fff!important;color:#000!important
+  }
+  details.mtb-study-verse{display:block!important;overflow:visible!important}
+  details.mtb-study-verse>summary{display:flex!important;background:#fff!important;color:#000!important;border-bottom:1px solid #777!important}
+  details.mtb-study-verse>summary:after{display:none!important}
+  details.mtb-study-verse>.mtb-study-verse-body{display:block!important}
+  h1,h2,h3,h4{break-after:avoid;page-break-after:avoid;color:#000!important}
+  p,li{orphans:3;widows:3}
+  a{color:#000!important;text-decoration:none!important}
+  a[href]::after{content:none!important}
+}
+</style>
+<div class="mtb-print-controls"><button type="button" class="mtb-print-button" onclick="(function(button){var doc=button.closest('.mtb-doc')||document;var panels=Array.prototype.slice.call(doc.querySelectorAll('details'));panels.forEach(function(panel){panel.open=true;});window.print();})(this)">&#128438; Print This Page</button></div>
+<style>
+.mtb-chapter-overview-dashboard{--mtb-navy:#173a5e;--mtb-navy-2:#2b587f;--mtb-gold:#b7832f;--mtb-blue-soft:#eef4f9;--mtb-border:#d7e0e8;--mtb-text:#1d2935;width:100%;max-width:1600px;margin:0 auto;padding:2px 4px 30px;color:var(--mtb-text);font-family:Arial,Helvetica,sans-serif}.mtb-chapter-overview-dashboard *{box-sizing:border-box}.mtb-overview-hero{display:flex;align-items:center;justify-content:space-between;gap:20px;margin:0 0 22px;padding:22px 26px;border:1px solid #cbd8e3;border-radius:14px;background:linear-gradient(135deg,#f7fafc 0%,#e8f0f7 100%)}.mtb-overview-eyebrow{margin:0 0 5px;color:var(--mtb-gold);font-size:.78rem;font-weight:800;letter-spacing:.13em;text-transform:uppercase}.mtb-overview-title{margin:0;color:var(--mtb-navy);font-size:clamp(1.55rem,3vw,2.25rem);line-height:1.1}.mtb-overview-badge{flex:0 0 auto;padding:10px 16px;border:1px solid rgba(23,58,94,.18);border-radius:999px;background:#fff;color:var(--mtb-navy);font-weight:800}.mtb-overview-grid{display:grid;grid-template-columns:repeat(12,minmax(0,1fr));gap:16px;align-items:stretch}.mtb-overview-card{min-width:0;overflow:hidden;border:1px solid var(--mtb-border);border-top:4px solid var(--mtb-navy-2);border-radius:12px;background:#fff;box-shadow:0 4px 15px rgba(28,48,66,.055)}.mtb-overview-card-central{grid-column:1/span 4;grid-row:1}.mtb-overview-card-about{grid-column:5/span 4;grid-row:1}.mtb-overview-card-heart{grid-column:9/span 4;grid-row:1}.mtb-overview-card-sections{grid-column:1/span 6;grid-row:2}.mtb-overview-card-matters{grid-column:7/span 6;grid-row:2}.mtb-overview-card-themes{grid-column:1/span 6;grid-row:3}.mtb-overview-card-words{grid-column:7/span 6;grid-row:3}.mtb-psalms-overview .mtb-overview-card-psalm-author{grid-column:1/span 4;grid-row:1}.mtb-psalms-overview .mtb-overview-card-psalm-occasion{grid-column:5/span 4;grid-row:1}.mtb-psalms-overview .mtb-overview-card-psalm-kind{grid-column:9/span 4;grid-row:1}.mtb-psalms-overview .mtb-overview-card-central{grid-column:1/span 4;grid-row:2}.mtb-psalms-overview .mtb-overview-card-about{grid-column:5/span 4;grid-row:2}.mtb-psalms-overview .mtb-overview-card-heart{grid-column:9/span 4;grid-row:2}.mtb-psalms-overview .mtb-overview-card-sections{grid-column:1/span 6;grid-row:3}.mtb-psalms-overview .mtb-overview-card-matters{grid-column:7/span 6;grid-row:3}.mtb-psalms-overview .mtb-overview-card-themes{grid-column:1/span 6;grid-row:4}.mtb-psalms-overview .mtb-overview-card-words{grid-column:7/span 6;grid-row:4}.mtb-overview-card-header{margin:0;padding:12px 16px 10px;border-bottom:1px solid #e5ebf0;background:var(--mtb-blue-soft);color:var(--mtb-navy);font-size:.96rem;font-weight:800}.mtb-overview-card-body{padding:16px 18px 18px;font-size:1rem;line-height:1.48;overflow-wrap:anywhere}.mtb-overview-card-central .mtb-overview-card-body,.mtb-overview-card-heart .mtb-overview-card-body{font-size:1.06rem}.mtb-overview-card-body p{margin:0 0 .72em}.mtb-overview-card-body p:last-child{margin-bottom:0}.mtb-overview-card-body ul,.mtb-overview-card-body ol{margin:0;padding-left:1.25em}.mtb-overview-card-body li{margin:0 0 .35em}@media(max-width:980px){.mtb-overview-card{grid-column:span 6!important;grid-row:auto!important}}@media(max-width:760px){.mtb-overview-grid{grid-template-columns:1fr}.mtb-overview-card{grid-column:1/-1!important}.mtb-overview-hero{align-items:flex-start;flex-direction:column;padding:19px}}
+</style><div class="mtb-chapter-overview-dashboard"><header class="mtb-overview-hero"><div><p class="mtb-overview-eyebrow">Morning Chapter Explanation</p><h1 class="mtb-overview-title">John Chapter 10</h1></div><div class="mtb-overview-badge">Chapter 10</div></header><div class="mtb-overview-grid"><article class="mtb-overview-card mtb-overview-card-central"><h2 class="mtb-overview-card-header">Central Message</h2><div class="mtb-overview-card-body"><div data-custom-style="Normal (Web)">
+<p>Jesus is the true Shepherd who knows His sheep, gives His life for them, brings them into one flock, keeps them secure, and reveals His unique unity with the Father. John 10 confronts every false claim to spiritual leadership and presses the central question of the Gospel: Will people recognize the voice and works of Jesus and believe that He is the Christ, the Son of God?</p>
+</div></div></article><article class="mtb-overview-card mtb-overview-card-about"><h2 class="mtb-overview-card-header">What This Chapter Is About</h2><div class="mtb-overview-card-body"><div data-custom-style="Normal (Web)">
+<p>John 10 continues the conflict that followed the healing of the man born blind in John 9. The religious leaders had cast the healed man out, but Jesus had found him and received him. Against that background, Jesus contrasts false shepherds with the true Shepherd.</p>
+</div>
+<div data-custom-style="Normal (Web)">
+<p>He begins with the picture of a sheepfold. The true shepherd enters properly, calls his own sheep by name, and leads them because they know his voice. Jesus then identifies Himself as “the door of the sheep,” declaring that salvation and true pasture are found through Him. He contrasts His mission with the thief who comes to steal, kill, and destroy: Jesus came that His sheep “may have life, and that they may have it more abundantly.”</p>
+</div>
+<div data-custom-style="Normal (Web)">
+<p>Jesus then makes the chapter’s defining declaration: “I am the good shepherd.” Unlike a hired hand who abandons the sheep when danger comes, Jesus willingly lays down His life for them. His death will not be an accident or merely the result of His enemies’ power. He will lay His life down voluntarily, and He has authority to take it again.</p>
+</div>
+<div data-custom-style="Normal (Web)">
+<p>Later, during the Feast of Dedication, the religious leaders demand that Jesus state plainly whether He is the Christ. Jesus points them back to His words and works, but their unbelief exposes that they are not listening as His sheep do. He declares the security of those who belong to Him: they hear His voice, He knows them, they follow Him, He gives them eternal life, and no one can snatch them from His hand.</p>
+</div>
+<div data-custom-style="Normal (Web)">
+<p>The confrontation reaches its height when Jesus declares, “I and My Father are one.” His opponents attempt to stone Him for blasphemy. Jesus answers them from Scripture and again points to His works as evidence of His relationship with the Father. The chapter ends with Jesus withdrawing beyond the Jordan, where many remember John the Baptist’s testimony and believe in Him.</p>
+</div></div></article><article class="mtb-overview-card mtb-overview-card-heart"><h2 class="mtb-overview-card-header">The Heart of the Chapter</h2><div class="mtb-overview-card-body"><div data-custom-style="Normal (Web)">
+<p>At the heart of John 10 is the relationship between Jesus and His sheep.</p>
+</div>
+<div data-custom-style="Normal (Web)">
+<p>Jesus does not merely provide information about God or point toward life. He is the Shepherd who personally knows His sheep, calls them, leads them, protects them, gives His life for them, and gives them eternal life.</p>
+</div>
+<div data-custom-style="Normal (Web)">
+<p>The repeated language is deeply relational: “My sheep hear My voice, and I know them, and they follow Me.” Belonging to Jesus is revealed in recognizing Him, trusting Him, and following Him.</p>
+</div>
+<div data-custom-style="Normal (Web)">
+<p>But the Shepherd’s care rests on something even greater than human faithfulness. Jesus says, “neither shall anyone snatch them out of My hand.” Their security rests ultimately in the power of the Son and the Father. The Shepherd who laid down His life for the sheep is also the Shepherd whose hand cannot be overcome.</p>
+</div></div></article><article class="mtb-overview-card mtb-overview-card-sections"><h2 class="mtb-overview-card-header">Chapter Sections</h2><div class="mtb-overview-card-body"><div data-custom-style="Normal (Web)">
+<p><strong>1. The Shepherd and His Sheep — John 10:1–6</strong><br />
+Jesus contrasts the true shepherd with thieves and robbers. The shepherd knows his sheep, calls them by name, goes before them, and is followed because they recognize his voice.</p>
+</div>
+<div data-custom-style="Normal (Web)">
+<p><strong>2. Jesus, the Door of the Sheep — John 10:7–10</strong><br />
+Jesus identifies Himself as the door through which the sheep enter, are saved, and find pasture. He contrasts His life-giving purpose with the destructive purpose of the thief.</p>
+</div>
+<div data-custom-style="Normal (Web)">
+<p><strong>3. Jesus, the Good Shepherd — John 10:11–18</strong><br />
+The Good Shepherd lays down His life for the sheep. Jesus contrasts His sacrificial commitment with the hired hand who flees from danger and reveals that His death and resurrection are under His divine authority.</p>
+</div>
+<div data-custom-style="Normal (Web)">
+<p><strong>4. Division Over Jesus — John 10:19–21</strong><br />
+Jesus’ words again divide His hearers. Some accuse Him of having a demon, while others recognize that His words and works cannot easily be dismissed.</p>
+</div>
+<div data-custom-style="Normal (Web)">
+<p><strong>5. Jesus at the Feast of Dedication — John 10:22–30</strong><br />
+Asked whether He is the Christ, Jesus points to His works and explains the unbelief of His opponents. He describes His sheep as those who hear, are known by Him, and follow Him, and He declares their eternal security in His and His Father’s hands.</p>
+</div>
+<div data-custom-style="Normal (Web)">
+<p><strong>6. “I and My Father Are One” — John 10:31–39</strong><br />
+Jesus’ opponents attempt to stone Him because they understand His words as making Himself God. Jesus answers from Scripture, appeals again to His works, and declares the mutual indwelling relationship between Himself and the Father.</p>
+</div>
+<div data-custom-style="Normal (Web)">
+<p><strong>7. Many Believe Beyond the Jordan — John 10:40–42</strong><br />
+Jesus returns to the region where John the Baptist had ministered. The people recognize that everything John had said about Jesus was true, and many believe in Him.</p>
+</div></div></article><article class="mtb-overview-card mtb-overview-card-matters"><h2 class="mtb-overview-card-header">Why This Chapter Matters</h2><div class="mtb-overview-card-body"><div data-custom-style="Normal (Web)">
+<p>John 10 gives one of Scripture’s clearest pictures of who Jesus is to those who belong to Him. He is not a distant ruler managing a crowd. He is the Shepherd who knows His sheep individually and leads them personally.</p>
+</div>
+<div data-custom-style="Normal (Web)">
+<p>The chapter also establishes the cost of that relationship. The Shepherd keeps the sheep because He gives Himself for them. Jesus’ repeated statement that He will “lay down” His life anticipates the cross while emphasizing that His death is voluntary. No one ultimately takes His life from Him; He lays it down according to the Father’s will.</p>
+</div>
+<div data-custom-style="Normal (Web)">
+<p>John 10 also gives powerful assurance to believers. Eternal life is something Jesus gives, and the sheep’s security rests in His hand and the Father’s hand. The chapter therefore joins discipleship and security: His sheep hear His voice and follow Him, while Jesus knows them and keeps them.</p>
+</div>
+<div data-custom-style="Normal (Web)">
+<p>Finally, the chapter forces a decision about Jesus Himself. His claim to be the Good Shepherd, His authority to give eternal life, His works, and His declaration of unity with the Father cannot be reduced to Jesus merely being a moral teacher. His hearers must decide who He truly is.</p>
+</div></div></article><article class="mtb-overview-card mtb-overview-card-themes"><h2 class="mtb-overview-card-header">Key Themes to Watch For</h2><div class="mtb-overview-card-body"><ul>
+<li><p><strong>The True Shepherd</strong> — Jesus stands in contrast to leaders who use, neglect, or abandon the sheep. He knows, leads, protects, and sacrifices Himself for those who belong to Him.</p></li>
+<li><p><strong>Hearing His Voice</strong> — Jesus repeatedly describes His sheep as recognizing and responding to His voice. Their response reveals their relationship with the Shepherd.</p></li>
+<li><p><strong>Jesus as the Door</strong> — Access to salvation, safety, and spiritual provision comes through Jesus Himself.</p></li>
+<li><p><strong>Abundant Life</strong> — Jesus came not to destroy but to give life. The abundant life of verse 10 is rooted in belonging to and living under the care of the Shepherd.</p></li>
+<li><p><strong>The Shepherd Lays Down His Life</strong> — Jesus’ death is central to His identity as the Good Shepherd. He does not abandon the sheep when danger comes; He gives Himself for them.</p></li>
+<li><p><strong>One Flock and One Shepherd</strong> — Jesus speaks of “other sheep” whom He will also bring, pointing beyond the immediate Jewish setting toward the gathering of one people under one Shepherd.</p></li>
+<li><p><strong>Security in Christ</strong> — Jesus gives His sheep eternal life and declares that no one can snatch them from His hand or the Father’s hand.</p></li>
+<li><p><strong>Jesus and the Father</strong> — The chapter progressively reveals the extraordinary relationship between the Son and the Father, climaxing in Jesus’ declaration, “I and My Father are one.”</p></li>
+<li><p><strong>Belief and Unbelief</strong> — The same words and works of Jesus produce radically different responses. Some seek to stone Him; others recognize the truth of the testimony about Him and believe.</p></li>
+</ul></div></article><article class="mtb-overview-card mtb-overview-card-words"><h2 class="mtb-overview-card-header">Key Words &amp; Concepts</h2><div class="mtb-overview-card-body"><div data-custom-style="Normal (Web)">
+<p><strong>Shepherd</strong> — More than a pastoral illustration, shepherd language carried deep biblical significance. God Himself is portrayed as the Shepherd of His people, while Israel’s leaders were expected to shepherd faithfully. Jesus’ claim to be the Good Shepherd therefore carries significant theological weight.</p>
+</div>
+<div data-custom-style="Normal (Web)">
+<p><strong>Sheepfold</strong> — An enclosure used to gather and protect sheep. Jesus uses the familiar setting to distinguish the rightful shepherd from thieves and strangers and to describe the relationship between Himself and His people.</p>
+</div>
+<div data-custom-style="Normal (Web)">
+<p><strong>Door</strong> — Jesus declares, “I am the door.” He is not merely one guide among many; He presents Himself as the means by which the sheep enter into salvation and find pasture.</p>
+</div>
+<div data-custom-style="Normal (Web)">
+<p><strong>Good Shepherd</strong> — Jesus defines His goodness particularly through His willingness to lay down His life for the sheep. His shepherding reaches its fullest expression in sacrificial self-giving.</p>
+</div>
+<div data-custom-style="Normal (Web)">
+<p><strong>Know</strong> — Jesus knows His sheep, and His sheep know Him. This is more than awareness of information; the chapter describes personal recognition and relationship, patterned after the relationship between the Father and the Son.</p>
+</div>
+<div data-custom-style="Normal (Web)">
+<p><strong>Lay Down My Life</strong> — Repeated throughout verses 11–18, this language emphasizes the voluntary nature of Jesus’ death. He possesses authority both to lay His life down and to take it again.</p>
+</div>
+<div data-custom-style="Normal (Web)">
+<p><strong>Other Sheep</strong> — Jesus announces that He has sheep “which are not of this fold” whom He must also bring. Within John’s Gospel and the wider New Testament movement, this anticipates the gathering of people beyond Israel into one flock under Christ.</p>
+</div>
+<div data-custom-style="Normal (Web)">
+<p><strong>Feast of Dedication</strong> — The winter feast later known as Hanukkah, commemorating the rededication of the Jerusalem temple following its desecration in the second century BC. John specifically places the later confrontation with Jesus in this setting.</p>
+</div>
+<div data-custom-style="Normal (Web)">
+<p><strong>“I and My Father are one”</strong> — Jesus declares a unity with the Father that His opponents recognize as an extraordinary claim. The surrounding verses emphasize their united power in keeping the sheep and Jesus’ unique relationship with the Father.</p>
+</div>
+<h1 id="helpful-notes">Helpful Notes</h1>
+<div data-custom-style="Normal (Web)">
+<p>John 10:1–21 should be read closely with John 9. Jesus had just confronted religious leaders who claimed spiritual sight while rejecting both the miracle and the One who performed it. They expelled the healed man; Jesus found him. The shepherd imagery therefore does not appear in isolation—it follows a living demonstration of the difference between leaders who reject a sheep and the Shepherd who receives him.</p>
+</div>
+<div data-custom-style="Normal (Web)">
+<p>The Old Testament background is especially important. Ezekiel 34 condemns Israel’s unfaithful shepherds for caring for themselves rather than the flock and promises that God Himself will search for and shepherd His sheep. It also promises a Davidic shepherd over them. Against that background, Jesus’ declaration “I am the good shepherd” carries far more significance than simply describing Himself as a caring leader.</p>
+</div>
+<div data-custom-style="Normal (Web)">
+<p>John 10:16—“other sheep I have which are not of this fold”—should be understood within the Gospel’s expanding vision of Jesus gathering God’s people. Jesus is forming “one flock” under “one shepherd,” ultimately reaching beyond Israel to those who will believe in Him from the nations.</p>
+</div>
+<div data-custom-style="Normal (Web)">
+<p>John 10:28–29 strongly emphasizes the security of Jesus’ sheep. The focus is not on the sheep’s ability to hold tightly enough to the Shepherd but on the Shepherd’s and the Father’s ability to hold the sheep. “No one is able to snatch them out of My Father’s hand” places their security in divine power.</p>
+</div>
+<div data-custom-style="Normal (Web)">
+<p>John 10:30 should be read in its immediate context without reducing its significance to that context. The immediate discussion concerns the Son and Father keeping the sheep, but the reaction in verses 31–33 shows that Jesus’ opponents understood His statement as reaching into His identity and relationship with God.</p>
+</div>
+<div data-custom-style="Normal (Web)">
+<p>The chapter closes with an intentional contrast. Jerusalem’s leaders possess extraordinary evidence yet continue resisting Jesus. Beyond the Jordan, ordinary people remember John the Baptist’s testimony, compare it with what they now see in Jesus, conclude that John “spoke true,” and believe. John 10 therefore ends where much of John’s Gospel continually leads: testimony and works place Jesus before people, but each person must respond to who He has revealed Himself to be.</p>
+</div></div></article></div></div>
+</section>

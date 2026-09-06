@@ -1,0 +1,113 @@
+<section class="mtb-doc mtb-doc--read" data-doc-type="chapter-overview" data-mtb-status="draft">
+<style>
+.mtb-print-controls{display:flex;justify-content:flex-end;gap:8px;margin:0 0 14px;padding:0 4px}
+.mtb-print-button{appearance:none;border:1px solid #b9c8d5;border-radius:8px;background:#fff;padding:9px 14px;color:#173a5e;font:700 14px Arial,Helvetica,sans-serif;cursor:pointer}
+.mtb-print-button:hover{background:#f2f6f9}
+@media print{
+  @page{size:auto;margin:.45in}
+  html,body{background:#fff!important;color:#000!important}
+  .mtb-print-controls,.mtb-study-controls{display:none!important}
+  .mtb-doc{display:block!important;width:100%!important;max-width:none!important;margin:0!important;padding:0!important}
+  .mtb-overview-hero,.mtb-study-hero,.mtb-reflections-hero,.mtb-culture-hero{box-shadow:none!important;background:#fff!important;border-color:#777!important}
+  .mtb-overview-grid,.mtb-reflections-grid,.mtb-culture-grid,.mtb-study-verse-grid{display:block!important}
+  .mtb-overview-card,.mtb-reflections-card,.mtb-culture-card,.mtb-study-verse,.mtb-study-verse-panel,.mtb-intro-card{
+    display:block!important;width:100%!important;max-width:none!important;height:auto!important;margin:0 0 12pt!important;
+    break-inside:avoid;page-break-inside:avoid;box-shadow:none!important;background:#fff!important;color:#000!important
+  }
+  details.mtb-study-verse{display:block!important;overflow:visible!important}
+  details.mtb-study-verse>summary{display:flex!important;background:#fff!important;color:#000!important;border-bottom:1px solid #777!important}
+  details.mtb-study-verse>summary:after{display:none!important}
+  details.mtb-study-verse>.mtb-study-verse-body{display:block!important}
+  h1,h2,h3,h4{break-after:avoid;page-break-after:avoid;color:#000!important}
+  p,li{orphans:3;widows:3}
+  a{color:#000!important;text-decoration:none!important}
+  a[href]::after{content:none!important}
+}
+</style>
+<div class="mtb-print-controls"><button type="button" class="mtb-print-button" onclick="(function(button){var doc=button.closest('.mtb-doc')||document;var panels=Array.prototype.slice.call(doc.querySelectorAll('details'));panels.forEach(function(panel){panel.open=true;});window.print();})(this)">&#128438; Print This Page</button></div>
+<style>
+.mtb-chapter-overview-dashboard{--mtb-navy:#173a5e;--mtb-navy-2:#2b587f;--mtb-gold:#b7832f;--mtb-blue-soft:#eef4f9;--mtb-border:#d7e0e8;--mtb-text:#1d2935;width:100%;max-width:1600px;margin:0 auto;padding:2px 4px 30px;color:var(--mtb-text);font-family:Arial,Helvetica,sans-serif}.mtb-chapter-overview-dashboard *{box-sizing:border-box}.mtb-overview-hero{display:flex;align-items:center;justify-content:space-between;gap:20px;margin:0 0 22px;padding:22px 26px;border:1px solid #cbd8e3;border-radius:14px;background:linear-gradient(135deg,#f7fafc 0%,#e8f0f7 100%)}.mtb-overview-eyebrow{margin:0 0 5px;color:var(--mtb-gold);font-size:.78rem;font-weight:800;letter-spacing:.13em;text-transform:uppercase}.mtb-overview-title{margin:0;color:var(--mtb-navy);font-size:clamp(1.55rem,3vw,2.25rem);line-height:1.1}.mtb-overview-badge{flex:0 0 auto;padding:10px 16px;border:1px solid rgba(23,58,94,.18);border-radius:999px;background:#fff;color:var(--mtb-navy);font-weight:800}.mtb-overview-grid{display:grid;grid-template-columns:repeat(12,minmax(0,1fr));gap:16px;align-items:stretch}.mtb-overview-card{min-width:0;overflow:hidden;border:1px solid var(--mtb-border);border-top:4px solid var(--mtb-navy-2);border-radius:12px;background:#fff;box-shadow:0 4px 15px rgba(28,48,66,.055)}.mtb-overview-card-central{grid-column:1/span 4;grid-row:1}.mtb-overview-card-about{grid-column:5/span 4;grid-row:1}.mtb-overview-card-heart{grid-column:9/span 4;grid-row:1}.mtb-overview-card-sections{grid-column:1/span 6;grid-row:2}.mtb-overview-card-matters{grid-column:7/span 6;grid-row:2}.mtb-overview-card-themes{grid-column:1/span 6;grid-row:3}.mtb-overview-card-words{grid-column:7/span 6;grid-row:3}.mtb-psalms-overview .mtb-overview-card-psalm-author{grid-column:1/span 4;grid-row:1}.mtb-psalms-overview .mtb-overview-card-psalm-occasion{grid-column:5/span 4;grid-row:1}.mtb-psalms-overview .mtb-overview-card-psalm-kind{grid-column:9/span 4;grid-row:1}.mtb-psalms-overview .mtb-overview-card-central{grid-column:1/span 4;grid-row:2}.mtb-psalms-overview .mtb-overview-card-about{grid-column:5/span 4;grid-row:2}.mtb-psalms-overview .mtb-overview-card-heart{grid-column:9/span 4;grid-row:2}.mtb-psalms-overview .mtb-overview-card-sections{grid-column:1/span 6;grid-row:3}.mtb-psalms-overview .mtb-overview-card-matters{grid-column:7/span 6;grid-row:3}.mtb-psalms-overview .mtb-overview-card-themes{grid-column:1/span 6;grid-row:4}.mtb-psalms-overview .mtb-overview-card-words{grid-column:7/span 6;grid-row:4}.mtb-overview-card-header{margin:0;padding:12px 16px 10px;border-bottom:1px solid #e5ebf0;background:var(--mtb-blue-soft);color:var(--mtb-navy);font-size:.96rem;font-weight:800}.mtb-overview-card-body{padding:16px 18px 18px;font-size:1rem;line-height:1.48;overflow-wrap:anywhere}.mtb-overview-card-central .mtb-overview-card-body,.mtb-overview-card-heart .mtb-overview-card-body{font-size:1.06rem}.mtb-overview-card-body p{margin:0 0 .72em}.mtb-overview-card-body p:last-child{margin-bottom:0}.mtb-overview-card-body ul,.mtb-overview-card-body ol{margin:0;padding-left:1.25em}.mtb-overview-card-body li{margin:0 0 .35em}@media(max-width:980px){.mtb-overview-card{grid-column:span 6!important;grid-row:auto!important}}@media(max-width:760px){.mtb-overview-grid{grid-template-columns:1fr}.mtb-overview-card{grid-column:1/-1!important}.mtb-overview-hero{align-items:flex-start;flex-direction:column;padding:19px}}
+</style><div class="mtb-chapter-overview-dashboard"><header class="mtb-overview-hero"><div><p class="mtb-overview-eyebrow">Morning Chapter Explanation</p><h1 class="mtb-overview-title">Jonah Chapter 2</h1></div><div class="mtb-overview-badge">Chapter 2</div></header><div class="mtb-overview-grid"><article class="mtb-overview-card mtb-overview-card-central"><h2 class="mtb-overview-card-header">Central Message</h2><div class="mtb-overview-card-body"><div data-custom-style="Normal (Web)">
+<p>Jonah’s prayer from inside the great fish reveals that the Lord hears those who cry to Him from the depths, rescues by His mercy, and alone is the source of salvation.</p>
+</div></div></article><article class="mtb-overview-card mtb-overview-card-about"><h2 class="mtb-overview-card-header">What This Chapter Is About</h2><div class="mtb-overview-card-body"><div data-custom-style="Normal (Web)">
+<p>Jonah 2 records Jonah’s prayer after the Lord appointed the great fish to swallow him. From what appeared to be the place of certain death, Jonah looks back on his descent into the sea and recognizes that God heard his cry and preserved his life.</p>
+</div>
+<div data-custom-style="Normal (Web)">
+<p>The prayer traces Jonah’s movement downward—from the waves, into the deep, beneath the waters, and toward “the moorings of the mountains”—until he describes himself as descending toward “the pit.” Yet at the lowest point, Jonah declares, “Yet You have brought up my life from the pit, O LORD, my God.”</p>
+</div>
+<div data-custom-style="Normal (Web)">
+<p>Jonah’s rescue produces renewed worship. He remembers the Lord, rejects the emptiness of idols, promises sacrifice and thanksgiving, and reaches the chapter’s central confession: “Salvation is of the LORD.” The chapter ends when the Lord commands the fish to release Jonah onto dry land.</p>
+</div></div></article><article class="mtb-overview-card mtb-overview-card-heart"><h2 class="mtb-overview-card-header">The Heart of the Chapter</h2><div class="mtb-overview-card-body"><div data-custom-style="Normal (Web)">
+<p>The heart of Jonah 2 is the contrast between Jonah’s helpless descent and God’s saving intervention. Jonah cannot rescue himself. He is surrounded by water, overwhelmed by the deep, and sinking toward death. His only hope is the Lord.</p>
+</div>
+<div data-custom-style="Normal (Web)">
+<p>Jonah’s prayer also shows a change in perspective. In chapter 1, Jonah attempted to flee “from the presence of the LORD.” Now, from the depths, he longs again toward God’s holy temple and remembers the Lord. The man who ran from God discovers that even at the bottom of the sea he is not beyond God’s hearing or saving reach.</p>
+</div>
+<div data-custom-style="Normal (Web)">
+<p>The chapter reaches its theological center in Jonah’s declaration, “Salvation is of the LORD.” Jonah lives because God intervened. His deliverance is not something he achieved; it is something God provided.</p>
+</div></div></article><article class="mtb-overview-card mtb-overview-card-sections"><h2 class="mtb-overview-card-header">Chapter Sections</h2><div class="mtb-overview-card-body"><div data-custom-style="Normal (Web)">
+<p><strong>Jonah 2:1–2 — Jonah Cries to the Lord</strong><br />
+From inside the fish, Jonah prays and acknowledges that God heard him when he cried from his distress.</p>
+</div>
+<div data-custom-style="Normal (Web)">
+<p><strong>Jonah 2:3–6 — Jonah Remembers His Descent</strong><br />
+Jonah describes being cast into the sea, surrounded by the waters, covered by the deep, and brought near death. At the lowest point, he recognizes that the Lord brought his life up from the pit.</p>
+</div>
+<div data-custom-style="Normal (Web)">
+<p><strong>Jonah 2:7–9 — Jonah Remembers the Lord</strong><br />
+As his life was fading, Jonah remembered the Lord. He contrasts devotion to worthless idols with trusting God’s mercy and responds with thanksgiving, sacrifice, and the confession that salvation belongs to the Lord.</p>
+</div>
+<div data-custom-style="Normal (Web)">
+<p><strong>Jonah 2:10 — Jonah Is Delivered</strong><br />
+The Lord speaks to the fish, and it releases Jonah onto dry land. The God who appointed the fish also commands when Jonah’s confinement will end.</p>
+</div></div></article><article class="mtb-overview-card mtb-overview-card-matters"><h2 class="mtb-overview-card-header">Why This Chapter Matters</h2><div class="mtb-overview-card-body"><div data-custom-style="Normal (Web)">
+<p>Jonah 2 demonstrates that God’s discipline and God’s mercy can operate together. Jonah is in the sea because of his rebellion, but he is alive inside the fish because God has preserved him. What initially appears only to be judgment becomes the means by which God keeps Jonah from death.</p>
+</div>
+<div data-custom-style="Normal (Web)">
+<p>The chapter also establishes one of the book’s central truths: God is sovereign over salvation. Jonah could neither escape his danger nor manufacture his deliverance. He cried to the Lord, and the Lord heard him.</p>
+</div>
+<div data-custom-style="Normal (Web)">
+<p>This becomes especially important as Jonah’s story continues. Jonah readily celebrates God’s mercy when he is the one who desperately needs it. Later, he will struggle when that same mercy is extended to Nineveh. The book will eventually confront Jonah—and the reader—with whether we rejoice in God’s compassion only when it benefits us.</p>
+</div></div></article><article class="mtb-overview-card mtb-overview-card-themes"><h2 class="mtb-overview-card-header">Key Themes to Watch For</h2><div class="mtb-overview-card-body"><ul>
+<li><p><strong>Prayer from the depths</strong> — Jonah discovers that no physical location, desperate circumstance, or consequence of failure prevents a genuine cry from reaching the Lord.</p></li>
+<li><p><strong>God’s discipline and mercy</strong> — Jonah’s circumstances are the result of his rebellion, yet God preserves him within those very circumstances.</p></li>
+<li><p><strong>Descent and deliverance</strong> — Jonah repeatedly describes going downward until God reverses the movement and brings his life “up from the pit.”</p></li>
+<li><p><strong>Remembering the Lord</strong> — At the point when Jonah’s strength is disappearing, his heart turns again toward the God from whom he had fled.</p></li>
+<li><p><strong>Thanksgiving and worship</strong> — Rescue moves Jonah toward gratitude, sacrifice, and renewed acknowledgment of the Lord.</p></li>
+<li><p><strong>Salvation belongs to God</strong> — Jonah’s central confession recognizes that deliverance ultimately comes from the Lord and not from human ability.</p></li>
+<li><p><strong>God’s sovereign command</strong> — The chapter ends as it began: Jonah’s survival depends entirely upon God’s authority over creation.</p></li>
+</ul></div></article><article class="mtb-overview-card mtb-overview-card-words"><h2 class="mtb-overview-card-header">Key Words &amp; Concepts</h2><div class="mtb-overview-card-body"><div data-custom-style="Normal (Web)">
+<p><strong>“Sheol”</strong> — Jonah says, “Out of the belly of Sheol I cried.” In this poetic prayer, Sheol expresses how near Jonah believed himself to be to death and the realm of the dead.</p>
+</div>
+<div data-custom-style="Normal (Web)">
+<p><strong>“Your waves and Your billows”</strong> — Although the sailors physically threw Jonah into the sea, Jonah recognizes God’s sovereign hand behind what happened. He understands his circumstances in relation to the Lord’s dealings with him.</p>
+</div>
+<div data-custom-style="Normal (Web)">
+<p><strong>“Your holy temple”</strong> — Jonah twice refers to God’s holy temple. His attention has turned back toward the Lord and the place associated with His presence and worship.</p>
+</div>
+<div data-custom-style="Normal (Web)">
+<p><strong>“The pit”</strong> — Jonah describes his descent as reaching the boundary of death itself. His statement that God brought his life “up from the pit” emphasizes divine rescue from what Jonah could not escape.</p>
+</div>
+<div data-custom-style="Normal (Web)">
+<p><strong>“Remembered the LORD”</strong> — This is more than recalling information about God. At the point of collapse, Jonah turns his attention toward the Lord and cries to Him.</p>
+</div>
+<div data-custom-style="Normal (Web)">
+<p><strong>“Lying vanities”</strong> — The expression refers to worthless idols or false objects of trust. Jonah contrasts relying upon what is empty with receiving the mercy found in the Lord.</p>
+</div>
+<div data-custom-style="Normal (Web)">
+<p><strong>“Salvation is of the LORD”</strong> — This is the theological summit of the chapter and one of the defining statements of the entire book. Jonah’s rescue depends upon God’s initiative, authority, and mercy.</p>
+</div>
+<h1 id="helpful-notes">Helpful Notes</h1>
+<div data-custom-style="Normal (Web)">
+<p>Jonah’s prayer is written largely in the language and style of the Psalms. Its descriptions of distress, drowning, crying to God, remembering the Lord, thanksgiving, and deliverance resemble numerous psalms of lament and thanksgiving. Jonah interprets what happened to him through biblical language of prayer and worship.</p>
+</div>
+<div data-custom-style="Normal (Web)">
+<p>The prayer is offered from inside the fish, but much of it describes Jonah’s earlier experience in the sea. Jonah is therefore reflecting on the danger from which God has already begun to rescue him. The fish is not primarily presented as Jonah’s greatest danger; it is the extraordinary means God uses to preserve him from drowning.</p>
+</div>
+<div data-custom-style="Normal (Web)">
+<p>There is also an important narrative tension in Jonah’s prayer. Jonah correctly understands that salvation belongs to the Lord and celebrates the mercy he has personally received. Chapters 3–4 will test whether Jonah understands the full implications of that truth when God chooses to show mercy to people Jonah does not want spared.</p>
+</div>
+<div data-custom-style="Normal (Web)">
+<p>Jesus later points to Jonah’s time in the great fish as a sign connected with His own death, burial, and resurrection (Matthew 12:39–40). Jonah descended toward death and was brought out alive; Jesus would truly enter death and rise again. Jonah’s deliverance therefore becomes part of the larger biblical pattern that ultimately points toward God’s saving work in Christ.</p>
+</div></div></article></div></div>
+</section>

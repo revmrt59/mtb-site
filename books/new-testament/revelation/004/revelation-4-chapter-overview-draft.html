@@ -1,0 +1,139 @@
+<section class="mtb-doc mtb-doc--read" data-doc-type="chapter-overview" data-mtb-status="draft">
+<style>
+.mtb-print-controls{display:flex;justify-content:flex-end;gap:8px;margin:0 0 14px;padding:0 4px}
+.mtb-print-button{appearance:none;border:1px solid #b9c8d5;border-radius:8px;background:#fff;padding:9px 14px;color:#173a5e;font:700 14px Arial,Helvetica,sans-serif;cursor:pointer}
+.mtb-print-button:hover{background:#f2f6f9}
+@media print{
+  @page{size:auto;margin:.45in}
+  html,body{background:#fff!important;color:#000!important}
+  .mtb-print-controls,.mtb-study-controls{display:none!important}
+  .mtb-doc{display:block!important;width:100%!important;max-width:none!important;margin:0!important;padding:0!important}
+  .mtb-overview-hero,.mtb-study-hero,.mtb-reflections-hero,.mtb-culture-hero{box-shadow:none!important;background:#fff!important;border-color:#777!important}
+  .mtb-overview-grid,.mtb-reflections-grid,.mtb-culture-grid,.mtb-study-verse-grid{display:block!important}
+  .mtb-overview-card,.mtb-reflections-card,.mtb-culture-card,.mtb-study-verse,.mtb-study-verse-panel,.mtb-intro-card{
+    display:block!important;width:100%!important;max-width:none!important;height:auto!important;margin:0 0 12pt!important;
+    break-inside:avoid;page-break-inside:avoid;box-shadow:none!important;background:#fff!important;color:#000!important
+  }
+  details.mtb-study-verse{display:block!important;overflow:visible!important}
+  details.mtb-study-verse>summary{display:flex!important;background:#fff!important;color:#000!important;border-bottom:1px solid #777!important}
+  details.mtb-study-verse>summary:after{display:none!important}
+  details.mtb-study-verse>.mtb-study-verse-body{display:block!important}
+  h1,h2,h3,h4{break-after:avoid;page-break-after:avoid;color:#000!important}
+  p,li{orphans:3;widows:3}
+  a{color:#000!important;text-decoration:none!important}
+  a[href]::after{content:none!important}
+}
+</style>
+<div class="mtb-print-controls"><button type="button" class="mtb-print-button" onclick="(function(button){var doc=button.closest('.mtb-doc')||document;var panels=Array.prototype.slice.call(doc.querySelectorAll('details'));panels.forEach(function(panel){panel.open=true;});window.print();})(this)">&#128438; Print This Page</button></div>
+<style>
+.mtb-chapter-overview-dashboard{--mtb-navy:#173a5e;--mtb-navy-2:#2b587f;--mtb-gold:#b7832f;--mtb-blue-soft:#eef4f9;--mtb-border:#d7e0e8;--mtb-text:#1d2935;width:100%;max-width:1600px;margin:0 auto;padding:2px 4px 30px;color:var(--mtb-text);font-family:Arial,Helvetica,sans-serif}.mtb-chapter-overview-dashboard *{box-sizing:border-box}.mtb-overview-hero{display:flex;align-items:center;justify-content:space-between;gap:20px;margin:0 0 22px;padding:22px 26px;border:1px solid #cbd8e3;border-radius:14px;background:linear-gradient(135deg,#f7fafc 0%,#e8f0f7 100%)}.mtb-overview-eyebrow{margin:0 0 5px;color:var(--mtb-gold);font-size:.78rem;font-weight:800;letter-spacing:.13em;text-transform:uppercase}.mtb-overview-title{margin:0;color:var(--mtb-navy);font-size:clamp(1.55rem,3vw,2.25rem);line-height:1.1}.mtb-overview-badge{flex:0 0 auto;padding:10px 16px;border:1px solid rgba(23,58,94,.18);border-radius:999px;background:#fff;color:var(--mtb-navy);font-weight:800}.mtb-overview-grid{display:grid;grid-template-columns:repeat(12,minmax(0,1fr));gap:16px;align-items:stretch}.mtb-overview-card{min-width:0;overflow:hidden;border:1px solid var(--mtb-border);border-top:4px solid var(--mtb-navy-2);border-radius:12px;background:#fff;box-shadow:0 4px 15px rgba(28,48,66,.055)}.mtb-overview-card-central{grid-column:1/span 4;grid-row:1}.mtb-overview-card-about{grid-column:5/span 4;grid-row:1}.mtb-overview-card-heart{grid-column:9/span 4;grid-row:1}.mtb-overview-card-sections{grid-column:1/span 6;grid-row:2}.mtb-overview-card-matters{grid-column:7/span 6;grid-row:2}.mtb-overview-card-themes{grid-column:1/span 6;grid-row:3}.mtb-overview-card-words{grid-column:7/span 6;grid-row:3}.mtb-psalms-overview .mtb-overview-card-psalm-author{grid-column:1/span 4;grid-row:1}.mtb-psalms-overview .mtb-overview-card-psalm-occasion{grid-column:5/span 4;grid-row:1}.mtb-psalms-overview .mtb-overview-card-psalm-kind{grid-column:9/span 4;grid-row:1}.mtb-psalms-overview .mtb-overview-card-central{grid-column:1/span 4;grid-row:2}.mtb-psalms-overview .mtb-overview-card-about{grid-column:5/span 4;grid-row:2}.mtb-psalms-overview .mtb-overview-card-heart{grid-column:9/span 4;grid-row:2}.mtb-psalms-overview .mtb-overview-card-sections{grid-column:1/span 6;grid-row:3}.mtb-psalms-overview .mtb-overview-card-matters{grid-column:7/span 6;grid-row:3}.mtb-psalms-overview .mtb-overview-card-themes{grid-column:1/span 6;grid-row:4}.mtb-psalms-overview .mtb-overview-card-words{grid-column:7/span 6;grid-row:4}.mtb-overview-card-header{margin:0;padding:12px 16px 10px;border-bottom:1px solid #e5ebf0;background:var(--mtb-blue-soft);color:var(--mtb-navy);font-size:.96rem;font-weight:800}.mtb-overview-card-body{padding:16px 18px 18px;font-size:1rem;line-height:1.48;overflow-wrap:anywhere}.mtb-overview-card-central .mtb-overview-card-body,.mtb-overview-card-heart .mtb-overview-card-body{font-size:1.06rem}.mtb-overview-card-body p{margin:0 0 .72em}.mtb-overview-card-body p:last-child{margin-bottom:0}.mtb-overview-card-body ul,.mtb-overview-card-body ol{margin:0;padding-left:1.25em}.mtb-overview-card-body li{margin:0 0 .35em}@media(max-width:980px){.mtb-overview-card{grid-column:span 6!important;grid-row:auto!important}}@media(max-width:760px){.mtb-overview-grid{grid-template-columns:1fr}.mtb-overview-card{grid-column:1/-1!important}.mtb-overview-hero{align-items:flex-start;flex-direction:column;padding:19px}}
+</style><div class="mtb-chapter-overview-dashboard"><header class="mtb-overview-hero"><div><p class="mtb-overview-eyebrow">Morning Chapter Explanation</p><h1 class="mtb-overview-title">Revelation Chapter 4</h1></div><div class="mtb-overview-badge">Chapter 4</div></header><div class="mtb-overview-grid"><article class="mtb-overview-card mtb-overview-card-central"><h2 class="mtb-overview-card-header">Central Message</h2><div class="mtb-overview-card-body"><div data-custom-style="Normal (Web)">
+<p>Revelation 4 shifts John’s vision from the churches on earth to the throne room of heaven, where God reigns in absolute authority and receives unceasing worship. Before Revelation reveals the judgments and conflicts that will unfold on earth, it establishes the controlling reality behind everything that follows: <strong>God is on the throne.</strong></p>
+</div></div></article><article class="mtb-overview-card mtb-overview-card-about"><h2 class="mtb-overview-card-header">What This Chapter Is About</h2><div class="mtb-overview-card-body"><div data-custom-style="Normal (Web)">
+<p>After the messages to the seven churches, John sees an open door in heaven and is called to witness what will take place from heaven’s perspective. At the center of everything he sees is a throne—and the One seated upon it.</p>
+</div>
+<div data-custom-style="Normal (Web)">
+<p>Around God’s throne are twenty-four elders, four living creatures, flashes of lightning, voices, thunderings, seven lamps of fire, and something like a sea of glass. The imagery communicates majesty, holiness, authority, and overwhelming glory.</p>
+</div>
+<div data-custom-style="Normal (Web)">
+<p>The chapter reaches its focus in worship. The four living creatures continually declare God’s holiness, and the twenty-four elders fall before Him, cast their crowns before His throne, and proclaim that He is worthy because He created all things.</p>
+</div>
+<div data-custom-style="Normal (Web)">
+<p>Revelation 4 does not yet explain the judgments that are coming. It first establishes <strong>who rules over them all</strong>.</p>
+</div></div></article><article class="mtb-overview-card mtb-overview-card-heart"><h2 class="mtb-overview-card-header">The Heart of the Chapter</h2><div class="mtb-overview-card-body"><div data-custom-style="Normal (Web)">
+<p>The heart of Revelation 4 is the throne of God.</p>
+</div>
+<div data-custom-style="Normal (Web)">
+<p>John repeatedly draws attention to the throne because heaven is organized around the reality of God’s sovereign rule. The throne is not empty, threatened, or contested. <strong>One sits on the throne.</strong></p>
+</div>
+<div data-custom-style="Normal (Web)">
+<p>That truth prepares the reader for everything that follows. Revelation will describe terrifying judgments, spiritual conflict, persecution, evil powers, and enormous upheaval. Yet none of these events means that God has lost control. Before John sees what happens on earth, he is shown who reigns in heaven.</p>
+</div>
+<div data-custom-style="Normal (Web)">
+<p>The response of heaven is therefore worship. God is worshiped for who He is—<strong>“Holy, holy, holy”</strong>—and for what He has done—<strong>“You created all things.”</strong> His holiness and His creative authority establish His absolute worthiness.</p>
+</div></div></article><article class="mtb-overview-card mtb-overview-card-sections"><h2 class="mtb-overview-card-header">Chapter Sections</h2><div class="mtb-overview-card-body"><div data-custom-style="Normal (Web)">
+<p><strong>1. The Open Door into Heaven — Revelation 4:1</strong><br />
+John sees a door standing open in heaven and hears the voice calling him to “Come up here.” The vision moves from the earthly churches to the heavenly throne room and introduces the events that will follow.</p>
+</div>
+<div data-custom-style="Normal (Web)">
+<p><strong>2. The One Sitting on the Throne — Revelation 4:2–3</strong><br />
+John is immediately in the Spirit and sees a throne with One sitting upon it. Brilliant jewel-like imagery and a rainbow surrounding the throne communicate overwhelming glory and majesty.</p>
+</div>
+<div data-custom-style="Normal (Web)">
+<p><strong>3. The Twenty-Four Elders — Revelation 4:4</strong><br />
+Twenty-four thrones surround God’s throne, occupied by elders clothed in white garments and wearing golden crowns. Even these honored heavenly figures occupy positions surrounding and subordinate to the central throne.</p>
+</div>
+<div data-custom-style="Normal (Web)">
+<p><strong>4. The Majesty Surrounding the Throne — Revelation 4:5–6a</strong><br />
+Lightning, thunder, voices, burning lamps, and the glass-like sea intensify the sense of divine glory and holiness surrounding God’s presence.</p>
+</div>
+<div data-custom-style="Normal (Web)">
+<p><strong>5. The Four Living Creatures — Revelation 4:6b–8</strong><br />
+Four extraordinary living creatures surround the throne. Their many eyes emphasize their remarkable awareness, and they continually proclaim the holiness, almighty power, and eternal existence of God.</p>
+</div>
+<div data-custom-style="Normal (Web)">
+<p><strong>6. The Worship of the Twenty-Four Elders — Revelation 4:9–11</strong><br />
+Whenever the living creatures give glory, honor, and thanks to God, the elders fall before Him, worship Him, and cast their crowns before His throne. They declare that God alone is worthy because all things exist by His will and creative power.</p>
+</div></div></article><article class="mtb-overview-card mtb-overview-card-matters"><h2 class="mtb-overview-card-header">Why This Chapter Matters</h2><div class="mtb-overview-card-body"><div data-custom-style="Normal (Web)">
+<p>Revelation 4 gives the reader the perspective necessary for understanding the rest of the book. The events that follow can appear chaotic when viewed only from earth. John is first taken into heaven so that he—and the churches—can see the greater reality: <strong>history is unfolding beneath the throne of God.</strong></p>
+</div>
+<div data-custom-style="Normal (Web)">
+<p>The chapter also establishes worship as the proper response to seeing God rightly. Heaven is not centered on human achievement, earthly power, or even the heavenly beings themselves. Everything is centered on God.</p>
+</div>
+<div data-custom-style="Normal (Web)">
+<p>The elders possess thrones and crowns, yet they fall before His throne and cast their crowns before Him. Whatever authority, honor, or reward they possess ultimately finds its meaning in the One from whom all things come.</p>
+</div>
+<div data-custom-style="Normal (Web)">
+<p>For believers facing pressure, uncertainty, or opposition, Revelation 4 provides a foundational truth: circumstances on earth never determine whether God is reigning. <strong>He already reigns.</strong></p>
+</div></div></article><article class="mtb-overview-card mtb-overview-card-themes"><h2 class="mtb-overview-card-header">Key Themes to Watch For</h2><div class="mtb-overview-card-body"><ul>
+<li><p><strong>The Throne of God</strong> — The throne dominates the chapter and establishes God’s sovereign authority over everything that follows in Revelation.</p></li>
+<li><p><strong>The Holiness of God</strong> — The continual cry “Holy, holy, holy” emphasizes that God is utterly distinct, pure, and worthy of reverence.</p></li>
+<li><p><strong>God as Almighty</strong> — Heaven worships “the Lord God Almighty.” No earthly ruler, empire, spiritual power, or coming judgment stands outside His authority.</p></li>
+<li><p><strong>God’s Eternal Existence</strong> — He is the One “who was and is and is to come.” God stands above the changing events of history.</p></li>
+<li><p><strong>Creation Belongs to God</strong> — God is worthy because He created all things, and everything ultimately exists because of His will.</p></li>
+<li><p><strong>Worship Around the Throne</strong> — Heaven’s response to God’s glory is continual worship, thanksgiving, surrender, and acknowledgment of His worthiness.</p></li>
+<li><p><strong>Authority Surrendered to God</strong> — The elders cast their crowns before the throne, visibly acknowledging that all honor and authority ultimately belong to God.</p></li>
+</ul></div></article><article class="mtb-overview-card mtb-overview-card-words"><h2 class="mtb-overview-card-header">Key Words &amp; Concepts</h2><div class="mtb-overview-card-body"><div data-custom-style="Normal (Web)">
+<p><strong>Throne</strong> — The controlling image of the chapter. It represents God’s kingship, authority, government, and sovereign rule.</p>
+</div>
+<div data-custom-style="Normal (Web)">
+<p><strong>Twenty-Four Elders</strong> — Heavenly figures seated on thrones around God’s throne. Their precise identity has been interpreted in different ways, but the chapter clearly presents them as honored figures who worship God and submit their crowns before Him.</p>
+</div>
+<div data-custom-style="Normal (Web)">
+<p><strong>Four Living Creatures</strong> — Heavenly beings closely associated with God’s throne and worship. Their description has strong connections with the throne visions of Ezekiel 1 and Isaiah 6.</p>
+</div>
+<div data-custom-style="Normal (Web)">
+<p><strong>“Holy, holy, holy”</strong> — The threefold declaration magnifies God’s absolute holiness and echoes the worship of the seraphim in Isaiah 6:3.</p>
+</div>
+<div data-custom-style="Normal (Web)">
+<p><strong>Seven lamps of fire</strong> — Identified in the text as “the seven Spirits of God.” This imagery has already appeared in Revelation and points to the fullness of God’s Spirit.</p>
+</div>
+<div data-custom-style="Normal (Web)">
+<p><strong>Sea of glass</strong> — Something resembling a transparent crystalline sea lies before the throne. The imagery contributes to the overwhelming splendor and majesty of the heavenly scene.</p>
+</div>
+<div data-custom-style="Normal (Web)">
+<p><strong>Casting their crowns</strong> — An act of worship and submission. The elders acknowledge that whatever honor they possess is secondary to and dependent upon the supreme worthiness of God.</p>
+</div>
+<div data-custom-style="Normal (Web)">
+<p><strong>Worthy</strong> — A major worship concept that continues directly into Revelation 5. Revelation 4 declares God worthy as Creator; Revelation 5 will focus attention on the worthiness of the Lamb.</p>
+</div>
+<h1 id="helpful-notes">Helpful Notes</h1>
+<div data-custom-style="Normal (Web)">
+<p>Revelation 4 begins a major transition in the book. Chapters 2–3 focused on Christ’s messages to the seven churches; beginning here, John is shown the heavenly perspective behind the events that will unfold.</p>
+</div>
+<div data-custom-style="Normal (Web)">
+<p>The throne imagery should be read against important Old Testament throne-room passages, especially Isaiah 6:1–5, Ezekiel 1, and Daniel 7:9–10. Revelation draws upon this prophetic imagery while developing its own vision of God’s heavenly court.</p>
+</div>
+<div data-custom-style="Normal (Web)">
+<p>The identity of the <strong>twenty-four elders</strong> is debated. Interpretations include representatives of God’s redeemed people and members of the heavenly court. The chapter itself places greater emphasis on what they do than on precisely identifying them: they surround God’s throne, worship Him, and surrender their crowns before Him.</p>
+</div>
+<div data-custom-style="Normal (Web)">
+<p>The four living creatures resemble elements of Ezekiel’s living creatures and Isaiah’s seraphim without simply reproducing either vision. Their continual worship keeps attention fixed on the character of the One seated on the throne.</p>
+</div>
+<div data-custom-style="Normal (Web)">
+<p>Revelation 4 and 5 belong closely together. Chapter 4 centers worship on <strong>God as Creator</strong>, while chapter 5 introduces <strong>the Lamb as Redeemer and the only One worthy to open the scroll</strong>. Together they establish the heavenly throne room as the setting from which the unfolding events of Revelation must be understood.</p>
+</div>
+<div data-custom-style="Normal (Web)">
+<p>The most important interpretive anchor is therefore not speculation about every detail surrounding the throne. It is the unmistakable center of the vision: <strong>God is seated upon His throne, all creation exists by His will, and heaven declares Him worthy of glory, honor, and power.</strong></p>
+</div></div></article></div></div>
+</section>

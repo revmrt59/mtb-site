@@ -253,6 +253,23 @@ function pathForTabFile(book, chapter, tabKey) {
   }
 }
 
+function draftPathForTabFile(book, chapter, tabKey) {
+  const approved = pathForTabFile(book, chapter, tabKey);
+  if (!approved) return "";
+
+  const editorialTabs = new Set([
+    "book_introduction",
+    "chapter_overview",
+    "chapter_explanation",
+    "chapter_reflections",
+    "eg_culture"
+  ]);
+
+  if (!editorialTabs.has(tabKey)) return "";
+
+  return approved.replace(/\.html$/i, "-draft.html");
+}
+
 
 async function chapterStudyFileIsComplete(path) {
   if (!path) return false;
@@ -337,6 +354,102 @@ async function tabFileExists(path) {
     return false;
   }
 }
+
+async function getGeneratedEditorialStatus(path, expectedDocType) {
+  if (!path) return "missing";
+
+  try {
+    const response = await fetch(path, {
+      method: "GET",
+      cache: "no-store"
+    });
+
+    if (!response.ok) return "missing";
+
+    const html = await response.text();
+
+    // Some static/local servers return the main book.html shell with HTTP 200
+    // when a generated HTML file is missing. Reject that shell, but do NOT
+    // require newer data-mtb-status/data-doc-type markers because many valid
+    // approved MTB files were generated before those markers existed.
+    const looksLikeBookShell =
+      /<title>\s*Mastering the Bible\s*-\s*Book\s*<\/title>/i.test(html) ||
+      /id=["']book-hero["']/i.test(html) ||
+      /id=["']book-hero-chapters["']/i.test(html);
+
+    if (looksLikeBookShell) {
+      return "missing";
+    }
+
+    if (/data-mtb-status=["']placeholder["']/i.test(html)) {
+      return "placeholder";
+    }
+
+    if (/data-mtb-status=["']draft["']/i.test(html) || /-draft\.html(?:$|[?#])/i.test(path)) {
+      return "draft";
+    }
+
+    // Any other real HTML response at the approved canonical path is treated
+    // as a valid legacy/current approved file.
+    return "complete";
+
+  } catch (err) {
+    console.warn("MTB editorial status check failed:", path, err);
+    return "missing";
+  }
+}
+
+async function getEditorialTabStatus(book, chapter, tabKey) {
+  const approvedPath = pathForTabFile(book, chapter, tabKey);
+  const draftPath = draftPathForTabFile(book, chapter, tabKey);
+
+  if (!approvedPath) {
+    return { show: false, status: "missing" };
+  }
+
+  const expectedDocType = {
+    book_introduction: "book-overview",
+    chapter_overview: "chapter-overview",
+    chapter_explanation: "chapter-explanation",
+    chapter_reflections: "chapter-reflections",
+    eg_culture: "chapter-eg-culture"
+  }[tabKey];
+
+  if (!expectedDocType) {
+    return { show: false, status: "missing" };
+  }
+
+  // Validate actual generated MTB markup, not only HTTP status.
+  // This prevents a server fallback page with HTTP 200 from masquerading
+  // as an approved document.
+  const approvedStatus = await getGeneratedEditorialStatus(
+    approvedPath,
+    expectedDocType
+  );
+
+  if (approvedStatus === "complete") {
+    return { show: true, status: "complete" };
+  }
+
+  // A Chapter Study placeholder must not make the Study tab visible.
+  if (approvedStatus !== "placeholder") {
+    // Any non-complete approved response is ignored and draft is checked.
+  }
+
+  if (draftPath) {
+    const draftStatus = await getGeneratedEditorialStatus(
+      draftPath,
+      expectedDocType
+    );
+
+    if (draftStatus === "draft" || draftStatus === "complete") {
+      return { show: true, status: "draft" };
+    }
+  }
+
+  return { show: false, status: "missing" };
+}
+
   // ==========================================
   // TABS
   // ==========================================
@@ -403,17 +516,45 @@ if (tab.key === "book_introduction") {
     "book_introduction"
   );
 
-  const exists = await bookOverviewFileExists(overviewPath);
+  const result = await getEditorialTabStatus(
+    book,
+    0,
+    "book_introduction"
+  );
 
   return {
     tab,
-    show: exists
+    show: result.show,
+    status: result.status
   };
 }
 
 
       // -------------------------------------
-      // Everything else requires a real file.
+      // Editorial tabs support approved + draft.
+      // Approved always wins; draft keeps the tab visible.
+      // -------------------------------------
+      if ([
+        "chapter_overview",
+        "chapter_explanation",
+        "chapter_reflections",
+        "eg_culture"
+      ].includes(tab.key)) {
+        const result = await getEditorialTabStatus(
+          book,
+          chapter,
+          tab.key
+        );
+
+        return {
+          tab,
+          show: result.show,
+          status: result.status
+        };
+      }
+
+      // -------------------------------------
+      // Non-editorial tabs require their normal file.
       // -------------------------------------
       const path = pathForTabFile(
         book,
@@ -421,14 +562,12 @@ if (tab.key === "book_introduction") {
         tab.key
       );
 
-      const exists =
-        tab.key === "chapter_explanation"
-          ? await chapterStudyFileIsComplete(path)
-          : await tabFileExists(path);
+      const exists = await tabFileExists(path);
 
       return {
         tab,
-        show: exists
+        show: exists,
+        status: exists ? "complete" : "missing"
       };
     })
   );
@@ -443,7 +582,7 @@ if (tab.key === "book_introduction") {
 
   const fragment = document.createDocumentFragment();
 
-  availability.forEach(({ tab: t, show }) => {
+  availability.forEach(({ tab: t, show, status }) => {
 
     if (!show) return;
 
@@ -453,6 +592,20 @@ if (tab.key === "book_introduction") {
     btn.className = "tab-btn";
     btn.dataset.tab = t.key;
     btn.textContent = t.label;
+
+    if (status === "draft") {
+      btn.classList.add("mtb-draft-tab");
+      btn.dataset.mtbStatus = "draft";
+      btn.title = "Draft — editorial review needed";
+      btn.setAttribute("aria-label", t.label + " — Draft");
+
+      // Force the editorial draft state so normal/active tab CSS cannot
+      // visually override it.
+      btn.style.setProperty("background", "#f59e0b", "important");
+      btn.style.setProperty("color", "#111111", "important");
+      btn.style.setProperty("border-color", "#d97706", "important");
+      btn.style.setProperty("box-shadow", "0 0 0 3px rgba(245,158,11,0.28)", "important");
+    }
 
     if (t.key === activeTab) {
       btn.classList.add("active");
@@ -502,9 +655,41 @@ if (tab.key === "book_introduction") {
   }
 
   // ==========================================
+  // DRAFT TAB STYLING
+  // ==========================================
+  function ensureDraftTabStyle() {
+    if (document.getElementById("mtb-draft-tab-style")) return;
+
+    const style = document.createElement("style");
+    style.id = "mtb-draft-tab-style";
+    style.textContent = `
+      #tabs .tab-btn.mtb-draft-tab{
+        background:#f59e0b;
+        color:#111111;
+        border-color:#d97706;
+      }
+
+      #tabs .tab-btn.mtb-draft-tab:hover{
+        background:#d97706;
+        color:#111111;
+        border-color:#b45309;
+      }
+
+      #tabs .tab-btn.mtb-draft-tab.active{
+        background:#f59e0b !important;
+        color:#111111 !important;
+        border-color:#d97706 !important;
+        box-shadow:0 0 0 3px rgba(245,158,11,0.38) !important;
+      }
+    `;
+    document.head.appendChild(style);
+  }
+
+  // ==========================================
   // INIT
   // ==========================================
   function init() {
+    ensureDraftTabStyle();
     const params = getParams();
 
     if (params.book) {

@@ -11,13 +11,13 @@
    { name: "Nehemiah", slug: "nehemiah", chapters: 13 },
   { name: "Psalms", slug: "psalms", chapters: 150 },
   { name: "Obadiah", slug: "obadiah", chapters: 1 },
-  { name: "Jonah", slug: "jonah", chapters: 4 },
-  { name: "Habakkuk", slug: "habakkuk", chapters: 3 },
-   { name: "John", slug: "john", chapters: 21 },
+ // { name: "Jonah", slug: "jonah", chapters: 4 },
+  // { name: "Habakkuk", slug: "habakkuk", chapters: 3 },
+    //{ name: "John", slug: "john", chapters: 21 },
   { name: "Philemon", slug: "philemon", chapters: 1 },
   { name: "2John", slug: "2-john", chapters: 1 },
-  { name: "3 John", slug: "3-john", chapters: 1 },
-   { name: "Revelation", slug: "revelation", chapters: 22 },
+ // { name: "3 John", slug: "3-john", chapters: 1 },
+  //  { name: "Revelation", slug: "revelation", chapters: 22 },
   
  // { name: "Habakkuk", slug: "habakkuk", chapters: 3 },
  

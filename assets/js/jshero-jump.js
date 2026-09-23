@@ -7,6 +7,7 @@
   const MTB_CONTENT = [
   // { name: "3 John", slug: "3-john", chapters: 1 },
   // { name: "Exodus", slug: "exodus", chapters: 40 },
+  { name: "1Samuel", slug: "1-samuel", chapters: 24 },
    { name: "Ruth", slug: "ruth", chapters: 4 },
    { name: "Nehemiah", slug: "nehemiah", chapters: 13 },
   { name: "Psalms", slug: "psalms", chapters: 150 },

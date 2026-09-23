@@ -1,0 +1,2796 @@
+/* =========================================================
+   MTB UI OVERRIDES — CLEAN BASELINE (CHAPTER + ABOUT + LOC + RESOURCES)
+   Put ONLY overrides here.
+   ========================================================= */
+
+
+/* =========================================================
+   2) CHAPTER SCRIPTURE (wide + wrap + no clipping)
+   ========================================================= */
+
+body[data-book][data-chapter][data-doc-type="chapter-scripture"] main.doc-shell{
+  max-width: 1700px !important;
+  margin-left: auto !important;
+  margin-right: auto !important;
+}
+
+/* Table layout + wrapping */
+body[data-book][data-chapter][data-doc-type="chapter-scripture"] #doc-target table{
+  width: 100% !important;
+  table-layout: fixed !important;
+}
+
+body[data-book][data-chapter][data-doc-type="chapter-scripture"] #doc-target table colgroup col:nth-child(1){
+  width: 70px !important;
+}
+body[data-book][data-chapter][data-doc-type="chapter-scripture"] #doc-target table colgroup col:nth-child(2),
+body[data-book][data-chapter][data-doc-type="chapter-scripture"] #doc-target table colgroup col:nth-child(3){
+  width: calc((100% - 70px) / 2) !important;
+}
+
+body[data-book][data-chapter][data-doc-type="chapter-scripture"] #doc-target th,
+body[data-book][data-chapter][data-doc-type="chapter-scripture"] #doc-target td{
+  white-space: normal !important;
+  overflow-wrap: anywhere !important;
+  word-break: break-word !important;
+}
+
+
+/* =========================================================
+   3) ABOUT PAGE (inner scroll: primary header fixed, about tabs fixed, white content scrolls)
+   ========================================================= */
+
+html:has(.about-nav),
+body:has(.about-nav),
+html:has(.about-mtb-nav),
+body:has(.about-mtb-nav){
+  height: 100% !important;
+  overflow: hidden !important;
+}
+
+body:has(.about-nav) main,
+body:has(.about-mtb-nav) main{
+  height: calc(100vh - var(--mtb-header-h, 64px)) !important;
+  overflow: hidden !important;
+  display: flex !important;
+  flex-direction: column !important;
+  min-height: 0 !important;
+}
+
+body:has(.about-nav) .about-nav,
+body:has(.about-mtb-nav) .about-mtb-nav{
+  flex: 0 0 auto !important;
+  position: sticky !important;
+  top: 0 !important;
+  z-index: 5000 !important;
+  background: var(--mtb-chrome, #eef3f8) !important;
+  border-bottom: 1px solid rgba(0,0,0,0.08) !important;
+}
+
+body:has(.about-nav) #doc-target,
+body:has(.about-mtb-nav) #doc-target{
+  flex: 1 1 auto !important;
+  min-height: 0 !important;
+  height: 100% !important;
+  overflow-y: auto !important;
+  overflow-x: hidden !important;
+  box-sizing: border-box !important;
+  padding-bottom: 120px !important;
+  scroll-padding-bottom: 120px !important;
+}
+
+body:has(.about-nav) #doc-target > *:last-child,
+body:has(.about-mtb-nav) #doc-target > *:last-child{
+  margin-bottom: 0 !important;
+}
+
+/* =========================================================
+   4) LOC HARMONY (visual only)
+   ========================================================= */
+
+body.loc-page .loc-seq-header{
+  background: var(--mtb-chrome, #eef3f8) !important;
+  border-bottom: 1px solid rgba(0,0,0,0.10) !important;
+  display: flex !important;
+  align-items: center !important;
+}
+
+body.loc-page .loc-seq-left{  flex: 0 0 170px !important; }
+body.loc-page .loc-seq-center{ flex: 1 1 auto !important; text-align: center !important; }
+body.loc-page .loc-seq-right{
+  flex: 0 0 170px !important;
+  display: flex !important;
+  justify-content: flex-end !important;
+  align-items: center !important;
+  gap: 10px !important;
+}
+
+body.loc-page #loc-prev,
+body.loc-page #loc-next{
+  position: static !important;
+  left: auto !important;
+  right: auto !important;
+  margin: 0 !important;
+}
+
+body.loc-page table.mtb-loc-harmony-table thead th{
+  background: var(--mtb-chrome, #eef3f8) !important;
+  border-bottom: 1px solid rgba(0,0,0,0.10) !important;
+}
+
+/* =========================================================
+   5) RESOURCES TABLE (spacing only)
+   ========================================================= */
+
+.resource-table{
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0 14px;
+}
+
+.resource-table thead th{
+  padding: 12px 18px;
+  text-align: left;
+  border-bottom: 1px solid rgba(0,0,0,0.12);
+  white-space: nowrap;
+}
+
+.resource-table tbody td{
+  padding: 16px 18px;
+  vertical-align: top;
+}
+
+.resource-table tbody tr{
+  background: #fff;
+}
+
+/* Keep “Open / PDF” tight */
+.resource-table thead th:last-child,
+.resource-table thead th:nth-last-child(2),
+.resource-table tbody td:last-child,
+.resource-table tbody td:nth-last-child(2){
+  width: 74px;
+  padding-left: 8px;
+  padding-right: 8px;
+  text-align: left;
+  white-space: nowrap;
+}
+
+/* =========================================================
+   CHAPTER PAGES — NO WINDOW SCROLL (SCROLL ONLY CONTENT)
+   Goal:
+   - Primary header stays sticky (already working)
+   - Chapter blue-grey header never moves/jumps
+   - Only the content area (#doc-layout) scrolls
+   ========================================================= */
+
+body[data-book][data-chapter]{
+  height: 100vh !important;
+  overflow: hidden !important;          /* kill window scroll */
+}
+
+/* main becomes a fixed viewport column under the primary header */
+body[data-book][data-chapter] main.doc-shell{
+  height: calc(100vh - var(--mtb-header-h, 64px)) !important;
+  display: flex !important;
+  flex-direction: column !important;
+  overflow: hidden !important;
+  min-height: 0 !important;
+}
+
+/* chapter header stays fixed because it is outside the scroller */
+body[data-book][data-chapter] .doc-header{
+  flex: 0 0 auto !important;
+  background: #eef3f8 !important;       /* solid so white page never shows behind buttons */
+  z-index: 5 !important;
+}
+
+/* ONLY this scrolls */
+body[data-book][data-chapter] #doc-layout{
+  flex: 1 1 auto !important;
+  min-height: 0 !important;             /* critical for inner scroll */
+  overflow-y: auto !important;
+  overflow-x: hidden !important;
+  scrollbar-gutter: stable !important;  /* prevents tiny width shift */
+  background: #eef3f8 !important;
+}
+/* =========================================================
+   CHAPTER HEADER — ADJUST SIZE + LEFT SHIFT (SAFE)
+   ========================================================= */
+
+/* Make header shorter WITHOUT moving its top */
+body[data-book][data-chapter] .doc-header{
+  padding-bottom: 6px !important;   /* reduces height */
+}
+
+/* Make title smaller (do not change layout) */
+body[data-book][data-chapter] #book-title,
+body[data-book][data-chapter] #book-subtitle{
+  font-size: 28px !important;
+  font-weight: 700 !important;
+  color: #111 !important;
+  opacity: 1 !important;
+  display: inline !important;
+  margin: 0 !important;
+}
+
+/* Tight single-space feel */
+body[data-book][data-chapter] #book-title{
+  margin-right: 8px !important;
+}
+
+/* Shift ONLY the book/chapter text left */
+body[data-book][data-chapter] #book-title,
+body[data-book][data-chapter] #book-subtitle{
+  margin-left: -72px !important;   /* ~1 inch */
+}
+
+/* Shift the tabs row (buttons + nav) left */
+body[data-book][data-chapter] #tabs-shell{
+  margin-left: -72px !important;   /* match title */
+}
+
+/* Make sure buttons don't crowd into the title line */
+body[data-book][data-chapter] .doc-header{
+  row-gap: 10px !important;
+}
+
+/* =========================================================
+   CHAPTER PAGES — FULL-BLEED SECONDARY HEADER (Option A)
+   Goal:
+   - The chapter header band (title + tabs) spans full screen width
+   - The content inside the band stays aligned to your normal max width
+   - No HTML changes required
+   ========================================================= */
+
+body[data-book][data-chapter] .doc-header{
+  /* full-bleed band */
+  width: 100vw;
+  margin-left: calc(50% - 50vw);
+  margin-right: calc(50% - 50vw);
+
+  /* band styling */
+  background: var(--mtb-bg, #eef2f6);
+  border-bottom: 1px solid rgba(0,0,0,0.08);
+
+  /* keep band from collapsing */
+  padding: 14px 0;
+}
+
+/* Keep the *inside* of the band aligned to your normal page width */
+body[data-book][data-chapter] .doc-header > *{
+  max-width: var(--mtb-maxw, 1100px);
+  margin-left: auto;
+  margin-right: auto;
+  padding-left: 18px;
+  padding-right: 18px;
+  box-sizing: border-box;
+}
+
+/* Optional: make the title+subtitle sit nicely in the band */
+body[data-book][data-chapter] #book-title{
+  margin: 0;
+}
+body[data-book][data-chapter] #book-subtitle{
+  margin: 4px 0 0 0;
+}
+/* Fix mashed-left Book/Chapter text inside full-bleed band */
+
+body[data-book][data-chapter] .doc-header{
+  padding-left: 0 !important;
+  padding-right: 0 !important;
+}
+
+/* Align title with tab row content */
+body[data-book][data-chapter] #book-title,
+body[data-book][data-chapter] #book-subtitle{
+  padding-left: 35px !important;   /* match internal content padding */
+  display: inline-block !important;
+}
+/* =========================================================
+   FIX: Prevent full-bleed chapter header from being CLIPPED
+   Cause: main.doc-shell has overflow:hidden, which clips 100vw header.
+   ========================================================= */
+
+body[data-book][data-chapter] main.doc-shell{
+  overflow: visible !important; /* allow the header band to extend full width */
+}
+
+/* keep the scroll confined to the content area only */
+body[data-book][data-chapter] #doc-layout{
+  overflow-y: auto !important;
+}
+/* =========================================================
+   CHAPTER HEADER TITLE FIX — stop "TitusChapter 2" overlap
+   ========================================================= */
+
+body[data-book][data-chapter] #book-title,
+body[data-book][data-chapter] #book-subtitle{
+  display: inline-block !important;
+  vertical-align: baseline !important;
+  margin: 0 !important;
+  line-height: 1.1 !important;
+}
+
+body[data-book][data-chapter] #book-subtitle{
+  margin-left: 14px !important;   /* forces the single space gap */
+  color: #000 !important;         /* match title */
+  font-size: inherit !important;  /* match title size */
+  font-weight: inherit !important;
+}
+/* =========================================================
+   CHAPTER HEADER (book.html) — stable layout
+   Title | Subtitle | Tabs | Prev/Next
+   ========================================================= */
+
+body[data-book][data-chapter] .doc-header{
+  margin-top: 0 !important;
+  padding: 10px 24px 12px 24px !important;
+
+  /* lock layout so title never crushes tabs */
+  display: grid !important;
+  grid-template-columns: max-content max-content 1fr max-content !important;
+  align-items: center !important;
+  column-gap: 18px !important;
+
+  /* keep the blue-grey band full width */
+  width: 100% !important;
+}
+
+/* Titus + Chapter 2: same size, black, no weird gaps */
+body[data-book][data-chapter] #book-title,
+body[data-book][data-chapter] #book-subtitle{
+  margin: 0 !important;
+  padding: 0 !important;
+  color: #000 !important;
+  font-size: 38px !important;     /* adjust smaller if you want */
+  font-weight: 700 !important;
+  line-height: 1.05 !important;
+}
+
+/* Subtitle should not be “muted” on chapter pages */
+body[data-book][data-chapter] #book-subtitle.muted{
+  opacity: 1 !important;
+}
+
+/* Tabs sit in the 3rd column and start LEFT (no centering) */
+body[data-book][data-chapter] #tabs-shell{
+  margin: 0 !important;
+  padding: 0 !important;
+  min-width: 0 !important;       /* critical so grid column can shrink */
+}
+
+body[data-book][data-chapter] #tabs{
+  display: flex !important;
+  align-items: center !important;
+  justify-content: flex-start !important;
+  gap: 12px !important;
+
+  /* do not create its own scroll unless absolutely necessary */
+  overflow: visible !important;
+  flex-wrap: nowrap !important;
+}
+
+/* Keep the nav arrows aligned and same height as tabs */
+body[data-book][data-chapter] .chapter-nav{
+  display: flex !important;
+  align-items: center !important;
+  gap: 10px !important;
+  margin-left: 8px !important;
+}
+body[data-book][data-chapter] .chapter-nav .chapter-nav-btn{
+  height: 44px !important;
+  min-width: 44px !important;
+  padding: 0 12px !important;
+  border-radius: 12px !important;
+}
+
+/* Optional: if you want slightly smaller tabs so they fit tighter */
+body[data-book][data-chapter] #tabs .tab-btn,
+body[data-book][data-chapter] #tabs button{
+  height: 44px !important;
+  padding: 10px 14px !important;
+  border-radius: 12px !important;
+}
+/* =========================================================
+   CHAPTER HEADER — full-bleed band (works even inside mtb-paper)
+   ========================================================= */
+body[data-book][data-chapter] .doc-header{
+  position: relative !important;
+  background: transparent !important;     /* the band comes from ::before */
+}
+
+/* full-width blue-grey band behind the header */
+body[data-book][data-chapter] .doc-header::before{
+  content: "" !important;
+  position: absolute !important;
+  top: 0; bottom: 0;
+  left: 50% !important;
+  right: 50% !important;
+  margin-left: -50vw !important;
+  margin-right: -50vw !important;
+
+  background: var(--mtb-chrome, #eef3f8) !important;
+  border-bottom: 1px solid var(--mtb-border, #d7dde5) !important;
+  z-index: 0 !important;
+}
+
+/* keep the actual header content above the band */
+body[data-book][data-chapter] .doc-header > *{
+  position: relative !important;
+  z-index: 1 !important;
+}
+
+/* remove any “card” look from the header itself */
+body[data-book][data-chapter] .doc-header{
+  box-shadow: none !important;
+  border-radius: 0 !important;
+}
+/* =========================================================
+   MTB CHAPTER HEADER — FINAL OVERRIDE (paste at VERY bottom)
+   Goals:
+   - Title + buttons in ONE row
+   - Title smaller and not squished
+   - Header shorter (less tall) without shifting down
+   - Buttons sit to the right; nav arrows same height as buttons
+   MRT
+   ========================================================= */
+
+/* =========================================================
+   MTB CHAPTER HEADER — STABLE ROW LAYOUT (replace prior block)
+   Fixes:
+   - Force ONE row layout (title + tabs + arrows)
+   - Prevent title stacking
+   - Prevent arrows overlapping tabs
+   ========================================================= */
+
+body[data-book][data-chapter] .doc-header{
+  position: sticky !important;
+  top: var(--mtb-header-h, 72px) !important;
+  z-index: 9000 !important;
+
+  display: flex !important;
+  flex-direction: row !important;   /* FORCE row */
+  flex-wrap: nowrap !important;     /* never wrap */
+
+  align-items: center !important;
+  gap: 18px !important;
+
+  background: var(--mtb-chrome, #eef3f8) !important;
+  border-bottom: 1px solid rgba(0,0,0,0.08) !important;
+
+  padding: 10px 18px !important;
+  margin: 0 !important;
+}
+
+/* Title area stays together and never collapses */
+body[data-book][data-chapter] #book-title,
+body[data-book][data-chapter] #book-subtitle{
+  flex: 0 0 auto !important;
+  margin: 0 !important;
+  padding: 0 !important;
+
+  font-size: 32px !important;
+  line-height: 1.05 !important;
+
+  color: #111 !important;
+  opacity: 1 !important;
+
+  white-space: nowrap !important;  /* no wrapping */
+}
+
+body[data-book][data-chapter] #book-title{ font-weight: 800 !important; }
+body[data-book][data-chapter] #book-subtitle{
+  font-weight: 800 !important;
+  margin-left: 10px !important;
+}
+
+/* Tabs take remaining space, stay in one line */
+body[data-book][data-chapter] .tabs-shell{
+  flex: 1 1 auto !important;
+  min-width: 0 !important;
+  margin-left: 22px !important;    /* moves tabs left/right as a group */
+  padding: 0 !important;
+}
+
+body[data-book][data-chapter] #tabs{
+  display: flex !important;
+  align-items: center !important;
+  gap: 12px !important;
+  flex-wrap: nowrap !important;
+  min-width: 0 !important;
+}
+
+/* Keep arrows to the far right, never overlap tabs */
+body[data-book][data-chapter] .chapter-nav{
+  flex: 0 0 auto !important;
+  display: flex !important;
+  align-items: center !important;
+  gap: 10px !important;
+  margin-left: 12px !important;
+}
+
+/* Button sizing + gray default, blue hover/active */
+body[data-book][data-chapter] .tabs .tab-btn,
+body[data-book][data-chapter] .tabs button,
+body[data-book][data-chapter] .chapter-nav-btn{
+  height: 44px !important;
+  min-height: 44px !important;
+  padding: 0 14px !important;
+  border-radius: 12px !important;
+
+  background: #e6ebf1 !important;
+  color: #1b2430 !important;
+  border: 1px solid rgba(0,0,0,0.12) !important;
+
+  font-weight: 600 !important;
+}
+
+body[data-book][data-chapter] .tabs .tab-btn:hover,
+body[data-book][data-chapter] .tabs button:hover,
+body[data-book][data-chapter] .chapter-nav-btn:hover{
+  background: #3b6fb6 !important;
+  border-color: #3b6fb6 !important;
+  color: #fff !important;
+}
+
+body[data-book][data-chapter] .tabs .tab-btn.active,
+body[data-book][data-chapter] .tabs .tab-btn[aria-current="page"]{
+  background: #3b6fb6 !important;
+  border-color: #3b6fb6 !important;
+  color: #fff !important;
+}
+/* =========================================================
+   CHAPTER PAGES — SINGLE SOURCE OF TRUTH (HEADER + TABS)
+   Scope: only book.html chapter pages (body has data-book + data-chapter)
+   Goals:
+   - No jumping
+   - Full-width blue/grey band under the primary header
+   - Title + tabs on one line
+   - Buttons grey by default, blue on hover/active
+   ========================================================= */
+
+body[data-book][data-chapter]{
+  background: var(--mtb-chrome, #eef3f8);
+}
+
+/* IMPORTANT: undo any old “lock scroll / overflow hidden” experiments */
+body[data-book][data-chapter],
+body[data-book][data-chapter] main.doc-shell{
+  height: auto !important;
+  overflow: visible !important;
+}
+
+/* Make the whole chapter header band sticky under the PRIMARY header */
+body[data-book][data-chapter] .doc-header{
+  position: sticky;
+  top: var(--mtb-header-h, 72px);
+  z-index: 5000;
+
+  /* full-width band look */
+  background: var(--mtb-chrome, #eef3f8);
+  border-bottom: 1px solid rgba(0,0,0,0.08);
+
+  /* tighter (about 1/2 inch shorter than before) */
+  padding: 10px 18px;
+
+  /* layout */
+  display: flex;
+  align-items: center;
+  gap: 12px;
+
+  margin: 0;
+}
+
+/* Title: Titus Chapter 2 = same size, black, one “space” between */
+body[data-book][data-chapter] #book-title,
+body[data-book][data-chapter] #book-subtitle{
+  margin: 0;
+  padding: 0;
+  color: #111;
+  opacity: 1;              /* defeats .muted */
+  white-space: nowrap;
+  font-size: 32px;         /* smaller than your big Titus */
+  line-height: 1.05;
+  font-weight: 800;
+}
+
+/* Visually “one space” */
+body[data-book][data-chapter] #book-subtitle{
+  margin-left: 10px;
+}
+
+/* Tabs sit to the right of the title */
+body[data-book][data-chapter] .tabs-shell{
+  margin-left: auto;
+  padding: 0;
+}
+
+/* Keep tabs in one row */
+body[data-book][data-chapter] #tabs{
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: nowrap;
+}
+
+/* Tabs + nav buttons default grey; blue on hover/active */
+body[data-book][data-chapter] .tabs .tab-btn,
+body[data-book][data-chapter] .tabs button,
+body[data-book][data-chapter] .chapter-nav-btn{
+  height: 44px;
+  min-height: 44px;
+
+  padding: 0 14px;
+  border-radius: 12px;
+
+  background: #e6ebf1;
+  color: #1b2430;
+  border: 1px solid rgba(0,0,0,0.12);
+
+  font-weight: 600;
+  line-height: 1.2;
+}
+
+body[data-book][data-chapter] .tabs .tab-btn:hover,
+body[data-book][data-chapter] .tabs button:hover,
+body[data-book][data-chapter] .chapter-nav-btn:hover{
+  background: #3b6fb6;
+  border-color: #3b6fb6;
+  color: #fff;
+}
+
+body[data-book][data-chapter] .tabs .tab-btn.active,
+body[data-book][data-chapter] .tabs .tab-btn[aria-current="page"]{
+  background: #3b6fb6;
+  border-color: #3b6fb6;
+  color: #fff;
+}
+
+/* Nav arrows: same height as tabs, spaced a bit, aligned */
+body[data-book][data-chapter] .chapter-nav{
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-left: 12px;
+}
+
+/* White “page” container for all non-scripture chapter tabs */
+body[data-book][data-chapter]:not([data-doc-type="chapter-scripture"]) #doc-target{
+  background: #fff;
+  border: 1px solid rgba(0,0,0,0.10);
+  border-radius: 14px;
+  padding: 28px 32px;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.06);
+  margin-top: 18px; /* keeps it from touching the sticky band */
+}
+
+/* Scripture tab should NOT be boxed like a page */
+body[data-book][data-chapter][data-doc-type="chapter-scripture"] #doc-target{
+  background: transparent;
+  border: 0;
+  box-shadow: none;
+  padding: 0;
+  margin-top: 18px;
+}
+/* =========================================================
+   CHAPTER HEADER — stable sticky band + correct layout
+   ========================================================= */
+
+body[data-book][data-chapter] .doc-header{
+  position: sticky !important;
+  top: var(--mtb-header-h, 72px) !important;
+  z-index: 2000 !important;
+
+  display: flex !important;
+  align-items: center !important;
+  flex-wrap: nowrap !important;
+  gap: 18px !important;
+
+  background: var(--mtb-chrome, #eef3f8) !important;
+  border-bottom: 1px solid rgba(0,0,0,0.08) !important;
+
+  /* keep it tighter */
+  padding: 10px 18px !important;
+  margin: 0 !important;
+}
+
+/* Title: Titus Chapter 2 — one line, same size, black */
+body[data-book][data-chapter] #book-title,
+body[data-book][data-chapter] #book-subtitle{
+  display: inline !important;
+  margin: 0 !important;
+  padding: 0 !important;
+
+  font-size: 32px !important;
+  line-height: 1.05 !important;
+
+  color: #111 !important;
+  opacity: 1 !important;              /* overrides "muted" */
+  white-space: nowrap !important;
+
+  flex: 0 0 auto !important;          /* prevents squishing */
+}
+
+body[data-book][data-chapter] #book-title{
+  font-weight: 800 !important;
+}
+
+body[data-book][data-chapter] #book-subtitle{
+  font-weight: 800 !important;
+  margin-left: 12px !important;       /* “one space” feel */
+}
+
+/* Tabs container participates in the same row */
+body[data-book][data-chapter] .tabs-shell{
+  flex: 1 1 auto !important;
+  padding: 0 !important;
+  margin: 0 !important;
+}
+
+/* Keep all buttons in one row */
+body[data-book][data-chapter] #tabs{
+  display: flex !important;
+  align-items: center !important;
+  gap: 12px !important;
+  flex-wrap: nowrap !important;
+  min-width: 0 !important;
+}
+
+/* Push the arrow nav group to the far right */
+body[data-book][data-chapter] .chapter-nav{
+  margin-left: auto !important;
+  display: flex !important;
+  align-items: center !important;
+  gap: 10px !important;
+}
+
+/* Default grey buttons; blue on hover/active */
+body[data-book][data-chapter] .tabs .tab-btn,
+body[data-book][data-chapter] .tabs button,
+body[data-book][data-chapter] .chapter-nav-btn{
+  height: 44px !important;
+  min-height: 44px !important;
+  padding: 0 14px !important;
+  border-radius: 12px !important;
+
+  background: #e6ebf1 !important;
+  color: #1b2430 !important;
+  border: 1px solid rgba(0,0,0,0.12) !important;
+
+  font-weight: 600 !important;
+}
+
+body[data-book][data-chapter] .tabs .tab-btn:hover,
+body[data-book][data-chapter] .tabs button:hover,
+body[data-book][data-chapter] .chapter-nav-btn:hover{
+  background: #3b6fb6 !important;
+  border-color: #3b6fb6 !important;
+  color: #fff !important;
+}
+
+body[data-book][data-chapter] .tabs .tab-btn.active,
+body[data-book][data-chapter] .tabs .tab-btn[aria-current="page"]{
+  background: #3b6fb6 !important;
+  border-color: #3b6fb6 !important;
+  color: #fff !important;
+}
+/* ===== FIX: Chapter header title wrapping + nav overlapping tabs ===== */
+
+/* 1) Force title + subtitle to stay on one line and not shrink */
+body[data-book][data-chapter] #book-title,
+body[data-book][data-chapter] #book-subtitle{
+  display: inline !important;
+  flex: 0 0 auto !important;      /* prevents shrink-wrap squeezing */
+  white-space: nowrap !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  color: #111 !important;
+  opacity: 1 !important;
+}
+
+body[data-book][data-chapter] #book-subtitle{
+  margin-left: 12px !important;
+}
+
+/* 2) Reserve space for the arrow nav and pin it to the right */
+body[data-book][data-chapter] #tabs{
+  position: relative !important;
+  padding-right: 140px !important;   /* keeps last tab from hiding under arrows */
+}
+
+body[data-book][data-chapter] .chapter-nav{
+  position: absolute !important;
+  right: 0 !important;
+  top: 50% !important;
+  transform: translateY(-50%) !important;
+  margin-left: 0 !important;
+  z-index: 5 !important;
+}
+/* =========================================================
+   CHAPTER PAGES — FOUNDATION HEADER (FINAL OVERRIDES)
+   KEEP THIS AT THE VERY END of mtb-ui-overrides.css
+   ========================================================= */
+
+body[data-book][data-chapter]{
+  /* prevents tiny “jump” when scrollbar appears */
+  scrollbar-gutter: stable;
+}
+
+body[data-book][data-chapter] main.doc-shell{
+  max-width: none !important;
+  width: 100% !important;
+  margin: 0 !important;
+  padding: 0 !important;
+}
+
+/* Full-width blue-grey band under the PRIMARY site header */
+body[data-book][data-chapter] .doc-header{
+  position: sticky !important;
+  top: var(--mtb-header-h, 72px) !important;
+  z-index: 3000 !important;
+
+  display: flex !important;
+  align-items: center !important;
+  gap: 18px !important;
+
+  background: var(--mtb-chrome, #eef3f8) !important;
+  border-bottom: 1px solid rgba(0,0,0,0.08) !important;
+
+  /* shorter band */
+  padding: 8px 24px !important;
+  margin: 0 !important;
+}
+
+/* Titus + Chapter 2 = one line, same size, black */
+body[data-book][data-chapter] #book-title,
+body[data-book][data-chapter] #book-subtitle{
+  display: inline-block !important;
+  margin: 0 !important;
+  padding: 0 !important;
+
+  font-size: 32px !important;
+  line-height: 1.1 !important;
+  font-weight: 800 !important;
+
+  color: #111 !important;
+  opacity: 1 !important;
+  white-space: nowrap !important;
+
+  /* prevents flex from crushing the title */
+  flex: 0 0 auto !important;
+}
+
+body[data-book][data-chapter] #book-subtitle{
+  margin-left: 10px !important; /* one visual space */
+}
+
+/* Tabs sit to the right of the title */
+body[data-book][data-chapter] .tabs-shell{
+  margin-left: 28px !important;
+  flex: 1 1 auto !important;
+  padding: 0 !important;
+  min-width: 0 !important;
+}
+
+/* Keep all buttons on one row (no inner scroll badges) */
+body[data-book][data-chapter] #tabs{
+  display: flex !important;
+  align-items: center !important;
+  gap: 12px !important;
+  flex-wrap: nowrap !important;
+  overflow: visible !important;
+  min-width: 0 !important;
+}
+
+/* Default gray, blue on hover/active */
+body[data-book][data-chapter] .tabs .tab-btn,
+body[data-book][data-chapter] .tabs button,
+body[data-book][data-chapter] .chapter-nav-btn{
+  height: 42px !important;
+  min-height: 42px !important;
+  padding: 0 14px !important;
+  border-radius: 12px !important;
+
+  background: #e6ebf1 !important;
+  color: #1b2430 !important;
+  border: 1px solid rgba(0,0,0,0.12) !important;
+
+  font-weight: 600 !important;
+}
+
+body[data-book][data-chapter] .tabs .tab-btn:hover,
+body[data-book][data-chapter] .tabs button:hover,
+body[data-book][data-chapter] .chapter-nav-btn:hover{
+  background: #3b6fb6 !important;
+  border-color: #3b6fb6 !important;
+  color: #fff !important;
+}
+
+body[data-book][data-chapter] .tabs .tab-btn.active,
+body[data-book][data-chapter] .tabs .tab-btn[aria-current="page"]{
+  background: #3b6fb6 !important;
+  border-color: #3b6fb6 !important;
+  color: #fff !important;
+}
+
+/* Nav arrows aligned with tabs */
+body[data-book][data-chapter] .chapter-nav{
+  display: flex !important;
+  align-items: center !important;
+  gap: 10px !important;
+  margin-left: 10px !important;
+}
+
+body[data-book][data-chapter] .chapter-nav-btn{
+  padding: 0 12px !important;
+  min-width: 42px !important;
+}
+
+/* White page (content) stays centered below the header */
+body[data-book][data-chapter] #doc-layout{
+  max-width: var(--mtb-maxw-wide, 1600px) !important;
+  margin: 0 auto !important;
+  padding: 18px !important;
+}
+/* Hide READ / UNDERSTAND / DWELL on Chapter Explanation page */
+body[data-doc-type="chapter-explanation"] .ce-mode-controls,
+body[data-doc-type="chapter-explanation"] .read-understand-dwell,
+body[data-doc-type="chapter-explanation"] .ce-controls{
+  display: none !important;
+}
+/* Chapter Explanation: hide READ / UNDERSTAND / DWELL bar */
+body[data-doc-type="chapter-explanation"] #ce-modebar{
+  display: none !important;
+}
+/* Narrow white page container for non-Scripture chapter tabs */
+body[data-book][data-chapter]:not([data-doc-type="chapter-scripture"]) #doc-layout{
+  max-width: 1100px !important;   /* match scripture width */
+  margin: 0 auto !important;
+  padding-left: 24px !important;
+  padding-right: 24px !important;
+}
+/* =========================================================
+   CHAPTER EXPLANATION ONLY
+   Make the blue-grey header band span full screen width
+   (without changing the centered content width)
+   ========================================================= */
+
+body[data-doc-type="chapter-explanation"] .doc-header{
+  position: sticky;            /* keep whatever sticky/top you already have */
+  left: auto;
+  right: auto;
+  width: 100%;
+  background: transparent !important;  /* move bg to ::before */
+  position: relative !important;       /* needed for ::before */
+  z-index: 9000 !important;
+}
+
+/* Full-width background strip behind the header */
+body[data-doc-type="chapter-explanation"] .doc-header::before{
+  content: "";
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 100vw;
+  background: var(--mtb-chrome, #eef3f8);
+  border-bottom: 1px solid rgba(0,0,0,0.08);
+  z-index: -1;
+}
+/* Chapter Explanation: force the header band background to full viewport width */
+body[data-doc-type="chapter-explanation"] .chapter-header-band{
+  position: relative !important;
+  background: transparent !important; /* background will come from ::before */
+  z-index: 9000 !important;
+}
+
+body[data-doc-type="chapter-explanation"] .chapter-header-band::before{
+  content: "";
+  position: absolute;
+  inset: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 100vw;
+  background: var(--mtb-chrome, #eef3f8);
+  border-bottom: 1px solid rgba(0,0,0,0.08);
+  z-index: -1;
+  pointer-events: none;
+}
+/* Chapter Explanation ONLY: make the outer shell full-width (not a centered white card) */
+body[data-doc-type="chapter-explanation"] main.doc-shell{
+  max-width: none !important;
+  width: 100% !important;
+  margin: 0 !important;
+
+  /* remove the white-card effect from the shell */
+  background: transparent !important;
+  border-radius: 0 !important;
+  box-shadow: none !important;
+  padding: 0 !important;
+}
+
+
+/* =========================================================
+   CHAPTER RESOURCES TAB — make card bigger + link styling
+   Works even when body has no data-doc-type.
+   ========================================================= */
+
+body[data-book][data-chapter]:has(#tabs .tab-btn.active[data-tab="resources"]) #doc-target,
+body[data-book][data-chapter]:has(#tabs button.active[data-tab="resources"]) #doc-target,
+body[data-book][data-chapter]:has(#tabs .tab-btn[aria-current="page"][data-tab="resources"]) #doc-target,
+body[data-book][data-chapter]:has(#tabs button[aria-current="page"][data-tab="resources"]) #doc-target{
+  /* bigger white container */
+  max-width: 980px !important;
+  width: min(980px, calc(100% - 64px)) !important;
+  margin: 28px auto !important;
+
+  padding: 40px 52px !important;
+  background: #fff !important;
+  border: 1px solid rgba(0,0,0,0.10) !important;
+  border-radius: 16px !important;
+  box-shadow: 0 10px 24px rgba(0,0,0,0.08) !important;
+}
+
+/* Make links look like links (Resources tab only) */
+body[data-book][data-chapter]:has(#tabs .tab-btn.active[data-tab="resources"]) #doc-target a,
+body[data-book][data-chapter]:has(#tabs button.active[data-tab="resources"]) #doc-target a,
+body[data-book][data-chapter]:has(#tabs .tab-btn[aria-current="page"][data-tab="resources"]) #doc-target a,
+body[data-book][data-chapter]:has(#tabs button[aria-current="page"][data-tab="resources"]) #doc-target a{
+  color: #1a5fd1 !important;
+  text-decoration: underline !important;
+  font-weight: 600 !important;
+}
+
+body[data-book][data-chapter]:has(#tabs .tab-btn.active[data-tab="resources"]) #doc-target a:hover,
+body[data-book][data-chapter]:has(#tabs button.active[data-tab="resources"]) #doc-target a:hover,
+body[data-book][data-chapter]:has(#tabs .tab-btn[aria-current="page"][data-tab="resources"]) #doc-target a:hover,
+body[data-book][data-chapter]:has(#tabs button[aria-current="page"][data-tab="resources"]) #doc-target a:hover{
+  color: #0f3ea8 !important;
+}
+/* =========================================================
+   CHAPTER RESOURCES — make card properly large
+   ========================================================= */
+
+body[data-book][data-chapter]:has(#tabs .active[data-tab="resources"]) #doc-target {
+  max-width: 1100px !important;
+  width: min(1100px, 92%) !important;
+  margin: 40px auto !important;
+
+  padding: 60px 80px !important;
+
+  border-radius: 20px !important;
+}
+/* Only when the Chapter Resources tab is active */
+body[data-book][data-chapter][data-active-tab="resources"] #doc-target{
+  max-width: 1100px !important;
+  width: min(1100px, 92vw) !important;
+  margin: 40px auto !important;
+  padding: 60px 80px !important;
+  border-radius: 20px !important;
+}
+/* =========================================================
+   CHAPTER RESOURCES: make the white container larger
+   (ONLY on the Resources tab)
+   ========================================================= */
+
+body[data-book][data-chapter][data-active-tab="resources"] main.doc-shell{
+  max-width: none !important;
+  width: 100% !important;
+}
+
+/* If your layout grid is constraining width, neutralize it for this tab */
+body[data-book][data-chapter][data-active-tab="resources"] #doc-layout{
+  display: block !important;
+}
+
+/* The actual white card */
+body[data-book][data-chapter][data-active-tab="resources"] #doc-target{
+  max-width: 1100px !important;
+  width: min(1100px, 92vw) !important;
+  margin: 48px auto !important;
+
+  padding: 70px 90px !important;
+  border-radius: 18px !important;
+}
+
+/* =========================================================
+   Chapter Resources: make the white card wider (but keep centered)
+   ========================================================= */
+body[data-active-tab="resources"] #doc-target > section.mtb-doc{
+  width: min(1100px, calc(100vw - 120px)) !important;
+}
+
+/* Make sure links look like links in Resources */
+body[data-active-tab="resources"] #doc-target a{
+  color: #1a5fd1 !important;
+  text-decoration: underline !important;
+}
+body[data-active-tab="resources"] #doc-target a:hover{
+  color: #0f3ea8 !important;
+}
+/* =========================================================
+   CHAPTER RESOURCES — make the white card bigger
+   (only when the Resources tab is active)
+   ========================================================= */
+body[data-book][data-chapter][data-active-tab="resources"] #doc-target{
+  width: min(1100px, calc(100vw - 64px)) !important;
+  max-width: 1100px !important;
+  padding: 52px 64px !important;
+  min-height: 340px !important;
+
+  /* keep it centered like the other chapter pages */
+  margin-left: auto !important;
+  margin-right: auto !important;
+}
+/* =========================================================
+   CHAPTER RESOURCES — remove parent width clamp, then widen card
+   ========================================================= */
+body[data-book][data-chapter][data-active-tab="resources"] .doc-layout,
+body[data-book][data-chapter][data-active-tab="resources"] .doc-main{
+  width: 100% !important;
+  max-width: none !important;
+}
+
+/* Now the card can actually grow wider */
+body[data-book][data-chapter][data-active-tab="resources"] #doc-target{
+  width: min(1200px, calc(100vw - 80px)) !important;
+  max-width: 1200px !important;
+  margin: 28px auto !important;
+
+  padding: 52px 64px !important;
+  min-height: 340px !important;
+}
+
+/* =========================================================
+   CHAPTER STUDY — WIDE CONTENT FOUNDATION
+   Keep this block at the VERY END of this file.
+   Widens only the Chapter Study tab and leaves Scripture,
+   Overview, EG Culture, and Resources unchanged.
+   ========================================================= */
+
+body[data-book][data-chapter][data-active-tab="chapter_explanation"] #doc-layout,
+body[data-book][data-chapter][data-active-tab="chapter_explanation"] .doc-layout{
+  width: 100% !important;
+  max-width: none !important;
+  margin: 0 !important;
+  padding: 18px 24px 48px !important;
+  box-sizing: border-box !important;
+}
+
+body[data-book][data-chapter][data-active-tab="chapter_explanation"] .doc-main{
+  width: 100% !important;
+  max-width: none !important;
+  margin: 0 !important;
+}
+
+body[data-book][data-chapter][data-active-tab="chapter_explanation"] #doc-target{
+  width: min(1600px, calc(100vw - 48px)) !important;
+  max-width: 1600px !important;
+  margin: 18px auto 40px !important;
+  padding: 28px 32px !important;
+  box-sizing: border-box !important;
+  overflow-x: hidden !important;
+}
+
+/* Keep the generated Chapter Study content inside the white page. */
+body[data-book][data-chapter][data-active-tab="chapter_explanation"] #doc-target > #doc-root,
+body[data-book][data-chapter][data-active-tab="chapter_explanation"] #doc-target > .mtb-study-page,
+body[data-book][data-chapter][data-active-tab="chapter_explanation"] #doc-target .mtb-study-page{
+  width: 100% !important;
+  max-width: none !important;
+  margin-left: auto !important;
+  margin-right: auto !important;
+  box-sizing: border-box !important;
+}
+
+@media (max-width: 1100px){
+  body[data-book][data-chapter][data-active-tab="chapter_explanation"] #doc-target{
+    width: calc(100vw - 32px) !important;
+    padding: 24px !important;
+  }
+}
+
+@media (max-width: 700px){
+  body[data-book][data-chapter][data-active-tab="chapter_explanation"] #doc-layout,
+  body[data-book][data-chapter][data-active-tab="chapter_explanation"] .doc-layout{
+    padding: 12px 8px 32px !important;
+  }
+
+  body[data-book][data-chapter][data-active-tab="chapter_explanation"] #doc-target{
+    width: calc(100vw - 16px) !important;
+    margin-top: 12px !important;
+    padding: 18px 14px !important;
+    border-radius: 10px !important;
+  }
+}
+
+/* =========================================================
+   CHAPTER OVERVIEW — WIDE 4-COLUMN LAYOUT
+   Keep this block at the VERY END of this file.
+   ========================================================= */
+body[data-book][data-chapter][data-active-tab="chapter_overview"] #doc-layout,
+body[data-book][data-chapter][data-active-tab="chapter_overview"] .doc-layout{
+  width: 100% !important;
+  max-width: none !important;
+  margin: 0 !important;
+  padding: 18px 24px 48px !important;
+  box-sizing: border-box !important;
+}
+
+body[data-book][data-chapter][data-active-tab="chapter_overview"] .doc-main{
+  width: 100% !important;
+  max-width: none !important;
+  margin: 0 !important;
+}
+
+body[data-book][data-chapter][data-active-tab="chapter_overview"] #doc-target{
+  width: min(1600px, calc(100vw - 48px)) !important;
+  max-width: 1600px !important;
+  margin: 18px auto 40px !important;
+  padding: 28px 32px !important;
+  box-sizing: border-box !important;
+  overflow-x: hidden !important;
+}
+
+body[data-book][data-chapter][data-active-tab="chapter_overview"] #doc-target > #doc-root,
+body[data-book][data-chapter][data-active-tab="chapter_overview"] #doc-target .mtb-chapter-overview-dashboard{
+  width: 100% !important;
+  max-width: none !important;
+  margin-left: auto !important;
+  margin-right: auto !important;
+  box-sizing: border-box !important;
+}
+
+@media (max-width: 1100px){
+  body[data-book][data-chapter][data-active-tab="chapter_overview"] #doc-target{
+    width: calc(100vw - 32px) !important;
+    padding: 24px !important;
+  }
+}
+
+@media (max-width: 700px){
+  body[data-book][data-chapter][data-active-tab="chapter_overview"] #doc-layout,
+  body[data-book][data-chapter][data-active-tab="chapter_overview"] .doc-layout{
+    padding: 12px 8px 32px !important;
+  }
+
+  body[data-book][data-chapter][data-active-tab="chapter_overview"] #doc-target{
+    width: calc(100vw - 16px) !important;
+    margin-top: 12px !important;
+    padding: 18px 14px !important;
+    border-radius: 10px !important;
+  }
+}
+/* =========================================================
+   CHAPTER EG CULTURE — WIDE
+   Must remain at the bottom of this file
+   ========================================================= */
+
+body[data-book][data-chapter][data-active-tab="eg_culture"] #doc-layout,
+body[data-book][data-chapter][data-active-tab="eg_culture"] .doc-layout{
+  width: 100% !important;
+  max-width: none !important;
+  margin: 0 !important;
+  padding: 18px 24px 48px !important;
+  box-sizing: border-box !important;
+}
+
+body[data-book][data-chapter][data-active-tab="eg_culture"] .doc-main{
+  width: 100% !important;
+  max-width: none !important;
+  margin: 0 !important;
+}
+
+body[data-book][data-chapter][data-active-tab="eg_culture"] #doc-target{
+  width: min(1600px, calc(100vw - 48px)) !important;
+  max-width: 1600px !important;
+  margin: 18px auto 40px !important;
+  padding: 28px 32px !important;
+  box-sizing: border-box !important;
+  overflow-x: hidden !important;
+}
+
+body[data-book][data-chapter][data-active-tab="eg_culture"] #doc-target > #doc-root,
+body[data-book][data-chapter][data-active-tab="eg_culture"] #doc-target .mtb-culture-dashboard{
+  width: 100% !important;
+  max-width: none !important;
+  margin-left: auto !important;
+  margin-right: auto !important;
+  box-sizing: border-box !important;
+}
+
+@media (max-width: 1100px){
+  body[data-book][data-chapter][data-active-tab="eg_culture"] #doc-target{
+    width: calc(100vw - 32px) !important;
+    padding: 24px !important;
+  }
+}
+
+@media (max-width: 700px){
+  body[data-book][data-chapter][data-active-tab="eg_culture"] #doc-layout,
+  body[data-book][data-chapter][data-active-tab="eg_culture"] .doc-layout{
+    padding: 12px 8px 32px !important;
+  }
+
+  body[data-book][data-chapter][data-active-tab="eg_culture"] #doc-target{
+    width: calc(100vw - 16px) !important;
+    margin-top: 12px !important;
+    padding: 18px 14px !important;
+    border-radius: 10px !important;
+  }
+}
+
+
+/* =========================================================
+   CHAPTER REFLECTIONS — LOCKED 2x2 LAYOUT
+   Keep this block at the VERY END of this file.
+   ========================================================= */
+
+/* Remove the general 1100px clamp for the active Chapter Reflections tab. */
+body[data-book][data-chapter][data-active-tab="chapter_reflections"] #doc-layout,
+body[data-book][data-chapter][data-active-tab="chapter_reflections"] .doc-layout{
+  width: 100% !important;
+  max-width: none !important;
+  margin: 0 !important;
+  padding: 18px 24px 48px !important;
+  box-sizing: border-box !important;
+}
+
+body[data-book][data-chapter][data-active-tab="chapter_reflections"] .doc-main{
+  width: 100% !important;
+  max-width: none !important;
+  margin: 0 !important;
+}
+
+/* Widen the white page container. */
+body[data-book][data-chapter][data-active-tab="chapter_reflections"] #doc-target{
+  width: min(1600px, calc(100vw - 48px)) !important;
+  max-width: 1600px !important;
+  margin: 18px auto 40px !important;
+  padding: 28px 32px !important;
+  box-sizing: border-box !important;
+  overflow-x: hidden !important;
+}
+
+/* Let the generated reflection document and grid fill the white page. */
+body[data-book][data-chapter][data-active-tab="chapter_reflections"] #doc-target > #doc-root,
+body[data-book][data-chapter][data-active-tab="chapter_reflections"] #doc-target > .mtb-doc,
+body[data-book][data-chapter][data-active-tab="chapter_reflections"] #doc-target .mtb-reflections-page,
+body[data-book][data-chapter][data-active-tab="chapter_reflections"] #doc-target .mtb-reflections-grid{
+  width: 100% !important;
+  max-width: none !important;
+  margin-left: auto !important;
+  margin-right: auto !important;
+  box-sizing: border-box !important;
+}
+
+/* Locked MTB Chapter Reflections layout:
+   Row 1: Foundational Truths | Chapter Insights
+   Row 2: Christ & Life | Dwelling in the Word
+*/
+body[data-book][data-chapter][data-active-tab="chapter_reflections"] #doc-target .mtb-reflections-grid{
+  display: grid !important;
+  grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+  align-items: stretch !important;
+  gap: 16px !important;
+}
+
+body[data-book][data-chapter][data-active-tab="chapter_reflections"] #doc-target .mtb-reflections-card,
+body[data-book][data-chapter][data-active-tab="chapter_reflections"] #doc-target .mtb-reflection-card{
+  min-width: 0 !important;
+  height: 100% !important;
+  overflow: visible !important;
+  grid-column: auto !important;
+  grid-row: auto !important;
+}
+
+/* Mobile: stack cards one per row. */
+@media (max-width: 700px){
+  body[data-book][data-chapter][data-active-tab="chapter_reflections"] #doc-layout,
+  body[data-book][data-chapter][data-active-tab="chapter_reflections"] .doc-layout{
+    padding: 12px 8px 32px !important;
+  }
+
+  body[data-book][data-chapter][data-active-tab="chapter_reflections"] #doc-target{
+    width: calc(100vw - 16px) !important;
+    margin-top: 12px !important;
+    padding: 18px 14px !important;
+    border-radius: 10px !important;
+  }
+
+  body[data-book][data-chapter][data-active-tab="chapter_reflections"] #doc-target .mtb-reflections-grid{
+    grid-template-columns: minmax(0, 1fr) !important;
+  }
+}
+/* TEMPORARILY HIDE ABOUT NAV LINKS SITE-WIDE */
+
+/*  .main-nav a[href="/aboutthebible.html"], */
+/* .main-nav a[href="/about.html"] {
+  display: none !important;
+} */
+/* =========================================================
+   HOME PAGE INFORMATION BOXES
+   ========================================================= */
+
+
+
+.home-info-section {
+  width: min(1100px, calc(100% - 40px));
+  margin: 30px auto 30px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.home-info-box {
+  width: 100%;
+  box-sizing: border-box;
+  padding: 12px 20px;
+  background: transparent;
+  border: 1px solid var(--line);
+  border-top: 3px solid var(--blue);
+  border-radius: 10px;
+}
+
+.home-info-box h2 {
+  margin: 0 0 6px;
+  color: var(--navy);
+  font-size: 1.1rem;
+}
+
+.home-info-box p {
+  margin: 0;
+  line-height: 1.45;
+}
+.home-info-box:first-child {
+  background: transparent !important;
+  border: none;
+}
+/* =========================================================
+   CHAPTER STUDY — ONE-ROW VERSE PREVIEW
+   Reference | NKJV | NLT | Main Idea | Toggle
+   ========================================================= */
+
+
+/* =========================================================
+   VERSE CARD / JOINED ROWS
+   ========================================================= */
+
+.mtb-study-verse-card {
+  margin: 0 !important;
+  border: 1px solid #cfdae3;
+  border-radius: 0;
+  overflow: hidden;
+  background: #fff;
+}
+
+
+/* Remove doubled horizontal borders between verses */
+.mtb-study-verse-card + .mtb-study-verse-card {
+  border-top: 0;
+}
+
+
+/* Round only the first row */
+.mtb-study-verses .mtb-study-verse-card:first-child {
+  border-radius: 10px 10px 0 0;
+}
+
+
+/* Round only the last row */
+.mtb-study-verses .mtb-study-verse-card:last-child {
+  border-radius: 0 0 10px 10px;
+}
+
+
+/* If there is only one verse */
+.mtb-study-verses .mtb-study-verse-card:only-child {
+  border-radius: 10px;
+}
+
+
+/* =========================================================
+   COLLAPSED / ALWAYS-VISIBLE ROW
+   ========================================================= */
+
+.mtb-study-row {
+  display: grid;
+
+  grid-template-columns:
+    135px
+    minmax(0, 1.05fr)
+    minmax(0, 1.05fr)
+    minmax(0, 1fr)
+    48px;
+
+  align-items: stretch;
+
+  background: #f3f7fa;
+}
+
+
+/* =========================================================
+   VERSE REFERENCE
+   ========================================================= */
+
+.mtb-study-row-reference {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+
+  padding: 12px 14px;
+
+  border-right: 1px solid #d8e1e8;
+
+  background: #f3f7fa;
+
+  color: #173a5e;
+  font-weight: 800;
+  line-height: 1.35;
+
+  text-align: left;
+
+  cursor: pointer;
+}
+
+
+/* =========================================================
+   NKJV / NLT / MAIN IDEA CELLS
+   ========================================================= */
+
+.mtb-study-row-cell {
+  padding: 12px 14px;
+
+  border-right: 1px solid #d8e1e8;
+
+  background: #fff;
+}
+
+
+/* Labels */
+.mtb-study-row-label {
+  margin: 0 0 6px;
+
+  color: #173a5e;
+
+  font-size: .76rem;
+  font-weight: 800;
+  letter-spacing: .02em;
+  line-height: 1.2;
+
+  text-transform: uppercase;
+}
+
+
+/* Text content */
+.mtb-study-row-content {
+  margin: 0;
+
+  color: #1f2b37;
+
+  font-size: .94rem;
+  line-height: 1.42;
+}
+
+
+/* Remove inherited paragraph / blockquote spacing */
+.mtb-study-row-content p,
+.mtb-study-row-content blockquote {
+  margin: 0 !important;
+  padding: 0;
+}
+
+
+/* Remove old blockquote styling */
+.mtb-study-row-content blockquote {
+  border: 0;
+}
+
+
+/* Prevent stray generated line breaks from pushing
+   Main Idea text downward */
+.mtb-study-row-mainidea .mtb-study-row-content > br:first-child,
+.mtb-study-row-mainidea .mtb-study-row-content > br:first-child + br {
+  display: none;
+}
+
+
+/* Main Idea should begin at the same vertical level
+   as NKJV and NLT text */
+.mtb-study-row-mainidea .mtb-study-row-content {
+  padding-top: 0;
+}
+
+
+/* =========================================================
+   TOGGLE
+   ========================================================= */
+
+.mtb-study-row-toggle {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  width: 100%;
+  min-width: 0;
+
+  padding: 0;
+
+  border: 0;
+
+  background: #f3f7fa;
+
+  color: #173a5e;
+
+  font-size: 1.25rem;
+  font-weight: 800;
+
+  cursor: pointer;
+}
+
+
+.mtb-study-row-toggle:hover {
+  background: #e8f0f7;
+}
+
+
+/* Open state:
+   keep content cells white and only lightly change
+   the reference/toggle areas */
+.mtb-study-verse-card.is-open .mtb-study-row-reference,
+.mtb-study-verse-card.is-open .mtb-study-row-toggle {
+  background: #eaf2f8;
+}
+
+
+.mtb-study-verse-card.is-open .mtb-study-row-cell {
+  background: #fff;
+}
+
+
+/* =========================================================
+   EXPANDED CONTENT
+   ========================================================= */
+
+.mtb-study-verse-deep {
+  display: none;
+
+  padding: 14px;
+
+  border-top: 1px solid #dbe3ea;
+
+  background: #fff;
+}
+
+
+.mtb-study-verse-card.is-open .mtb-study-verse-deep {
+  display: block;
+}
+
+
+.mtb-study-verse-deep-grid {
+  display: grid;
+
+  grid-template-columns: 2fr 1fr;
+
+  gap: 14px;
+
+  align-items: start;
+}
+
+
+.mtb-study-deep-explanation,
+.mtb-study-deep-remarks {
+  height: auto !important;
+  grid-column: auto !important;
+}
+
+
+/* =========================================================
+   MOBILE / TABLET
+   ========================================================= */
+
+@media (max-width: 900px) {
+
+  .mtb-study-row {
+    grid-template-columns: 110px 1fr 44px;
+  }
+
+
+  .mtb-study-row-reference {
+    grid-column: 1;
+    grid-row: 1 / span 3;
+
+    align-items: center;
+  }
+
+
+  .mtb-study-row-nkjv,
+  .mtb-study-row-nlt,
+  .mtb-study-row-mainidea {
+    grid-column: 2;
+  }
+
+
+  .mtb-study-row-toggle {
+    grid-column: 3;
+    grid-row: 1 / span 3;
+  }
+
+
+  .mtb-study-row-nkjv,
+  .mtb-study-row-nlt {
+    border-bottom: 1px solid #d8e1e8;
+  }
+}
+
+
+@media (max-width: 650px) {
+
+  .mtb-study-row {
+    grid-template-columns: 1fr 44px;
+  }
+
+
+  .mtb-study-row-reference {
+    grid-column: 1;
+    grid-row: 1;
+
+    padding: 9px 11px;
+
+    border-bottom: 1px solid #d8e1e8;
+
+    align-items: center;
+  }
+
+
+  .mtb-study-row-toggle {
+    grid-column: 2;
+    grid-row: 1;
+
+    border-bottom: 1px solid #d8e1e8;
+  }
+
+
+  .mtb-study-row-nkjv,
+  .mtb-study-row-nlt,
+  .mtb-study-row-mainidea {
+    grid-column: 1 / -1;
+
+    border-right: 0;
+  }
+
+
+  .mtb-study-row-nkjv,
+  .mtb-study-row-nlt {
+    border-bottom: 1px solid #d8e1e8;
+  }
+
+
+  .mtb-study-verse-deep-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+
+/* =========================================================
+   PRINT
+   ========================================================= */
+
+@media print {
+
+  .mtb-study-row-toggle {
+    display: none !important;
+  }
+
+
+  .mtb-study-verse-deep {
+    display: block !important;
+  }
+
+
+  .mtb-study-row-cell,
+  .mtb-study-row-reference {
+    background: #fff !important;
+  }
+}
+/* =========================================================
+   CHAPTER STUDY — FINAL LAYOUT CLEANUP
+   ========================================================= */
+
+
+/* Remove the large Chapter Study hero box */
+body[data-active-tab="chapter_explanation"] .mtb-study-hero {
+  display: none !important;
+}
+
+
+/* Keep Chapter Study positioned normally */
+body[data-active-tab="chapter_explanation"] .mtb-chapter-study {
+  position: relative;
+}
+
+
+/* Expand All | Collapse All | Print This Page
+   aligned to the right edge */
+body[data-active-tab="chapter_explanation"] .mtb-study-controls {
+  display: flex;
+  width: 100%;
+  box-sizing: border-box;
+
+  justify-content: flex-end;
+  align-items: center;
+  gap: 8px;
+
+  margin: 0 0 16px;
+  padding: 0 !important;
+}
+
+
+/* Make sure moved Print button behaves like the other controls */
+body[data-active-tab="chapter_explanation"]
+.mtb-study-controls .mtb-print-button {
+  margin: 0;
+  flex: 0 0 auto;
+}
+
+
+/* =========================================================
+   MAIN IDEA / TEXT ALIGNMENT
+   ========================================================= */
+
+/* Normalize all three cells */
+body[data-active-tab="chapter_explanation"] .mtb-study-row-cell {
+  display: flex;
+  flex-direction: column;
+}
+
+
+/* Keep all labels aligned */
+body[data-active-tab="chapter_explanation"] .mtb-study-row-label {
+  margin: 0 0 6px !important;
+  line-height: 1.2;
+}
+
+
+/* Normalize all content positioning */
+body[data-active-tab="chapter_explanation"] .mtb-study-row-content {
+  margin: 0 !important;
+  padding: 0 !important;
+}
+
+
+/* First paragraph begins immediately below label */
+body[data-active-tab="chapter_explanation"]
+.mtb-study-row-content > p:first-child {
+  margin-top: 0 !important;
+  padding-top: 0 !important;
+}
+
+
+/* Main Idea alignment */
+body[data-active-tab="chapter_explanation"]
+.mtb-study-row-mainidea .mtb-study-row-content {
+  margin-top: 0 !important;
+  padding-top: 0 !important;
+}
+
+
+/* Remove generated leading BRs in Main Idea */
+body[data-active-tab="chapter_explanation"]
+.mtb-study-row-mainidea .mtb-study-row-content br:first-child,
+body[data-active-tab="chapter_explanation"]
+.mtb-study-row-mainidea .mtb-study-row-content br:first-child + br {
+  display: none !important;
+}
+
+
+/* =========================================================
+   MOBILE
+   ========================================================= */
+
+@media (max-width: 650px) {
+
+  body[data-active-tab="chapter_explanation"] .mtb-study-controls {
+    justify-content: flex-end;
+    flex-wrap: wrap;
+    padding: 0 !important;
+  }
+}
+/* =========================================================
+   CHAPTER SCRIPTURE — VERSE EXPLANATION INFO BUTTON
+   ========================================================= */
+
+.mtb-scripture-verse-cell {
+  text-align: center;
+  vertical-align: middle;
+  white-space: nowrap;
+}
+
+
+.mtb-scripture-verse-number {
+  display: inline-block;
+  vertical-align: middle;
+}
+
+
+.mtb-verse-info-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  width: 19px;
+  height: 19px;
+
+  margin-left: 7px;
+  padding: 0;
+
+  border: 1px solid #7ea3c7;
+  border-radius: 50%;
+
+  background: #eef5fb;
+
+  color: #173a5e;
+
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: 12px;
+  font-weight: 700;
+  font-style: italic;
+  line-height: 1;
+
+  cursor: pointer;
+  vertical-align: middle;
+}
+
+
+.mtb-verse-info-button:hover {
+  background: #dcebf7;
+  border-color: #4f7faa;
+}
+
+
+/* =========================================================
+   VERSE EXPLANATION MODAL
+   ========================================================= */
+
+body.mtb-verse-explain-open {
+  overflow: hidden;
+}
+
+
+.mtb-verse-explain-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 10000;
+
+  display: none;
+  align-items: center;
+  justify-content: center;
+
+  padding: 28px;
+
+  background: rgba(20, 34, 48, .42);
+}
+
+
+.mtb-verse-explain-overlay.is-open {
+  display: flex;
+}
+
+
+.mtb-verse-explain-modal {
+  position: relative;
+
+  width: min(980px, 94vw);
+  max-height: 86vh;
+
+  overflow: hidden;
+
+  border: 1px solid #c8d6e2;
+  border-radius: 14px;
+
+  background: #fff;
+
+  box-shadow:
+    0 18px 50px rgba(20, 34, 48, .20);
+
+  color: #1f2b37;
+}
+
+
+/* =========================================================
+   MODAL HEADER
+   Reference | NKJV verse | close
+   ========================================================= */
+
+.mtb-verse-explain-header {
+  display: grid;
+
+  grid-template-columns:
+    135px
+    minmax(0, 1fr);
+
+  gap: 18px;
+
+  align-items: start;
+
+  padding: 19px 54px 19px 22px;
+
+  border-bottom: 1px solid #d8e1e8;
+
+  background: #f3f7fa;
+}
+
+
+.mtb-verse-explain-reference {
+  color: #173a5e;
+
+  font-size: 1.05rem;
+  font-weight: 800;
+  line-height: 1.45;
+}
+
+
+.mtb-verse-explain-scripture {
+  color: #1f2b37;
+
+  font-size: 1rem;
+  line-height: 1.55;
+}
+
+
+.mtb-verse-explain-scripture p,
+.mtb-verse-explain-scripture blockquote {
+  margin: 0 !important;
+  padding: 0 !important;
+  border: 0 !important;
+}
+
+
+/* Existing word-study styling remains available.
+   This reinforces the dotted underline inside modal. */
+.mtb-verse-explain-scripture .ws {
+  cursor: pointer;
+  text-decoration-line: underline;
+  text-decoration-style: dotted;
+  text-underline-offset: 3px;
+}
+
+
+/* Close button */
+.mtb-verse-explain-close {
+  position: absolute;
+  top: 13px;
+  right: 15px;
+  z-index: 2;
+
+  width: 32px;
+  height: 32px;
+
+  padding: 0;
+
+  border: 0;
+  border-radius: 50%;
+
+  background: transparent;
+
+  color: #173a5e;
+
+  font-size: 1.65rem;
+  line-height: 1;
+
+  cursor: pointer;
+}
+
+
+.mtb-verse-explain-close:hover {
+  background: #e7eef4;
+}
+
+
+/* =========================================================
+   MODAL BODY
+   ========================================================= */
+
+.mtb-verse-explain-body {
+  max-height: calc(86vh - 95px);
+  overflow-y: auto;
+
+  padding: 20px 24px 26px;
+}
+
+
+.mtb-verse-explain-section {
+  margin: 0 0 22px;
+}
+
+
+.mtb-verse-explain-section:last-child {
+  margin-bottom: 0;
+}
+
+
+.mtb-verse-explain-section h3 {
+  margin: 0 0 8px;
+
+  color: #173a5e;
+
+  font-size: .82rem;
+  font-weight: 800;
+  letter-spacing: .04em;
+  text-transform: uppercase;
+}
+
+
+.mtb-verse-explain-section-content {
+  font-size: .98rem;
+  line-height: 1.58;
+}
+
+
+.mtb-verse-explain-section-content p {
+  margin: 0 0 .9em;
+}
+
+
+.mtb-verse-explain-section-content p:last-child {
+  margin-bottom: 0;
+}
+
+
+/* Main Idea gets a subtle distinction */
+.mtb-verse-explain-mainidea {
+  padding: 13px 15px;
+
+  border: 1px solid #d8e1e8;
+  border-radius: 8px;
+
+  background: #f8fafc;
+}
+
+
+.mtb-verse-explain-loading,
+.mtb-verse-explain-error {
+  color: #66727d;
+  font-style: italic;
+}
+
+
+/* =========================================================
+   MOBILE
+   ========================================================= */
+
+@media (max-width: 700px) {
+
+  .mtb-verse-explain-overlay {
+    padding: 10px;
+  }
+
+
+  .mtb-verse-explain-modal {
+    width: 100%;
+    max-height: 92vh;
+  }
+
+
+  .mtb-verse-explain-header {
+    grid-template-columns: 1fr;
+    gap: 6px;
+
+    padding: 16px 48px 16px 16px;
+  }
+
+
+  .mtb-verse-explain-body {
+    max-height: calc(92vh - 125px);
+    padding: 16px;
+  }
+}
+/* =========================================================
+   VERSE EXPLANATION POPUP — FINAL TUNING
+   ========================================================= */
+
+
+/* 1. Make the explanation popup wider */
+.mtb-verse-explain-modal {
+  width: min(1180px, 96vw) !important;
+  max-width: 1180px !important;
+}
+
+
+/* Keep the modal comfortably inside the viewport */
+.mtb-verse-explain-overlay {
+  padding: 20px !important;
+}
+
+
+/* 2. Make sure Word Study popup appears ABOVE
+      the verse explanation popup */
+.ws-popover,
+.wordstudy-popover,
+.word-study-popover,
+.wordstudy-popup,
+.word-study-popup,
+#wordstudy-popover,
+#word-study-popover,
+#ws-popover {
+  z-index: 20050 !important;
+}
+
+
+/* Explanation popup stays below Word Study popup */
+.mtb-verse-explain-overlay {
+  z-index: 10000 !important;
+}
+
+.mtb-verse-explain-modal {
+  z-index: 10001 !important;
+}
+
+
+/* 3. Pull Main Idea text up directly below heading */
+.mtb-verse-explain-mainidea {
+  padding-top: 11px !important;
+}
+
+
+/* Tighten Main Idea heading spacing */
+.mtb-verse-explain-mainidea h3 {
+  margin: 0 0 4px !important;
+  padding: 0 !important;
+}
+
+
+/* Remove generated blank spacing before first line */
+.mtb-verse-explain-mainidea
+.mtb-verse-explain-section-content {
+  margin: 0 !important;
+  padding: 0 !important;
+}
+
+
+.mtb-verse-explain-mainidea
+.mtb-verse-explain-section-content > p:first-child {
+  margin-top: 0 !important;
+  padding-top: 0 !important;
+}
+
+
+/* Generated Chapter Study HTML sometimes contains
+   leading BR elements before the Main Idea text */
+.mtb-verse-explain-mainidea
+.mtb-verse-explain-section-content br:first-child,
+.mtb-verse-explain-mainidea
+.mtb-verse-explain-section-content br:first-child + br {
+  display: none !important;
+}
+
+
+/* =========================================================
+   MOBILE
+   ========================================================= */
+
+@media (max-width: 700px) {
+  .mtb-verse-explain-modal {
+    width: 100% !important;
+    max-width: none !important;
+  }
+}
+/* =========================================================
+   WORD STUDY — ALWAYS ABOVE VERSE EXPLANATION POPUP
+   ========================================================= */
+
+/* Verse Explanation popup */
+.mtb-verse-explain-overlay {
+  z-index: 10000 !important;
+}
+
+.mtb-verse-explain-modal {
+  z-index: 10001 !important;
+}
+
+
+/* Word Study hover tooltip */
+.ws-tooltip {
+  position: fixed !important;
+  z-index: 30000 !important;
+}
+
+
+/* Full Word Study modal */
+.ws-modal {
+  position: fixed !important;
+  inset: 0 !important;
+  z-index: 25000 !important;
+}
+
+
+/* Word Study dark backdrop */
+.ws-modal-backdrop {
+  position: fixed !important;
+  inset: 0 !important;
+  z-index: 25001 !important;
+}
+
+
+/* Actual Word Study window */
+.ws-modal-panel {
+  position: relative !important;
+  z-index: 25002 !important;
+}
+/* =========================================================
+   CHAPTER STUDY — EXPANDED CARD BORDERS
+   Verse Explanation | Study Notes
+                     | Spirit & Life
+   ========================================================= */
+
+.mtb-study-verse-deep {
+  display: none;
+  padding: 14px;
+  border-top: 1px solid #d8e1e8;
+  background: #fff;
+}
+
+.mtb-study-verse-card.is-open .mtb-study-verse-deep {
+  display: block;
+}
+
+
+.mtb-study-verse-deep-grid {
+  display: grid;
+  grid-template-columns:
+    minmax(0, 2fr)
+    minmax(300px, 1fr);
+  gap: 14px;
+  align-items: start;
+}
+
+
+/* Right-hand vertical stack */
+.mtb-study-deep-right {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  min-width: 0;
+  align-self: start;
+}
+
+
+/* =========================================================
+   THREE EXPANDED CARDS
+   ========================================================= */
+
+.mtb-study-deep-explanation,
+.mtb-study-deep-study-notes,
+.mtb-study-deep-spirit-life {
+  width: 100%;
+  height: auto !important;
+  box-sizing: border-box;
+
+  border: 1px solid #d8e1e8 !important;
+  border-radius: 8px;
+
+  overflow: hidden;
+  background: #fff;
+
+  grid-column: auto !important;
+  align-self: start;
+}
+
+
+/* =========================================================
+   CARD HEADINGS
+   ========================================================= */
+
+.mtb-study-deep-explanation > h4,
+.mtb-study-deep-study-notes > h4,
+.mtb-study-deep-spirit-life > h4 {
+  margin: 0 !important;
+  padding: 10px 14px !important;
+
+  border-bottom: 1px solid #d8e1e8 !important;
+
+  background: #f3f7fa !important;
+
+  color: #173a5e;
+  font-size: .92rem;
+  font-weight: 800;
+  line-height: 1.3;
+}
+
+
+/* =========================================================
+   CARD CONTENT
+   ========================================================= */
+
+.mtb-study-deep-explanation .mtb-study-verse-panel-content,
+.mtb-study-deep-study-notes .mtb-study-verse-panel-content,
+.mtb-study-deep-spirit-life .mtb-study-verse-panel-content {
+  padding: 14px 16px !important;
+  background: #fff;
+  box-sizing: border-box;
+}
+
+
+/* Paragraph spacing */
+.mtb-study-deep-explanation .mtb-study-verse-panel-content p,
+.mtb-study-deep-study-notes .mtb-study-verse-panel-content p,
+.mtb-study-deep-spirit-life .mtb-study-verse-panel-content p {
+  margin-top: 0;
+  margin-bottom: 1em;
+}
+
+.mtb-study-deep-explanation .mtb-study-verse-panel-content p:last-child,
+.mtb-study-deep-study-notes .mtb-study-verse-panel-content p:last-child,
+.mtb-study-deep-spirit-life .mtb-study-verse-panel-content p:last-child {
+  margin-bottom: 0;
+}
+
+
+/* =========================================================
+   MOBILE
+   ========================================================= */
+
+@media (max-width: 900px) {
+  .mtb-study-verse-deep-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .mtb-study-deep-right {
+    width: 100%;
+  }
+}
+/* =========================================================
+   VERSE EXPLANATION "i" POPUP
+   Study Notes | Spirit & Life
+   ========================================================= */
+
+.mtb-verse-explain-notes-row {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  gap: 14px;
+  align-items: start;
+}
+
+
+/* Both cards grow naturally with their own content */
+.mtb-verse-explain-study-notes,
+.mtb-verse-explain-spirit-life {
+  min-width: 0;
+  height: auto !important;
+  align-self: start;
+}
+
+
+/* Mobile */
+@media (max-width: 800px) {
+  .mtb-verse-explain-notes-row {
+    grid-template-columns: 1fr;
+  }
+}
+/* =========================================================
+   VERSE EXPLANATION "i" POPUP
+   Study Notes / Spirit & Life card borders
+   ========================================================= */
+
+.mtb-verse-explain-study-notes,
+.mtb-verse-explain-spirit-life {
+  border: 1px solid #d8e1e8 !important;
+  border-radius: 8px;
+  overflow: hidden;
+  background: #fff;
+}
+
+
+/* Card headings */
+.mtb-verse-explain-study-notes > h3,
+.mtb-verse-explain-spirit-life > h3 {
+  margin: 0 !important;
+  padding: 10px 14px !important;
+
+  border-bottom: 1px solid #d8e1e8 !important;
+
+  background: #f3f7fa !important;
+
+  color: #173a5e;
+  font-size: .92rem;
+  font-weight: 800;
+  line-height: 1.3;
+}
+
+
+/* Card content */
+.mtb-verse-explain-study-notes
+.mtb-verse-explain-section-content,
+
+.mtb-verse-explain-spirit-life
+.mtb-verse-explain-section-content {
+  padding: 14px 16px !important;
+  background: #fff;
+}
+
+
+/* Keep the two-card row aligned naturally */
+.mtb-verse-explain-notes-row {
+  display: grid;
+  grid-template-columns:
+    minmax(0, 1fr)
+    minmax(0, 1fr);
+
+  gap: 14px;
+  align-items: stretch;
+
+  margin-top: 14px;
+}
+
+
+@media (max-width: 800px) {
+  .mtb-verse-explain-notes-row {
+    grid-template-columns: 1fr;
+  }
+}
+/* Equal height Study Notes / Spirit & Life cards */
+
+.mtb-verse-explain-study-notes,
+.mtb-verse-explain-spirit-life {
+  min-width: 0;
+  height: 100% !important;
+  align-self: stretch;
+}
+
+@media (max-width: 800px) {
+  .mtb-verse-explain-study-notes,
+  .mtb-verse-explain-spirit-life {
+    height: auto !important;
+  }
+}
+/* =========================================================
+   MOBILE — Hide previous/next book navigation arrows
+   ========================================================= */
+@media (max-width: 700px) {
+
+  #book-prev,
+  #book-next {
+    display: none !important;
+  }
+
+}
+
+/* =========================================================
+   MOBILE — FINAL POPUP + NAV FIX
+   MUST BE LAST IN mtb-ui-overrides.css
+   ========================================================= */
+
+@media screen and (max-width: 700px) {
+
+  /* =======================================================
+     HIDE ALL PREVIOUS / NEXT NAVIGATION ARROWS ON PHONE
+     ======================================================= */
+
+  body[data-book][data-chapter] #tabs .chapter-nav,
+  body[data-book][data-chapter] #tabs #chapter-prev,
+  body[data-book][data-chapter] #tabs #chapter-next,
+  body[data-book][data-chapter] #tabs .chapter-nav-btn,
+  #book-nav,
+  #book-prev,
+  #book-next {
+    display: none !important;
+  }
+
+  /* Remove the space previously reserved for chapter arrows */
+  body[data-book][data-chapter] #tabs {
+    padding-right: 0 !important;
+  }
+
+
+  /* =======================================================
+     BOOK OVERVIEW / BOOK POPUPS
+     ======================================================= */
+
+  #book-modal.book-modal {
+    position: fixed !important;
+    inset: 0 !important;
+
+    width: 100vw !important;
+    height: 100dvh !important;
+
+    margin: 0 !important;
+    padding: 12px !important;
+
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+
+    overflow: hidden !important;
+
+    box-sizing: border-box !important;
+  }
+
+  #book-modal.book-modal.hidden {
+    display: none !important;
+  }
+
+  #book-modal .book-modal-backdrop {
+    position: absolute !important;
+    inset: 0 !important;
+  }
+
+  #book-modal .book-modal-panel,
+  #book-modal .book-modal-panel:has(.mtb-book-overview-dashboard) {
+    position: relative !important;
+
+    width: calc(100vw - 24px) !important;
+    max-width: calc(100vw - 24px) !important;
+
+    height: auto !important;
+    max-height: calc(100dvh - 24px) !important;
+
+    margin: 0 !important;
+    padding: 12px !important;
+
+    overflow-x: hidden !important;
+    overflow-y: auto !important;
+
+    border-radius: 10px !important;
+    box-sizing: border-box !important;
+
+    transform: none !important;
+
+    -webkit-overflow-scrolling: touch;
+  }
+
+
+  /* =======================================================
+     FORCE EVERYTHING INSIDE POPUP TO SHRINK TO PHONE WIDTH
+     ======================================================= */
+
+  #book-modal .book-modal-content,
+  #book-modal .mtb-doc,
+  #book-modal .mtb-book-overview-dashboard,
+  #book-modal .mtb-intro-section,
+  #book-modal .mtb-intro-grid,
+  #book-modal .mtb-intro-card,
+  #book-modal .mtb-intro-card-body {
+    width: 100% !important;
+    max-width: 100% !important;
+    min-width: 0 !important;
+
+    margin-left: 0 !important;
+    margin-right: 0 !important;
+
+    box-sizing: border-box !important;
+  }
+
+  /* One card per row on phone */
+  #book-modal .mtb-book-overview-dashboard .mtb-intro-grid {
+    display: grid !important;
+    grid-template-columns: minmax(0, 1fr) !important;
+  }
+
+  #book-modal .mtb-book-overview-dashboard .mtb-intro-card,
+  #book-modal .mtb-book-overview-dashboard .mtb-intro-card.mtb-span-4,
+  #book-modal .mtb-book-overview-dashboard .mtb-intro-card.mtb-span-6,
+  #book-modal .mtb-book-overview-dashboard .mtb-intro-card.mtb-span-12 {
+    grid-column: 1 !important;
+  }
+
+  /* Prevent long text from making modal wider */
+  #book-modal p,
+  #book-modal li,
+  #book-modal h1,
+  #book-modal h2,
+  #book-modal h3,
+  #book-modal a {
+    max-width: 100% !important;
+    overflow-wrap: anywhere !important;
+    word-break: normal !important;
+  }
+
+
+  /* =======================================================
+     CLOSE BUTTON — ALWAYS VISIBLE
+     ======================================================= */
+
+  #book-modal #book-modal-close {
+    position: sticky !important;
+    top: 0 !important;
+    right: 0 !important;
+    float: right !important;
+
+    z-index: 999 !important;
+
+    margin: 0 0 8px 8px !important;
+  }
+
+
+  /* =======================================================
+     HIDE PRINT ON PHONE
+     ======================================================= */
+
+  #book-modal .mtb-print-controls,
+  #book-modal .mtb-print-button,
+  .mtb-print-controls,
+  .mtb-print-button {
+    display: none !important;
+  }
+
+}
+/* =========================================================
+   MOBILE — WORD STUDY POPUP FIX
+   Keep AFTER all book-popup mobile rules
+   ========================================================= */
+
+@media screen and (max-width: 700px) {
+
+  /* When Word Study JS opens the modal, center its panel */
+.ws-modal[style*="display: block"] {
+  position: fixed !important;
+  inset: 0 !important;
+
+  display: flex !important;
+  align-items: flex-start !important;
+  justify-content: center !important;
+
+  width: 100vw !important;
+  height: 100dvh !important;
+
+  margin: 0 !important;
+  padding: 10px !important;
+
+  overflow: hidden !important;
+
+  z-index: 40000 !important;
+  box-sizing: border-box !important;
+}
+
+
+
+  /* Dark background stays BEHIND the white window */
+  .ws-modal .ws-modal-backdrop {
+    position: absolute !important;
+    inset: 0 !important;
+    z-index: 1 !important;
+    background: rgba(0,0,0,.40) !important;
+  }
+
+  /* Actual Word Study window */
+.ws-modal .ws-modal-panel {
+  position: relative !important;
+  z-index: 2 !important;
+
+  width: calc(100vw - 20px) !important;
+  max-width: calc(100vw - 20px) !important;
+
+  height: auto !important;
+  max-height: calc(100dvh - 70px) !important;
+
+  margin: 42px 0 0 !important;
+
+  overflow: hidden !important;
+
+  background: #ffffff !important;
+  border-radius: 12px !important;
+  box-sizing: border-box !important;
+}
+
+  /* Keep Close visible */
+  .ws-modal .ws-modal-header {
+    flex: 0 0 auto !important;
+    position: relative !important;
+    top: auto !important;
+    z-index: 3 !important;
+  }
+
+  /* Only the study content scrolls */
+  .ws-modal .ws-modal-body {
+    flex: 1 1 auto !important;
+    min-height: 0 !important;
+
+    overflow-y: auto !important;
+    overflow-x: hidden !important;
+
+    -webkit-overflow-scrolling: touch;
+  }
+}

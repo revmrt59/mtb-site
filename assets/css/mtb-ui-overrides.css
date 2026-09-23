@@ -2794,3 +2794,78 @@ body.mtb-verse-explain-open {
     -webkit-overflow-scrolling: touch;
   }
 }
+/* =========================================================
+   CHAPTER STUDY — AUTHORITATIVE EXPANDED LAYOUT
+   FINAL OVERRIDE
+
+   Desktop:
+   Row 1: Verse Explanation — full width
+   Row 2: Study Notes — full width
+   Row 3: Spirit & Life — full width
+
+   All three cards span all four grid columns.
+   ========================================================= */
+
+body[data-active-tab="chapter_explanation"] .mtb-study-verse-deep-grid {
+  display: grid !important;
+  grid-template-columns: repeat(4, minmax(0, 1fr)) !important;
+  gap: 14px !important;
+  align-items: stretch !important;
+}
+
+/* Remove the old right-hand vertical stack as a layout box.
+   Its children become direct grid items. */
+body[data-active-tab="chapter_explanation"] .mtb-study-deep-right {
+  display: contents !important;
+}
+
+/* Verse Explanation — full width */
+body[data-active-tab="chapter_explanation"] .mtb-study-deep-explanation {
+  grid-column: 1 / -1 !important;
+  grid-row: 1 !important;
+  width: 100% !important;
+  height: auto !important;
+  align-self: stretch !important;
+}
+
+/* Study Notes — full width */
+body[data-active-tab="chapter_explanation"] .mtb-study-deep-study-notes {
+  grid-column: 1 / -1 !important;
+  grid-row: 2 !important;
+  width: 100% !important;
+  height: auto !important;
+  align-self: stretch !important;
+}
+
+/* Spirit & Life — full width */
+body[data-active-tab="chapter_explanation"] .mtb-study-deep-spirit-life {
+  grid-column: 1 / -1 !important;
+  grid-row: 3 !important;
+  width: 100% !important;
+  height: auto !important;
+  align-self: stretch !important;
+}
+
+/* Ensure no inherited flex sizing keeps any card narrow. */
+body[data-active-tab="chapter_explanation"] .mtb-study-deep-explanation,
+body[data-active-tab="chapter_explanation"] .mtb-study-deep-study-notes,
+body[data-active-tab="chapter_explanation"] .mtb-study-deep-spirit-life {
+  min-width: 0 !important;
+  max-width: none !important;
+  box-sizing: border-box !important;
+}
+
+/* Tablet / phone uses the same stacked layout. */
+@media (max-width: 900px) {
+  body[data-active-tab="chapter_explanation"] .mtb-study-verse-deep-grid {
+    grid-template-columns: minmax(0, 1fr) !important;
+  }
+
+  body[data-active-tab="chapter_explanation"] .mtb-study-deep-explanation,
+  body[data-active-tab="chapter_explanation"] .mtb-study-deep-study-notes,
+  body[data-active-tab="chapter_explanation"] .mtb-study-deep-spirit-life {
+    grid-column: 1 !important;
+    grid-row: auto !important;
+    width: 100% !important;
+  }
+}

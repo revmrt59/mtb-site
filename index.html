@@ -69,8 +69,6 @@
   }
 
   @media (max-width: 700px) {
-    /* MOBILE HOME: let the page grow naturally instead of layering
-       the information boxes over the hero controls. */
     .hero {
       min-height: 0 !important;
       height: auto !important;
@@ -127,8 +125,6 @@
       padding: 9px 14px;
     }
 
-    /* The site currently has no hamburger/menu script.
-       On phones, make the existing navigation usable and compact. */
     header.site-header.mtb-primary-header {
       height: auto !important;
       min-height: 0;
@@ -197,54 +193,59 @@
 
   <!-- On-Screen Unique Visitor Counter -->
   <footer class="visitor-stats">
-    <span>Visitors Today: <strong id="visitors-today">...</strong></span>
+    <span>Visitors Today: <strong id="visitors-today">1</strong></span>
     <span class="visitor-divider">|</span>
-    <span>Total Unique Visitors: <strong id="visitors-total">...</strong></span>
+    <span>Total Unique Visitors: <strong id="visitors-total">1</strong></span>
   </footer>
 
   <script src="/assets/js/jshero-jump.js"></script>
 
   <script>
     (function() {
-      var namespace = "masteringthebible.org";
-      var todayKey = "mtb-today-" + new Date().toISOString().slice(0, 10);
-
-      // Check storage for lifetime and daily status
-      var hasVisitedEver = localStorage.getItem("mtb-visited-lifetime");
-      var hasVisitedToday = localStorage.getItem(todayKey);
-
       var totalEl = document.getElementById("visitors-total");
       var todayEl = document.getElementById("visitors-today");
 
-      // TOTAL: Only increments if the user has NEVER visited the site before
-      var endpointTotal = hasVisitedEver 
-        ? "https://api.counterapi.dev/v1/" + namespace + "/alltime-unique" 
-        : "https://api.counterapi.dev/v1/" + namespace + "/alltime-unique/up";
+      var todayStr = new Date().toISOString().slice(0, 10);
+      var dayKey = "mtb_seen_" + todayStr;
+      var lifetimeKey = "mtb_seen_forever";
 
-      // TODAY: Increments once per calendar day
-      var endpointToday = hasVisitedToday 
-        ? "https://api.counterapi.dev/v1/" + namespace + "/" + todayKey 
-        : "https://api.counterapi.dev/v1/" + namespace + "/" + todayKey + "/up";
+      var isNewToday = !localStorage.getItem(dayKey);
+      var isNewEver = !localStorage.getItem(lifetimeKey);
 
-      // Fetch Total
-      fetch(endpointTotal)
-        .then(function(res) { return res.json(); })
-        .then(function(data) { 
-          if (totalEl && data.count !== undefined) totalEl.innerText = data.count.toLocaleString(); 
-        })
-        .catch(function() { if (totalEl) totalEl.innerText = "1"; });
+      var totalUrl = isNewEver 
+        ? "https://api.counterapi.dev/v1/masteringthebible-org/alltime/up"
+        : "https://api.counterapi.dev/v1/masteringthebible-org/alltime";
 
-      // Fetch Today
-      fetch(endpointToday)
-        .then(function(res) { return res.json(); })
-        .then(function(data) { 
-          if (todayEl && data.count !== undefined) todayEl.innerText = data.count.toLocaleString(); 
-        })
-        .catch(function() { if (todayEl) todayEl.innerText = "1"; });
+      var dayUrl = isNewToday
+        ? "https://api.counterapi.dev/v1/masteringthebible-org/day-" + todayStr + "/up"
+        : "https://api.counterapi.dev/v1/masteringthebible-org/day-" + todayStr;
 
-      // Save lifetime and daily markers in browser storage
-      localStorage.setItem("mtb-visited-lifetime", "true");
-      localStorage.setItem(todayKey, "true");
+      function fetchCount(url, element) {
+        var controller = new AbortController();
+        var timeoutId = setTimeout(function() { controller.abort(); }, 1500);
+
+        fetch(url, { signal: controller.signal })
+          .then(function(res) {
+            clearTimeout(timeoutId);
+            return res.json();
+          })
+          .then(function(data) {
+            if (element && data && typeof data.count === "number") {
+              element.innerText = data.count.toLocaleString();
+            }
+          })
+          .catch(function() {
+            // Keep default visible number if blocked or timed out
+          });
+      }
+
+      fetchCount(dayUrl, todayEl);
+      fetchCount(totalUrl, totalEl);
+
+      try {
+        localStorage.setItem(dayKey, "1");
+        localStorage.setItem(lifetimeKey, "1");
+      } catch (e) {}
     })();
   </script>
 

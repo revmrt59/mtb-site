@@ -6,7 +6,7 @@
 @media print{
   @page{size:auto;margin:.45in}
   html,body{background:#fff!important;color:#000!important}
-  .mtb-print-controls,.mtb-study-controls{display:none!important}
+  .mtb-print-controls,.mtb-study-controls,.mtb-reflections-controls{display:none!important}
   .mtb-doc{display:block!important;width:100%!important;max-width:none!important;margin:0!important;padding:0!important}
   .mtb-overview-hero,.mtb-study-hero,.mtb-reflections-hero,.mtb-culture-hero{box-shadow:none!important;background:#fff!important;border-color:#777!important}
   .mtb-overview-grid,.mtb-reflections-grid,.mtb-culture-grid,.mtb-study-verse-grid{display:block!important}
@@ -14,10 +14,10 @@
     display:block!important;width:100%!important;max-width:none!important;height:auto!important;margin:0 0 12pt!important;
     break-inside:avoid;page-break-inside:avoid;box-shadow:none!important;background:#fff!important;color:#000!important
   }
-  details.mtb-study-verse{display:block!important;overflow:visible!important}
-  details.mtb-study-verse>summary{display:flex!important;background:#fff!important;color:#000!important;border-bottom:1px solid #777!important}
-  details.mtb-study-verse>summary:after{display:none!important}
-  details.mtb-study-verse>.mtb-study-verse-body{display:block!important}
+  details.mtb-study-verse,details.mtb-reflection-section{display:block!important;overflow:visible!important}
+  details.mtb-study-verse>summary,details.mtb-reflection-section>summary{display:flex!important;background:#fff!important;color:#000!important;border-bottom:1px solid #777!important}
+  details.mtb-study-verse>summary:after,details.mtb-reflection-section>summary:after{display:none!important}
+  details.mtb-study-verse>.mtb-study-verse-body,details.mtb-reflection-section>.mtb-reflection-section-body{display:block!important}
   h1,h2,h3,h4{break-after:avoid;page-break-after:avoid;color:#000!important}
   p,li{orphans:3;widows:3}
   a{color:#000!important;text-decoration:none!important}
@@ -25,7 +25,7 @@
 }
 </style>
 <div class="mtb-print-controls"><button type="button" class="mtb-print-button" onclick="(function(button){var doc=button.closest('.mtb-doc')||document;var panels=Array.prototype.slice.call(doc.querySelectorAll('details'));panels.forEach(function(panel){panel.open=true;});window.print();})(this)">&#128438; Print This Page</button></div>
-<div id='ws-summary-text'><p><strong>LORD - ( ye.ho.vah , Strong's H3068 )</strong></p>
+<div id='ws-summary-text'><p><strong>LORD - (<em>YHWH</em>, Strong's H3068)</strong></p>
 <p class='ws-summary-label'><strong>Summary:</strong></p>
 <p>The Hebrew noun yhwh is the proper personal name of the God of Israel. Lexically, it functions as the distinct divine name revealed to God's covenant people. In Obadiah 1:1, yhwh identifies the sovereign divine Author behind the prophet's message concerning Edom. By grounding the prophetic vision in the personal name of Israel's God, the text establishes that the judgment pronounced against Edom is not a product of human hostility, but the authoritative decree of the supreme Ruler of the nations.</p>
 </div><p><strong>Full Study:</strong></p><div id='ws-full-body'>

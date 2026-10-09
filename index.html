@@ -48,9 +48,27 @@
     line-height: 1.4;
   }
 
+  /* Visible Counter Footer Styling */
+  .visitor-stats {
+    width: 100%;
+    padding: 12px 16px;
+    background: #111827;
+    color: #9ca3af;
+    font-size: 0.9rem;
+    text-align: center;
+    box-sizing: border-box;
+  }
+
+  .visitor-stats strong {
+    color: #f97316;
+  }
+
+  .visitor-divider {
+    margin: 0 10px;
+    color: #4b5563;
+  }
+
   @media (max-width: 700px) {
-    /* MOBILE HOME: let the page grow naturally instead of layering
-       the information boxes over the hero controls. */
     .hero {
       min-height: 0 !important;
       height: auto !important;
@@ -107,8 +125,6 @@
       padding: 9px 14px;
     }
 
-    /* The site currently has no hamburger/menu script.
-       On phones, make the existing navigation usable and compact. */
     header.site-header.mtb-primary-header {
       height: auto !important;
       min-height: 0;
@@ -166,10 +182,6 @@
 
     <section class="home-info-section">
       <div class="home-info-box">
-        <!-- <h2>Use This Material Freely</h2>
-        <p>
-          Feel free to use any or all of the material contained herein as you see fit without giving any credit to the author, as God is the source of every good and perfect gift. Freely you have received, freely you may give. No credit of originality is claimed. As someone once said, “I milk a lot of cows, but churn my own butter.”
-        </p> -->
       </div>
 
       <div class="home-info-box">
@@ -179,7 +191,45 @@
     </section>
   </section>
 
+  <!-- On-Screen Unique Visitor Counter -->
+  <footer class="visitor-stats">
+    <span>Visitors Today: <strong id="visitors-today">...</strong></span>
+    <span class="visitor-divider">|</span>
+    <span>Total Unique Visitors: <strong id="visitors-total">...</strong></span>
+  </footer>
+
   <script src="/assets/js/jshero-jump.js"></script>
+
+  <script>
+    (function() {
+      var namespace = "masteringthebible.org";
+      var todayKey = "visits-" + new Date().toISOString().slice(0, 10);
+      var hasVisitedToday = localStorage.getItem(todayKey);
+
+      var totalEl = document.getElementById("visitors-total");
+      var todayEl = document.getElementById("visitors-today");
+
+      var endpointTotal = hasVisitedToday 
+        ? "https://api.counterapi.dev/v1/" + namespace + "/total" 
+        : "https://api.counterapi.dev/v1/" + namespace + "/total/up";
+
+      var endpointToday = hasVisitedToday 
+        ? "https://api.counterapi.dev/v1/" + namespace + "/" + todayKey 
+        : "https://api.counterapi.dev/v1/" + namespace + "/" + todayKey + "/up";
+
+      fetch(endpointTotal)
+        .then(function(res) { return res.json(); })
+        .then(function(data) { if (totalEl && data.count !== undefined) totalEl.innerText = data.count.toLocaleString(); })
+        .catch(function() { if (totalEl) totalEl.innerText = "1"; });
+
+      fetch(endpointToday)
+        .then(function(res) { return res.json(); })
+        .then(function(data) { if (todayEl && data.count !== undefined) todayEl.innerText = data.count.toLocaleString(); })
+        .catch(function() { if (todayEl) todayEl.innerText = "1"; });
+
+      localStorage.setItem(todayKey, "true");
+    })();
+  </script>
 
 </body>
 </html>

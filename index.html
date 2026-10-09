@@ -69,6 +69,8 @@
   }
 
   @media (max-width: 700px) {
+    /* MOBILE HOME: let the page grow naturally instead of layering
+       the information boxes over the hero controls. */
     .hero {
       min-height: 0 !important;
       height: auto !important;
@@ -125,6 +127,8 @@
       padding: 9px 14px;
     }
 
+    /* The site currently has no hamburger/menu script.
+       On phones, make the existing navigation usable and compact. */
     header.site-header.mtb-primary-header {
       height: auto !important;
       min-height: 0;
@@ -203,30 +207,43 @@
   <script>
     (function() {
       var namespace = "masteringthebible.org";
-      var todayKey = "visits-" + new Date().toISOString().slice(0, 10);
+      var todayKey = "mtb-today-" + new Date().toISOString().slice(0, 10);
+
+      // Check storage for lifetime and daily status
+      var hasVisitedEver = localStorage.getItem("mtb-visited-lifetime");
       var hasVisitedToday = localStorage.getItem(todayKey);
 
       var totalEl = document.getElementById("visitors-total");
       var todayEl = document.getElementById("visitors-today");
 
-      var endpointTotal = hasVisitedToday 
-        ? "https://api.counterapi.dev/v1/" + namespace + "/total" 
-        : "https://api.counterapi.dev/v1/" + namespace + "/total/up";
+      // TOTAL: Only increments if the user has NEVER visited the site before
+      var endpointTotal = hasVisitedEver 
+        ? "https://api.counterapi.dev/v1/" + namespace + "/alltime-unique" 
+        : "https://api.counterapi.dev/v1/" + namespace + "/alltime-unique/up";
 
+      // TODAY: Increments once per calendar day
       var endpointToday = hasVisitedToday 
         ? "https://api.counterapi.dev/v1/" + namespace + "/" + todayKey 
         : "https://api.counterapi.dev/v1/" + namespace + "/" + todayKey + "/up";
 
+      // Fetch Total
       fetch(endpointTotal)
         .then(function(res) { return res.json(); })
-        .then(function(data) { if (totalEl && data.count !== undefined) totalEl.innerText = data.count.toLocaleString(); })
+        .then(function(data) { 
+          if (totalEl && data.count !== undefined) totalEl.innerText = data.count.toLocaleString(); 
+        })
         .catch(function() { if (totalEl) totalEl.innerText = "1"; });
 
+      // Fetch Today
       fetch(endpointToday)
         .then(function(res) { return res.json(); })
-        .then(function(data) { if (todayEl && data.count !== undefined) todayEl.innerText = data.count.toLocaleString(); })
+        .then(function(data) { 
+          if (todayEl && data.count !== undefined) todayEl.innerText = data.count.toLocaleString(); 
+        })
         .catch(function() { if (todayEl) todayEl.innerText = "1"; });
 
+      // Save lifetime and daily markers in browser storage
+      localStorage.setItem("mtb-visited-lifetime", "true");
       localStorage.setItem(todayKey, "true");
     })();
   </script>

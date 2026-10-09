@@ -915,60 +915,28 @@ if (canonicalBtn) {
   updateBookOverviewButtonStatus();
 
 if (chapterWrap) {
-  chapterWrap.innerHTML = "";
-  const chapters = CHAPTER_AVAILABILITY[book] || [];
+    chapterWrap.innerHTML = "";
 
-  /* 1. Mobile Dropdown (active on phones <= 768px) */
-  const mobileWrap = document.createElement("div");
-  mobileWrap.className = "mtb-mobile-chapter-select";
+const chapters = CHAPTER_AVAILABILITY[book] || [];
 
-  const select = document.createElement("select");
-  select.id = "mobile-chapter-dropdown";
-  select.innerHTML = '<option value="">Select Chapter...</option>';
+for (const ch of chapters) {
+      const btn = document.createElement("button");
+      btn.type = "button";
+      btn.textContent = String(ch);
 
-  for (const ch of chapters) {
-    const opt = document.createElement("option");
-    opt.value = ch;
-    opt.textContent = "Chapter " + ch;
-    if (ch === currentChapter) opt.selected = true;
-    select.appendChild(opt);
-  }
+      // highlight current chapter (won't show on chapter=0, which is correct)
+      if (ch === currentChapter) btn.classList.add("is-active");
 
-  select.addEventListener("change", function() {
-    if (this.value) {
-      window.location.href =
-        "/book.html?book=" + encodeURIComponent(book) +
-        "&chapter=" + this.value +
-        "&tab=chapter_scripture";
+      btn.addEventListener("click", function(){
+        window.location.href =
+          "/book.html?book=" + encodeURIComponent(book) +
+          "&chapter=" + ch +
+          "&tab=chapter_scripture";
+      });
+
+      chapterWrap.appendChild(btn);
     }
-  });
-
-  mobileWrap.appendChild(select);
-  chapterWrap.appendChild(mobileWrap);
-
-  /* 2. Desktop Button Grid (visible on desktop) */
-  const gridWrap = document.createElement("div");
-  gridWrap.className = "mtb-desktop-chapter-grid";
-
-  for (const ch of chapters) {
-    const btn = document.createElement("button");
-    btn.type = "button";
-    btn.textContent = String(ch);
-
-    if (ch === currentChapter) btn.classList.add("is-active");
-
-    btn.addEventListener("click", function(){
-      window.location.href =
-        "/book.html?book=" + encodeURIComponent(book) +
-        "&chapter=" + ch +
-        "&tab=chapter_scripture";
-    });
-
-    gridWrap.appendChild(btn);
   }
-
-  chapterWrap.appendChild(gridWrap);
-}
 // --------------------------------------------------
 // Remove Book Overview tab on chapter pages
 // --------------------------------------------------

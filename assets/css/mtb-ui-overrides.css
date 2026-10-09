@@ -3058,3 +3058,88 @@ body[data-active-tab="chapter_explanation"] .mtb-study-deep-spirit-life {
     font-size: 14px !important;
   }
 }
+/* =========================================================
+   CHAPTER SELECTOR: MOBILE DROPDOWN & POSITION FIX
+   ========================================================= */
+
+/* Desktop view: show button grid, hide mobile select */
+.mtb-mobile-chapter-select {
+  display: none;
+}
+
+.mtb-desktop-chapter-grid {
+  display: contents;
+}
+
+@media screen and (max-width: 768px) {
+  /* Prevent overlap: Convert hero container to a vertical flex column */
+  .book-hero-banner {
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: center !important;
+    justify-content: flex-start !important;
+    height: auto !important;
+    min-height: calc(100vh - 60px) !important;
+    padding: 24px 16px 40px !important;
+    box-sizing: border-box !important;
+  }
+
+  /* Unpin top section so it naturally pushes down the chapter picker */
+  .book-hero-top {
+    position: static !important;
+    width: 100% !important;
+    margin: 0 0 24px 0 !important;
+    padding: 0 !important;
+  }
+
+  .book-hero-title {
+    font-size: 26px !important;
+    line-height: 1.2 !important;
+    margin-bottom: 12px !important;
+  }
+
+  /* Unpin chapter selector overlay */
+  .book-hero-overlay {
+    position: static !important;
+    inset: auto !important;
+    padding: 0 !important;
+    width: 100% !important;
+    max-width: 320px !important;
+    margin: 0 auto !important;
+    text-shadow: none !important;
+  }
+
+  .book-hero-overlay > div:first-child {
+    font-size: 16px !important;
+    font-weight: 700 !important;
+    margin-bottom: 8px !important;
+    color: #ffffff !important;
+    text-shadow: 0 2px 4px rgba(0,0,0,0.7) !important;
+  }
+
+  /* Hide the huge button grid on mobile */
+  .mtb-desktop-chapter-grid {
+    display: none !important;
+  }
+
+  /* Show the mobile dropdown menu */
+  .mtb-mobile-chapter-select {
+    display: block !important;
+    width: 100% !important;
+  }
+
+  #mobile-chapter-dropdown {
+    width: 100% !important;
+    height: 48px !important;
+    padding: 10px 16px !important;
+    font-size: 16px !important;
+    font-weight: 600 !important;
+    color: #173a5e !important;
+    background-color: #ffffff !important;
+    border: 2px solid #3b6fb6 !important;
+    border-radius: 10px !important;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.2) !important;
+    outline: none !important;
+    box-sizing: border-box !important;
+  }
+}

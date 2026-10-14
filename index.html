@@ -59,15 +59,6 @@
     box-sizing: border-box;
   }
 
-  .visitor-stats strong {
-    color: #f97316;
-  }
-
-  .visitor-divider {
-    margin: 0 10px;
-    color: #4b5563;
-  }
-
   @media (max-width: 700px) {
     .hero {
       min-height: 0 !important;
@@ -191,59 +182,17 @@
     </section>
   </section>
 
-  <!-- On-Screen Unique Visitor Counter -->
+  <!-- On-Screen Visitor Counter Badge -->
   <footer class="visitor-stats">
-    <span>Visitors Today: <strong id="visitors-today">—</strong></span>
-    <span class="visitor-divider">|</span>
-    <span>Total Unique Visitors: <strong id="visitors-total">—</strong></span>
+    <div style="display: flex; justify-content: center; align-items: center; gap: 12px; flex-wrap: wrap;">
+      <span>Site Traffic:</span>
+      <img src="https://hits.sh/masteringthebible.org.svg?style=flat-square&label=Visitors&color=f97316&labelColor=1f2937" 
+           alt="Visitor Counter" 
+           style="vertical-align: middle; height: 20px;" />
+    </div>
   </footer>
 
   <script src="/assets/js/jshero-jump.js"></script>
-
-  <script>
-    (function() {
-      var totalEl = document.getElementById("visitors-total");
-      var todayEl = document.getElementById("visitors-today");
-
-      var todayStr = new Date().toISOString().slice(0, 10);
-      var dayKey = "mtb_visit_" + todayStr;
-      var lifetimeKey = "mtb_visit_alltime";
-
-      var isNewToday = !localStorage.getItem(dayKey);
-      var isNewEver = !localStorage.getItem(lifetimeKey);
-
-      // JSON storage counter
-      function fetchCounter(key, shouldIncrement, element) {
-        var mode = shouldIncrement ? "hit" : "get";
-        var url = "https://api.counterapi.dev/v1/masteringthebible/" + key + (shouldIncrement ? "/up" : "");
-
-        fetch(url)
-          .then(function(res) { return res.json(); })
-          .then(function(data) {
-            if (data && typeof data.count === "number") {
-              element.innerText = data.count.toLocaleString();
-            }
-          })
-          .catch(function() {
-            // Secondary fallback using open count service
-            fetch("https://api.codetabs.com/v1/counter?key=mtb_" + key)
-              .then(function(r) { return r.json(); })
-              .then(function(d) {
-                if (d && d.count) element.innerText = d.count.toLocaleString();
-              })
-              .catch(function() {});
-          });
-      }
-
-      fetchCounter("total", isNewEver, totalEl);
-      fetchCounter("day_" + todayStr, isNewToday, todayEl);
-
-      try {
-        localStorage.setItem(dayKey, "1");
-        localStorage.setItem(lifetimeKey, "1");
-      } catch (e) {}
-    })();
-  </script>
 
 </body>
 </html>

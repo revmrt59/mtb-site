@@ -193,9 +193,9 @@
 
   <!-- On-Screen Unique Visitor Counter -->
   <footer class="visitor-stats">
-    <span>Visitors Today: <strong id="visitors-today">1</strong></span>
+    <span>Visitors Today: <strong id="visitors-today">—</strong></span>
     <span class="visitor-divider">|</span>
-    <span>Total Unique Visitors: <strong id="visitors-total">1</strong></span>
+    <span>Total Unique Visitors: <strong id="visitors-total">—</strong></span>
   </footer>
 
   <script src="/assets/js/jshero-jump.js"></script>
@@ -206,41 +206,37 @@
       var todayEl = document.getElementById("visitors-today");
 
       var todayStr = new Date().toISOString().slice(0, 10);
-      var dayKey = "mtb_seen_" + todayStr;
-      var lifetimeKey = "mtb_seen_forever";
+      var dayKey = "mtb_visit_" + todayStr;
+      var lifetimeKey = "mtb_visit_alltime";
 
       var isNewToday = !localStorage.getItem(dayKey);
       var isNewEver = !localStorage.getItem(lifetimeKey);
 
-      var totalUrl = isNewEver 
-        ? "https://api.counterapi.dev/v1/masteringthebible-org/alltime/up"
-        : "https://api.counterapi.dev/v1/masteringthebible-org/alltime";
+      // JSON storage counter
+      function fetchCounter(key, shouldIncrement, element) {
+        var mode = shouldIncrement ? "hit" : "get";
+        var url = "https://api.counterapi.dev/v1/masteringthebible/" + key + (shouldIncrement ? "/up" : "");
 
-      var dayUrl = isNewToday
-        ? "https://api.counterapi.dev/v1/masteringthebible-org/day-" + todayStr + "/up"
-        : "https://api.counterapi.dev/v1/masteringthebible-org/day-" + todayStr;
-
-      function fetchCount(url, element) {
-        var controller = new AbortController();
-        var timeoutId = setTimeout(function() { controller.abort(); }, 1500);
-
-        fetch(url, { signal: controller.signal })
-          .then(function(res) {
-            clearTimeout(timeoutId);
-            return res.json();
-          })
+        fetch(url)
+          .then(function(res) { return res.json(); })
           .then(function(data) {
-            if (element && data && typeof data.count === "number") {
+            if (data && typeof data.count === "number") {
               element.innerText = data.count.toLocaleString();
             }
           })
           .catch(function() {
-            // Keep default visible number if blocked or timed out
+            // Secondary fallback using open count service
+            fetch("https://api.codetabs.com/v1/counter?key=mtb_" + key)
+              .then(function(r) { return r.json(); })
+              .then(function(d) {
+                if (d && d.count) element.innerText = d.count.toLocaleString();
+              })
+              .catch(function() {});
           });
       }
 
-      fetchCount(dayUrl, todayEl);
-      fetchCount(totalUrl, totalEl);
+      fetchCounter("total", isNewEver, totalEl);
+      fetchCounter("day_" + todayStr, isNewToday, todayEl);
 
       try {
         localStorage.setItem(dayKey, "1");

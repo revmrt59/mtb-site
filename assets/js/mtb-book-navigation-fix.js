@@ -23,6 +23,27 @@
     });
   }
 
+  function handleStudyControls(event) {
+    var button = event.target.closest ? event.target.closest("[data-mtb-study-action]") : null;
+    if (!button) return;
+
+    var root = button.closest ? button.closest(".mtb-chapter-study") : null;
+    if (!root) return;
+
+    var action = button.getAttribute("data-mtb-study-action");
+    var shouldOpen = action === "expand";
+    if (!shouldOpen && action !== "collapse") return;
+
+    var panels = root.querySelectorAll("details.mtb-study-verse");
+    for (var i = 0; i < panels.length; i++) {
+      panels[i].open = shouldOpen;
+    }
+
+    event.preventDefault();
+  }
+
+  document.addEventListener("click", handleStudyControls);
+
   document.addEventListener("DOMContentLoaded", function () {
     repairNavigation(document);
 

@@ -1,0 +1,381 @@
+<section class="mtb-doc mtb-doc--read" data-doc-type="book-overview" data-mtb-status="draft">
+<style>
+.mtb-print-controls{display:flex;justify-content:flex-end;gap:8px;margin:0 0 14px;padding:0 4px}
+.mtb-print-button{appearance:none;border:1px solid #b9c8d5;border-radius:8px;background:#fff;padding:9px 14px;color:#173a5e;font:700 14px Arial,Helvetica,sans-serif;cursor:pointer}
+.mtb-print-button:hover{background:#f2f6f9}
+@media print{
+  @page{size:auto;margin:.45in}
+  html,body{background:#fff!important;color:#000!important}
+  .mtb-print-controls,.mtb-study-controls,.mtb-reflections-controls{display:none!important}
+  .mtb-doc{display:block!important;width:100%!important;max-width:none!important;margin:0!important;padding:0!important}
+  .mtb-overview-hero,.mtb-study-hero,.mtb-reflections-hero,.mtb-culture-hero{box-shadow:none!important;background:#fff!important;border-color:#777!important}
+  .mtb-overview-grid,.mtb-reflections-grid,.mtb-culture-grid,.mtb-study-verse-grid{display:block!important}
+  .mtb-overview-card,.mtb-reflections-card,.mtb-culture-card,.mtb-study-verse,.mtb-study-verse-panel,.mtb-intro-card{
+    display:block!important;width:100%!important;max-width:none!important;height:auto!important;margin:0 0 12pt!important;
+    break-inside:avoid;page-break-inside:avoid;box-shadow:none!important;background:#fff!important;color:#000!important
+  }
+  details.mtb-study-verse,details.mtb-reflection-section{display:block!important;overflow:visible!important}
+  details.mtb-study-verse>summary,details.mtb-reflection-section>summary{display:flex!important;background:#fff!important;color:#000!important;border-bottom:1px solid #777!important}
+  details.mtb-study-verse>summary:after,details.mtb-reflection-section>summary:after{display:none!important}
+  details.mtb-study-verse>.mtb-study-verse-body,details.mtb-reflection-section>.mtb-reflection-section-body{display:block!important}
+  h1,h2,h3,h4{break-after:avoid;page-break-after:avoid;color:#000!important}
+  p,li{orphans:3;widows:3}
+  a{color:#000!important;text-decoration:none!important}
+  a[href]::after{content:none!important}
+}
+</style>
+<div class="mtb-print-controls"><button type="button" class="mtb-print-button" onclick="(function(button){var doc=button.closest('.mtb-doc')||document;var panels=Array.prototype.slice.call(doc.querySelectorAll('details'));panels.forEach(function(panel){panel.open=true;});window.print();})(this)">&#128438; Print This Page</button></div>
+<style>
+.book-modal-panel:has(.mtb-book-overview-dashboard) {
+  width: min(1600px, 96vw);
+  max-width: none;
+}
+.mtb-book-overview-dashboard {
+  --mtb-navy: #173a5e;
+  --mtb-navy-2: #274f76;
+  --mtb-gold: #b7832f;
+  --mtb-gold-soft: #fbf4e7;
+  --mtb-blue-soft: #eef4f9;
+  --mtb-border: #d7e0e8;
+  --mtb-text: #1d2935;
+  width: 100%;
+  max-width: 1560px;
+  margin: 0 auto;
+  padding: 2px 4px 28px;
+  color: var(--mtb-text);
+  font-family: Arial, Helvetica, sans-serif;
+}
+.mtb-book-overview-dashboard * { box-sizing: border-box; }
+.mtb-book-overview-dashboard .mtb-intro-hero {
+  position: relative;
+  overflow: hidden;
+  margin: 0 0 24px;
+  padding: 22px 28px;
+  border: 1px solid #cbd8e3;
+  border-radius: 14px;
+  background: linear-gradient(135deg, #f7fafc 0%, #e8f0f7 100%);
+}
+.mtb-book-overview-dashboard .mtb-intro-hero::after {
+  content: '';
+  position: absolute;
+  right: -48px;
+  top: -72px;
+  width: 210px;
+  height: 210px;
+  border-radius: 50%;
+  background: rgba(183, 131, 47, .10);
+}
+.mtb-book-overview-dashboard .mtb-intro-eyebrow {
+  position: relative; z-index: 1; margin: 0 0 5px;
+  color: var(--mtb-gold); font-size: .78rem; font-weight: 800;
+  letter-spacing: .13em; text-transform: uppercase;
+}
+.mtb-book-overview-dashboard .mtb-intro-title {
+  position: relative; z-index: 1; margin: 0; color: var(--mtb-navy);
+  font-size: clamp(1.85rem, 3vw, 2.6rem); line-height: 1.05;
+}
+.mtb-book-overview-dashboard .mtb-intro-subtitle {
+  position: relative; z-index: 1; margin: 6px 0 0;
+  color: #4e6477; font-size: 1rem; font-weight: 700;
+}
+.mtb-book-overview-dashboard .mtb-intro-section { margin: 0 0 25px; }
+.mtb-book-overview-dashboard .mtb-intro-section-heading {
+  display: flex; align-items: center; gap: 12px; margin: 0 0 12px;
+}
+.mtb-book-overview-dashboard .mtb-intro-section-heading h2 {
+  margin: 0; color: var(--mtb-navy); font-size: 1.08rem;
+  letter-spacing: .05em; text-transform: uppercase;
+}
+.mtb-book-overview-dashboard .mtb-intro-section-heading::after {
+  content: ''; height: 1px; flex: 1 1 auto;
+  background: linear-gradient(to right, #c7d3de, transparent);
+}
+.mtb-book-overview-dashboard .mtb-intro-grid {
+  display: grid;
+  grid-template-columns: repeat(12, minmax(0, 1fr));
+  gap: 16px;
+  align-items: stretch;
+  grid-auto-rows: auto;
+}
+/* Each implicit grid row grows to the height of its longest card. Every card
+   then stretches to that row height. No fixed or maximum height is used. */
+.mtb-book-overview-dashboard .mtb-intro-card {
+  grid-column: span 1;
+  min-width: 0;
+  min-height: 0;
+  height: 100%;
+  max-height: none !important;
+  overflow: visible !important;
+  display: flex;
+  flex-direction: column;
+  align-self: stretch;
+  border: 1px solid var(--mtb-border);
+  border-top: 4px solid var(--mtb-navy-2);
+  border-radius: 12px;
+  background: #fff;
+  box-shadow: 0 4px 15px rgba(28, 48, 66, .055);
+}
+.mtb-book-overview-dashboard .mtb-intro-card.mtb-span-4 { grid-column: span 4; }
+.mtb-book-overview-dashboard .mtb-intro-card.mtb-span-6 { grid-column: span 6; }
+.mtb-book-overview-dashboard .mtb-intro-card.mtb-span-12 { grid-column: span 12; }
+.mtb-book-overview-dashboard .mtb-intro-card-header {
+  margin: 0; padding: 12px 16px 10px; border-bottom: 1px solid #e5ebf0;
+  background: var(--mtb-blue-soft); color: var(--mtb-navy);
+  font-size: .92rem; font-weight: 800; letter-spacing: .025em;
+}
+.mtb-book-overview-dashboard .mtb-intro-card-body {
+  flex: 1 1 auto;
+  min-height: 0;
+  height: auto !important;
+  max-height: none !important;
+  overflow: visible !important;
+  padding: 15px 17px 17px;
+  font-size: 1rem;
+  line-height: 1.48;
+  overflow-wrap: anywhere;
+}
+.mtb-book-overview-dashboard .mtb-intro-card-body p { margin: 0 0 .8em; }
+.mtb-book-overview-dashboard .mtb-intro-card-body p:last-child { margin-bottom: 0; }
+.mtb-book-overview-dashboard .mtb-intro-card-body ul,
+.mtb-book-overview-dashboard .mtb-intro-card-body ol { margin: 0 0 .8em; padding-left: 1.35em; }
+.mtb-book-overview-dashboard .mtb-intro-card-body li { margin: 0 0 .45em; padding-left: .1em; }
+.mtb-book-overview-dashboard .mtb-intro-card-body h2 {
+  margin: 1.15em 0 .45em; color: var(--mtb-navy); font-size: 1.15rem;
+}
+.mtb-book-overview-dashboard .mtb-intro-card-body h2:first-child { margin-top: 0; }
+.mtb-book-overview-dashboard .mtb-intro-card-body h3 {
+  margin: 1em 0 .35em; color: var(--mtb-navy-2); font-size: 1.02rem;
+}
+.mtb-book-overview-dashboard .mtb-intro-card-body blockquote {
+  margin: .9em 0; padding: .65em 1em; border-left: 4px solid var(--mtb-gold);
+  background: var(--mtb-gold-soft); color: #45371f;
+}
+.mtb-book-overview-dashboard .mtb-resource-link {
+  color: #1f5fae; font-weight: 700; text-decoration-line: underline;
+  text-decoration-style: dotted; text-decoration-thickness: 2px;
+  text-underline-offset: 4px; cursor: pointer;
+}
+.mtb-book-overview-dashboard .mtb-resource-link::after {
+  content: " \2197"; display: inline-block; margin-left: 2px;
+  font-size: .78em; line-height: 1; opacity: .78;
+}
+@media (max-width: 1100px) {
+  .book-modal-panel:has(.mtb-book-overview-dashboard) { width: min(1100px, 94vw); }
+  .mtb-book-overview-dashboard .mtb-intro-grid { grid-template-columns: repeat(12, minmax(0, 1fr)); }
+  .mtb-book-overview-dashboard .mtb-intro-card,
+  .mtb-book-overview-dashboard .mtb-intro-card.mtb-span-4 { grid-column: span 6; }
+  .mtb-book-overview-dashboard .mtb-intro-card.mtb-span-6,
+  .mtb-book-overview-dashboard .mtb-intro-card.mtb-span-12 { grid-column: 1 / -1; }
+}
+@media (max-width: 660px) {
+  .book-modal-panel:has(.mtb-book-overview-dashboard) { width: 94vw; padding-left: 12px; padding-right: 12px; }
+  .mtb-book-overview-dashboard { padding-left: 0; padding-right: 0; }
+  .mtb-book-overview-dashboard .mtb-intro-hero { padding: 19px; border-radius: 10px; }
+  .mtb-book-overview-dashboard .mtb-intro-grid { grid-template-columns: 1fr; gap: 12px; }
+  .mtb-book-overview-dashboard .mtb-intro-card,
+  .mtb-book-overview-dashboard .mtb-intro-card.mtb-span-4,
+  .mtb-book-overview-dashboard .mtb-intro-card.mtb-span-6,
+  .mtb-book-overview-dashboard .mtb-intro-card.mtb-span-12 { grid-column: 1; }
+  .mtb-book-overview-dashboard .mtb-intro-card-body { padding: 14px 15px 16px; }
+}
+</style><div class="mtb-book-overview-dashboard"><header class="mtb-intro-hero"><p class="mtb-intro-eyebrow">Mastering the Bible</p><h1 class="mtb-intro-title">1 Samuel</h1><p class="mtb-intro-subtitle">1 Samuel - Book Overview</p></header><section class="mtb-intro-section"><div class="mtb-intro-section-heading"><h2>Background</h2></div><div class="mtb-intro-grid"><article class="mtb-intro-card mtb-span-4"><h3 class="mtb-intro-card-header">Author</h3><div class="mtb-intro-card-body"></div>
+<div data-custom-style="Normal (Web)">
+<p>The human author of 1 Samuel is not identified in the book. Samuel himself could not have written the entire work because his death is recorded in 1 Samuel 25:1, and the narrative continues well beyond that event. Scripture does indicate that Samuel recorded certain matters concerning the kingdom in a book and laid it before the LORD (1 Samuel 10:25), and 1 Chronicles 29:29 refers to records associated with Samuel, Nathan, and Gad concerning David’s reign. These references show that prophetic records existed and may have contributed to the historical material preserved in Samuel, but Scripture does not identify the final writer or compiler. The safest conclusion is that the book was formed from reliable prophetic and historical sources under divine inspiration, while its precise human authorship remains uncertain.</p>
+</div>
+<div data-custom-style="Normal (Web)"></div></article><article class="mtb-intro-card mtb-span-4"><h3 class="mtb-intro-card-header">Audience</h3><div class="mtb-intro-card-body"></div>
+<div data-custom-style="Normal (Web)">
+<p>The book was written for the people of Israel, particularly for generations looking back on the establishment of Israel’s monarchy and seeking to understand what faithful kingship under God was meant to be. It explains how Israel moved from the unsettled period of the judges into the monarchy, why Saul’s kingship failed, and why David was chosen and established by God.</p>
+</div>
+<div data-custom-style="Normal (Web)">
+<p>The book also teaches Israel how to interpret its political history spiritually. Kingship was never meant to replace the LORD as Israel’s true King. The nation, its leaders, its worship, and its future remained under His authority.</p>
+</div>
+<div data-custom-style="Normal (Web)"></div></article><article class="mtb-intro-card mtb-span-4"><h3 class="mtb-intro-card-header">Date</h3><div class="mtb-intro-card-body"></div>
+<div data-custom-style="Normal (Web)">
+<p>The events of 1 Samuel take place approximately from the late eleventh century into the early tenth century BC, beginning near the end of the period of the judges and continuing through the reign of Saul and David’s rise.</p>
+</div>
+<div data-custom-style="Normal (Web)">
+<p>The final form of the book was written after the events it records. Certain expressions within the narrative look back on earlier conditions, and 1 Samuel 27:6 refers to Ziklag as belonging to the kings of Judah “to this day,” suggesting composition or final compilation after the monarchy had been established and the kingdom had divided. The precise date cannot be determined with certainty.</p>
+</div>
+<div data-custom-style="Normal (Web)"></div></article><article class="mtb-intro-card mtb-span-6"><h3 class="mtb-intro-card-header">Historical Setting</h3><div class="mtb-intro-card-body"></div>
+<div data-custom-style="Normal (Web)">
+<p>First Samuel opens during a spiritually troubled period in Israel’s history. The era of the judges was drawing to a close. Israel had no human king, national leadership was unstable, surrounding peoples threatened the nation, and serious corruption existed even within the priesthood. Eli’s sons abused their sacred office, and “the word of the LORD was rare” in those days.</p>
+</div>
+<div data-custom-style="Normal (Web)">
+<p>Into this setting God raised Samuel as prophet, judge, and spiritual leader. Through Samuel, the LORD confronted corruption, restored prophetic revelation, called Israel to repentance, and guided the nation through one of the most important transitions in its history.</p>
+</div>
+<div data-custom-style="Normal (Web)">
+<p>Israel was also under considerable pressure from the Philistines, a powerful neighboring people who possessed significant military strength. Conflict with them forms an important background to the rise of Saul and David.</p>
+</div>
+<div data-custom-style="Normal (Web)">
+<p>The central political development is Israel’s transition from judges to kings. The monarchy itself was not outside God’s purposes, but Israel’s demand for a king exposed a deeper problem: they wanted to be “like all the nations” and sought visible human security instead of trusting the LORD as their King. First Samuel therefore presents kingship as both a genuine institution within God’s unfolding purpose and an arena in which Israel’s faithfulness to Him would be tested.</p>
+</div>
+<div data-custom-style="Normal (Web)"></div></article><article class="mtb-intro-card mtb-span-6"><h3 class="mtb-intro-card-header">Occasion</h3><div class="mtb-intro-card-body"></div>
+<div data-custom-style="Normal (Web)">
+<p>First Samuel preserves and explains the decisive transition from the period of the judges to the establishment of Israel’s monarchy. It shows how Samuel was raised up, why Israel requested a king, why Saul was chosen and later rejected, and why David became the man God selected to lead His people.</p>
+</div>
+<div data-custom-style="Normal (Web)">
+<p>The book therefore does more than preserve national history. It interprets that history in light of God’s rule. Israel needed to understand that leadership succeeds or fails according to its response to the LORD, and that outward position cannot substitute for faith, obedience, humility, and dependence upon Him.</p>
+</div>
+<div data-custom-style="Normal (Web)"></div></article></div></section><section class="mtb-intro-section"><div class="mtb-intro-section-heading"><h2>Understanding the Book</h2></div><div class="mtb-intro-grid"><article class="mtb-intro-card mtb-span-6"><h3 class="mtb-intro-card-header">What This Book Is About</h3><div class="mtb-intro-card-body"></div>
+<div data-custom-style="Normal (Web)">
+<p>First Samuel tells the story of a nation in transition and of the God who remains sovereign through every change. It begins not with kings and armies but with Hannah praying before the LORD. Her story introduces a major pattern that continues throughout the book: God brings down human pride, raises those who depend upon Him, and accomplishes His purposes through people who listen to His voice.</p>
+</div>
+<div data-custom-style="Normal (Web)">
+<p>Samuel emerges in contrast to the corrupt house of Eli. While Eli’s sons dishonor God, Samuel grows before the LORD and becomes His faithful prophet. Through Samuel, God restores His word to Israel and leads the nation toward repentance and renewed dependence upon Him. Even Israel’s disastrous attempt to use the ark as though God’s presence could be controlled exposes the difference between possessing sacred things and actually walking faithfully with the LORD.</p>
+</div>
+<div data-custom-style="Normal (Web)">
+<p>The book then turns to Israel’s desire for a king. Saul begins with remarkable opportunities. He is chosen by God, empowered by the Spirit for his task, and given the possibility of establishing a faithful kingdom. Yet Saul increasingly acts from fear, impatience, self-protection, and concern for human approval. His failure is not simply that he makes mistakes. He repeatedly resists the word of the LORD while attempting to preserve the appearance of obedience.</p>
+</div>
+<div data-custom-style="Normal (Web)">
+<p>David enters the story as Saul’s opposite in crucial ways. He is the overlooked son whom God chooses because He does not see as man sees. David trusts God against Goliath, serves faithfully under Saul, develops a deep bond with Jonathan, and repeatedly refuses to seize the kingdom by killing the man God had anointed before him. David is not presented as flawless, but throughout 1 Samuel his life demonstrates a growing dependence upon the LORD while Saul’s life increasingly demonstrates the ruin of self-directed kingship.</p>
+</div>
+<div data-custom-style="Normal (Web)">
+<p>The book ends with Saul’s death on Mount Gilboa. The first king has fallen, while the man God has chosen waits to receive the kingdom in God’s time. The unresolved ending intentionally prepares for 2 Samuel, where David’s reign will begin.</p>
+</div>
+<div data-custom-style="Normal (Web)"></div></article><article class="mtb-intro-card mtb-span-6"><h3 class="mtb-intro-card-header">Central Message</h3><div class="mtb-intro-card-body"></div>
+<div data-custom-style="Normal (Web)">
+<p>First Samuel reveals that the LORD remains the true King over His people and establishes His purposes through those who hear His word, trust Him, and walk in obedience, while leadership built on self-will, fear, and outward appearance cannot endure before Him.</p>
+</div>
+<div data-custom-style="Normal (Web)"></div></article><article class="mtb-intro-card mtb-span-6"><h3 class="mtb-intro-card-header">Why This Book Matters</h3><div class="mtb-intro-card-body"></div>
+<div data-custom-style="Normal (Web)">
+<p>First Samuel explains one of the great turning points in the biblical story: the establishment of kingship in Israel. Without this book, it would be difficult to understand how Israel moved from the judges to Saul and then toward David, or why the house of David became so important in the unfolding purposes of God.</p>
+</div>
+<div data-custom-style="Normal (Web)">
+<p>The book also gives unusual clarity about the difference between outward qualification and the condition of the heart before God. Eli’s sons hold priestly office but dishonor the LORD. Saul possesses the appearance of a king but repeatedly fails to obey God. David is initially overlooked by everyone around him but is chosen by God. Again and again, 1 Samuel teaches that God is not governed by human appearances, status, strength, or reputation.</p>
+</div>
+<div data-custom-style="Normal (Web)">
+<p>First Samuel also reveals the seriousness of responding rightly to God’s word. Samuel’s defining posture is, “Speak, for Your servant hears.” Saul’s tragedy is progressively revealed through his refusal to remain under that word. The difference between hearing and resisting God becomes one of the book’s deepest spiritual dividing lines.</p>
+</div>
+<div data-custom-style="Normal (Web)">
+<p>The book also prepares the reader for the biblical importance of David and the kingdom associated with him. David’s rise does not yet complete that story, but it establishes the king through whose line the larger biblical hope of God’s righteous King will unfold.</p>
+</div>
+<div data-custom-style="Normal (Web)"></div></article><article class="mtb-intro-card mtb-span-6"><h3 class="mtb-intro-card-header">Key Themes to Watch For</h3><div class="mtb-intro-card-body"></div>
+<div data-custom-style="Normal (Web)">
+<p><strong>The LORD as Israel’s True King</strong> - Human kingship develops throughout 1 Samuel, but God never surrenders His ultimate rule. Kings govern only under His authority and remain accountable to His word.</p>
+</div>
+<div data-custom-style="Normal (Web)">
+<p><strong>Hearing and Obeying the Word of the LORD</strong> - Samuel listens when God speaks, while Saul increasingly resists divine instruction. The contrast between hearing and disobedience becomes one of the principal measures of spiritual faithfulness.</p>
+</div>
+<div data-custom-style="Normal (Web)">
+<p><strong>God Looks at the Heart</strong> - Human beings repeatedly judge according to outward appearance, position, strength, or reputation. God sees more deeply. His choice of David over his older brothers gives explicit expression to a principle already operating throughout the book.</p>
+</div>
+<div data-custom-style="Normal (Web)">
+<p><strong>God Raises the Humble and Brings Down the Proud</strong> - Hannah’s song establishes a theological pattern that continues through the book. God overturns human expectations, opposes pride, and raises those who depend upon Him.</p>
+</div>
+<div data-custom-style="Normal (Web)">
+<p><strong>The Failure of Self-Directed Leadership</strong> - Eli’s household and especially Saul show how spiritual and national leadership deteriorate when people preserve position, reputation, or personal desire rather than submitting to God.</p>
+</div>
+<div data-custom-style="Normal (Web)">
+<p><strong>Waiting for God’s Time</strong> - David is anointed long before he receives the kingdom. His years of suffering under Saul repeatedly confront him with the temptation to secure through human means what God has promised to give.</p>
+</div>
+<div data-custom-style="Normal (Web)">
+<p><strong>The Presence of God Cannot Be Manipulated</strong> - Israel’s misuse of the ark reveals that sacred symbols cannot substitute for faithful relationship with God. His presence is holy and sovereign, not an instrument for securing human plans.</p>
+</div>
+<div data-custom-style="Normal (Web)"></div></article><article class="mtb-intro-card mtb-span-6"><h3 class="mtb-intro-card-header">Key Concepts to Understand Before Reading</h3><div class="mtb-intro-card-body"></div>
+<div data-custom-style="Normal (Web)">
+<p><strong>Judge</strong> - Before Israel had kings, God raised leaders called judges to deliver and govern His people during times of crisis. Samuel serves as one of the final major judges while also functioning prominently as a prophet.</p>
+</div>
+<div data-custom-style="Normal (Web)">
+<p><strong>Prophet</strong> - A prophet was called by God to speak His word. Samuel’s prophetic ministry becomes especially important because God uses him to guide Israel through the transition to kingship and to confront its kings.</p>
+</div>
+<div data-custom-style="Normal (Web)">
+<p><strong>Anointing</strong> - Oil was poured upon someone to mark that person as set apart for a God-given office. Both Saul and David are anointed as kings. The anointing identifies divine appointment, though faithful exercise of the office still requires obedience to God.</p>
+</div>
+<div data-custom-style="Normal (Web)">
+<p><strong>The Ark of the Covenant</strong> - The ark represented the throne and holy presence of the LORD among His people. First Samuel makes clear that Israel could not treat the ark as a magical object guaranteeing divine protection apart from faithfulness to God.</p>
+</div>
+<div data-custom-style="Normal (Web)">
+<p><strong>Kingship in Israel</strong> - Israel’s desire for a king contains both a legitimate development and a sinful motive. God permitted and directed the establishment of the monarchy, yet the people’s desire to be like surrounding nations revealed distrust of His rule.</p>
+</div>
+<div data-custom-style="Normal (Web)">
+<p><strong>The Spirit of the LORD and Royal Empowerment</strong> - The Spirit comes upon Saul and later David in connection with their God-given royal calling. In the Old Testament setting, this empowerment for office should not simply be equated with the fuller new-covenant reality of the Spirit dwelling within all who belong to Christ.</p>
+</div>
+<div data-custom-style="Normal (Web)">
+<p><strong>The LORD’s Anointed</strong> - This expression refers especially to the king whom God had appointed and anointed. David’s refusal to kill Saul reflects his conviction that he must not seize by his own hand what God alone had the authority to remove and give.</p>
+</div>
+<div data-custom-style="Normal (Web)"></div></article><article class="mtb-intro-card mtb-span-6"><h3 class="mtb-intro-card-header">Book Flow</h3><div class="mtb-intro-card-body"></div>
+<div data-custom-style="Normal (Web)">
+<p><strong>Chapters 1–3 | Samuel Raised Before the LORD</strong></p>
+</div>
+<div data-custom-style="Normal (Web)">
+<p>Hannah’s prayer, Samuel’s birth and dedication, the corruption of Eli’s sons, and Samuel’s prophetic calling establish the spiritual foundation of the book. God raises a faithful servant while judging corrupt leadership.</p>
+</div>
+<div data-custom-style="Normal (Web)">
+<p><strong>Chapters 4–7 | The Ark, Judgment, and Israel’s Return to the LORD</strong></p>
+</div>
+<div data-custom-style="Normal (Web)">
+<p>Israel loses the ark to the Philistines after treating it as a guarantee of victory. God demonstrates that His presence cannot be manipulated, brings judgment upon the Philistines, restores the ark, and later grants Israel victory when the people repent and return to Him under Samuel.</p>
+</div>
+<div data-custom-style="Normal (Web)">
+<p><strong>Chapters 8–12 | Israel Demands a King</strong></p>
+</div>
+<div data-custom-style="Normal (Web)">
+<p>Israel asks for a king like the surrounding nations. God identifies their request as a rejection of His kingship, yet He instructs Samuel to establish the monarchy. Saul is chosen, publicly confirmed, and given an opportunity to lead Israel faithfully under the LORD.</p>
+</div>
+<div data-custom-style="Normal (Web)">
+<p><strong>Chapters 13–15 | Saul’s Disobedience and Rejection</strong></p>
+</div>
+<div data-custom-style="Normal (Web)">
+<p>Saul repeatedly refuses to remain under God’s command. His unlawful sacrifice, rash leadership, and incomplete obedience concerning Amalek reveal a deeper resistance to the word of the LORD. God rejects Saul from continuing as the foundation of the royal line.</p>
+</div>
+<div data-custom-style="Normal (Web)">
+<p><strong>Chapters 16–20 | David Chosen and Saul Threatened</strong></p>
+</div>
+<div data-custom-style="Normal (Web)">
+<p>God directs Samuel to anoint David. David defeats Goliath and rises in public esteem, while Saul becomes increasingly jealous and fearful. Jonathan recognizes David’s calling and binds himself to him in loyal friendship.</p>
+</div>
+<div data-custom-style="Normal (Web)">
+<p><strong>Chapters 21–26 | David the Fugitive</strong></p>
+</div>
+<div data-custom-style="Normal (Web)">
+<p>David flees from Saul and lives as an outlaw while gathering followers around him. These chapters repeatedly test whether David will seize the kingdom for himself. Twice he has opportunity to kill Saul, yet he refuses to take the throne through violence against the LORD’s anointed.</p>
+</div>
+<div data-custom-style="Normal (Web)">
+<p><strong>Chapters 27–31 | Saul’s Final Decline and Death</strong></p>
+</div>
+<div data-custom-style="Normal (Web)">
+<p>David seeks refuge among the Philistines, while Saul reaches the end of his spiritual collapse. Unable to receive an answer from the LORD, Saul seeks forbidden counsel through a medium at En Dor. The Philistines defeat Israel at Mount Gilboa, Saul and his sons die, and the book closes with the end of Saul’s reign.</p>
+</div>
+<div data-custom-style="Normal (Web)"></div></article><article class="mtb-intro-card mtb-span-6"><h3 class="mtb-intro-card-header">Christ &amp; Life</h3><div class="mtb-intro-card-body"></div>
+<div data-custom-style="Normal (Web)">
+<p>First Samuel establishes the biblical category of the anointed king with unusual force. Israel wants a king who will provide visible security and military leadership, but Saul reveals the inadequacy of kingship centered in human strength, appearance, and self-will. David introduces a different pattern: a king chosen by God, dependent upon Him, and established according to His purpose. David remains imperfect, but the royal office associated with him becomes a major part of the biblical expectation that ultimately reaches its fulfillment in Jesus Christ, the Son of David and the true King.</p>
+</div>
+<div data-custom-style="Normal (Web)">
+<p>The movement toward Christ therefore arises not merely because David resembles Jesus in selected events, but because 1 Samuel establishes the Davidic royal line within the unfolding story of redemption. What begins here develops through the promises given to David in 2 Samuel, the prophets’ expectation of a righteous Davidic King, and finally the New Testament identification of Jesus as the promised Son of David.</p>
+</div>
+<div data-custom-style="Normal (Web)">
+<p>The failure of Saul also creates a significant contrast. Israel’s first king repeatedly acts from fear, seeks human approval, protects his own position, and resists the word of God. Jesus embodies perfect obedience to the Father. Where failed human kingship reveals the danger of self-rule, Christ reveals kingship wholly aligned with the will and character of God.</p>
+</div>
+<div data-custom-style="Normal (Web)">
+<p>Samuel’s ministry also strengthens the book’s emphasis upon hearing God. The life of God’s people cannot be sustained merely by religious office, sacred objects, or external structures. God speaks, and His people must hear Him. In Christ, the fullest revelation of God has come, and through the Holy Spirit believers are brought into living relationship with Him. The posture introduced so memorably in Samuel, “Speak, for Your servant hears,” remains essential to a life wholly responsive to God.</p>
+</div>
+<div data-custom-style="Normal (Web)">
+<p>David’s long wait between anointing and enthronement also reveals an important principle of life with God. He receives promise before possession and calling before fulfillment. Much of his formation occurs while he waits, suffers, serves, and refuses to grasp what God has promised. Life in Christ likewise calls believers to trust God’s faithfulness rather than secure His purposes through fear, manipulation, or self-directed striving.</p>
+</div>
+<div data-custom-style="Normal (Web)"></div></article></div></section><section class="mtb-intro-section"><div class="mtb-intro-section-heading"><h2>Reading Guide</h2></div><div class="mtb-intro-grid"><article class="mtb-intro-card mtb-span-6"><h3 class="mtb-intro-card-header">One-Sentence Summary</h3><div class="mtb-intro-card-body"></div></article><article class="mtb-intro-card mtb-span-6"><h3 class="mtb-intro-card-header">Read This Book Remembering…</h3><div class="mtb-intro-card-body"></div>
+<div data-custom-style="Normal (Web)">
+<p>First Samuel is fundamentally about God’s rule, not merely the rise of human kings. Keep the LORD’s kingship in view as Saul and David enter the story.</p>
+</div>
+<div data-custom-style="Normal (Web)">
+<p>Pay attention to how people respond when God speaks. Samuel, Eli, Saul, Jonathan, David, and others are repeatedly distinguished by what they do with the word they have received.</p>
+</div>
+<div data-custom-style="Normal (Web)">
+<p>Do not read Saul merely as a villain and David merely as a hero. The book develops their contrast carefully. Saul’s decline is progressive, and David is still being formed. The central issue is their posture toward God and His word.</p>
+</div>
+<div data-custom-style="Normal (Web)">
+<p>Notice how often God overturns outward expectations. Hannah, Samuel, David, and even the circumstances surrounding the ark demonstrate that human strength and visible importance do not determine what God will do.</p>
+</div>
+<div data-custom-style="Normal (Web)">
+<p>Remember that 1 Samuel ends before David becomes king. The book intentionally leaves the story unfinished. Saul’s kingdom has fallen, David has been chosen, but the fulfillment of David’s kingship awaits 2 Samuel.</p>
+</div>
+<div data-custom-style="Normal (Web)"></div></article></div></section><section class="mtb-intro-section"><div class="mtb-intro-section-heading"><h2>Helpful Notes</h2></div><div class="mtb-intro-grid"><article class="mtb-intro-card mtb-span-12"><div class="mtb-intro-card-body"></div>
+<div data-custom-style="Normal (Web)">
+<p>In the Hebrew Bible, 1 and 2 Samuel originally formed one continuous work. The division into two books arose later in the transmission of the text. Reading them together helps preserve the continuity from Samuel’s birth through Saul’s reign and into David’s kingdom.</p>
+</div>
+<div data-custom-style="Normal (Web)">
+<p>The Hebrew text of Samuel contains several places where textual difficulties are more pronounced than in many other Old Testament books. Ancient witnesses such as the Septuagint and the Dead Sea Scrolls sometimes preserve readings that differ from the traditional Hebrew text. These matters occasionally affect individual details but do not alter the major message or movement of the book.</p>
+</div>
+<div data-custom-style="Normal (Web)">
+<p>Hannah’s prayer in 1 Samuel 2:1–10 is especially important for reading the whole book. Its themes of God bringing down the proud, raising the lowly, judging human strength, and strengthening His anointed anticipate major developments that follow.</p>
+</div></div></article></div></section></div>
+</section>

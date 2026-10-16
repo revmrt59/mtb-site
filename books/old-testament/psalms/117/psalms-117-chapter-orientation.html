@@ -1,0 +1,106 @@
+<section class="mtb-doc mtb-doc--read" data-doc-type="chapter-overview" data-mtb-status="complete">
+<style>
+.mtb-print-controls{display:flex;justify-content:flex-end;gap:8px;margin:0 0 14px;padding:0 4px}
+.mtb-print-button{appearance:none;border:1px solid #b9c8d5;border-radius:8px;background:#fff;padding:9px 14px;color:#173a5e;font:700 14px Arial,Helvetica,sans-serif;cursor:pointer}
+.mtb-print-button:hover{background:#f2f6f9}
+@media print{
+  @page{size:auto;margin:.45in}
+  html,body{background:#fff!important;color:#000!important}
+  .mtb-print-controls,.mtb-study-controls,.mtb-reflections-controls{display:none!important}
+  .mtb-doc{display:block!important;width:100%!important;max-width:none!important;margin:0!important;padding:0!important}
+  .mtb-overview-hero,.mtb-study-hero,.mtb-reflections-hero,.mtb-culture-hero{box-shadow:none!important;background:#fff!important;border-color:#777!important}
+  .mtb-overview-grid,.mtb-reflections-grid,.mtb-culture-grid,.mtb-study-verse-grid{display:block!important}
+  .mtb-overview-card,.mtb-reflections-card,.mtb-culture-card,.mtb-study-verse,.mtb-study-verse-panel,.mtb-intro-card{
+    display:block!important;width:100%!important;max-width:none!important;height:auto!important;margin:0 0 12pt!important;
+    break-inside:avoid;page-break-inside:avoid;box-shadow:none!important;background:#fff!important;color:#000!important
+  }
+  details.mtb-study-verse,details.mtb-reflection-section{display:block!important;overflow:visible!important}
+  details.mtb-study-verse>summary,details.mtb-reflection-section>summary{display:flex!important;background:#fff!important;color:#000!important;border-bottom:1px solid #777!important}
+  details.mtb-study-verse>summary:after,details.mtb-reflection-section>summary:after{display:none!important}
+  details.mtb-study-verse>.mtb-study-verse-body,details.mtb-reflection-section>.mtb-reflection-section-body{display:block!important}
+  h1,h2,h3,h4{break-after:avoid;page-break-after:avoid;color:#000!important}
+  p,li{orphans:3;widows:3}
+  a{color:#000!important;text-decoration:none!important}
+  a[href]::after{content:none!important}
+}
+</style>
+<div class="mtb-print-controls"><button type="button" class="mtb-print-button" onclick="(function(button){var doc=button.closest('.mtb-doc')||document;var panels=Array.prototype.slice.call(doc.querySelectorAll('details'));panels.forEach(function(panel){panel.open=true;});window.print();})(this)">&#128438; Print This Page</button></div>
+<style>
+.mtb-chapter-overview-dashboard{--mtb-navy:#173a5e;--mtb-navy-2:#2b587f;--mtb-gold:#b7832f;--mtb-blue-soft:#eef4f9;--mtb-border:#d7e0e8;--mtb-text:#1d2935;width:100%;max-width:1600px;margin:0 auto;padding:2px 4px 30px;color:var(--mtb-text);font-family:Arial,Helvetica,sans-serif}.mtb-chapter-overview-dashboard *{box-sizing:border-box}
+.mtb-overview-glance{margin:0 0 18px;overflow:hidden;border:1px solid #cbd8e3;border-radius:14px;background:linear-gradient(135deg,#f7fafc 0%,#e8f0f7 100%);box-shadow:0 4px 15px rgba(28,48,66,.045)}
+.mtb-overview-glance-head{display:flex;align-items:center;justify-content:space-between;gap:20px;padding:18px 24px 13px;border-bottom:1px solid rgba(23,58,94,.12)}
+.mtb-overview-eyebrow{margin:0 0 4px;color:var(--mtb-gold);font-size:.78rem;font-weight:800;letter-spacing:.13em;text-transform:uppercase}.mtb-overview-title{margin:0;color:var(--mtb-navy);font-size:clamp(1.4rem,2.6vw,1.95rem);line-height:1.1}.mtb-overview-badge{flex:0 0 auto;padding:9px 15px;border:1px solid rgba(23,58,94,.18);border-radius:999px;background:#fff;color:var(--mtb-navy);font-weight:800}
+.mtb-overview-glance-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:0;padding:8px 22px 13px}.mtb-overview-glance-item{min-width:0;padding:10px 12px;font-size:1rem;line-height:1.42}.mtb-overview-glance-item:nth-child(even){border-left:1px solid rgba(23,58,94,.11)}.mtb-overview-glance-label{display:inline;color:var(--mtb-navy);font-weight:800}.mtb-overview-glance-content{display:inline}.mtb-overview-glance-content p{display:inline;margin:0}.mtb-overview-glance-structure .mtb-overview-glance-content{display:block;margin-top:4px}.mtb-overview-glance-structure ul,.mtb-overview-glance-structure ol{margin:4px 0 0;padding-left:1.25em}.mtb-overview-glance-structure li{margin:0 0 2px}.mtb-overview-glance-structure li p{display:block;margin:0}.mtb-overview-glance-keyverse .mtb-overview-glance-content{font-style:italic}
+.mtb-overview-deeper{margin:0}.mtb-overview-deeper>summary{display:flex;align-items:center;justify-content:space-between;gap:16px;cursor:pointer;list-style:none;padding:14px 18px;border:1px solid #cbd8e3;border-radius:10px;background:#f4f7fa;color:var(--mtb-navy);font-size:1rem;font-weight:800;user-select:none}.mtb-overview-deeper>summary::-webkit-details-marker{display:none}.mtb-overview-deeper>summary::after{content:'+';font-size:1.35rem;line-height:1}.mtb-overview-deeper[open]>summary{margin-bottom:16px;border-color:#b8cad9;background:#eef4f9}.mtb-overview-deeper[open]>summary::after{content:'−'}
+.mtb-overview-grid{display:grid;grid-template-columns:repeat(12,minmax(0,1fr));gap:16px;align-items:stretch}.mtb-overview-card{min-width:0;overflow:hidden;border:1px solid var(--mtb-border);border-top:4px solid var(--mtb-navy-2);border-radius:12px;background:#fff;box-shadow:0 4px 15px rgba(28,48,66,.055)}.mtb-overview-card-heart{grid-column:1/-1}.mtb-overview-card-sections{grid-column:1/span 6}.mtb-overview-card-matters{grid-column:7/span 6}.mtb-overview-card-themes{grid-column:1/span 6}.mtb-overview-card-words{grid-column:7/span 6}.mtb-overview-card-psalm-author{grid-column:1/span 4}.mtb-overview-card-psalm-occasion{grid-column:5/span 4}.mtb-overview-card-psalm-kind{grid-column:9/span 4}.mtb-overview-card-header{margin:0;padding:12px 16px 10px;border-bottom:1px solid #e5ebf0;background:var(--mtb-blue-soft);color:var(--mtb-navy);font-size:.96rem;font-weight:800}.mtb-overview-card-body{padding:16px 18px 18px;font-size:1rem;line-height:1.48;overflow-wrap:anywhere}.mtb-overview-card-heart .mtb-overview-card-body{font-size:1.04rem}.mtb-overview-card-body p{margin:0 0 .72em}.mtb-overview-card-body p:last-child{margin-bottom:0}.mtb-overview-card-body ul,.mtb-overview-card-body ol{margin:0;padding-left:1.25em}.mtb-overview-card-body li{margin:0 0 .35em}
+@media(max-width:980px){.mtb-overview-card{grid-column:span 6!important}.mtb-overview-card-heart{grid-column:1/-1!important}.mtb-overview-glance-grid{grid-template-columns:1fr}.mtb-overview-glance-item:nth-child(even){border-left:0}.mtb-overview-glance-item+.mtb-overview-glance-item{border-top:1px solid rgba(23,58,94,.09)}}
+@media(max-width:760px){.mtb-overview-grid{grid-template-columns:1fr}.mtb-overview-card{grid-column:1/-1!important}.mtb-overview-glance-head{align-items:flex-start;flex-direction:column;padding:17px 18px 12px}.mtb-overview-glance-grid{padding:6px 10px 12px}.mtb-overview-glance-item{padding:9px 8px}.mtb-overview-deeper>summary{padding:13px 15px}}
+@media print{.mtb-overview-deeper>summary{display:none!important}.mtb-overview-deeper:not([open])>.mtb-overview-grid{display:grid!important}}
+</style><div class="mtb-chapter-overview-dashboard mtb-psalms-overview"><section class="mtb-overview-glance" aria-labelledby="mtb-at-a-glance-title"><div class="mtb-overview-glance-head"><div><p class="mtb-overview-eyebrow">Chapter Overview</p><h1 id="mtb-at-a-glance-title" class="mtb-overview-title">At a Glance</h1></div><div class="mtb-overview-badge">Psalm 117</div></div><div class="mtb-overview-glance-grid"><div class="mtb-overview-glance-item"><span class="mtb-overview-glance-label">The Core: </span><div class="mtb-overview-glance-content"><p>All nations are called to praise the LORD for His great love and enduring faithfulness.</p>
+</div>
+<div data-custom-style="Normal (Web)"></div></div><div class="mtb-overview-glance-item"><span class="mtb-overview-glance-label">The Context: </span><div class="mtb-overview-glance-content"><p>An Israelite song of worship inviting all nations to praise God.</p>
+</div>
+<div data-custom-style="Normal (Web)"></div></div><div class="mtb-overview-glance-item mtb-overview-glance-structure"><span class="mtb-overview-glance-label">The Structure: </span><div class="mtb-overview-glance-content"></div>
+<ul>
+<li><div data-custom-style="Normal (Web)">
+<p><strong>Verse 1:</strong> The worldwide call to praise.</p>
+</div></li>
+<li><div data-custom-style="Normal (Web)">
+<p><strong>Verse 2:</strong> The reason for praise.</p>
+</div></li>
+</ul>
+<div data-custom-style="Normal (Web)"></div></div><div class="mtb-overview-glance-item mtb-overview-glance-keyverse"><span class="mtb-overview-glance-label">The Key Verse: </span><div class="mtb-overview-glance-content"><p>“For His merciful kindness is great toward us, And the truth of the LORD endures forever.” (v. 2, NKJV)</p>
+</div></div></div></div></section><details class="mtb-overview-deeper"><summary>Go Deeper</summary><div class="mtb-overview-grid"><article class="mtb-overview-card mtb-overview-card-psalm-author"><h2 class="mtb-overview-card-header">Author</h2><div class="mtb-overview-card-body"><div data-custom-style="Normal (Web)">
+<p>Psalm 117 has no superscription, and Scripture does not identify its author. It belongs to Book Five of the Psalms (107–150) and to the Hallel (Psalms 113–118), a collection of praise psalms. Some Hebrew manuscripts join Psalm 117 to a neighboring psalm, but its original authorship and circumstances remain unknown.</p>
+</div></div></article><article class="mtb-overview-card mtb-overview-card-psalm-occasion"><h2 class="mtb-overview-card-header">Occasion</h2><div class="mtb-overview-card-body"><div data-custom-style="Normal (Web)">
+<p>The original occasion is unknown, but the psalm became part of Israel's worship. Jewish tradition records that the Hallel was sung at major feasts, including Passover. The hymn Jesus and His disciples sang before going to the Mount of Olives was most likely from this collection (Matthew 26:30; Mark 14:26). If so, Jesus sang Psalm 117 on the night He was betrayed.</p>
+</div></div></article><article class="mtb-overview-card mtb-overview-card-psalm-kind"><h2 class="mtb-overview-card-header">Psalm Type</h2><div class="mtb-overview-card-body"><div data-custom-style="Normal (Web)">
+<p>A hymn of praise with a worldwide invitation. Verse 1 calls the nations to worship, and verse 2 gives the reason: God's great love and enduring faithfulness. The psalm ends with another call to praise the LORD.</p>
+</div></div></article><article class="mtb-overview-card mtb-overview-card-heart"><h2 class="mtb-overview-card-header">The Heart of the Chapter</h2><div class="mtb-overview-card-body"><div data-custom-style="Normal (Web)">
+<p><strong>God's love for one nation was always meant to reach every nation.</strong> God promised Abraham that all the families of the earth would be blessed through him (Genesis 12:3). Now Israel calls those very nations to praise the LORD for His great kindness toward His people. Through His faithfulness to Israel, God was making Himself known to the world.</p>
+</div>
+<div data-custom-style="Normal (Web)">
+<p>The two qualities in verse 2, merciful kindness and truth, recall how God revealed Himself to Moses: “abounding in goodness and truth” (Exodus 34:6). His love is not a passing feeling, and His faithfulness does not change with time.</p>
+</div>
+<div data-custom-style="Normal (Web)">
+<p>Paul quotes Psalm 117 in Romans 15:11, showing that God's purpose always included the Gentiles. Christ came to confirm God's promises to Israel so that the Gentiles might also glorify Him for His mercy (Romans 15:8–9). In Jesus, who came “full of grace and truth” (John 1:14), God's love and faithfulness find their fullest expression. The invitation of Psalm 117 ultimately reaches toward the multitude from every nation worshiping before God's throne (Revelation 7:9–10).</p>
+</div></div></article><article class="mtb-overview-card mtb-overview-card-sections"><h2 class="mtb-overview-card-header">Chapter Sections</h2><div class="mtb-overview-card-body"><div data-custom-style="Normal (Web)">
+<p><strong>Psalm 117:1–2 — Praise the LORD, All You Nations</strong></p>
+</div>
+<div data-custom-style="Normal (Web)">
+<p>The psalm forms one complete unit. Verse 1 calls every nation to praise the LORD. Verse 2 explains why: His merciful kindness is great, and His truth endures forever.</p>
+</div></div></article><article class="mtb-overview-card mtb-overview-card-matters"><h2 class="mtb-overview-card-header">Why This Chapter Matters</h2><div class="mtb-overview-card-body"><div data-custom-style="Normal (Web)">
+<p>God's heart for the nations is not a New Testament afterthought. Long before the church was born, Israel was singing an invitation for the Gentiles to worship the LORD. Believers from the nations who praise Him today are answering that ancient call.</p>
+</div>
+<div data-custom-style="Normal (Web)">
+<p><strong>True praise has reasons.</strong> Worship does not depend on our mood or circumstances but on who God is and what He has done. His love is steadfast, and His faithfulness never fails. The God who kept His promises to Israel is the same God in whom we place our hope.</p>
+</div></div></article><article class="mtb-overview-card mtb-overview-card-themes"><h2 class="mtb-overview-card-header">Key Themes to Watch For</h2><div class="mtb-overview-card-body"><div data-custom-style="Normal (Web)">
+<p><strong>The nations called to worship.</strong> Every people is invited to praise the LORD (v. 1; Romans 15:11).</p>
+</div>
+<div data-custom-style="Normal (Web)">
+<p><strong>God's steadfast love.</strong> His merciful kindness toward His people is great and prevailing (v. 2; Psalm 103:11).</p>
+</div>
+<div data-custom-style="Normal (Web)">
+<p><strong>God's enduring faithfulness.</strong> His truth and promises remain dependable forever (v. 2; Psalm 100:5).</p>
+</div>
+<div data-custom-style="Normal (Web)">
+<p><strong>Israel's blessing reaches the nations.</strong> God's faithfulness to Israel reveals His heart and purposes for the whole world (vv. 1–2; Genesis 12:3).</p>
+</div></div></article><article class="mtb-overview-card mtb-overview-card-words"><h2 class="mtb-overview-card-header">Key Words &amp; Concepts</h2><div class="mtb-overview-card-body"><div data-custom-style="Normal (Web)">
+<p><strong>Praise the LORD (<em>hallelu Yah</em>).</strong> The familiar “Hallelujah,” a command to praise Yah, a shortened form of the LORD's personal name.</p>
+</div>
+<div data-custom-style="Normal (Web)">
+<p><strong>Gentiles and peoples (<em>goyim, ummim</em>).</strong> Nations and peoples, particularly those beyond Israel in this setting. The invitation to worship extends to every people group.</p>
+</div>
+<div data-custom-style="Normal (Web)">
+<p><strong>Laud (<em>shabach</em>).</strong> To praise, commend, or extol, often expressing praise aloud.</p>
+</div>
+<div data-custom-style="Normal (Web)">
+<p><strong>Merciful kindness (<em>chesed</em>).</strong> God's steadfast, faithful love and enduring kindness toward His people. His love is loyal and dependable.</p>
+</div>
+<div data-custom-style="Normal (Web)">
+<p><strong>Is great (<em>gabar</em>).</strong> To be strong, mighty, or to prevail. God's merciful kindness is not weak or uncertain; it is mighty and prevailing.</p>
+</div>
+<div data-custom-style="Normal (Web)">
+<p><strong>Truth (<em>emet</em>).</strong> Faithfulness, firmness, and reliability. God is utterly trustworthy, and what He promises stands forever.</p>
+</div></div></article></div></details></div>
+</section>

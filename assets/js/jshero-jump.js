@@ -10,7 +10,7 @@
   { name: "1Samuel", slug: "1-samuel", chapters: 24 },
    // { name: "Ruth", slug: "ruth", chapters: 4 },
    // { name: "Nehemiah", slug: "nehemiah", chapters: 13 },
-  // { name: "Psalms", slug: "psalms", chapters: 150 },
+  { name: "Psalms", slug: "psalms", chapters: 150 },
   { name: "Obadiah", slug: "obadiah", chapters: 1 },
  // { name: "Jonah", slug: "jonah", chapters: 4 },
   // { name: "Habakkuk", slug: "habakkuk", chapters: 3 },

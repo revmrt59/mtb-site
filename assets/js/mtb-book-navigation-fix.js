@@ -45,281 +45,225 @@
   document.addEventListener("click", handleStudyControls);
 
   // -------------------------------------------------------------
-  // Chapter editorial tab compatibility / discovery
+  // Chapter Overview / Study tab compatibility
   // -------------------------------------------------------------
-  var mtbTabRepairTimer = null;
-  var mtbTabRepairBusy = false;
+  // Deliberately finite: do NOT observe the tabs container. The earlier
+  // MutationObserver-based repair could retrigger itself after moving tabs,
+  // producing an endless stream of availability requests.
+  var mtbEditorialTabRepairKey = "";
 
-  function mtbCanonicalBookSlug(value) {
-    var b = String(value || "").toLowerCase().trim().replace(/\s+/g, "-");
-    if (b === "psalm") b = "psalms";
-    return b;
-  }
-
-  function mtbChapterContext() {
+  function mtbEditorialContext() {
     var p = new URLSearchParams(window.location.search);
-    var book = mtbCanonicalBookSlug(
-      p.get("book") || document.body.getAttribute("data-book") || ""
-    );
-    var chapter = parseInt(
-      p.get("chapter") || document.body.getAttribute("data-chapter") || "0",
-      10
-    );
+    var book = String(p.get("book") || "").toLowerCase().trim().replace(/\s+/g, "-");
+    if (book === "psalm") book = "psalms";
+
+    var chapter = parseInt(p.get("chapter") || "0", 10);
     if (!book || !Number.isFinite(chapter) || chapter < 1) return null;
+
+    var nt = {
+      "matthew":1,"mark":1,"luke":1,"john":1,"acts":1,"romans":1,
+      "1-corinthians":1,"2-corinthians":1,"galatians":1,"ephesians":1,
+      "philippians":1,"colossians":1,"1-thessalonians":1,"2-thessalonians":1,
+      "1-timothy":1,"2-timothy":1,"titus":1,"philemon":1,"hebrews":1,
+      "james":1,"1-peter":1,"2-peter":1,"1-john":1,"2-john":1,
+      "3-john":1,"jude":1,"revelation":1
+    };
+
     return {
       book: book,
       chapter: chapter,
-      folder: String(chapter).padStart(3, "0")
+      folder: String(chapter).padStart(3, "0"),
+      testament: nt[book] ? "new-testament" : "old-testament"
     };
   }
 
-  function mtbCandidateUrls(ctx, fileNames) {
-    var urls = [];
-    ["old-testament", "new-testament"].forEach(function (testament) {
-      fileNames.forEach(function (fileName) {
-        urls.push(
-          "/books/" + testament + "/" + ctx.book + "/" +
-          ctx.folder + "/" + fileName
-        );
-      });
-    });
-    return urls;
+  async function mtbRealEditorialFile(url, kind) {
+    try {
+      var response = await fetch(url, { method: "GET", cache: "no-store" });
+      if (!response.ok) return "";
+
+      var html = await response.text();
+
+      // Reject a static-server fallback page that happened to return 200.
+      if (/id=["']book-hero["']/i.test(html) &&
+          !/data-doc-type=["']chapter-/i.test(html)) {
+        return "";
+      }
+
+      if (kind === "overview") {
+        if (!/data-doc-type=["']chapter-overview["']/i.test(html) &&
+            !/mtb-chapter-overview-dashboard/i.test(html) &&
+            !/mtb-overview-glance/i.test(html)) {
+          return "";
+        }
+      }
+
+      if (kind === "study") {
+        if (/data-mtb-status=["']placeholder["']/i.test(html)) return "";
+        if (!/data-doc-type=["']chapter-explanation["']/i.test(html) &&
+            !/mtb-chapter-study/i.test(html)) {
+          return "";
+        }
+      }
+
+      return url;
+    } catch (_) {
+      return "";
+    }
   }
 
-  async function mtbFindRealEditorialFile(urls, kind) {
-    for (var i = 0; i < urls.length; i++) {
-      try {
-        var response = await fetch(urls[i], {
-          method: "GET",
-          cache: "no-store"
-        });
-        if (!response.ok) continue;
+  async function mtbFindEditorialFile(ctx, kind) {
+    var base = "/books/" + ctx.testament + "/" + ctx.book + "/" + ctx.folder + "/";
+    var stem = ctx.book + "-" + ctx.chapter;
 
-        var html = await response.text();
+    var names = kind === "overview"
+      ? [
+          stem + "-chapter-overview.html",
+          stem + "-chapter-overview-draft.html",
+          stem + "-chapter-orientation.html",
+          stem + "-chapter-orientation-draft.html"
+        ]
+      : [
+          stem + "-chapter-explanation.html",
+          stem + "-chapter-explanation-draft.html"
+        ];
 
-        // Reject a static-server fallback that returned book.html with 200.
-        if (/id=["']book-hero["']/i.test(html) &&
-            !/data-doc-type=["']chapter-/i.test(html)) {
-          continue;
-        }
-
-        if (kind === "study") {
-          if (!/data-doc-type=["']chapter-explanation["']/i.test(html) &&
-              !/mtb-chapter-study/i.test(html)) continue;
-          if (/data-mtb-status=["']placeholder["']/i.test(html)) continue;
-        }
-        else if (kind === "overview") {
-          if (!/data-doc-type=["']chapter-overview["']/i.test(html) &&
-              !/mtb-chapter-overview-dashboard/i.test(html) &&
-              !/mtb-overview-glance/i.test(html)) continue;
-        }
-        else if (kind === "reflections") {
-          if (!/data-doc-type=["']chapter-reflections["']/i.test(html) &&
-              !/mtb-reflections-dashboard/i.test(html)) continue;
-        }
-        else if (kind === "culture") {
-          if (!/data-doc-type=["']chapter-eg-culture["']/i.test(html) &&
-              !/mtb-culture-dashboard/i.test(html)) continue;
-        }
-
-        return urls[i];
-      } catch (_) {}
-    }
-    return "";
-  }
-
-  function mtbTabByMeaning(tabs, key, label) {
-    var selectors = [];
-
-    if (key === "chapter_overview") {
-      selectors = [
-        '[data-tab="chapter_overview"]',
-        '[data-tab="chapter_orientation"]'
-      ];
-    }
-    else if (key === "chapter_reflections") {
-      selectors = [
-        '[data-tab="chapter_reflections"]',
-        '[data-tab="chapter_insights"]'
-      ];
-    }
-    else {
-      selectors = ['[data-tab="' + key + '"]'];
-    }
-
-    for (var i = 0; i < selectors.length; i++) {
-      var found = tabs.querySelector(selectors[i]);
+    for (var i = 0; i < names.length; i++) {
+      var found = await mtbRealEditorialFile(base + names[i], kind);
       if (found) return found;
     }
 
-    var buttons = tabs.querySelectorAll("button,a");
-    for (var j = 0; j < buttons.length; j++) {
-      if ((buttons[j].textContent || "").trim().toLowerCase() ===
-          label.toLowerCase()) {
-        return buttons[j];
+    return "";
+  }
+
+  function mtbFindTab(tabs, keys, label) {
+    for (var i = 0; i < keys.length; i++) {
+      var found = tabs.querySelector('[data-tab="' + keys[i] + '"]');
+      if (found) return found;
+    }
+
+    var nodes = tabs.querySelectorAll("button,a");
+    for (var j = 0; j < nodes.length; j++) {
+      if ((nodes[j].textContent || "").trim().toLowerCase() === label.toLowerCase()) {
+        return nodes[j];
       }
     }
+
     return null;
   }
 
-  function mtbMakeTabButton(ctx, key, label, fileUrl) {
-    var btn = document.createElement("button");
-    btn.type = "button";
-    btn.className = "tab-btn mtb-tab-compat";
-    btn.dataset.tab = key;
-    btn.textContent = label;
+  function mtbCreateEditorialTab(ctx, key, label, fileUrl) {
+    var button = document.createElement("button");
+    button.type = "button";
+    button.className = "tab-btn mtb-tab-compat";
+    button.dataset.tab = key;
+    button.textContent = label;
 
-    var current = String(
-      new URLSearchParams(window.location.search).get("tab") || ""
-    ).toLowerCase();
-
-    if (current === key ||
-        (key === "chapter_overview" && current === "chapter_orientation") ||
-        (key === "chapter_reflections" && current === "chapter_insights")) {
-      btn.classList.add("active");
-      btn.setAttribute("aria-current", "page");
-    }
-
-    btn.addEventListener("click", function () {
+    button.addEventListener("click", function () {
       var u = new URL(window.location.href);
       u.searchParams.set("book", ctx.book);
       u.searchParams.set("chapter", String(ctx.chapter));
       u.searchParams.set("tab", key);
 
-      // Supplying doc makes the click independent of old/new tab suffix maps.
-      var fileName = String(fileUrl || "").split("/").pop();
+      // Give load-doc.js the exact file as a fallback against older tab maps.
+      var fileName = String(fileUrl).split("/").pop();
       if (fileName) u.searchParams.set("doc", fileName);
-      else u.searchParams.delete("doc");
 
-      window.location.href =
-        u.pathname + "?" + u.searchParams.toString();
+      window.location.href = u.pathname + "?" + u.searchParams.toString();
     });
 
-    return btn;
+    return button;
   }
 
-  async function mtbEnsureEditorialTabs() {
-    if (mtbTabRepairBusy) return;
-
-    var ctx = mtbChapterContext();
+  async function mtbRepairOverviewStudyTabs(force) {
+    var ctx = mtbEditorialContext();
     var tabs = document.getElementById("tabs");
     if (!ctx || !tabs) return;
 
-    mtbTabRepairBusy = true;
+    var contextKey = ctx.book + ":" + ctx.chapter;
 
-    try {
-      var b = ctx.book;
-      var ch = ctx.chapter;
-
-      var found = await Promise.all([
-        mtbFindRealEditorialFile(
-          mtbCandidateUrls(ctx, [
-            b + "-" + ch + "-chapter-overview.html",
-            b + "-" + ch + "-chapter-overview-draft.html",
-            b + "-" + ch + "-chapter-orientation.html",
-            b + "-" + ch + "-chapter-orientation-draft.html"
-          ]),
-          "overview"
-        ),
-
-        mtbFindRealEditorialFile(
-          mtbCandidateUrls(ctx, [
-            b + "-" + ch + "-chapter-explanation.html",
-            b + "-" + ch + "-chapter-explanation-draft.html"
-          ]),
-          "study"
-        ),
-
-        mtbFindRealEditorialFile(
-          mtbCandidateUrls(ctx, [
-            b + "-" + ch + "-chapter-reflections.html",
-            b + "-" + ch + "-chapter-reflections-draft.html",
-            b + "-" + ch + "-chapter-insights.html"
-          ]),
-          "reflections"
-        ),
-
-        mtbFindRealEditorialFile(
-          mtbCandidateUrls(ctx, [
-            b + "-" + ch + "-chapter-eg-culture.html",
-            b + "-" + ch + "-chapter-eg-culture-draft.html"
-          ]),
-          "culture"
-        )
-      ]);
-
-      var desired = [
-        { key: "chapter_scripture", label: "Chapter Scripture", url: "builtin" },
-        { key: "chapter_overview", label: "Chapter Overview", url: found[0] },
-        { key: "chapter_explanation", label: "Chapter Study", url: found[1] },
-        { key: "chapter_reflections", label: "Chapter Reflection", url: found[2] },
-        { key: "eg_culture", label: "EG Culture", url: found[3] }
-      ];
-
-      desired.forEach(function (item) {
-        if (item.key === "chapter_scripture" || !item.url) return;
-
-        var existing = mtbTabByMeaning(
-          tabs,
-          item.key,
-          item.label
-        );
-
-        if (!existing) {
-          existing = mtbMakeTabButton(
-            ctx,
-            item.key,
-            item.label,
-            item.url
-          );
-        }
-
-        existing.dataset.mtbEditorialTab = "1";
-      });
-
-      // Restore the locked MTB order while preserving existing event handlers.
-      var nav = tabs.querySelector(".chapter-nav");
-
-      desired.forEach(function (item) {
-        var node = mtbTabByMeaning(
-          tabs,
-          item.key,
-          item.label
-        );
-        if (node) tabs.insertBefore(node, nav || null);
-      });
-
-      var resources = mtbTabByMeaning(
+    if (!force && mtbEditorialTabRepairKey === contextKey) {
+      var hasOverview = !!mtbFindTab(
         tabs,
-        "resources",
-        "Resources"
+        ["chapter_overview", "chapter_orientation"],
+        "Chapter Overview"
       );
-      if (resources) tabs.insertBefore(resources, nav || null);
+      var hasStudy = !!mtbFindTab(
+        tabs,
+        ["chapter_explanation"],
+        "Chapter Study"
+      );
+      if (hasOverview && hasStudy) return;
     }
-    finally {
-      mtbTabRepairBusy = false;
+
+    var results = await Promise.all([
+      mtbFindEditorialFile(ctx, "overview"),
+      mtbFindEditorialFile(ctx, "study")
+    ]);
+
+    var overviewUrl = results[0];
+    var studyUrl = results[1];
+
+    if (overviewUrl && !mtbFindTab(
+      tabs,
+      ["chapter_overview", "chapter_orientation"],
+      "Chapter Overview"
+    )) {
+      var overviewButton = mtbCreateEditorialTab(
+        ctx,
+        "chapter_overview",
+        "Chapter Overview",
+        overviewUrl
+      );
+
+      var studyExisting = mtbFindTab(
+        tabs,
+        ["chapter_explanation"],
+        "Chapter Study"
+      );
+
+      if (studyExisting) tabs.insertBefore(overviewButton, studyExisting);
+      else tabs.appendChild(overviewButton);
     }
+
+    if (studyUrl && !mtbFindTab(
+      tabs,
+      ["chapter_explanation"],
+      "Chapter Study"
+    )) {
+      var studyButton = mtbCreateEditorialTab(
+        ctx,
+        "chapter_explanation",
+        "Chapter Study",
+        studyUrl
+      );
+
+      var reflectionExisting = mtbFindTab(
+        tabs,
+        ["chapter_reflections", "chapter_insights"],
+        "Chapter Reflection"
+      );
+
+      if (reflectionExisting) tabs.insertBefore(studyButton, reflectionExisting);
+      else tabs.appendChild(studyButton);
+    }
+
+    mtbEditorialTabRepairKey = contextKey;
   }
 
-  function mtbScheduleEditorialTabRepair() {
-    if (mtbTabRepairTimer) clearTimeout(mtbTabRepairTimer);
-    mtbTabRepairTimer = setTimeout(function () {
-      mtbTabRepairTimer = null;
-      mtbEnsureEditorialTabs();
-    }, 120);
-  }
-
+  // book.js performs asynchronous availability checks. Run a few finite
+  // post-load checks so our repair happens after its render, without creating
+  // an observer/request loop.
   document.addEventListener("DOMContentLoaded", function () {
-    mtbScheduleEditorialTabRepair();
-
-    var tabs = document.getElementById("tabs");
-    if (tabs) {
-      new MutationObserver(mtbScheduleEditorialTabRepair)
-        .observe(tabs, { childList: true, subtree: true });
-    }
+    setTimeout(function () { mtbRepairOverviewStudyTabs(true); }, 250);
+    setTimeout(function () { mtbRepairOverviewStudyTabs(false); }, 900);
+    setTimeout(function () { mtbRepairOverviewStudyTabs(false); }, 1800);
   });
 
-  window.addEventListener("popstate", mtbScheduleEditorialTabRepair);
+  window.addEventListener("popstate", function () {
+    mtbEditorialTabRepairKey = "";
+    setTimeout(function () { mtbRepairOverviewStudyTabs(true); }, 250);
+  });
 
   document.addEventListener("DOMContentLoaded", function () {
     repairNavigation(document);

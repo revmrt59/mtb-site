@@ -17,6 +17,7 @@
 
     var p = new URLSearchParams(window.location.search);
     var book = (p.get("book") || "").toLowerCase();
+    if (book === "psalm") book = "psalms";
     var wrap = document.getElementById("book-hero-chapters");
     if (!book || !wrap) return;
 
@@ -27,6 +28,9 @@
       })
       .then(function (manifest) {
         var chapters = Array.isArray(manifest[book]) ? manifest[book] : [];
+        if (!chapters.length && book === "psalms" && Array.isArray(manifest.psalm)) {
+          chapters = manifest.psalm;
+        }
         chapters = chapters
           .map(function (value) { return parseInt(value, 10); })
           .filter(function (value) { return Number.isFinite(value) && value > 0; })

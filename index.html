@@ -59,14 +59,13 @@
     box-sizing: border-box;
   }
 
-  .visitor-stats a {
+  .visitor-stats strong {
     color: #f97316;
-    text-decoration: underline;
-    font-weight: 500;
   }
 
-  .visitor-stats a:hover {
-    color: #fb923c;
+  .visitor-divider {
+    margin: 0 10px;
+    color: #4b5563;
   }
 
   @media (max-width: 700px) {
@@ -154,7 +153,7 @@
   <script defer src='https://static.cloudflareinsights.com/beacon.min.js' data-cf-beacon='{"token": "99465596e80542b5acc4c1e345c1891e"}'></script>
   <!-- End Cloudflare Web Analytics -->
 
-  <!-- GoatCounter Bot-Filtered Analytics -->
+  <!-- Silent GoatCounter Background Tracking -->
   <script data-goatcounter="https://mtb.goatcounter.com/count"
           async src="//gc.zgo.at/count.js"></script>
 </head>
@@ -196,23 +195,53 @@
     </section>
   </section>
 
-  <!-- Visible GoatCounter Footer: On-screen count linking to live public dashboard -->
+  <!-- On-Screen Daily & Total Visitor Display -->
   <footer class="visitor-stats">
-    <div style="display: flex; justify-content: center; align-items: center; gap: 12px; flex-wrap: wrap;">
-      <span>Human Visitors:</span>
-      <a href="https://mtb.goatcounter.com" target="_blank" rel="noopener" title="Click to view site visitor statistics">
-        <img src="https://mtb.goatcounter.com/counter//.svg" 
-             alt="Site Traffic Count" 
-             style="vertical-align: middle; height: 20px; display: inline-block;" />
-      </a>
-      <span style="color: #6b7280;">•</span>
-      <a href="https://mtb.goatcounter.com" target="_blank" rel="noopener" style="font-size: 0.85rem;">
-        View Daily Stats
-      </a>
-    </div>
+    <span>Visitors Today: <strong id="visitors-today">—</strong></span>
+    <span class="visitor-divider">|</span>
+    <span>Total Unique Visitors: <strong id="visitors-total">—</strong></span>
   </footer>
 
   <script src="/assets/js/jshero-jump.js"></script>
+
+  <script>
+    (function() {
+      var todayEl = document.getElementById("visitors-today");
+      var totalEl = document.getElementById("visitors-total");
+
+      var todayStr = new Date().toISOString().slice(0, 10);
+      var dayKey = "mtb_bible_day_" + todayStr;
+      var totalKey = "mtb_bible_total_unique";
+
+      var hasSeenToday = localStorage.getItem(dayKey);
+      var hasSeenEver = localStorage.getItem("mtb_bible_seen_ever");
+
+      var dayAction = hasSeenToday ? "get" : "hit";
+      var totalAction = hasSeenEver ? "get" : "hit";
+
+      var baseUrl = "https://countapi.mileshilliard.com/api/v1/";
+
+      fetch(baseUrl + dayAction + "/" + dayKey)
+        .then(function(res) { return res.json(); })
+        .then(function(data) {
+          if (todayEl && data && data.value !== undefined) {
+            todayEl.innerText = Number(data.value).toLocaleString();
+            localStorage.setItem(dayKey, "1");
+          }
+        })
+        .catch(function() {});
+
+      fetch(baseUrl + totalAction + "/" + totalKey)
+        .then(function(res) { return res.json(); })
+        .then(function(data) {
+          if (totalEl && data && data.value !== undefined) {
+            totalEl.innerText = Number(data.value).toLocaleString();
+            localStorage.setItem("mtb_bible_seen_ever", "1");
+          }
+        })
+        .catch(function() {});
+    })();
+  </script>
 
 </body>
 </html>

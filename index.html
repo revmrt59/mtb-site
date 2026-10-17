@@ -63,11 +63,6 @@
     color: #f97316;
   }
 
-  .visitor-divider {
-    margin: 0 10px;
-    color: #4b5563;
-  }
-
   @media (max-width: 700px) {
     .hero {
       min-height: 0 !important;
@@ -153,7 +148,7 @@
   <script defer src='https://static.cloudflareinsights.com/beacon.min.js' data-cf-beacon='{"token": "99465596e80542b5acc4c1e345c1891e"}'></script>
   <!-- End Cloudflare Web Analytics -->
 
-  <!-- Silent GoatCounter Background Tracking -->
+  <!-- GoatCounter Bot-Filtered Analytics -->
   <script data-goatcounter="https://mtb.goatcounter.com/count"
           async src="//gc.zgo.at/count.js"></script>
 </head>
@@ -195,51 +190,32 @@
     </section>
   </section>
 
-  <!-- On-Screen Daily & Total Visitor Display -->
+  <!-- Clean On-Screen Unique Human Visitor Counter -->
   <footer class="visitor-stats">
-    <span>Visitors Today: <strong id="visitors-today">—</strong></span>
-    <span class="visitor-divider">|</span>
-    <span>Total Unique Visitors: <strong id="visitors-total">—</strong></span>
+    <span>Unique Human Visitors: <strong id="gc-human-visitors">—</strong></span>
   </footer>
 
   <script src="/assets/js/jshero-jump.js"></script>
 
   <script>
     (function() {
-      var todayEl = document.getElementById("visitors-today");
-      var totalEl = document.getElementById("visitors-total");
+      var el = document.getElementById("gc-human-visitors");
+      if (!el) return;
 
-      var todayStr = new Date().toISOString().slice(0, 10);
-      var dayKey = "mtb_bible_day_" + todayStr;
-      var totalKey = "mtb_bible_total_unique";
-
-      var hasSeenToday = localStorage.getItem(dayKey);
-      var hasSeenEver = localStorage.getItem("mtb_bible_seen_ever");
-
-      var dayAction = hasSeenToday ? "get" : "hit";
-      var totalAction = hasSeenEver ? "get" : "hit";
-
-      var baseUrl = "https://countapi.mileshilliard.com/api/v1/";
-
-      fetch(baseUrl + dayAction + "/" + dayKey)
-        .then(function(res) { return res.json(); })
+      // Query GoatCounter's server directly for bot-filtered total visits
+      fetch("https://mtb.goatcounter.com/counter/TOTAL.json")
+        .then(function(res) {
+          if (!res.ok) throw new Error("HTTP " + res.status);
+          return res.json();
+        })
         .then(function(data) {
-          if (todayEl && data && data.value !== undefined) {
-            todayEl.innerText = Number(data.value).toLocaleString();
-            localStorage.setItem(dayKey, "1");
+          if (data && data.count !== undefined) {
+            el.innerText = data.count;
           }
         })
-        .catch(function() {});
-
-      fetch(baseUrl + totalAction + "/" + totalKey)
-        .then(function(res) { return res.json(); })
-        .then(function(data) {
-          if (totalEl && data && data.value !== undefined) {
-            totalEl.innerText = Number(data.value).toLocaleString();
-            localStorage.setItem("mtb_bible_seen_ever", "1");
-          }
-        })
-        .catch(function() {});
+        .catch(function(err) {
+          console.warn("GoatCounter count fetch:", err);
+        });
     })();
   </script>
 

@@ -59,6 +59,16 @@
     box-sizing: border-box;
   }
 
+  .visitor-stats a {
+    color: #f97316;
+    text-decoration: underline;
+    font-weight: 500;
+  }
+
+  .visitor-stats a:hover {
+    color: #fb923c;
+  }
+
   @media (max-width: 700px) {
     .hero {
       min-height: 0 !important;
@@ -143,6 +153,10 @@
   <!-- Cloudflare Web Analytics -->
   <script defer src='https://static.cloudflareinsights.com/beacon.min.js' data-cf-beacon='{"token": "99465596e80542b5acc4c1e345c1891e"}'></script>
   <!-- End Cloudflare Web Analytics -->
+
+  <!-- GoatCounter Bot-Filtered Analytics -->
+  <script data-goatcounter="https://mtb.goatcounter.com/count"
+          async src="//gc.zgo.at/count.js"></script>
 </head>
 
 <body>
@@ -182,13 +196,19 @@
     </section>
   </section>
 
-  <!-- On-Screen Visitor Counter Badge -->
+  <!-- Visible GoatCounter Footer: On-screen count linking to live public dashboard -->
   <footer class="visitor-stats">
     <div style="display: flex; justify-content: center; align-items: center; gap: 12px; flex-wrap: wrap;">
-      <span>Site Traffic:</span>
-      <img src="https://hits.sh/masteringthebible.org.svg?style=flat-square&label=Visitors&color=f97316&labelColor=1f2937" 
-           alt="Visitor Counter" 
-           style="vertical-align: middle; height: 20px;" />
+      <span>Human Visitors:</span>
+      <a href="https://mtb.goatcounter.com" target="_blank" rel="noopener" title="Click to view site visitor statistics">
+        <img src="https://mtb.goatcounter.com/counter//.svg" 
+             alt="Site Traffic Count" 
+             style="vertical-align: middle; height: 20px; display: inline-block;" />
+      </a>
+      <span style="color: #6b7280;">•</span>
+      <a href="https://mtb.goatcounter.com" target="_blank" rel="noopener" style="font-size: 0.85rem;">
+        View Daily Stats
+      </a>
     </div>
   </footer>
 

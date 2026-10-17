@@ -45,7 +45,7 @@
   document.addEventListener("click", handleStudyControls);
 
   // -------------------------------------------------------------
-  // Chapter Overview / Study tab compatibility
+  // Chapter Overview / Study / Reflections tab compatibility
   // -------------------------------------------------------------
   // Deliberately finite: do NOT observe the tabs container. The earlier
   // MutationObserver-based repair could retrigger itself after moving tabs,
@@ -106,6 +106,13 @@
         }
       }
 
+      if (kind === "reflections") {
+        if (!/data-doc-type=["']chapter-reflections["']/i.test(html) &&
+            !/mtb-chapter-reflections/i.test(html)) {
+          return "";
+        }
+      }
+
       return url;
     } catch (_) {
       return "";
@@ -116,17 +123,30 @@
     var base = "/books/" + ctx.testament + "/" + ctx.book + "/" + ctx.folder + "/";
     var stem = ctx.book + "-" + ctx.chapter;
 
-    var names = kind === "overview"
-      ? [
-          stem + "-chapter-overview.html",
-          stem + "-chapter-overview-draft.html",
-          stem + "-chapter-orientation.html",
-          stem + "-chapter-orientation-draft.html"
-        ]
-      : [
-          stem + "-chapter-explanation.html",
-          stem + "-chapter-explanation-draft.html"
-        ];
+    var names;
+
+    if (kind === "overview") {
+      names = [
+        stem + "-chapter-overview.html",
+        stem + "-chapter-overview-draft.html",
+        stem + "-chapter-orientation.html",
+        stem + "-chapter-orientation-draft.html"
+      ];
+    }
+    else if (kind === "reflections") {
+      names = [
+        stem + "-chapter-reflections.html",
+        stem + "-chapter-reflections-draft.html",
+        stem + "-chapter-insights.html",
+        stem + "-chapter-insights-draft.html"
+      ];
+    }
+    else {
+      names = [
+        stem + "-chapter-explanation.html",
+        stem + "-chapter-explanation-draft.html"
+      ];
+    }
 
     for (var i = 0; i < names.length; i++) {
       var found = await mtbRealEditorialFile(base + names[i], kind);
@@ -175,7 +195,7 @@
     return button;
   }
 
-  async function mtbRepairOverviewStudyTabs(force) {
+  async function mtbRepairEditorialTabs(force) {
     var ctx = mtbEditorialContext();
     var tabs = document.getElementById("tabs");
     if (!ctx || !tabs) return;
@@ -193,16 +213,23 @@
         ["chapter_explanation"],
         "Chapter Study"
       );
-      if (hasOverview && hasStudy) return;
+      var hasReflections = !!mtbFindTab(
+        tabs,
+        ["chapter_reflections", "chapter_insights"],
+        "Chapter Reflection"
+      );
+      if (hasOverview && hasStudy && hasReflections) return;
     }
 
     var results = await Promise.all([
       mtbFindEditorialFile(ctx, "overview"),
-      mtbFindEditorialFile(ctx, "study")
+      mtbFindEditorialFile(ctx, "study"),
+      mtbFindEditorialFile(ctx, "reflections")
     ]);
 
     var overviewUrl = results[0];
     var studyUrl = results[1];
+    var reflectionsUrl = results[2];
 
     if (overviewUrl && !mtbFindTab(
       tabs,
@@ -248,21 +275,43 @@
       else tabs.appendChild(studyButton);
     }
 
+    if (reflectionsUrl && !mtbFindTab(
+      tabs,
+      ["chapter_reflections", "chapter_insights"],
+      "Chapter Reflection"
+    )) {
+      var reflectionsButton = mtbCreateEditorialTab(
+        ctx,
+        "chapter_reflections",
+        "Chapter Reflection",
+        reflectionsUrl
+      );
+
+      var cultureExisting = mtbFindTab(
+        tabs,
+        ["eg_culture"],
+        "EG Culture"
+      );
+
+      if (cultureExisting) tabs.insertBefore(reflectionsButton, cultureExisting);
+      else tabs.appendChild(reflectionsButton);
+    }
+
     mtbEditorialTabRepairKey = contextKey;
   }
 
   // book.js performs asynchronous availability checks. Run a few finite
-  // post-load checks so our repair happens after its render, without creating
-  // an observer/request loop.
+  // post-load checks so Overview, Study, and Reflections can be restored
+  // after its render, without creating an observer/request loop.
   document.addEventListener("DOMContentLoaded", function () {
-    setTimeout(function () { mtbRepairOverviewStudyTabs(true); }, 250);
-    setTimeout(function () { mtbRepairOverviewStudyTabs(false); }, 900);
-    setTimeout(function () { mtbRepairOverviewStudyTabs(false); }, 1800);
+    setTimeout(function () { mtbRepairEditorialTabs(true); }, 250);
+    setTimeout(function () { mtbRepairEditorialTabs(false); }, 900);
+    setTimeout(function () { mtbRepairEditorialTabs(false); }, 1800);
   });
 
   window.addEventListener("popstate", function () {
     mtbEditorialTabRepairKey = "";
-    setTimeout(function () { mtbRepairOverviewStudyTabs(true); }, 250);
+    setTimeout(function () { mtbRepairEditorialTabs(true); }, 250);
   });
 
   document.addEventListener("DOMContentLoaded", function () {

@@ -344,10 +344,29 @@
   // book.js performs asynchronous availability checks. Run a few finite
   // post-load checks so Overview, Study, Hearing, and Reflections can be restored
   // after its render, without creating an observer/request loop.
+  var mtbEditorialObserverTimer = null;
+
   document.addEventListener("DOMContentLoaded", function () {
     setTimeout(function () { mtbRepairEditorialTabs(true); }, 250);
     setTimeout(function () { mtbRepairEditorialTabs(false); }, 900);
     setTimeout(function () { mtbRepairEditorialTabs(false); }, 1800);
+
+    // book.js can finish its asynchronous tab availability render after our
+    // finite checks and replace the entire tab bar. Watch only child changes
+    // and repair missing editorial tabs after that replacement. Unlike the
+    // retired observer, this code never reorders tabs that already exist, so
+    // its own inserted buttons do not create a request loop.
+    var tabs = document.getElementById("tabs");
+    if (tabs && window.MutationObserver) {
+      var observer = new MutationObserver(function () {
+        if (mtbEditorialObserverTimer) clearTimeout(mtbEditorialObserverTimer);
+        mtbEditorialObserverTimer = setTimeout(function () {
+          mtbEditorialObserverTimer = null;
+          mtbRepairEditorialTabs(false);
+        }, 120);
+      });
+      observer.observe(tabs, { childList:true });
+    }
   });
 
   window.addEventListener("popstate", function () {

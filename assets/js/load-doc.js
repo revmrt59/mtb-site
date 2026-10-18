@@ -1654,9 +1654,7 @@ target.setAttribute("data-doc-dir", injectedDocDir);
     
     groupDwellBlocks(target);
     wireDocLinks(target);
-if (meta.type === "chapter-explanation") {
-  buildChapterStudyVerseCards(target);
-}
+/* MTB: generated Chapter Study renders its own complete verse cards. */
 
 /* ==========================================
    GROUP DWELL BLOCKS INTO ONE BOX PER VERSE

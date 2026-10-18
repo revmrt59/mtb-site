@@ -12,8 +12,7 @@
   { key: "book_introduction", label: "Book Overview" },
   { key: "chapter_overview", label: "Chapter Overview" },
   { key: "chapter_explanation", label: "Chapter Study" },
-  { key: "chapter_hearing", label: "Chapter Hearing" },
-  { key: "chapter_reflections", label: "Chapter Reflection" },
+{ key: "chapter_reflections", label: "Chapter Reflection" },
   { key: "eg_culture", label: "EG Culture" },
   { key: "resources", label: "Resources" }
 ];
@@ -126,7 +125,6 @@
 
   function normalizeTabKey(tab) {
     const t = String(tab || "").toLowerCase().trim();
-    if (t === "chapter_hearing" || t === "chapter-hearing" || t === "hearing") return "chapter_hearing";
     if (t === "chapter_insights" || t === "chapter-insights" || t === "insights" || t === "chapter_reflection" || t === "chapter-reflections" || t === "reflections") return "chapter_reflections";
     return t || "chapter_scripture";
   }
@@ -167,8 +165,7 @@
       book_introduction: "book-overview",
       chapter_overview: "chapter-overview",
       chapter_explanation: "chapter-explanation",
-      chapter_hearing: "chapter-hearing",
-      chapter_reflections: "chapter-reflections",
+chapter_reflections: "chapter-reflections",
       eg_culture: "eg-culture",
       resources: "resources"
     };
@@ -238,11 +235,7 @@ function pathForTabFile(book, chapter, tabKey) {
 
     case "chapter_explanation":
       return `/books/${testament}/${b}/${folder}/${b}-${chapterNum}-chapter-explanation.html`;
-
-    case "chapter_hearing":
-      return `/books/${testament}/${b}/${folder}/${b}-${chapterNum}-chapter-hearing.html`;
-
-    case "chapter_reflections":
+case "chapter_reflections":
       return `/books/${testament}/${b}/${folder}/${b}-${chapterNum}-chapter-reflections.html`;
 
     case "eg_culture":
@@ -417,8 +410,7 @@ async function getEditorialTabStatus(book, chapter, tabKey) {
     book_introduction: "book-overview",
     chapter_overview: "chapter-overview",
     chapter_explanation: "chapter-explanation",
-      chapter_hearing: "chapter-hearing",
-    chapter_reflections: "chapter-reflections",
+chapter_reflections: "chapter-reflections",
     eg_culture: "chapter-eg-culture"
   }[tabKey];
 

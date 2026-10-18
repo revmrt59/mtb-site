@@ -196,9 +196,8 @@
       u.searchParams.set("chapter", String(ctx.chapter));
       u.searchParams.set("tab", key);
 
-      // Give load-doc.js the exact file as a fallback against older tab maps.
-      var fileName = String(fileUrl).split("/").pop();
-      if (fileName) u.searchParams.set("doc", fileName);
+      // Editorial tabs use the site's native canonical tab-to-file routing.
+      u.searchParams.delete("doc");
 
       window.location.href = u.pathname + "?" + u.searchParams.toString();
     });
@@ -224,30 +223,23 @@
         ["chapter_explanation"],
         "Chapter Study"
       );
-      var hasHearing = !!mtbFindTab(
-        tabs,
-        ["chapter_hearing"],
-        "Chapter Hearing"
-      );
       var hasReflections = !!mtbFindTab(
         tabs,
         ["chapter_reflections", "chapter_insights"],
         "Chapter Reflection"
       );
-      if (hasOverview && hasStudy && hasHearing && hasReflections) return;
+      if (hasOverview && hasStudy && hasReflections) return;
     }
 
     var results = await Promise.all([
       mtbFindEditorialFile(ctx, "overview"),
       mtbFindEditorialFile(ctx, "study"),
-      mtbFindEditorialFile(ctx, "hearing"),
       mtbFindEditorialFile(ctx, "reflections")
     ]);
 
     var overviewUrl = results[0];
     var studyUrl = results[1];
-    var hearingUrl = results[2];
-    var reflectionsUrl = results[3];
+    var reflectionsUrl = results[2];
 
     if (overviewUrl && !mtbFindTab(
       tabs,
@@ -293,27 +285,6 @@
       else tabs.appendChild(studyButton);
     }
 
-    if (hearingUrl && !mtbFindTab(
-      tabs,
-      ["chapter_hearing"],
-      "Chapter Hearing"
-    )) {
-      var hearingButton = mtbCreateEditorialTab(
-        ctx,
-        "chapter_hearing",
-        "Chapter Hearing",
-        hearingUrl
-      );
-
-      var reflectionForHearing = mtbFindTab(
-        tabs,
-        ["chapter_reflections", "chapter_insights"],
-        "Chapter Reflection"
-      );
-      if (reflectionForHearing) tabs.insertBefore(hearingButton, reflectionForHearing);
-      else tabs.appendChild(hearingButton);
-    }
-
     if (reflectionsUrl && !mtbFindTab(
       tabs,
       ["chapter_reflections", "chapter_insights"],
@@ -340,7 +311,7 @@
   }
 
   // book.js performs asynchronous availability checks. Run a few finite
-  // post-load checks so Overview, Study, Hearing, and Reflections can be restored
+  // post-load checks so Overview, Study, and Reflections can be restored
   // after its render, without creating an observer/request loop.
   var mtbEditorialObserverTimer = null;
 

@@ -149,9 +149,7 @@
     else if (kind === "reflections") {
       names = [
         stem + "-chapter-reflections.html",
-        stem + "-chapter-reflections-draft.html",
-        stem + "-chapter-insights.html",
-        stem + "-chapter-insights-draft.html"
+        stem + "-chapter-reflections-draft.html"
       ];
     }
     else {

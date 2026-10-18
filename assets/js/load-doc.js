@@ -1,4 +1,4 @@
-﻿// load-doc.js
+// load-doc.js
 // Mastering the Bible - document loader + chapter-explanation enhancements
 // - Loads the requested generated HTML into #doc-target
 // - Fixes mojibake
@@ -100,7 +100,7 @@
     const legacyIntro = name.match(/^([a-z0-9-]+)-0-book-overview(?:-draft)?\.html$/i);
     if (legacyIntro) return { book: legacyIntro[1].toLowerCase(), chapter: 0, type: "book-overview" };
 
-    const chap = name.match(/^([a-z0-9-]+)-(\d+)-chapter-(scripture|overview|explanation|reflections|insights)(?:-draft)?\.html$/i);
+    const chap = name.match(/^([a-z0-9-]+)-(\\d+)-chapter-(scripture|orientation|overview|explanation|hearing|insights|reflections)(?:-draft)?\\.html$/i);
     if (chap) {
       const kind = chap[3].toLowerCase() === "insights" ? "reflections" : chap[3].toLowerCase();
       return { book: chap[1].toLowerCase(), chapter: Number(chap[2]), type: "chapter-" + kind };
@@ -226,6 +226,7 @@
     if (t === "resources" || t === "chapter_resources" || t === "chapter-resources") return RESOURCES_TAB;
     if (t === "scripture" || t === "chapter_scripture" || t === "chapter-scripture") return "chapter_scripture";
     if (t === "explanation" || t === "chapter_explanation" || t === "chapter-explanation") return "chapter_explanation";
+    if (t === "hearing" || t === "chapter_hearing" || t === "chapter-hearing") return "chapter_hearing";
     if (t === "overview" || t === "chapter_overview" || t === "chapter-overview") return "chapter_overview";
     if (t === "reflections" || t === "chapter_reflections" || t === "chapter-reflections" || t === "insights" || t === "chapter_insights" || t === "chapter-insights") return "chapter_reflections";
     if (t === "eg_culture" || t === "eg-culture" || t === "egculture" || t === "chapter_eg_culture" || t === "chapter-eg-culture") return "eg_culture";
@@ -243,6 +244,7 @@
     switch (normalizeTab(tab)) {
       case "chapter_scripture": return "chapter-scripture";
       case "chapter_explanation": return "chapter-explanation";
+      case "chapter_hearing": return "chapter-hearing";
       case "chapter_overview": return "chapter-overview";
       case "chapter_reflections": return "chapter-reflections";
       case "eg_culture": return "chapter-eg-culture";
@@ -1822,7 +1824,16 @@ if (String(chapterParamRaw) === "0" && String(tabParamRaw) === "book_home") {
   const tabLower = String(tabParam).toLowerCase();
 
   // Honor doc= when Resources is active OR when the doc itself is a resources page.
-  const shouldUseDoc = docLooksLikeResources || normalizeTab(tabParam) === RESOURCES_TAB;
+  const normalizedEditorialTab = normalizeTab(tabParam);
+  const shouldUseDoc = !!safeDoc && (
+    docLooksLikeResources ||
+    normalizedEditorialTab === RESOURCES_TAB ||
+    normalizedEditorialTab === "chapter_overview" ||
+    normalizedEditorialTab === "chapter_explanation" ||
+    normalizedEditorialTab === "chapter_hearing" ||
+    normalizedEditorialTab === "chapter_reflections" ||
+    normalizedEditorialTab === "eg_culture"
+  );
 
   // Determine the chapter we should use for chapter-based docs.
   // If chapter is missing/0, but the doc implies a real chapter, use that.

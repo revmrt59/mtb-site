@@ -14,6 +14,7 @@
   { name: "Obadiah", slug: "obadiah", chapters: 1 },
  // { name: "Jonah", slug: "jonah", chapters: 4 },
   // { name: "Habakkuk", slug: "habakkuk", chapters: 3 },
+  { name: "Matthew", slug: "matthew", chapters: 1 },
     //{ name: "John", slug: "john", chapters: 21 },
   { name: "Philemon", slug: "philemon", chapters: 1 },
   { name: "2John", slug: "2-john", chapters: 1 },

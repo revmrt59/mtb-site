@@ -65,5 +65,21 @@
   window.MTB.hasVerseExplanationFile=async function(){return !!(await findStudyPath());};
 
   function cleanup(){cleanLegacyStudy(document.querySelector("#doc-target"));}
+
+  // Own the Chapter Scripture "i" button at capture phase.  Older load-doc.js
+  // versions also attach an explanation handler; stopping propagation here
+  // prevents that retired MAIN IDEA / SPIRIT & LIFE modal from ever opening.
+  document.addEventListener("click",function(e){
+    var button=e.target&&e.target.closest?e.target.closest(".mtb-verse-info-button"):null;
+    if(!button)return;
+    var cell=button.closest(".mtb-scripture-verse-cell");
+    var numberEl=cell?cell.querySelector(".mtb-scripture-verse-number"):null;
+    var verse=parseInt(numberEl?numberEl.textContent:"",10);
+    if(!Number.isFinite(verse)||verse<1)return;
+    e.preventDefault();
+    e.stopImmediatePropagation();
+    openVerse(verse);
+  },true);
+
   document.addEventListener("DOMContentLoaded",cleanup);document.addEventListener("mtb:doc-injected",cleanup);window.addEventListener("popstate",function(){cacheKey="";cachePath="";cacheDoc=null;setTimeout(cleanup,50);});
 })();

@@ -1440,7 +1440,7 @@ function addScriptureExplainButtons(root, meta, scriptureDocPath) {
   // ---------------------------------------
   window.MTB = window.MTB || {};
 
-  window.MTB.openVerseExplanation = function (verse) {
+  window.MTB.openVerseExplanationLegacy = function (verse) {
     const verseNumber = Number(verse);
     if (!Number.isFinite(verseNumber)) return;
     openVerseExplanation(verseNumber);

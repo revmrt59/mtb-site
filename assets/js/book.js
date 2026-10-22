@@ -11,7 +11,8 @@
   { key: "chapter_scripture", label: "Chapter Scripture" },
   { key: "book_introduction", label: "Book Overview" },
   { key: "chapter_overview", label: "Chapter Overview" },
-  { key: "chapter_explanation", label: "Chapter Study" },
+  { key: "chapter_explanation", label: "Chapter Study" },
+  { key: "chapter_hearing", label: "Hearing God's Voice" },
 { key: "chapter_reflections", label: "Chapter Reflection" },
   { key: "eg_culture", label: "EG Culture" },
   { key: "resources", label: "Resources" }
@@ -164,7 +165,8 @@
       chapter_scripture: "chapter-scripture",
       book_introduction: "book-overview",
       chapter_overview: "chapter-overview",
-      chapter_explanation: "chapter-explanation",
+      chapter_explanation: "chapter-explanation",
+      chapter_hearing: "chapter-hearing",
 chapter_reflections: "chapter-reflections",
       eg_culture: "eg-culture",
       resources: "resources"
@@ -234,7 +236,10 @@ function pathForTabFile(book, chapter, tabKey) {
       return `/books/${testament}/${b}/${folder}/${b}-${chapterNum}-chapter-overview.html`;
 
     case "chapter_explanation":
-      return `/books/${testament}/${b}/${folder}/${b}-${chapterNum}-chapter-explanation.html`;
+      return `/books/${testament}/${b}/${folder}/${b}-${chapterNum}-chapter-explanation.html`;
+
+    case "chapter_hearing":
+      return `/books/${testament}/${b}/${folder}/${b}-${chapterNum}-chapter-hearing.html`;
 case "chapter_reflections":
       return `/books/${testament}/${b}/${folder}/${b}-${chapterNum}-chapter-reflections.html`;
 
@@ -409,7 +414,8 @@ async function getEditorialTabStatus(book, chapter, tabKey) {
   const expectedDocType = {
     book_introduction: "book-overview",
     chapter_overview: "chapter-overview",
-    chapter_explanation: "chapter-explanation",
+    chapter_explanation: "chapter-explanation",
+      chapter_hearing: "chapter-hearing",
 chapter_reflections: "chapter-reflections",
     eg_culture: "chapter-eg-culture"
   }[tabKey];

@@ -44,8 +44,50 @@
 
   document.addEventListener("click", handleStudyControls);
 
+
+  function handleHearingControls(event) {
+    var button = event.target.closest ? event.target.closest("[data-mtb-hearing-action]") : null;
+    if (!button) return;
+    var root = button.closest ? button.closest(".mtb-chapter-hearing") : null;
+    if (!root) return;
+    var action = button.getAttribute("data-mtb-hearing-action");
+    var shouldOpen = action === "expand";
+    if (!shouldOpen && action !== "collapse") return;
+    var panels = root.querySelectorAll("details.mtb-hearing-verse");
+    for (var i = 0; i < panels.length; i++) panels[i].open = shouldOpen;
+    event.preventDefault();
+  }
+
+  document.addEventListener("click", handleHearingControls);
+
+  function compactHearingControls() {
+    var root = document.querySelector("#doc-target .mtb-chapter-hearing");
+    if (!root) return;
+
+    var controls = root.querySelector(".mtb-study-controls");
+    if (!controls) return;
+
+    var printWrap = document.querySelector("#doc-target > .mtb-print-controls, #doc-target .mtb-doc > .mtb-print-controls");
+    if (!printWrap) return;
+
+    var printButton = printWrap.querySelector("button,a");
+    if (!printButton) return;
+
+    printButton.classList.add("mtb-study-control");
+    printButton.classList.add("mtb-hearing-print-button");
+    controls.appendChild(printButton);
+    printWrap.remove();
+  }
+
+  document.addEventListener("mtb:doc-injected", function () {
+    setTimeout(compactHearingControls, 0);
+  });
+  document.addEventListener("DOMContentLoaded", function () {
+    setTimeout(compactHearingControls, 0);
+  });
+
   // -------------------------------------------------------------
-  // Chapter Overview / Study / Hearing / Reflections tab compatibility
+  // Chapter Overview / Study / Hearing Gods Voice / Reflections tab compatibility
   // -------------------------------------------------------------
   // Deliberately finite: do NOT observe the tabs container. The earlier
   // MutationObserver-based repair could retrigger itself after moving tabs,
@@ -223,23 +265,30 @@
         ["chapter_explanation"],
         "Chapter Study"
       );
+      var hasHearing = !!mtbFindTab(
+        tabs,
+        ["chapter_hearing"],
+        "Hearing God's Voice"
+      );
       var hasReflections = !!mtbFindTab(
         tabs,
         ["chapter_reflections", "chapter_insights"],
         "Chapter Reflection"
       );
-      if (hasOverview && hasStudy && hasReflections) return;
+      if (hasOverview && hasStudy && hasHearing && hasReflections) return;
     }
 
     var results = await Promise.all([
       mtbFindEditorialFile(ctx, "overview"),
       mtbFindEditorialFile(ctx, "study"),
+      mtbFindEditorialFile(ctx, "hearing"),
       mtbFindEditorialFile(ctx, "reflections")
     ]);
 
     var overviewUrl = results[0];
     var studyUrl = results[1];
-    var reflectionsUrl = results[2];
+    var hearingUrl = results[2];
+    var reflectionsUrl = results[3];
 
     if (overviewUrl && !mtbFindTab(
       tabs,
@@ -283,6 +332,27 @@
 
       if (reflectionExisting) tabs.insertBefore(studyButton, reflectionExisting);
       else tabs.appendChild(studyButton);
+    }
+
+    if (hearingUrl && !mtbFindTab(
+      tabs,
+      ["chapter_hearing"],
+      "Hearing God's Voice"
+    )) {
+      var hearingButton = mtbCreateEditorialTab(ctx,"chapter_hearing","Hearing God's Voice",hearingUrl);
+      var reflectionForHearing = mtbFindTab(tabs,["chapter_reflections", "chapter_insights"],"Chapter Reflection");
+      if (reflectionForHearing) tabs.insertBefore(hearingButton, reflectionForHearing);
+      else tabs.appendChild(hearingButton);
+    }
+
+    // Enforce canonical editorial order even when all buttons already existed.
+    // Hearing God's Voice belongs immediately after Chapter Study.
+    var studyForOrder = mtbFindTab(tabs,["chapter_explanation"],"Chapter Study");
+    var hearingForOrder = mtbFindTab(tabs,["chapter_hearing"],"Hearing God's Voice");
+    if (studyForOrder && hearingForOrder) {
+      if (studyForOrder.nextElementSibling !== hearingForOrder) {
+        tabs.insertBefore(hearingForOrder, studyForOrder.nextElementSibling);
+      }
     }
 
     if (reflectionsUrl && !mtbFindTab(

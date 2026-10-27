@@ -72,6 +72,10 @@
   document.addEventListener("click",function(e){
     var button=e.target&&e.target.closest?e.target.closest(".mtb-verse-info-button"):null;
     if(!button)return;
+    // The h button has its own Hearing God's Voice handler. Do not let the
+    // Chapter Study capture handler claim it.
+    if(button.classList && button.classList.contains("mtb-verse-hearing-button"))return;
+    if(button.classList && button.classList.contains("mtb-verse-reflection-button"))return;
     var cell=button.closest(".mtb-scripture-verse-cell");
     var numberEl=cell?cell.querySelector(".mtb-scripture-verse-number"):null;
     var verse=parseInt(numberEl?numberEl.textContent:"",10);

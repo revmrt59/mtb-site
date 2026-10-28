@@ -11,7 +11,7 @@
   { key: "chapter_scripture", label: "Chapter Scripture" },
   { key: "book_introduction", label: "Book Overview" },
   { key: "chapter_overview", label: "Chapter Overview" },
-  { key: "chapter_explanation", label: "Chapter Study" },
+  { key: "chapter_explanation", label: "Chapter Study" },
   { key: "chapter_hearing", label: "Hearing God's Voice" },
 { key: "chapter_reflections", label: "Chapter Reflection" },
   { key: "eg_culture", label: "EG Culture" },

@@ -275,7 +275,13 @@
         ["chapter_reflections", "chapter_insights"],
         "Chapter Reflection"
       );
-      if (hasOverview && hasStudy && hasHearing && hasReflections) return;
+      if (hasOverview && hasStudy && hasHearing && hasReflections) {
+        var resourcesFast = mtbFindTab(tabs,["resources", "chapter_resources"],"Resources");
+        if (resourcesFast && resourcesFast !== tabs.lastElementChild) {
+          tabs.appendChild(resourcesFast);
+        }
+        return;
+      }
     }
 
     var results = await Promise.all([
@@ -375,6 +381,18 @@
 
       if (cultureExisting) tabs.insertBefore(reflectionsButton, cultureExisting);
       else tabs.appendChild(reflectionsButton);
+    }
+
+    // Resources is intentionally the final chapter tab.  book.js may render
+    // it earlier from its own availability list, so enforce the visual order
+    // after all editorial tab repairs have completed.
+    var resourcesForOrder = mtbFindTab(
+      tabs,
+      ["resources", "chapter_resources"],
+      "Resources"
+    );
+    if (resourcesForOrder && resourcesForOrder !== tabs.lastElementChild) {
+      tabs.appendChild(resourcesForOrder);
     }
 
     mtbEditorialTabRepairKey = contextKey;

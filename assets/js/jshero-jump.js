@@ -7,25 +7,27 @@
   const MTB_CONTENT = [
   // { name: "3 John", slug: "3-john", chapters: 1 },
   // { name: "Exodus", slug: "exodus", chapters: 40 },
-   { name: "1Samuel", slug: "1-samuel", chapters: 24 },
-    { name: "1Chronicles", slug: "1-chronicles", chapters: 29 },
-   // { name: "Ruth", slug: "ruth", chapters: 4 },
+  { name: "1Samuel", slug: "1-samuel", chapters: 24 },
+  { name: "1Chronicles", slug: "1-chronicles", chapters: 29 },
+  { name: "Ruth", slug: "ruth", chapters: 4 },
    // { name: "Nehemiah", slug: "nehemiah", chapters: 13 },
   { name: "Psalms", slug: "psalms", chapters: 150 },
+  { name: "Song of Songs", slug: "song-of-solomon", chapters: 8 },
   { name: "Obadiah", slug: "obadiah", chapters: 1 },
  // { name: "Jonah", slug: "jonah", chapters: 4 },
   // { name: "Habakkuk", slug: "habakkuk", chapters: 3 },
  //  { name: "Matthew", slug: "matthew", chapters: 1 },
     //{ name: "John", slug: "john", chapters: 21 },
-  // { name: "Philemon", slug: "philemon", chapters: 1 },
-  // { name: "2John", slug: "2-john", chapters: 1 },
+  { name: "Titus", slug: "titus", chapters: 3},
+  { name: "Philemon", slug: "philemon", chapters: 1 },
+  { name: "2John", slug: "2-john", chapters: 1 },
  // { name: "3 John", slug: "3-john", chapters: 1 },
   //  { name: "Revelation", slug: "revelation", chapters: 22 },
   
  // { name: "Habakkuk", slug: "habakkuk", chapters: 3 },
  
   // { name: "Second Timothy", slug: "2-timothy", chapters: 4 },
-  // { name: "Titus", slug: "titus", chapters: 3 }
+ 
 ];
 
 // Make available to book.html too (so you don’t maintain two lists)

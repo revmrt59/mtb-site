@@ -1,0 +1,101 @@
+<section class="mtb-doc mtb-doc--read" data-doc-type="chapter-overview" data-mtb-status="complete">
+<style>
+.mtb-print-controls{display:flex;justify-content:flex-end;gap:8px;margin:0 0 14px;padding:0 4px}
+.mtb-print-button{appearance:none;border:1px solid #b9c8d5;border-radius:8px;background:#fff;padding:9px 14px;color:#173a5e;font:700 14px Arial,Helvetica,sans-serif;cursor:pointer}
+.mtb-print-button:hover{background:#f2f6f9}
+@media print{
+  @page{size:auto;margin:.45in}
+  html,body{background:#fff!important;color:#000!important}
+  .mtb-print-controls,.mtb-study-controls,.mtb-reflections-controls{display:none!important}
+  .mtb-doc{display:block!important;width:100%!important;max-width:none!important;margin:0!important;padding:0!important}
+  .mtb-overview-hero,.mtb-study-hero,.mtb-reflections-hero,.mtb-culture-hero{box-shadow:none!important;background:#fff!important;border-color:#777!important}
+  .mtb-overview-grid,.mtb-reflections-grid,.mtb-culture-grid,.mtb-study-verse-grid{display:block!important}
+  .mtb-overview-card,.mtb-reflections-card,.mtb-culture-card,.mtb-study-verse,.mtb-study-verse-panel,.mtb-intro-card{
+    display:block!important;width:100%!important;max-width:none!important;height:auto!important;margin:0 0 12pt!important;
+    break-inside:avoid;page-break-inside:avoid;box-shadow:none!important;background:#fff!important;color:#000!important
+  }
+  details.mtb-study-verse,details.mtb-reflection-section{display:block!important;overflow:visible!important}
+  details.mtb-study-verse>summary,details.mtb-reflection-section>summary{display:flex!important;background:#fff!important;color:#000!important;border-bottom:1px solid #777!important}
+  details.mtb-study-verse>summary:after,details.mtb-reflection-section>summary:after{display:none!important}
+  details.mtb-study-verse>.mtb-study-verse-body,details.mtb-reflection-section>.mtb-reflection-section-body{display:block!important}
+  h1,h2,h3,h4{break-after:avoid;page-break-after:avoid;color:#000!important}
+  p,li{orphans:3;widows:3}
+  a{color:#000!important;text-decoration:none!important}
+  a[href]::after{content:none!important}
+}
+</style>
+<div class="mtb-print-controls"><button type="button" class="mtb-print-button" onclick="(function(button){var doc=button.closest('.mtb-doc')||document;var panels=Array.prototype.slice.call(doc.querySelectorAll('details'));panels.forEach(function(panel){panel.open=true;});window.print();})(this)">&#128438; Print This Page</button></div>
+<style>
+.mtb-chapter-overview-dashboard{--mtb-navy:#173a5e;--mtb-navy-2:#2b587f;--mtb-gold:#b7832f;--mtb-blue-soft:#eef4f9;--mtb-border:#d7e0e8;--mtb-text:#1d2935;width:100%;max-width:1600px;margin:0 auto;padding:2px 4px 30px;color:var(--mtb-text);font-family:Arial,Helvetica,sans-serif}.mtb-chapter-overview-dashboard *{box-sizing:border-box}
+.mtb-overview-glance{margin:0 0 18px;overflow:hidden;border:1px solid #cbd8e3;border-radius:14px;background:linear-gradient(135deg,#f7fafc 0%,#e8f0f7 100%);box-shadow:0 4px 15px rgba(28,48,66,.045)}
+.mtb-overview-glance-head{display:flex;align-items:center;justify-content:space-between;gap:20px;padding:18px 24px 13px;border-bottom:1px solid rgba(23,58,94,.12);background:var(--mtb-blue-soft)}
+.mtb-overview-eyebrow{margin:0 0 4px;color:var(--mtb-gold);font-size:.78rem;font-weight:800;letter-spacing:.13em;text-transform:uppercase}.mtb-overview-title{margin:0;color:var(--mtb-navy);font-size:clamp(1.4rem,2.6vw,1.95rem);line-height:1.1}.mtb-overview-badge{flex:0 0 auto;padding:9px 15px;border:1px solid rgba(23,58,94,.18);border-radius:999px;background:#fff;color:var(--mtb-navy);font-weight:800}
+.mtb-overview-glance-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:0;padding:8px 22px 13px;background:#fff}.mtb-overview-glance-item{min-width:0;padding:10px 12px;font-size:1rem;line-height:1.42}.mtb-overview-glance-item:nth-child(even){border-left:1px solid rgba(23,58,94,.11)}.mtb-overview-glance-label{display:inline;color:var(--mtb-navy);font-weight:800}.mtb-overview-glance-content{display:inline}.mtb-overview-glance-content p{display:inline;margin:0}.mtb-overview-glance-structure .mtb-overview-glance-content{display:block;margin-top:4px}.mtb-overview-glance-structure ul,.mtb-overview-glance-structure ol{margin:4px 0 0;padding-left:1.25em}.mtb-overview-glance-structure li{margin:0 0 2px}.mtb-overview-glance-structure li p{display:block;margin:0}.mtb-overview-glance-keyverse .mtb-overview-glance-content{font-style:italic}
+.mtb-overview-deeper{margin:0}.mtb-overview-deeper>summary{display:flex;align-items:center;justify-content:space-between;gap:16px;cursor:pointer;list-style:none;padding:14px 18px;border:1px solid #cbd8e3;border-radius:10px;background:#f4f7fa;color:var(--mtb-navy);font-size:1rem;font-weight:800;user-select:none}.mtb-overview-deeper>summary::-webkit-details-marker{display:none}.mtb-overview-deeper>summary::after{content:'+';font-size:1.35rem;line-height:1}.mtb-overview-deeper[open]>summary{margin-bottom:16px;border-color:#b8cad9;background:#eef4f9}.mtb-overview-deeper[open]>summary::after{content:'−'}
+.mtb-overview-grid{display:grid;grid-template-columns:repeat(12,minmax(0,1fr));gap:16px;align-items:stretch}.mtb-overview-card{min-width:0;overflow:hidden;border:1px solid var(--mtb-border);border-top:4px solid var(--mtb-navy-2);border-radius:12px;background:#fff;box-shadow:0 4px 15px rgba(28,48,66,.055)}.mtb-overview-card-heart{grid-column:1/-1}.mtb-overview-card-sections{grid-column:1/span 6}.mtb-overview-card-matters{grid-column:7/span 6}.mtb-overview-card-themes{grid-column:1/span 6}.mtb-overview-card-words{grid-column:7/span 6}.mtb-overview-card-psalm-author{grid-column:1/span 4}.mtb-overview-card-psalm-occasion{grid-column:5/span 4}.mtb-overview-card-psalm-kind{grid-column:9/span 4}.mtb-overview-card-header{margin:0;padding:12px 16px 10px;border-bottom:1px solid #e5ebf0;background:var(--mtb-blue-soft);color:var(--mtb-navy);font-size:.96rem;font-weight:800}.mtb-overview-card-body{padding:16px 18px 18px;font-size:1rem;line-height:1.48;overflow-wrap:anywhere}.mtb-overview-card-heart .mtb-overview-card-body{font-size:1.04rem}.mtb-overview-card-body p{margin:0 0 .72em}.mtb-overview-card-body p:last-child{margin-bottom:0}.mtb-overview-card-body ul,.mtb-overview-card-body ol{margin:0;padding-left:1.25em}.mtb-overview-card-body li{margin:0 0 .35em}
+@media(max-width:980px){.mtb-overview-card{grid-column:span 6!important}.mtb-overview-card-heart{grid-column:1/-1!important}.mtb-overview-glance-grid{grid-template-columns:1fr}.mtb-overview-glance-item:nth-child(even){border-left:0}.mtb-overview-glance-item+.mtb-overview-glance-item{border-top:1px solid rgba(23,58,94,.09)}}
+@media(max-width:760px){.mtb-overview-grid{grid-template-columns:1fr}.mtb-overview-card{grid-column:1/-1!important}.mtb-overview-glance-head{align-items:flex-start;flex-direction:column;padding:17px 18px 12px}.mtb-overview-glance-grid{padding:6px 10px 12px}.mtb-overview-glance-item{padding:9px 8px}.mtb-overview-deeper>summary{padding:13px 15px}}
+@media print{.mtb-overview-deeper>summary{display:none!important}.mtb-overview-deeper:not([open])>.mtb-overview-grid{display:grid!important}}
+</style><div class="mtb-chapter-overview-dashboard"><section class="mtb-overview-glance" aria-labelledby="mtb-at-a-glance-title"><div class="mtb-overview-glance-head"><div><p class="mtb-overview-eyebrow">Chapter Overview</p><h1 id="mtb-at-a-glance-title" class="mtb-overview-title">At a Glance</h1></div><div class="mtb-overview-badge">Chapter 30</div></div><div class="mtb-overview-glance-grid"><div class="mtb-overview-glance-item"><span class="mtb-overview-glance-label">Main Idea: </span><div class="mtb-overview-glance-content"><p>Proverbs 30 records the words of Agur, who confesses that he cannot reach the knowledge of the Holy One alone, asks the name of God’s Son, rests on God’s pure word, and teaches humility through numbered sayings drawn from life and creation.</p></div></div><div class="mtb-overview-glance-item"><span class="mtb-overview-glance-label">Setting: </span><div class="mtb-overview-glance-content"><p>Agur the son of Jakeh is otherwise unknown, and the book presents him as a wise man distinct from Solomon. His words follow the proverbs copied by Hezekiah’s men (25:1) and precede King Lemuel’s (31:1).</p></div></div><div class="mtb-overview-glance-item mtb-overview-glance-structure"><span class="mtb-overview-glance-label">Chapter Outline: </span><div class="mtb-overview-glance-content"><ul>
+<li><div data-custom-style="List Bullet">
+<p><strong>Proverbs 30:1–4 — Agur’s Confession and His Question</strong></p>
+</div></li>
+<li><div data-custom-style="List Bullet">
+<p><strong>Proverbs 30:5–6 — Every Word of God Is Pure</strong></p>
+</div></li>
+<li><div data-custom-style="List Bullet">
+<p><strong>Proverbs 30:7–9 — Neither Poverty nor Riches</strong></p>
+</div></li>
+<li><div data-custom-style="List Bullet">
+<p><strong>Proverbs 30:10–14 — A Generation That Curses and Devours</strong></p>
+</div></li>
+<li><div data-custom-style="List Bullet">
+<p><strong>Proverbs 30:15–17 — Things Never Satisfied</strong></p>
+</div></li>
+<li><div data-custom-style="List Bullet">
+<p><strong>Proverbs 30:18–20 — Four Ways Too Wonderful and the Adulterous Woman</strong></p>
+</div></li>
+<li><div data-custom-style="List Bullet">
+<p><strong>Proverbs 30:21–23 — Four Things the Earth Cannot Bear</strong></p>
+</div></li>
+<li><div data-custom-style="List Bullet">
+<p><strong>Proverbs 30:24–28 — Four Small but Wise Creatures</strong></p>
+</div></li>
+<li><div data-custom-style="List Bullet">
+<p><strong>Proverbs 30:29–31 — Four Things Stately in Walk</strong></p>
+</div></li>
+<li><div data-custom-style="List Bullet">
+<p><strong>Proverbs 30:32–33 — Put Your Hand on Your Mouth</strong></p>
+</div></li>
+</ul></div></div><div class="mtb-overview-glance-item mtb-overview-glance-keyverse"><span class="mtb-overview-glance-label">Key Verse: </span><div class="mtb-overview-glance-content"><p>“Every word of God is pure; He is a shield to those who put their trust in Him.” (Proverbs 30:5)</p></div></div></div></section><details class="mtb-overview-deeper"><summary>Go Deeper</summary><div class="mtb-overview-grid"><article class="mtb-overview-card mtb-overview-card-heart"><h2 class="mtb-overview-card-header">The Heart of the Chapter</h2><div class="mtb-overview-card-body"><p>Agur begins where most teachers would end, with what he does not know: “I neither learned wisdom Nor have knowledge of the Holy One” (30:3). His confession is the fear of the LORD at work, a right view of God that sees how far the Creator stands above human reach. He presses the point with questions only the Creator can answer, and ends, “What is His name, and what is His Son’s name, If you know?” (30:4). Agur leaves the name unspoken. The answer comes in Jesus: “No one has ascended to heaven but He who came down from heaven, that is, the Son of Man” (John 3:13).</p>
+<p>Unable to climb to heaven, Agur stands on what God has spoken, “Every word of God is pure” (30:5), and asks only for truth and daily bread (30:8). He then counts what he sees in threes and fours: a generation pure in its own eyes, appetites that never say “Enough!”, and small creatures that are exceedingly wise. Among the wonders is “the way of a man with a virgin” (30:19), set beside an adulterous woman who says, “I have done no wickedness” (30:20). Read in light of Christ and His Bride (Ephesians 5:32), faithful love and its counterfeit stand side by side, just before the book’s closing portrait of a virtuous wife.</p></div></article><article class="mtb-overview-card mtb-overview-card-sections"><h2 class="mtb-overview-card-header">Chapter Sections</h2><div class="mtb-overview-card-body"><p><strong>Proverbs 30:1–4 — Agur’s Confession and His Question</strong></p>
+<p>Agur opens with a confession instead of confident instruction, admitting that he lacks understanding and the knowledge of the Holy One, and that humility is where his wisdom begins. He then asks who has gone up to heaven and rules the wind, the waters, and the ends of the earth, and what the name of that One and of His Son might be, a question answered in Jesus, the Son of Man who came down from heaven (John 3:13).</p>
+<p><strong>Proverbs 30:5–6 — Every Word of God Is Pure</strong></p>
+<p>Over against his own limits Agur sets the reliability of God, whose every word is tested and true and who shields those who trust Him. Because His words are pure, anyone who adds his own ideas to them invites God’s rebuke and is exposed as a liar (compare Deuteronomy 4:2).</p>
+<p><strong>Proverbs 30:7–9 — Neither Poverty nor Riches</strong></p>
+<p>Agur asks God for two things before he dies: a life kept far from falsehood, and the food allotted to him each day without poverty or riches. He knows that fullness can lead a man to say “Who is the LORD?” and that want can tempt him to steal, so he asks to stay faithful between the two.</p>
+<p><strong>Proverbs 30:10–14 — A Generation That Curses and Devours</strong></p>
+<p>A warning not to slander a servant to his master, since even the lowly have a just cause before God, leads into four portraits of a corrupt generation. It curses its parents, counts itself clean while still unwashed, looks down on everyone with lofty eyes, and ends by devouring the poor with teeth like swords.</p>
+<p><strong>Proverbs 30:15–17 — Things Never Satisfied</strong></p>
+<p>The leech’s two daughters, crying “Give and Give!”, introduce four things that never say “Enough!”: the grave, the barren womb, the thirsty earth, and fire, though the barren womb pictures unfulfilled longing rather than greed. The section returns to the generation of 30:11 with a grim warning that the eye that mocks father and mother will meet a shameful, unburied end.</p>
+<p><strong>Proverbs 30:18–20 — Four Ways Too Wonderful and the Adulterous Woman</strong></p>
+<p>Agur marvels at four ways that leave no trail: an eagle in the air, a serpent on a rock, a ship at sea, and the love of a man and a young woman. As a layered, spiritual reading they picture the ascension of Christ or the Spirit’s movement, Satan finding no foothold on Christ the Rock (John 14:30), the Church carried through the world by the Spirit, and Christ with His Bride (Ephesians 5:32), while the adulterous woman who wipes her mouth and denies any wrong is the counterfeit of faithful love.</p>
+<p><strong>Proverbs 30:21–23 — Four Things the Earth Cannot Bear</strong></p>
+<p>The earth trembles under four reversals: a servant suddenly made king, a fool filled with food, a hateful woman who gets married, and a maidservant who takes her mistress’s place. The danger lies in the sudden upheaval and the character carried into it, for a wise servant can rule well (17:2).</p>
+<p><strong>Proverbs 30:24–28 — Four Small but Wise Creatures</strong></p>
+<p>Ants, rock badgers, locusts, and the spider are little on the earth yet exceedingly wise. Each teaches a plain kind of wisdom that does not depend on strength: preparing in summer, taking shelter in the crags, advancing together in order, and holding on until it reaches a king’s palace.</p>
+<p><strong>Proverbs 30:29–31 — Four Things Stately in Walk</strong></p>
+<p>The last numerical saying turns to four that move with dignity: the lion that turns away from nothing, the greyhound, the male goat, and a king with his troops around him. The list climbs to the king, whose bearing is most stately when his army stands with him.</p>
+<p><strong>Proverbs 30:32–33 — Put Your Hand on Your Mouth</strong></p>
+<p>Anyone who has foolishly exalted himself or plotted evil is told to put his hand over his mouth before pride does more harm. As churning brings butter and wringing the nose brings blood, pressing anger always ends in strife.</p></div></article><article class="mtb-overview-card mtb-overview-card-matters"><h2 class="mtb-overview-card-header">Why This Chapter Matters</h2><div class="mtb-overview-card-body"><p>Proverbs 30 keeps the book’s practical wisdom from becoming self-confidence. Agur’s honest confession shows that the way into wisdom starts with admitting how little anyone knows of God unaided, and his question about God’s Son points past Proverbs to the One who came down from heaven to make the Father known.</p>
+<p>Agur also guards the way God’s word is handled. Because every word of God is pure, no one may add to it, so even faithful interpretation must never be passed off as Scripture itself (30:6). His prayer for neither poverty nor riches (30:8–9) names plainly what many forget, that plenty and want can each pull a heart away from God.</p></div></article><article class="mtb-overview-card mtb-overview-card-themes"><h2 class="mtb-overview-card-header">Key Themes to Watch For</h2><div class="mtb-overview-card-body"><p><strong>Humility before the Holy One.</strong> Agur confesses his limits at the start and tells the proud to cover their mouths at the end, framing the chapter with humility (30:2–3, 32).</p>
+<p><strong>God’s pure word.</strong> Every word of God is pure, and He is a shield to those who trust Him; nothing is to be added to His words (30:5–6).</p>
+<p><strong>Enough and never enough.</strong> Agur asks for the food allotted to him (30:8–9), while the leech’s daughters, the grave, and the fire never say “Enough!” (30:15–16).</p>
+<p><strong>Pride and contempt.</strong> A generation that curses its parents, thinks itself clean, and looks down on others ends by devouring the poor, and the eye that mocks a father comes to a shameful end (30:11–14, 17).</p>
+<p><strong>Wonder at God’s world.</strong> Agur studies eagles and ships, ants and locusts, lions and kings, and finds lessons and mysteries in each (30:18–19, 24–31).</p></div></article><article class="mtb-overview-card mtb-overview-card-words"><h2 class="mtb-overview-card-header">Key Words &amp; Concepts</h2><div class="mtb-overview-card-body"><p><strong>Agur the son of Jakeh (30:1).</strong> A wise man known only from this chapter and distinct from Solomon. The NKJV calls his words an “utterance” (30:1).</p>
+<p><strong>The Holy One (30:3).</strong> A name for God that stresses His holiness, His being unlike any other. Agur’s admission that he lacks this knowledge is itself the right view of God with which wisdom begins (9:10).</p>
+<p><strong>Three things, yes four (30:15, 18, 21, 29).</strong> A numerical pattern that groups observations and lands on the last item for emphasis, as in 6:16. It is not meant to set three against four.</p>
+<p><strong>Virgin (30:19).</strong> A young woman of marriageable age. The Hebrew word (’almah) is the one used in Isaiah 7:14, and in the natural sense Agur marvels at the mystery of love between a man and a young woman.</p>
+<p><strong>The adulterous woman (30:20).</strong> She “eats and wipes her mouth,” treating sin as lightly as a finished meal, and denies any wrong. Placed beside the man and the virgin, she is the counterfeit of faithful love, as the harlot stands against the Bride.</p>
+<p><strong>Put your hand on your mouth (30:32).</strong> A gesture of silence before God or others, as when Job said, “I lay my hand over my mouth” (Job 40:4). Agur’s closing counsel brings the chapter back to the humility with which it opened.</p></div></article></div></details></div>
+</section>

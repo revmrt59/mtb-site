@@ -391,6 +391,7 @@ body { margin: 0; }
       <div class="book-hero-controls">
          <button id="book-hero-canonical" type="button">Overall Bible Context</button>
         <button id="book-hero-intro" type="button" style="display:none" disabled>Book Overview</button>
+        <button id="book-hero-supplement" type="button" style="display:none" disabled></button>
       <!--   <button id="book-hero-resources" type="button">Book Resources</button>  -->
       </div>
     </div>
@@ -436,9 +437,9 @@ body { margin: 0; }
   </section>
 </main>
 <script src="assets/js/jshero-jump.js"></script>
-<script src="/assets/js/book.js?v=1793711017173"></script>
+<script src="/assets/js/book.js?v=1793755104192"></script>
  <script src="/assets/js/scripture-controls.js"></script> 
-<script src="/assets/js/load-doc.js?v=1793711017173"></script>
+<script src="/assets/js/load-doc.js?v=1793755104192"></script>
 <script src="assets/js/chapter-scripture-json.js"></script>
 <script src="assets/js/wordstudy-hover.js"></script>
 <script src="assets/js/resource-popup.js"></script>
@@ -457,6 +458,7 @@ document.addEventListener("DOMContentLoaded", function () {
   const chapterWrap = document.getElementById("book-hero-chapters");
   const canonicalBtn = document.getElementById("book-hero-canonical");
   const introBtn = document.getElementById("book-hero-intro");
+  const supplementBtn = document.getElementById("book-hero-supplement");
   const resourcesBtn = document.getElementById("book-hero-resources");
   const heroTitle = document.getElementById("book-hero-title");
   const docHeader = document.querySelector(".doc-header");
@@ -737,6 +739,44 @@ function getCanonicalContextForBook(bookSlug) {
   return { testament: found[0], section: found[1] };
 }
 
+  // The publisher writes this manifest only for a real source supplement.
+  let supplementRequest = null;
+  function getBookSupplement() {
+    if (supplementRequest) return supplementRequest;
+    supplementRequest = (async function () {
+      if (!/^[a-z0-9-]+$/.test(book)) return null;
+      for (const testament of ["old-testament", "new-testament"]) {
+        const folder = `/books/${testament}/${book}/000-book/`;
+        try {
+          const response = await fetch(folder + "book-supplement.json", {cache: "no-store"});
+          if (!response.ok) continue;
+          const entry = await response.json();
+          if (typeof entry.title !== "string" || !entry.title.trim() ||
+              typeof entry.file !== "string" || !entry.file.startsWith(`book-supplement-${book}-`) ||
+              !/^book-supplement-[a-z0-9-]+\.html$/.test(entry.file)) continue;
+          const href = folder + entry.file;
+          const documentResponse = await fetch(href, {cache: "no-store"});
+          if (!documentResponse.ok) continue;
+          const html = await documentResponse.text();
+          if (!/data-doc-type=["']book-supplement["']/i.test(html)) continue;
+          return {title: entry.title.trim(), href};
+        } catch (_) { /* Missing manifests and server fallback pages keep the button hidden. */ }
+      }
+      return null;
+    })();
+    return supplementRequest;
+  }
+
+  async function updateBookSupplementButton() {
+    if (!supplementBtn) return;
+    const supplement = await getBookSupplement();
+    if (!supplement) return;
+    supplementBtn.textContent = supplement.title;
+    supplementBtn.disabled = false;
+    supplementBtn.style.display = "";
+    supplementBtn.onclick = function () { openBookModal("book_supplement"); };
+  }
+
   async function openBookModal(kind) {
     if (kind === "book_intro") {
       const overviewStatus = await getBookOverviewStatus(book);
@@ -780,6 +820,12 @@ if (kind === "canonical_context") {
   ];
 
   missingLabel = candidates[0];
+
+} else if (kind === "book_supplement") {
+  const supplement = await getBookSupplement();
+  if (!supplement) { content.textContent = "This supplement is not available."; return; }
+  candidates = [supplement.href];
+  missingLabel = supplement.title;
 
 } else if (kind === "book_resources") {
   const docFile = `${book}-0-book-resources.html`;
@@ -913,6 +959,7 @@ if (canonicalBtn) {
 
   // Color Book Overview blue when only the draft version is available.
   updateBookOverviewButtonStatus();
+  updateBookSupplementButton();
 
 if (chapterWrap) {
   chapterWrap.innerHTML = "";
@@ -989,12 +1036,12 @@ if (chapterWrap) {
 });
 </script>
 
-<script src="/assets/js/mtb-book-navigation-fix.js?v=1793711017323"></script>
-<script src="/assets/js/mtb-chapter-availability.js?v=1793711017361"></script>
-<script src="/assets/js/mtb-hearing-voice.js?v=1793711017250"></script>
-<script src="/assets/js/mtb-master-word-links.js?v=1793711017"></script>
-<script src="/assets/js/mtb-word-studies-nav.js?v=1793711017"></script>
-<script src="/assets/js/mtb-reflection-verse.js?v=1793711017285"></script>
-<script src="/assets/js/mtb-study-popup.js?v=1793711017184"></script>
+<script src="/assets/js/mtb-book-navigation-fix.js?v=1793755104324"></script>
+<script src="/assets/js/mtb-chapter-availability.js?v=1793755104347"></script>
+<script src="/assets/js/mtb-hearing-voice.js?v=1793755104252"></script>
+<script src="/assets/js/mtb-master-word-links.js?v=1793754960"></script>
+<script src="/assets/js/mtb-word-studies-nav.js?v=1793754960"></script>
+<script src="/assets/js/mtb-reflection-verse.js?v=1793755104291"></script>
+<script src="/assets/js/mtb-study-popup.js?v=1793755104208"></script>
 </body>
 </html>

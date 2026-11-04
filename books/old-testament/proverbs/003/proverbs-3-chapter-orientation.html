@@ -1,0 +1,96 @@
+<section class="mtb-doc mtb-doc--read" data-doc-type="chapter-overview" data-mtb-status="complete">
+<style>
+.mtb-print-controls{display:flex;justify-content:flex-end;gap:8px;margin:0 0 14px;padding:0 4px}
+.mtb-print-button{appearance:none;border:1px solid #b9c8d5;border-radius:8px;background:#fff;padding:9px 14px;color:#173a5e;font:700 14px Arial,Helvetica,sans-serif;cursor:pointer}
+.mtb-print-button:hover{background:#f2f6f9}
+@media print{
+  @page{size:auto;margin:.45in}
+  html,body{background:#fff!important;color:#000!important}
+  .mtb-print-controls,.mtb-study-controls,.mtb-reflections-controls{display:none!important}
+  .mtb-doc{display:block!important;width:100%!important;max-width:none!important;margin:0!important;padding:0!important}
+  .mtb-overview-hero,.mtb-study-hero,.mtb-reflections-hero,.mtb-culture-hero{box-shadow:none!important;background:#fff!important;border-color:#777!important}
+  .mtb-overview-grid,.mtb-reflections-grid,.mtb-culture-grid,.mtb-study-verse-grid{display:block!important}
+  .mtb-overview-card,.mtb-reflections-card,.mtb-culture-card,.mtb-study-verse,.mtb-study-verse-panel,.mtb-intro-card{
+    display:block!important;width:100%!important;max-width:none!important;height:auto!important;margin:0 0 12pt!important;
+    break-inside:avoid;page-break-inside:avoid;box-shadow:none!important;background:#fff!important;color:#000!important
+  }
+  details.mtb-study-verse,details.mtb-reflection-section{display:block!important;overflow:visible!important}
+  details.mtb-study-verse>summary,details.mtb-reflection-section>summary{display:flex!important;background:#fff!important;color:#000!important;border-bottom:1px solid #777!important}
+  details.mtb-study-verse>summary:after,details.mtb-reflection-section>summary:after{display:none!important}
+  details.mtb-study-verse>.mtb-study-verse-body,details.mtb-reflection-section>.mtb-reflection-section-body{display:block!important}
+  h1,h2,h3,h4{break-after:avoid;page-break-after:avoid;color:#000!important}
+  p,li{orphans:3;widows:3}
+  a{color:#000!important;text-decoration:none!important}
+  a[href]::after{content:none!important}
+}
+</style>
+<div class="mtb-print-controls"><button type="button" class="mtb-print-button" onclick="(function(button){var doc=button.closest('.mtb-doc')||document;var panels=Array.prototype.slice.call(doc.querySelectorAll('details'));panels.forEach(function(panel){panel.open=true;});window.print();})(this)">&#128438; Print This Page</button></div>
+<style>
+.mtb-chapter-overview-dashboard{--mtb-navy:#173a5e;--mtb-navy-2:#2b587f;--mtb-gold:#b7832f;--mtb-blue-soft:#eef4f9;--mtb-border:#d7e0e8;--mtb-text:#1d2935;width:100%;max-width:1600px;margin:0 auto;padding:2px 4px 30px;color:var(--mtb-text);font-family:Arial,Helvetica,sans-serif}.mtb-chapter-overview-dashboard *{box-sizing:border-box}
+.mtb-overview-glance{margin:0 0 18px;overflow:hidden;border:1px solid #cbd8e3;border-radius:14px;background:linear-gradient(135deg,#f7fafc 0%,#e8f0f7 100%);box-shadow:0 4px 15px rgba(28,48,66,.045)}
+.mtb-overview-glance-head{display:flex;align-items:center;justify-content:space-between;gap:20px;padding:18px 24px 13px;border-bottom:1px solid rgba(23,58,94,.12);background:var(--mtb-blue-soft)}
+.mtb-overview-eyebrow{margin:0 0 4px;color:var(--mtb-gold);font-size:.78rem;font-weight:800;letter-spacing:.13em;text-transform:uppercase}.mtb-overview-title{margin:0;color:var(--mtb-navy);font-size:clamp(1.4rem,2.6vw,1.95rem);line-height:1.1}.mtb-overview-badge{flex:0 0 auto;padding:9px 15px;border:1px solid rgba(23,58,94,.18);border-radius:999px;background:#fff;color:var(--mtb-navy);font-weight:800}
+.mtb-overview-glance-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:0;padding:8px 22px 13px;background:#fff}.mtb-overview-glance-item{min-width:0;padding:10px 12px;font-size:1rem;line-height:1.42}.mtb-overview-glance-item:nth-child(even){border-left:1px solid rgba(23,58,94,.11)}.mtb-overview-glance-label{display:inline;color:var(--mtb-navy);font-weight:800}.mtb-overview-glance-content{display:inline}.mtb-overview-glance-content p{display:inline;margin:0}.mtb-overview-glance-structure .mtb-overview-glance-content{display:block;margin-top:4px}.mtb-overview-glance-structure ul,.mtb-overview-glance-structure ol{margin:4px 0 0;padding-left:1.25em}.mtb-overview-glance-structure li{margin:0 0 2px}.mtb-overview-glance-structure li p{display:block;margin:0}.mtb-overview-glance-keyverse .mtb-overview-glance-content{font-style:italic}
+.mtb-overview-deeper{margin:0}.mtb-overview-deeper>summary{display:flex;align-items:center;justify-content:space-between;gap:16px;cursor:pointer;list-style:none;padding:14px 18px;border:1px solid #cbd8e3;border-radius:10px;background:#f4f7fa;color:var(--mtb-navy);font-size:1rem;font-weight:800;user-select:none}.mtb-overview-deeper>summary::-webkit-details-marker{display:none}.mtb-overview-deeper>summary::after{content:'+';font-size:1.35rem;line-height:1}.mtb-overview-deeper[open]>summary{margin-bottom:16px;border-color:#b8cad9;background:#eef4f9}.mtb-overview-deeper[open]>summary::after{content:'−'}
+.mtb-overview-grid{display:grid;grid-template-columns:repeat(12,minmax(0,1fr));gap:16px;align-items:stretch}.mtb-overview-card{min-width:0;overflow:hidden;border:1px solid var(--mtb-border);border-top:4px solid var(--mtb-navy-2);border-radius:12px;background:#fff;box-shadow:0 4px 15px rgba(28,48,66,.055)}.mtb-overview-card-heart{grid-column:1/-1}.mtb-overview-card-sections{grid-column:1/span 6}.mtb-overview-card-matters{grid-column:7/span 6}.mtb-overview-card-themes{grid-column:1/span 6}.mtb-overview-card-words{grid-column:7/span 6}.mtb-overview-card-psalm-author{grid-column:1/span 4}.mtb-overview-card-psalm-occasion{grid-column:5/span 4}.mtb-overview-card-psalm-kind{grid-column:9/span 4}.mtb-overview-card-header{margin:0;padding:12px 16px 10px;border-bottom:1px solid #e5ebf0;background:var(--mtb-blue-soft);color:var(--mtb-navy);font-size:.96rem;font-weight:800}.mtb-overview-card-body{padding:16px 18px 18px;font-size:1rem;line-height:1.48;overflow-wrap:anywhere}.mtb-overview-card-heart .mtb-overview-card-body{font-size:1.04rem}.mtb-overview-card-body p{margin:0 0 .72em}.mtb-overview-card-body p:last-child{margin-bottom:0}.mtb-overview-card-body ul,.mtb-overview-card-body ol{margin:0;padding-left:1.25em}.mtb-overview-card-body li{margin:0 0 .35em}
+@media(max-width:980px){.mtb-overview-card{grid-column:span 6!important}.mtb-overview-card-heart{grid-column:1/-1!important}.mtb-overview-glance-grid{grid-template-columns:1fr}.mtb-overview-glance-item:nth-child(even){border-left:0}.mtb-overview-glance-item+.mtb-overview-glance-item{border-top:1px solid rgba(23,58,94,.09)}}
+@media(max-width:760px){.mtb-overview-grid{grid-template-columns:1fr}.mtb-overview-card{grid-column:1/-1!important}.mtb-overview-glance-head{align-items:flex-start;flex-direction:column;padding:17px 18px 12px}.mtb-overview-glance-grid{padding:6px 10px 12px}.mtb-overview-glance-item{padding:9px 8px}.mtb-overview-deeper>summary{padding:13px 15px}}
+@media print{.mtb-overview-deeper>summary{display:none!important}.mtb-overview-deeper:not([open])>.mtb-overview-grid{display:grid!important}}
+</style><div class="mtb-chapter-overview-dashboard"><section class="mtb-overview-glance" aria-labelledby="mtb-at-a-glance-title"><div class="mtb-overview-glance-head"><div><p class="mtb-overview-eyebrow">Chapter Overview</p><h1 id="mtb-at-a-glance-title" class="mtb-overview-title">At a Glance</h1></div><div class="mtb-overview-badge">Chapter 3</div></div><div class="mtb-overview-glance-grid"><div class="mtb-overview-glance-item"><span class="mtb-overview-glance-label">Main Idea: </span><div class="mtb-overview-glance-content"><p>Proverbs 3 calls the son to trust the LORD with all his heart and shows that trust at work: honoring God with his possessions, welcoming His correction, treasuring wisdom as a tree of life, and doing good to his neighbor.</p></div></div><div class="mtb-overview-glance-item"><span class="mtb-overview-glance-label">Setting: </span><div class="mtb-overview-glance-content"><p>The father is still speaking, and three times he begins again with “My son” (3:1, 11, 21). Chapter 2 promised that “the LORD gives wisdom” (2:6); this chapter shows the life of a son who receives it.</p></div></div><div class="mtb-overview-glance-item mtb-overview-glance-structure"><span class="mtb-overview-glance-label">Chapter Outline: </span><div class="mtb-overview-glance-content"><ul>
+<li><div data-custom-style="List Bullet">
+<p><strong>Proverbs 3:1–4 — Keep My Commands, Mercy, and Truth</strong></p>
+</div></li>
+<li><div data-custom-style="List Bullet">
+<p><strong>Proverbs 3:5–8 — Trust in the LORD with All Your Heart</strong></p>
+</div></li>
+<li><div data-custom-style="List Bullet">
+<p><strong>Proverbs 3:9–10 — Honor the LORD with Your Possessions</strong></p>
+</div></li>
+<li><div data-custom-style="List Bullet">
+<p><strong>Proverbs 3:11–12 — The LORD’s Loving Correction</strong></p>
+</div></li>
+<li><div data-custom-style="List Bullet">
+<p><strong>Proverbs 3:13–18 — Wisdom Is a Tree of Life</strong></p>
+</div></li>
+<li><div data-custom-style="List Bullet">
+<p><strong>Proverbs 3:19–20 — By Wisdom the LORD Founded the Earth</strong></p>
+</div></li>
+<li><div data-custom-style="List Bullet">
+<p><strong>Proverbs 3:21–26 — The LORD Will Be Your Confidence</strong></p>
+</div></li>
+<li><div data-custom-style="List Bullet">
+<p><strong>Proverbs 3:27–31 — Do Good to Your Neighbor</strong></p>
+</div></li>
+<li><div data-custom-style="List Bullet">
+<p><strong>Proverbs 3:32–35 — The LORD’s Curse and Blessing</strong></p>
+</div></li>
+</ul></div></div><div class="mtb-overview-glance-item mtb-overview-glance-keyverse"><span class="mtb-overview-glance-label">Key Verse: </span><div class="mtb-overview-glance-content"><p>“Trust in the LORD with all your heart, And lean not on your own understanding; In all your ways acknowledge Him, And He shall direct your paths.” (Proverbs 3:5–6)</p></div></div></div></section><details class="mtb-overview-deeper"><summary>Go Deeper</summary><div class="mtb-overview-grid"><article class="mtb-overview-card mtb-overview-card-heart"><h2 class="mtb-overview-card-header">The Heart of the Chapter</h2><div class="mtb-overview-card-body"><p>Proverbs 3 turns on one of the best-known commands in the Bible: “Trust in the LORD with all your heart, And lean not on your own understanding” (3:5). To lean is to put your whole weight on something, and the father warns his son against resting it on his own judgment. Its rival is being “wise in your own eyes” (3:7), which the fear of the LORD, a right view of God, exposes. Because trust reaches “all your ways” (3:6), the chapter shows it in concrete places: a heart that keeps the father’s law, firstfruits given back to God, and a humble answer to the LORD’s correction.</p>
+<p>That correction reveals the God the son is asked to trust: “For whom the LORD loves He corrects, Just as a father the son in whom he delights” (3:12). Then the father praises wisdom, the skill of living life God’s way, as “a tree of life to those who take hold of her” (3:18), the same wisdom by which the LORD founded the earth (3:19). Read in the light of the New Testament, this wisdom leads to Christ, “the wisdom of God” (1 Corinthians 1:24), through whom all things were made (John 1:3). Yet the chapter ends at a neighbor’s door, where wisdom pays what it owes today.</p></div></article><article class="mtb-overview-card mtb-overview-card-sections"><h2 class="mtb-overview-card-header">Chapter Sections</h2><div class="mtb-overview-card-body"><p><strong>Proverbs 3:1–4 — Keep My Commands, Mercy, and Truth</strong></p>
+<p>The father asks for obedience that lives in the heart’s memory, and he ties it to the general blessing of long life and peace. Mercy and truth, steadfast love and faithfulness, are to be worn like a necklace and written on the heart, so that the son gains favor with God and people alike.</p>
+<p><strong>Proverbs 3:5–8 — Trust in the LORD with All Your Heart</strong></p>
+<p>The son is to rest his full weight on the LORD rather than on his own judgment, and to recognize Him in every decision, so that God leads him on a straight road. That trust is humble: it refuses to be wise in its own eyes, fears the LORD, and turns from evil, which brings health to the whole person as a general blessing.</p>
+<p><strong>Proverbs 3:9–10 — Honor the LORD with Your Possessions</strong></p>
+<p>Giving God the first and best of the harvest declares that every increase comes from Him. Full barns and overflowing vats picture His generous provision for those who honor Him, a general truth about His blessing and never a formula for wealth.</p>
+<p><strong>Proverbs 3:11–12 — The LORD’s Loving Correction</strong></p>
+<p>The son must neither despise the LORD’s discipline nor resent it, because it comes from love. God corrects as a father corrects the son he delights in, and Hebrews 12:5–6 applies these words to every child of God.</p>
+<p><strong>Proverbs 3:13–18 — Wisdom Is a Tree of Life</strong></p>
+<p>A song of praise ranks wisdom above silver, gold, and rubies and pictures her holding long life in one hand and riches and honor in the other. Her paths are pleasant and peaceful, and she is a tree of life to everyone who takes hold of her, an image that reaches back to Eden and forward to the life restored in Christ.</p>
+<p><strong>Proverbs 3:19–20 — By Wisdom the LORD Founded the Earth</strong></p>
+<p>The wisdom offered to the son is the same wisdom by which the LORD laid the foundations of the earth and set the heavens in place. By His knowledge He still waters the world He made, from the depths below to the dew that drops from the clouds.</p>
+<p><strong>Proverbs 3:21–26 — The LORD Will Be Your Confidence</strong></p>
+<p>The son must keep sound wisdom and discretion in view, and they will give him life, steady footing by day, and sweet sleep by night. He need not live in dread of sudden disaster, because his security rests on the LORD, who keeps his foot from the trap.</p>
+<p><strong>Proverbs 3:27–31 — Do Good to Your Neighbor</strong></p>
+<p>Wisdom becomes concrete in five commands: pay what is owed while you are able, do not send a neighbor away until tomorrow, do not plot against someone who lives beside you in trust, do not pick needless fights, and do not envy the violent man or copy his ways. Each command protects a person close at hand who depends on the son’s honesty and goodwill.</p>
+<p><strong>Proverbs 3:32–35 — The LORD’s Curse and Blessing</strong></p>
+<p>The commands rest on how the LORD Himself deals with people: He detests the crooked and shares His secret counsel with the upright, and His curse and blessing reach the households of the wicked and the just. He scorns the scornful and gives grace to the humble, and the chapter closes with two inheritances, glory for the wise and shame for fools.</p></div></article><article class="mtb-overview-card mtb-overview-card-matters"><h2 class="mtb-overview-card-header">Why This Chapter Matters</h2><div class="mtb-overview-card-body"><p>Proverbs 3 gives trust a definite form. A reader could treat 3:5–6 as a private feeling of confidence, but the chapter measures trust by what a person does with money, with correction, with fear in the night, and with a neighbor who is owed something today. Its blessings of long life, health, and full barns describe how God’s world generally works. They are not guarantees, and Jesus, who had all wisdom, did not live a long life.</p>
+<p>The chapter also teaches the son how to receive the LORD’s discipline. Correction is evidence of God’s love and of belonging to Him, and the risen Christ still speaks this way to His people: “As many as I love, I rebuke and chasten” (Revelation 3:19). Discipline is never rejection, and the chapter does not claim that every hardship is punishment for sin.</p></div></article><article class="mtb-overview-card mtb-overview-card-themes"><h2 class="mtb-overview-card-header">Key Themes to Watch For</h2><div class="mtb-overview-card-body"><p><strong>Whole-hearted trust.</strong> Trust leans its full weight on the LORD instead of on personal judgment, and it reaches every part of life (3:5–7).</p>
+<p><strong>Honoring God with the first and best.</strong> Giving the firstfruits acknowledges that every increase comes from the LORD (3:9–10).</p>
+<p><strong>Correction as love.</strong> The LORD disciplines as a father who delights in his son, and the wise son does not resent it (3:11–12).</p>
+<p><strong>Wisdom’s surpassing worth.</strong> Nothing a person could want compares with wisdom, who holds life, peace, and honor in her hands (3:13–18, 22).</p>
+<p><strong>Righteousness next door.</strong> Wisdom shows itself in paying what is owed, keeping a neighbor’s trust, and refusing to envy the violent, because the LORD detests the perverse and blesses the home of the just (3:27–33).</p></div></article><article class="mtb-overview-card mtb-overview-card-words"><h2 class="mtb-overview-card-header">Key Words &amp; Concepts</h2><div class="mtb-overview-card-body"><p><strong>Mercy and truth (3:3).</strong> Steadfast love and faithfulness (Hebrew hesed and emet). The son is to bind them around his neck and write them on his heart, language that recalls Israel binding God’s words on the hand (Deuteronomy 6:8), so that they become part of who he is.</p>
+<p><strong>Direct your paths (3:6).</strong> The LORD’s promise to guide the life that acknowledges Him; the phrase can also be understood as making the paths straight. It describes His leading of a humble person, not a map of every step in advance.</p>
+<p><strong>Firstfruits (3:9).</strong> The first and best part of the harvest, given to God before the rest was used. Proverbs speaks of firstfruits rather than the tithe, though the tithe may be connected to it as an application.</p>
+<p><strong>Tree of life (3:18).</strong> The tree in Eden that Adam lost access to after the fall (Genesis 3:24). Proverbs uses it for the life wisdom gives, and the risen Christ promises “the tree of life” to the one who overcomes (Revelation 2:7).</p>
+<p><strong>Secret counsel (3:32).</strong> Close fellowship and confidence, the kind of friendship in which one shares his heart. The LORD keeps it with the upright (compare Psalm 25:14).</p>
+<p><strong>The scornful (3:34).</strong> Scoffers who will not be taught; their problem lies in the will. God meets their contempt with His own, but gives grace to the humble. James 4:6 and 1 Peter 5:5 quote the verse in the form “God resists the proud, But gives grace to the humble.”</p></div></article></div></details></div>
+</section>

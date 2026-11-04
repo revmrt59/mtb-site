@@ -12,6 +12,7 @@
   { name: "Ruth", slug: "ruth", chapters: 4 },
    // { name: "Nehemiah", slug: "nehemiah", chapters: 13 },
   { name: "Psalms", slug: "psalms", chapters: 150 },
+  { name: "Proverbs", slug: "proverbs", chapters: 31 },
   { name: "Song of Songs", slug: "song-of-solomon", chapters: 8 },
   { name: "Obadiah", slug: "obadiah", chapters: 1 },
  // { name: "Jonah", slug: "jonah", chapters: 4 },

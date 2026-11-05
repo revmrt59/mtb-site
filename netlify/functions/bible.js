@@ -5,7 +5,9 @@
 //   /.netlify/functions/bible?tr=niv&book=psalms&c=23   -> { verses:{"1":"..."}, copyright, fumsToken, reference }
 //   /.netlify/functions/bible?list=1                    -> the Bibles this key can use (id, abbreviation, name)
 
-const BASE = "https://rest.api.bible/v1";
+// API.Bible has a newer and an older address; keys from either era work on one of them.
+const BASES = ["https://rest.api.bible/v1", "https://api.scripture.api.bible/v1"];
+let goodBase = null;
 const BOOKS = {
   "genesis": "GEN", "exodus": "EXO", "leviticus": "LEV", "numbers": "NUM", "deuteronomy": "DEU",
   "joshua": "JOS", "judges": "JDG", "ruth": "RUT", "1-samuel": "1SA", "2-samuel": "2SA",
@@ -37,9 +39,17 @@ function reply(status, body, cache) {
 }
 
 async function api(path, key) {
-  const r = await fetch(BASE + path, { headers: { "api-key": key, "accept": "application/json" } });
-  if (!r.ok) throw new Error("API.Bible " + r.status + " for " + path.split("?")[0]);
-  return r.json();
+  const tries = goodBase ? [goodBase] : BASES;
+  let last = "";
+  for (const base of tries) {
+    const r = await fetch(base + path, { headers: { "api-key": key, "accept": "application/json" } });
+    if (r.ok) { goodBase = base; return r.json(); }
+    let msg = "";
+    try { msg = (await r.text()).slice(0, 300); } catch (e) { /* ignore */ }
+    last = "API.Bible " + r.status + " at " + base.replace("https://", "") + path.split("?")[0] + (msg ? " - " + msg : "");
+    if (r.status !== 401 && r.status !== 403 && r.status !== 404) break;
+  }
+  throw new Error(last);
 }
 
 async function bibles(key) {
@@ -98,8 +108,12 @@ function versesFromJson(content) {
 }
 
 exports.handler = async function (event) {
-  const key = process.env.API_BIBLE_KEY;
+  const key = (process.env.API_BIBLE_KEY || "").trim() || null;
+  const rawKey = process.env.API_BIBLE_KEY || "";
   if (!key) return reply(500, { error: "API_BIBLE_KEY is not set in Netlify." });
+  if (event.queryStringParameters && event.queryStringParameters.check) {
+    return reply(200, { keyLength: key.length, hadExtraSpaces: rawKey !== rawKey.trim() });
+  }
   const q = event.queryStringParameters || {};
   try {
     if (q.list) {

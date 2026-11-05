@@ -172,7 +172,7 @@ dialog.picker::backdrop { background: rgba(15, 42, 69, .55); }
 /* ---------- Home ---------- */
 .hero {
   position: relative; color: #fff; overflow: hidden;
-  background: #c9762a url("../../assets/images/hero.jpg") center bottom / cover no-repeat;
+  background: #c9762a url("../assets/images/hero.jpg") center bottom / cover no-repeat;
   min-height: 520px; display: flex;
 }
 .hero::before {

@@ -1,0 +1,7 @@
+# Mastering the Bible - redirects (Netlify)
+# The new site was previewed at /next/ - send any old /next links to the main site.
+/next          /           301!
+/next/*        /:splat     301!
+# Old "About the Bible" page now lives on the About page.
+/aboutthebible       /about.html   301!
+/aboutthebible.html  /about.html   301!

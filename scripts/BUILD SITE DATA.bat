@@ -4,5 +4,5 @@
 cd /d "C:\Users\Mike\Documents\MTB\GitHub\mtb-site"
 python scripts\build_site.py
 echo.
-echo The report above is also saved in next\data\build-report.txt
+echo The report above is also saved in data\build-report.txt
 pause

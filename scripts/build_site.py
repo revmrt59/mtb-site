@@ -4,10 +4,10 @@ Mastering the Bible - site builder.
 Reads the web files your generator already writes into mtb-site/books/
 and builds the data the new site needs:
 
-  next/data/library.json   every book, which chapters are ready, which layers each has
+  data/library.json   every book, which chapters are ready, which layers each has
 
 It also prints a plain-language problem report and saves it to
-next/data/build-report.txt.
+data/build-report.txt.
 
 Run it with "BUILD SITE DATA.bat" (double-click), or:
   python scripts/build_site.py
@@ -24,7 +24,9 @@ import mtb_convert  # noqa: E402
 
 SITE_ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 BOOKS_DIR = os.path.join(SITE_ROOT, "books")
-OUT_DIR = os.path.join(SITE_ROOT, "next", "data")
+OUT_DIR = os.path.join(SITE_ROOT, "data")
+# The new site's own pages (in the site root). Their ui/ links get a fresh version number each build.
+SITE_PAGES = ["index.html", "chapter.html", "book.html", "word.html", "doc.html", "about.html"]
 
 # Canon in Bible order, grouped the same way as the Bible Context pages (sections/).
 CANON = [
@@ -205,14 +207,13 @@ def build_pages():
 def stamp_versions():
     """Give the site's CSS/JS links a fresh ?v= so browsers load the newest copy after each build."""
     stamp = datetime.now().strftime("%Y%m%d%H%M%S")
-    next_dir = os.path.dirname(OUT_DIR)
-    for name in os.listdir(next_dir):
-        if not name.endswith(".html"):
+    for name in SITE_PAGES:
+        path = os.path.join(SITE_ROOT, name)
+        if not os.path.exists(path):
             continue
-        path = os.path.join(next_dir, name)
         with open(path, encoding="utf-8") as f:
             t = f.read()
-        t2 = re.sub(r'(assets/[a-z]+\.(?:css|js))(\?v=[\w-]+)?"', r'\1?v=' + stamp + '"', t)
+        t2 = re.sub(r'(ui/[a-z]+\.(?:css|js))(\?v=[\w-]+)?"', r'\1?v=' + stamp + '"', t)
         if t2 != t:
             with open(path, "w", encoding="utf-8", newline="") as f:
                 f.write(t2)

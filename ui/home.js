@@ -28,7 +28,6 @@
   function card(b) {
     var full = b.ready.filter(function (r) { return r.complete; }).length;
     var note = plural(b.ready.length, "chapter", "chapters") + " ready";
-    if (full) note += " · " + full + " with all layers";
     var link = b.overview
       ? '<a class="bc-link" href="' + MTB.bookUrl(b.slug) + '">Book Overview</a>'
       : '<span class="bc-link bc-missing">Book Overview coming</span>';
@@ -36,8 +35,7 @@
       '<div class="bc-top"><h4>' + esc(b.name) + "</h4>" + link + "</div>" +
       '<div class="bc-note">' + note + "</div>" +
       '<div class="chips">' + b.ready.map(function (r) {
-        return '<a class="chip' + (r.complete ? " full" : "") + '" href="' + MTB.chapterUrl(b.slug, r.n) + '" aria-label="' +
-          esc(b.name) + " " + r.n + (r.complete ? ", all layers" : ", study ready") + '">' + r.n + "</a>";
+        return '<a class="chip" href="' + MTB.chapterUrl(b.slug, r.n) + '" aria-label="' + esc(b.name) + " " + r.n + '">' + r.n + "</a>";
       }).join("") + "</div></article>";
   }
 

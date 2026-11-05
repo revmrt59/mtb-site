@@ -245,9 +245,18 @@ def verse_num(node):
     return None
 
 
-def read_study(path):
+def read_study(path, chapter=None):
     root = parse(path)
     verses = {}
+    # Some study files carry section headings ("Ruth 1:8–14 — Naomi Releases…") inside the verse panels.
+    # Pull them out so they don't show inside Study Notes, and keep them as the chapter's sections.
+    headings = []
+    if chapter:
+        for h in [n for n in root.walk() if n.tag in ("h1", "h2", "h3")]:
+            r = parse_range(h.get_text(), chapter)
+            if r and r[2]:
+                headings.append({"start": r[0], "end": r[1], "title": r[2]})
+                h.remove()
     for v in root.all("mtb-study-verse"):
         n = verse_num(v)
         if n is None:
@@ -273,7 +282,14 @@ def read_study(path):
             elif "note" in label:
                 d["notes"] = body
         verses[n] = d
-    return verses
+    if chapter is None:
+        return verses
+    seen, out = set(), []
+    for h in sorted(headings, key=lambda x: x["start"]):
+        if h["start"] not in seen:
+            seen.add(h["start"])
+            out.append(h)
+    return verses, out
 
 
 def read_hearing(path):
@@ -379,6 +395,28 @@ def read_culture(path):
     return cards
 
 
+def read_chapter_outline(path, chapter, nverses):
+    """Read the approved section headings and require exact chapter coverage."""
+    headings = [node for node in parse(path).walk() if node.tag in ("h1", "h2", "h3", "h4")]
+    sections = []
+    section_heading = None
+    for node in headings:
+        text = node.get_text()
+        if section_heading is None:
+            if text.casefold() == "chapter sections":
+                section_heading = node.tag
+            continue
+        if node.tag <= section_heading:
+            break
+        parsed = parse_range(text, chapter)
+        if parsed and parsed[2]:
+            sections.append(dict(start=parsed[0], end=parsed[1], title=parsed[2]))
+    covered = [verse for section in sections for verse in range(section["start"], section["end"] + 1)]
+    if covered != list(range(1, nverses + 1)):
+        raise ValueError("published outline sections do not cover the chapter exactly once")
+    return sections
+
+
 # ---------------------------------------------------------------- one chapter
 def build_chapter(site_root, testament, slug, name, n, files, nverses):
     """files: dict layer -> filename inside books/<t>/<slug>/<###>/"""
@@ -395,7 +433,7 @@ def build_chapter(site_root, testament, slug, name, n, files, nverses):
             data["overview"] = read_overview(p("overview"))
         except Exception as e:
             warn.append("overview could not be read (%s)" % e)
-    study = read_study(p("study")) if "study" in files else {}
+    study, study_heads = read_study(p("study"), n) if "study" in files else ({}, [])
     hearing = read_hearing(p("hearing")) if "hearing" in files else {}
     refl = read_reflections(p("reflections"), n, nverses) if "reflections" in files else {"verses": {}, "sections": [], "whole": []}
     if "culture" in files:
@@ -407,10 +445,29 @@ def build_chapter(site_root, testament, slug, name, n, files, nverses):
         r = parse_range(line, n)
         if r:
             sections.append({"start": r[0], "end": min(r[1], nverses), "title": r[2]})
+    if "outline" in files:
+        try:
+            sections = read_chapter_outline(p("outline"), n, nverses)
+            data["outline"] = f"books/{testament}/{slug}/{n:03d}/{files['outline']}"
+        except ValueError as e:
+            warn.append(str(e))
+    if not sections and study_heads:
+        sections = [{"start": h["start"], "end": min(h["end"], nverses), "title": h["title"]} for h in study_heads]
     if not sections:
         sections = [{"start": s["start"], "end": s["end"], "title": s["title"]} for s in refl["sections"]]
     if not sections:
         sections = [{"start": 1, "end": nverses, "title": ""}]
+    # Make sure every verse belongs to exactly one section (no gaps, no overlaps).
+    sections = sorted(sections, key=lambda x: x["start"])
+    fixed = []
+    for i, sec in enumerate(sections):
+        nxt = sections[i + 1]["start"] if i + 1 < len(sections) else nverses + 1
+        start = max(sec["start"], fixed[-1]["end"] + 1 if fixed else 1)
+        if not fixed and start > 1:
+            fixed.append({"start": 1, "end": start - 1, "title": ""})
+        if start <= min(nverses, nxt - 1):
+            fixed.append({"start": start, "end": min(nverses, nxt - 1), "title": sec["title"]})
+    sections = fixed or [{"start": 1, "end": nverses, "title": ""}]
     for s in sections:
         s["groups"] = []
     # Each group of section reflections goes after the last outline section it covers.

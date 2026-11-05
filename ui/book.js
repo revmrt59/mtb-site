@@ -17,12 +17,13 @@
     head.innerHTML = '<nav class="crumbs" aria-label="Breadcrumb"><a href="index.html#library">Library</a><span aria-hidden="true">›</span><span>' + esc(b.name) + "</span></nav>" +
       '<h1 id="ch-title">' + esc(b.name) + "</h1>" +
       '<p class="ch-main-idea">' + esc(b.group.name) + " · " + esc(b.testament.name) + " · " +
-      (b.ready.length ? b.ready.length + " of " + b.chapters + " chapters ready" + (full ? " (" + full + " with all layers)" : "") : "chapters coming") + "</p>";
+      (b.ready.length ? b.ready.length + " of " + b.chapters + (b.chapters === 1 ? " chapter" : " chapters") + " ready" : "chapters coming") + "</p>";
 
     var tabs = [
       { id: "overview", label: "Book Overview", path: b.overview ? base + "book-overview-" + b.slug + ".html" : "", missing: "The Book Overview for " + b.name + " is still being written." },
       { id: "context", label: "Bible Context", path: b.group.context + "index.html", missing: "Bible Context for this part of Scripture is still being written." }
     ];
+    if (b.outline) tabs.push({ id: "outline", label: "Book Outline", path: base + "book-outline-" + b.slug + ".html" });
     (b.special || []).forEach(function (s) { tabs.push({ id: "special-" + s, label: titleCase(s), path: base + "book-special-" + b.slug + "-" + s + ".html" }); });
     tabs.push({ id: "chapters", label: "Chapters" });
     if (b.resources) tabs.push({ id: "resources", label: "Resources", path: base + b.slug + "-0-book-resources.html" });
@@ -34,10 +35,10 @@
     function chapters() {
       var ready = {};
       b.ready.forEach(function (r) { ready[r.n] = r; });
-      var html = '<div class="legend"><span><i class="l-full"></i>All layers</span><span><i class="l-part"></i>Study ready</span><span><i class="l-off"></i>Coming later</span></div><div class="bk-chapters">';
+      var html = '<div class="bk-chapters">';
       for (var n = 1; n <= b.chapters; n++) {
         var r = ready[n];
-        html += r ? '<a class="chip' + (r.complete ? " full" : "") + '" href="' + MTB.chapterUrl(b.slug, n) + '">' + n + "</a>" : '<span class="chip off">' + n + "</span>";
+        html += r ? '<a class="chip" href="' + MTB.chapterUrl(b.slug, n) + '">' + n + "</a>" : '<span class="chip off">' + n + "</span>";
       }
       return html + "</div>";
     }

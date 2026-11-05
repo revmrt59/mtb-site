@@ -172,13 +172,14 @@ dialog.picker::backdrop { background: rgba(15, 42, 69, .55); }
 /* ---------- Home ---------- */
 .hero {
   position: relative; color: #fff; overflow: hidden;
-  background: #c9762a url("../assets/images/hero.jpg") center bottom / cover no-repeat;
+  background: #d9822b url("../assets/images/hero-wide-900.jpg") center bottom / cover no-repeat;
   min-height: 520px; display: flex;
 }
 .hero::before {
   content: ""; position: absolute; inset: 0;
   background: linear-gradient(180deg, rgba(38,20,4,.62) 0%, rgba(38,20,4,.38) 45%, rgba(38,20,4,0) 72%);
 }
+@media (min-width: 700px), (min-resolution: 2dppx) { .hero { background-image: url("../assets/images/hero-wide.jpg"); } }
 .hero .wrap { position: relative; width: 100%; padding-top: 44px; padding-bottom: 40px; display: flex; flex-direction: column; gap: 14px; }
 .hero h1 { margin: 0; font-family: var(--serif); font-size: 40px; line-height: 1.05; text-shadow: 0 2px 12px rgba(0,0,0,.35); }
 .hero .tag { margin: 0; font-family: var(--serif); font-style: italic; font-size: 21px; color: #ffe6b8; text-shadow: 0 1px 8px rgba(0,0,0,.4); }
@@ -527,3 +528,6 @@ dialog.picker::backdrop { background: rgba(15, 42, 69, .55); }
 /* ---------- Visitor count (home footer) ---------- */
 .visits { display: inline-flex; align-items: center; gap: 6px; color: var(--muted); font-size: 14px; margin-left: auto; }
 .visits[hidden] { display: none; }
+
+/* Book Overview: the "badge" repeats the first glance item, so hide it */
+.doc [class*="glance-badge"] { display: none; }

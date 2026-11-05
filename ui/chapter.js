@@ -144,6 +144,7 @@
         return '<a href="#s' + s.start + '"><span>' + ref(s.start, s.end) + "</span>" + esc(s.title) + "</a>";
       }).join("") + "</nav>";
     }
+    if (D.outline) html += '<p><a href="doc.html?p=' + encodeURIComponent(D.outline) + '">Read the Chapter Outline</a></p>';
     var cards = ov.cards.filter(function (c) { return c.title !== "Chapter Sections"; });
     if (cards.length) {
       html += '<button type="button" class="deeper-btn" aria-expanded="false" aria-controls="deeper">Go deeper into ' + esc(title) + " ▾</button>" +

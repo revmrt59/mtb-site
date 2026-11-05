@@ -75,6 +75,7 @@ CANON = [
 # Several kinds map to one layer (old and new names both work).
 LAYER_KINDS = {
     "overview": "overview",
+    "outline": "outline",
     "orientation": "overview",      # older duplicate of overview
     "explanation": "study",
     "study": "study",
@@ -280,6 +281,8 @@ def main():
                     if os.path.isdir(bk):
                         files = os.listdir(bk)
                         b["overview"] = ("book-overview-%s.html" % slug) in files
+                        if ("book-outline-%s.html" % slug) in files:
+                            b["outline"] = True
                         b["resources"] = ("%s-0-book-resources.html" % slug) in files
                         for f in files:
                             m = re.match(r"^book-special-%s-([a-z0-9-]+)\.html$" % re.escape(slug), f)

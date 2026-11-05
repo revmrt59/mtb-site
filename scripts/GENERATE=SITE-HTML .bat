@@ -9,9 +9,8 @@ REM ------------------------------------------------------------
 REM Set the folder this BAT lives in (so paths work no matter where you run it)
 set "BAT_DIR=%~dp0"
 
-REM If your PS1 is in the same folder as the BAT, this will work.
-REM If not, change PS1 to the correct full path.
-set "PS1=%BAT_DIR%generate-site-html.ps1"
+REM Use the main MTB generator shared with the publishing tools.
+set "PS1=%BAT_DIR%..\..\..\Scripts\generate-site-html.ps1"
 
 if not exist "%PS1%" (
   echo ERROR: Cannot find generate-site-html.ps1 at:
@@ -33,11 +32,13 @@ echo   2^) ABOUT
 echo   3^) RESOURCES
 echo   4^) SECTIONS (Canonical Context)
 echo.
+echo   5^) BOOK OUTLINE
+echo   6^) CHAPTER OUTLINE
 echo   Q^) Quit
 echo.
 
 set "CHOICE="
-set /p CHOICE=Enter choice (1-4, Q): 
+set /p "CHOICE=Enter choice (1-6, Q): "
 
 if /i "%CHOICE%"=="Q" goto :EOF
 
@@ -46,6 +47,8 @@ if "%CHOICE%"=="1" set "MODE=BOOK"
 if "%CHOICE%"=="2" set "MODE=ABOUT"
 if "%CHOICE%"=="3" set "MODE=RESOURCES"
 if "%CHOICE%"=="4" set "MODE=SECTIONS"
+if "%CHOICE%"=="5" set "MODE=BOOKOUTLINE"
+if "%CHOICE%"=="6" set "MODE=CHAPTEROUTLINE"
 
 if "%MODE%"=="" (
   echo.
@@ -59,6 +62,8 @@ echo Running Mode: %MODE%
 echo.
 
 powershell -NoProfile -ExecutionPolicy Bypass -File "%PS1%" -Mode %MODE%
+if not errorlevel 1 if "%CHOICE%"=="5" python "%BAT_DIR%build_site.py"
+if not errorlevel 1 if "%CHOICE%"=="6" python "%BAT_DIR%build_site.py"
 echo.
 pause
 goto MENU

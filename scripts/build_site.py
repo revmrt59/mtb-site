@@ -246,6 +246,28 @@ def build_word_index(notes):
     write_json(os.path.join(OUT_DIR, "words.json"), out)
 
 
+def book_supplements(folder, slug, files):
+    """Extra book tabs: book-supplement-<book>-<name>.html, labelled by book-supplement.json when present."""
+    labels = {}
+    meta = os.path.join(folder, "book-supplement.json")
+    if os.path.exists(meta):
+        try:
+            with open(meta, encoding="utf-8-sig") as f:
+                m = json.load(f)
+            for item in (m if isinstance(m, list) else [m]):
+                if isinstance(item, dict) and item.get("file"):
+                    labels[item["file"]] = item.get("title") or ""
+        except (OSError, ValueError):
+            pass
+    out = []
+    for f in sorted(files):
+        m = re.match(r"^book-(?:supplement|special)-%s-([a-z0-9-]+)\.html$" % re.escape(slug), f)
+        if m:
+            label = labels.get(f) or m.group(1).replace("-", " ").title()
+            out.append({"id": m.group(1), "label": label, "file": f})
+    return out
+
+
 def ranges(nums):
     """[1,2,3,5,7,8] -> '1–3, 5, 7–8'"""
     out, start, prev = [], None, None
@@ -285,10 +307,8 @@ def main():
                             # Only count it when the resources list actually links to something.
                             with open(os.path.join(bk, res), encoding="utf-8", errors="replace") as rf:
                                 b["resources"] = "<a " in rf.read()
-                        for f in files:
-                            m = re.match(r"^book-special-%s-([a-z0-9-]+)\.html$" % re.escape(slug), f)
-                            if m:
-                                b["special"].append(m.group(1))
+                        b["outline"] = ("book-outline-%s.html" % slug) in files
+                        b["special"] = book_supplements(bk, slug, files)
                     for n in range(1, nchap + 1):
                         layers, stray = chapter_layers(book_dir, slug, n)
                         for s in stray:

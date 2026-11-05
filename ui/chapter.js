@@ -28,14 +28,58 @@
   function ref(a, b) { return a === b ? String(a) : a + "–" + b; }
 
   /* ---------- Scripture text ---------- */
+  // Translations served live from API.Bible (licensed). The others still come from the stored JSON files.
+  var API_TR = { niv: 1 };
+  // Notices for the stored JSON copies (prototype only; confirm each against its license before launch).
+  var NOTICES = {
+    nkjv: "Scripture taken from the New King James Version®. Copyright © 1982 by Thomas Nelson. Used by permission. All rights reserved.",
+    esv: "Scripture quotations are from the ESV® Bible (The Holy Bible, English Standard Version®), © 2001 by Crossway, a publishing ministry of Good News Publishers. Used by permission. All rights reserved.",
+    nlt: "Scripture quotations are taken from the Holy Bible, New Living Translation, copyright © 1996, 2004, 2015 by Tyndale House Foundation. Used by permission of Tyndale House Publishers, Carol Stream, Illinois 60188. All rights reserved.",
+    niv: "Scripture quotations taken from The Holy Bible, New International Version® NIV®. Copyright © 1973, 1978, 1984, 2011 by Biblica, Inc.™ Used by permission. All rights reserved worldwide.",
+    nasb: "Scripture quotations taken from the (NASB®) New American Standard Bible®, Copyright © 1960, 1971, 1977, 1995, 2020 by The Lockman Foundation. Used by permission. All rights reserved. lockman.org",
+    amp: "Scripture quotations taken from the Amplified® Bible (AMP), Copyright © 2015 by The Lockman Foundation. Used by permission. lockman.org",
+    tlv: "Scripture taken from the Holy Scriptures, Tree of Life Version. Copyright © 2014, 2016 by the Tree of Life Bible Society. Used by permission of the Tree of Life Bible Society.",
+    kjv: "King James Version (public domain).",
+    ylt: "Young’s Literal Translation (public domain)."
+  };
+  var COPY = {}, SOURCE = {};
+
+  function loadStored(tr) {
+    return fetch(MTB.root + "assets/js/bibles-json/" + tr + "/" + SLUG + ".json").then(function (r) {
+      if (!r.ok) throw new Error(tr);
+      return r.json();
+    }).then(function (j) { COPY[tr] = NOTICES[tr] || ""; return (j.chapters || {})[String(CH)] || {}; });
+  }
+
+  function loadApi(tr) {
+    return fetch("/.netlify/functions/bible?tr=" + tr + "&book=" + encodeURIComponent(SLUG) + "&c=" + CH).then(function (r) {
+      return r.json().then(function (j) { if (!r.ok || !j.verses) throw new Error(j.error || "API " + r.status); return j; });
+    }).then(function (j) {
+      COPY[tr] = j.copyright || NOTICES[tr] || "";
+      SOURCE[tr] = "api";
+      if (j.fumsToken && window.fums) window.fums("trackView", j.fumsToken);
+      return j.verses;
+    });
+  }
+
   function loadBible(tr) {
     if (!BIBLE[tr]) {
-      BIBLE[tr] = fetch(MTB.root + "assets/js/bibles-json/" + tr + "/" + SLUG + ".json").then(function (r) {
-        if (!r.ok) throw new Error(tr);
-        return r.json();
-      }).then(function (j) { return (j.chapters || {})[String(CH)] || {}; });
+      BIBLE[tr] = API_TR[tr]
+        ? loadApi(tr).catch(function (e) {
+            if (window.console) console.warn("API.Bible:", e.message, "- using stored copy");
+            SOURCE[tr] = "stored";
+            return loadStored(tr);
+          })
+        : loadStored(tr);
     }
     return BIBLE[tr];
+  }
+
+  function copyNotice() {
+    var t = COPY[settings.tr];
+    if (!t) return "";
+    var note = API_TR[settings.tr] && SOURCE[settings.tr] === "stored" ? " <span class=\"sc-warn\">(Live text unavailable; showing the stored copy.)</span>" : "";
+    return '<p class="sc-copy">' + esc(t) + note + "</p>";
   }
 
   function verseHtml(text, n) {
@@ -144,7 +188,6 @@
         return '<a href="#s' + s.start + '"><span>' + ref(s.start, s.end) + "</span>" + esc(s.title) + "</a>";
       }).join("") + "</nav>";
     }
-    if (D.outline) html += '<p><a href="doc.html?p=' + encodeURIComponent(D.outline) + '">Read the Chapter Outline</a></p>';
     var cards = ov.cards.filter(function (c) { return c.title !== "Chapter Sections"; });
     if (cards.length) {
       html += '<button type="button" class="deeper-btn" aria-expanded="false" aria-controls="deeper">Go deeper into ' + esc(title) + " ▾</button>" +
@@ -241,6 +284,7 @@
               (c.label ? "<h4>" + esc(c.label) + "</h4>" : "") + '<div class="prose">' + c.html + "</div></article>";
           }).join("") + "</section>";
       }
+      html += copyNotice();
       var nav = PAGE.nav;
       html += '<nav class="ch-foot" aria-label="Chapters">' +
         (nav.prev ? '<a class="btn btn-outline" href="' + MTB.chapterUrl(nav.prev.slug, nav.prev.n) + '">‹ ' + esc(bookTitle(nav.prev.name) + " " + nav.prev.n) + "</a>" : "<span></span>") +

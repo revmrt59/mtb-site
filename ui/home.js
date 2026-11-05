@@ -13,7 +13,7 @@
     var t = lib.testaments.filter(function (x) { return x.key === current; })[0];
     var html = "", later = 0;
     t.groups.forEach(function (g) {
-      var books = g.books.filter(function (b) { return b.ready.length; });
+      var books = g.books.filter(function (b) { return MTB.hasContent(b); });
       later += g.books.length - books.length;
       if (!books.length) return;
       html += '<div class="lib-group"><div class="lib-group-head"><h3>' + esc(g.name) + "</h3>" +
@@ -27,7 +27,7 @@
 
   function card(b) {
     var full = b.ready.filter(function (r) { return r.complete; }).length;
-    var note = plural(b.ready.length, "chapter", "chapters") + " ready";
+    var note = b.ready.length ? plural(b.ready.length, "chapter", "chapters") + " ready" : "Chapter studies coming";
     var link = b.overview
       ? '<a class="bc-link" href="' + MTB.bookUrl(b.slug) + '">Book Overview</a>'
       : '<span class="bc-link bc-missing">Book Overview coming</span>';
@@ -40,7 +40,7 @@
   }
 
   MTB.library().then(function (lib) {
-    var books = MTB.books(lib).filter(function (b) { return b.ready.length; });
+    var books = MTB.books(lib).filter(function (b) { return b.ready.length; });  // books with chapters, for the summary line
     var chapters = books.reduce(function (n, b) { return n + b.ready.length; }, 0);
     summary.textContent = plural(chapters, "chapter", "chapters") + " ready in " + plural(books.length, "book", "books") + ", in Bible order. More are added regularly.";
     tabs.forEach(function (tab) {

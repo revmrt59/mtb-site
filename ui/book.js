@@ -23,7 +23,11 @@
       { id: "overview", label: "Book Overview", path: b.overview ? base + "book-overview-" + b.slug + ".html" : "", missing: "The Book Overview for " + b.name + " is still being written." },
       { id: "context", label: "Bible Context", path: b.group.context + "index.html", missing: "Bible Context for this part of Scripture is still being written." }
     ];
-    (b.special || []).forEach(function (s) { tabs.push({ id: "special-" + s, label: titleCase(s), path: base + "book-special-" + b.slug + "-" + s + ".html" }); });
+    if (b.outline) tabs.push({ id: "outline", label: "Book Outline", path: base + "book-outline-" + b.slug + ".html" });
+    (b.special || []).forEach(function (s) {
+      if (typeof s === "string") s = { id: s, label: titleCase(s), file: "book-special-" + b.slug + "-" + s + ".html" };
+      tabs.push({ id: "extra-" + s.id, label: s.label, path: base + s.file });
+    });
     tabs.push({ id: "chapters", label: "Chapters" });
     if (b.resources) tabs.push({ id: "resources", label: "Resources", path: base + b.slug + "-0-book-resources.html" });
 

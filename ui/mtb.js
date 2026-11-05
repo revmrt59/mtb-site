@@ -42,6 +42,8 @@
       }
       return MTB._lib;
     },
+    /* A book is worth opening when it has ready chapters or a Book Overview. */
+    hasContent: function (b) { return b.ready.length > 0 || !!b.overview; },
     /* Flatten: every book with testament + group info. */
     books: function (lib) {
       var out = [];
@@ -178,13 +180,13 @@
       lib.testaments.forEach(function (t) {
         var groups = "";
         t.groups.forEach(function (g) {
-          var books = g.books.filter(function (b) { return !state.readyOnly || b.ready.length; });
+          var books = g.books.filter(function (b) { return !state.readyOnly || MTB.hasContent(b); });
           if (!books.length) return;
           groups += '<div class="pk-group"><h3>' + esc(g.name) + '</h3><div class="pk-books">' +
             books.map(function (b) {
-              var ok = b.ready.length > 0;
+              var ok = MTB.hasContent(b);
               return '<button type="button" class="pk-book" data-book="' + esc(b.slug) + '"' + (ok ? "" : " disabled") +
-                ' aria-label="' + esc(b.name) + (ok ? ", " + b.ready.length + (b.ready.length === 1 ? " chapter" : " chapters") + " ready" : ", coming later") + '">' + esc(b.name) + "</button>";
+                ' aria-label="' + esc(b.name) + (ok ? (b.ready.length ? ", " + b.ready.length + (b.ready.length === 1 ? " chapter" : " chapters") + " ready" : ", Book Overview") : ", coming later") + '">' + esc(b.name) + "</button>";
             }).join("") + "</div></div>";
         });
         if (groups) html2 += '<section><h3 class="pk-test">' + esc(t.name) + "</h3>" + groups + "</section>";

@@ -97,22 +97,19 @@
     }
   }
 
-  /* ---------- Visitor count (home page footer), using the existing Netlify counter ---------- */
+  /* ---------- Visitor count (home page footer) ----------
+     Same GoatCounter total the old home page showed ("Unique Human Visitors"), bot-filtered. */
   function countVisit() {
-    var id = null;
-    try {
-      id = localStorage.getItem("mtbVisitorId");
-      if (!id) { id = (crypto.randomUUID ? crypto.randomUUID() : String(Date.now()) + Math.random()); localStorage.setItem("mtbVisitorId", id); }
-    } catch (e) { id = "anon-" + Date.now(); }
-    fetch("/.netlify/functions/visitor-count", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ visitorId: id }) })
+    fetch("https://mtb.goatcounter.com/counter/TOTAL.json")
       .then(function (r) { if (!r.ok) throw new Error(); return r.json(); })
       .then(function (d) {
         var el = document.getElementById("mtb-visits");
-        if (!el || !d || d.total == null) return;
+        if (!el || !d || d.count == null) return;
+        var n = String(d.count);
         el.innerHTML = '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>' +
-          '<span aria-label="' + Number(d.total).toLocaleString() + ' visitors">' + Number(d.total).toLocaleString() + "</span>";
+          '<span aria-label="' + esc(n) + ' visitors">' + esc(n) + "</span>";
         el.hidden = false;
-      }).catch(function () { /* counter only works on the live site */ });
+      }).catch(function () { /* counter unavailable: show nothing */ });
   }
 
   /* ---------- Passage picker ---------- */

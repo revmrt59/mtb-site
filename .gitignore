@@ -6,3 +6,5 @@ Thumbs.db
 about/headers.html
 scripts/MTB_STUDIO_OPEN.bat
 /about/archive
+
+__pycache__/

@@ -23,7 +23,6 @@
       { id: "overview", label: "Book Overview", path: b.overview ? base + "book-overview-" + b.slug + ".html" : "", missing: "The Book Overview for " + b.name + " is still being written." },
       { id: "context", label: "Bible Context", path: b.group.context + "index.html", missing: "Bible Context for this part of Scripture is still being written." }
     ];
-    if (b.outline) tabs.push({ id: "outline", label: "Book Outline", path: base + "book-outline-" + b.slug + ".html" });
     (b.special || []).forEach(function (s) { tabs.push({ id: "special-" + s, label: titleCase(s), path: base + "book-special-" + b.slug + "-" + s + ".html" }); });
     tabs.push({ id: "chapters", label: "Chapters" });
     if (b.resources) tabs.push({ id: "resources", label: "Resources", path: base + b.slug + "-0-book-resources.html" });
@@ -43,6 +42,19 @@
       return html + "</div>";
     }
 
+    /* Bible Context: lead with the portion's name and its books instead of "Understanding This Portion". */
+    function tidyContext(box) {
+      var title = box.querySelector("[class*='canon-title']"), name = title ? title.textContent.trim() : b.group.name;
+      Array.prototype.forEach.call(box.querySelectorAll("[class*='-hero'], [class*='section-heading']"), function (n) { n.remove(); });
+      var books = b.group.books.map(function (x) {
+        return x.ready.length && x.slug !== b.slug ? '<a href="' + MTB.bookUrl(x.slug) + '#context">' + esc(x.name) + "</a>" : (x.slug === b.slug ? "<strong>" + esc(x.name) + "</strong>" : esc(x.name));
+      }).join(" · ");
+      var intro = document.createElement("div");
+      intro.className = "ctx-intro";
+      intro.innerHTML = '<h2>' + esc(name) + '</h2><p class="ctx-books">' + books + "</p>";
+      box.insertBefore(intro, box.firstChild);
+    }
+
     function show(id) {
       var t = tabs.filter(function (x) { return x.id === id; })[0] || tabs[0];
       Array.prototype.forEach.call(tabsEl.querySelectorAll(".bk-tab"), function (el) { el.setAttribute("aria-selected", String(el.dataset.tab === t.id)); });
@@ -54,6 +66,7 @@
       MTB.loadDoc(t.path).then(function (box) {
         if (!box) { panel.innerHTML = '<p class="bk-missing">' + esc(t.missing || "This page isn’t available yet.") + "</p>"; return; }
         box.className = "doc hide-h1";
+        if (t.id === "context") tidyContext(box);
         panel.innerHTML = "";
         panel.appendChild(box);
       });

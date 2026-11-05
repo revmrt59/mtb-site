@@ -531,3 +531,15 @@ dialog.picker::backdrop { background: rgba(15, 42, 69, .55); }
 
 /* Book Overview: the "badge" repeats the first glance item, so hide it */
 .doc [class*="glance-badge"] { display: none; }
+
+/* About page: two columns (Mastering the Bible | the Bible), stacked buttons */
+.about-cols { display: grid; gap: 28px; align-items: start; }
+@media (min-width: 760px) { .about-cols { grid-template-columns: 1fr 1fr; } }
+.about-col .h2 { margin: 0 0 12px; font-size: 24px; }
+.doc-list.stacked { grid-template-columns: 1fr; }
+
+/* Bible Context intro */
+.doc .ctx-intro { margin: 0 0 16px; }
+.doc .ctx-intro h2 { margin: 0 0 6px; }
+.doc .ctx-books { margin: 0; font-size: 15px; color: var(--muted); }
+.doc .ctx-books strong { color: var(--navy); }

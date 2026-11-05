@@ -11,11 +11,11 @@
     fetch("data/pages.json", { cache: "no-cache" }).then(function (r) { return r.json(); }).then(function (pages) {
       function list(title, id, items) {
         if (!items || !items.length) return "";
-        return '<section id="' + id + '" style="margin-bottom:28px"><h2 class="h2" style="margin-bottom:12px">' + esc(title) + '</h2><div class="doc-list">' +
+        return '<section id="' + id + '" class="about-col"><h2 class="h2">' + esc(title) + '</h2><div class="doc-list stacked">' +
           items.map(function (p) { return '<a href="' + MTB.docUrl(p.path) + '"><strong>' + esc(p.title) + "</strong>" + (p.note ? "<span>" + esc(p.note) + "</span>" : "") + "</a>"; }).join("") +
           "</div></section>";
       }
-      main.innerHTML = list("Mastering the Bible", "mtb", pages.about) + list("About the Bible", "bible", pages.bible);
+      main.innerHTML = '<div class="about-cols">' + list("About Mastering the Bible", "mtb", pages.about) + list("About the Bible", "bible", pages.bible) + "</div>";
       if (location.hash) { var el = document.querySelector(location.hash); if (el) el.scrollIntoView(); }
     }).catch(function () { main.innerHTML = '<p class="notice">The About pages could not be loaded.</p>'; });
     return;

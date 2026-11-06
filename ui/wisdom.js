@@ -1,4 +1,4 @@
-/* Wisdom from Proverbs: browse every saying in Proverbs by theme, character, keyword, teaching form or chapter.
+/* The King’s Wisdom: browse every saying in Proverbs by theme, character, keyword, teaching form or chapter.
    Data comes from data/wisdom.json, exported from the Proverbs Project by scripts/build_site.py. */
 (function () {
   "use strict";
@@ -242,6 +242,6 @@
     readHash();
     render();
   }).catch(function () {
-    main.innerHTML = '<p class="notice">Wisdom from Proverbs isn’t available right now.</p>';
+    main.innerHTML = '<p class="notice">The King’s Wisdom isn’t available right now.</p>';
   });
 })();

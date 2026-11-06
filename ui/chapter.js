@@ -29,7 +29,7 @@
 
   /* ---------- Scripture text ---------- */
   // Translations served live from API.Bible (licensed). The others still come from the stored JSON files.
-  var API_TR = { niv: 1 };
+  var API_TR = { niv: 1, nlt: 1, amp: 1, kjv: 1 };
   // Notices for the stored JSON copies (prototype only; confirm each against its license before launch).
   var NOTICES = {
     nkjv: "Scripture taken from the New King James Version®. Copyright © 1982 by Thomas Nelson. Used by permission. All rights reserved.",

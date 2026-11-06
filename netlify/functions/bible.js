@@ -25,6 +25,14 @@ const BOOKS = {
   "3-john": "3JN", "jude": "JUD", "revelation": "REV"
 };
 
+// Licensed Bibles on this key (from ?list=1, Nov 5 2026). API_BIBLE_IDS in Netlify can override these.
+const PINNED = {
+  niv: "78a9f6124f344018-01",  // New International Version 2011
+  nlt: "d6e14a625393b4da-01",  // New Living Translation
+  amp: "a81b73293d3080c9-01",  // Amplified Bible
+  kjv: "de4e12af7f28f599-01"   // King James (Authorised) Version
+};
+
 let bibleList = null; // cached while the function stays warm
 
 function reply(status, body, cache) {
@@ -62,6 +70,7 @@ async function bibleId(tr, key) {
     const pinned = JSON.parse(process.env.API_BIBLE_IDS || "{}");
     if (pinned[tr]) return pinned[tr];
   } catch (e) { /* ignore bad JSON */ }
+  if (PINNED[tr]) return PINNED[tr];
   const want = tr.toUpperCase();
   const list = await bibles(key);
   const hit = list.find(b => (b.abbreviation || "").toUpperCase() === want)

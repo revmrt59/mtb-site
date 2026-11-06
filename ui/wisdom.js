@@ -7,7 +7,7 @@
   var W = null, NKJV = {}, BY_ID = {}, PAGE = 40, shown = PAGE, openCard = {};
   var FILTERS = [
     ["theme", "Theme", "themes"], ["char", "Character", "characters"], ["kw", "Keyword", "keywords"],
-    ["form", "Teaching form", "teaching_forms"], ["c", "Chapter", null]
+    ["c", "Chapter", null]
   ];
   var state = { theme: "", char: "", kw: "", form: "", c: "", q: "", focus: "" };
 
@@ -115,7 +115,9 @@
           return '<option value="' + esc(o[0]) + '"' + (o[0] === state[f[0]] ? " selected" : "") + ">" + esc(label) + " (" + o[1] + ")</option>";
         }).join("") + "</select></label>";
     });
+    var any = FILTERS.some(function (f) { return state[f[0]]; }) || state.q;
     html += '<label class="wis-f wis-q"><span>Words</span><input type="search" id="wis-q" value="' + esc(state.q) + '" placeholder="Optional" autocomplete="off"></label>';
+    html += '<div class="wis-f wis-clear"><span aria-hidden="true">&nbsp;</span><button type="button" class="btn btn-outline" data-clear' + (any ? "" : " disabled") + ">Clear filters</button></div>";
     html += "</div></div>";
     return html;
   }
@@ -132,39 +134,46 @@
   }
 
   function tagChips(u) {
-    var groups = [["theme", themesOf(u)], ["char", u.chars], ["kw", u.kw], ["form", u.forms]];
-    return '<div class="wu-tags">' + groups.map(function (g) {
-      return (g[1] || []).map(function (t) {
-        return '<button type="button" class="chip wu-tag' + (state[g[0]] === t ? " full" : "") + '" data-set="' + g[0] + '" data-val="' + esc(t) + '">' + esc(t) + "</button>";
-      }).join("");
+    var groups = [["theme", "Theme", themesOf(u)], ["char", "Character", u.chars], ["kw", "Keywords", u.kw]];
+    return '<div class="lc wu-find"><h3>Find more like this</h3>' + groups.map(function (g) {
+      if (!g[2] || !g[2].length) return "";
+      return '<div class="wu-tg"><span class="wu-tgl">' + g[1] + '</span><span class="wu-tgc">' + g[2].map(function (t) {
+        var on = state[g[0]] === t;
+        return '<button type="button" class="wu-tag' + (on ? " on" : "") + '" data-set="' + g[0] + '" data-val="' + esc(t) + '"' +
+          (on ? ' aria-pressed="true" title="Already filtering by this"' : ' title="Show every saying tagged ' + esc(t) + '"') + ">" + esc(t) + "</button>";
+      }).join("") + "</span></div>";
     }).join("") + "</div>";
   }
 
   function card(u) {
-    var o = !!openCard[u.id], lib = MTB._libCache;
+    var o = !!openCard[u.id];
     var study = MTB.chapterUrl("proverbs", u.c) + "#v" + u.s;
     var html = '<article class="wu' + (o ? " open" : "") + (state.focus === u.id ? " wu-focus" : "") + '" id="' + esc(u.id) + '">' +
-      '<div class="wu-top"><a class="wu-ref" href="' + study + '">' + esc(shortRef(u)) + "</a>" +
-      (u.draft ? '<span class="wu-draft" title="This chapter has not been approved yet">Draft</span>' : "") +
-      '<span class="wu-theme">' + esc(u.theme) + "</span></div>" +
-      '<div class="wu-text">' + verseText(u) + "</div>" +
-      (u.summary ? '<p class="wu-sum">' + esc(u.summary) + "</p>" : "") +
-      '<button type="button" class="wu-more" data-open="' + esc(u.id) + '" aria-expanded="' + o + '">' + (o ? "Less ▴" : "Principle, insight & related ▾") + "</button>";
+      '<button type="button" class="wu-row" data-open="' + esc(u.id) + '" aria-expanded="' + o + '">' +
+        '<span class="wu-top"><span class="wu-ref">' + esc(shortRef(u)) + "</span>" +
+          (u.draft ? '<span class="wu-draft" title="This chapter has not been approved yet">Draft</span>' : "") +
+          '<span class="wu-theme">' + esc(u.theme) + "</span></span>" +
+        '<span class="wu-text">' + verseText(u) + "</span>" +
+        (u.summary ? '<span class="wu-sum"><span class="wu-sumlab">In short</span>' + esc(u.summary) + "</span>" : "") +
+        '<span class="wu-cue">' + (o ? "Close ▴" : "Study ▾") + "</span>" +
+      "</button>";
     if (o) {
-      html += '<div class="wu-body">' +
-        (u.principle ? "<h3>Key Principle</h3><p>" + esc(u.principle) + "</p>" : "") +
-        (u.insight ? "<h3>Pastoral Insight</h3><p>" + esc(u.insight) + "</p>" : "") +
-        (u.application ? "<h3>Practical Application</h3><p>" + esc(u.application) + "</p>" : "") +
-        (u.notes ? "<h3>Notes</h3><p>" + esc(u.notes) + "</p>" : "");
+      html += '<div class="layers-card wu-card">' +
+        (u.principle ? '<div class="lc wu-principle"><h3>Key Principle</h3><p>' + esc(u.principle) + "</p></div>" : "") +
+        (u.insight ? '<div class="lc hear"><h3>Pastoral Insight</h3><p>' + esc(u.insight) + "</p></div>" : "") +
+        (u.application ? '<div class="lc"><h3>Practical Application</h3><p>' + esc(u.application) + "</p></div>" : "") +
+        (u.notes ? '<div class="lc notes"><h3>Notes</h3><p>' + esc(u.notes) + "</p></div>" : "");
       if (u.rel && u.rel.length) {
-        html += "<h3>Related Proverbs</h3><ul class=\"wu-rel\">" + u.rel.map(function (r) {
-          var t = unitFor(r.ref);
-          return "<li>" + (t ? '<button type="button" class="wu-rref" data-focus="' + esc(t.id) + '">' + esc(r.ref.replace(/^Pro\b/, "Proverbs")) + "</button>" : "<b>" + esc(r.ref) + "</b>") +
-            ' <span class="wu-rtype">' + esc(r.type) + "</span> " + esc(r.note) + "</li>";
-        }).join("") + "</ul>" +
-        (state.focus === u.id ? "" : '<button type="button" class="btn btn-outline wu-thread" data-focus="' + esc(u.id) + '">Show this saying with its related proverbs</button>');
+        html += '<div class="lc"><div class="wu-relhead"><h3>Related Proverbs · ' + u.rel.length + "</h3>" +
+          (state.focus === u.id ? "" : '<button type="button" class="wu-thread" data-focus="' + esc(u.id) + '">Read them together →</button>') + "</div>" +
+          '<ul class="wu-rel">' + u.rel.map(function (r) {
+            var t = unitFor(r.ref), label = esc(r.ref.replace(/^Pro\b/, "Proverbs"));
+            return '<li><span class="wu-rl">' + (t ? '<button type="button" class="wu-rref" data-focus="' + esc(t.id) + '">' + label + "</button>" : "<b>" + label + "</b>") +
+              '<span class="wu-rtype">' + esc(r.type) + '</span></span><span class="wu-rn">' + esc(r.note) + "</span></li>";
+          }).join("") + "</ul></div>";
       }
-      html += tagChips(u) + '<a class="wu-study" href="' + study + '">Read the full study of Proverbs ' + u.c + " →</a></div>";
+      html += tagChips(u) +
+        '<div class="lc wu-foot"><a href="' + study + '">Read the full study of Proverbs ' + u.c + " →</a></div></div>";
     }
     return html + "</article>";
   }
@@ -177,8 +186,7 @@
         '<button type="button" class="btn btn-outline" data-back>← Back to the list</button></div>';
     } else {
       html += filterBar() + defs() +
-        '<div class="wis-status"><span><b>' + list.length + "</b> " + (list.length === 1 ? "saying" : "sayings") + (any ? "" : " in Proverbs") + "</span>" +
-        (any ? '<button type="button" class="btn btn-outline" data-clear>Clear filters</button>' : "") + "</div>";
+        '<div class="wis-status"><span><b>' + list.length + "</b> " + (list.length === 1 ? "saying" : "sayings") + (any ? "" : " in Proverbs") + "</span></div>";
     }
     if (!list.length) html += '<p class="notice">No sayings match. Try removing a filter.</p>';
     html += '<div class="wu-list">' + list.slice(0, state.focus ? list.length : shown).map(card).join("") + "</div>";

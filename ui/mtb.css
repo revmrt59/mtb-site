@@ -565,33 +565,47 @@ dialog.picker::backdrop { background: rgba(15, 42, 69, .55); }
 .wis-f { display: flex; flex-direction: column; gap: 3px; font-size: 12px; font-weight: 700; letter-spacing: .06em; text-transform: uppercase; color: var(--muted); min-width: 0; }
 .wis-f select, .wis-f input { width: 100%; min-height: 44px; border: 1px solid var(--line); border-radius: 10px; background: #fff; padding: 0 10px; font: inherit; font-size: 16px; font-weight: 400; letter-spacing: 0; text-transform: none; color: var(--ink); }
 .wis-f.on select { border-color: var(--gold); background: var(--tint); font-weight: 600; }
-.wis-q { grid-column: span 2; }
-@media (min-width: 760px) { .wis-bar { position: sticky; top: 60px; z-index: 20; } .wis-filters { grid-template-columns: repeat(6, minmax(0, 1fr)); } .wis-q { grid-column: auto; } }
+@media (min-width: 760px) { .wis-bar { position: sticky; top: 60px; z-index: 20; } .wis-filters { grid-template-columns: repeat(6, minmax(0, 1fr)); } }
 .wis-defs { margin: 12px 0 0; font-size: 14px; color: var(--muted); }
 .wis-status { display: flex; align-items: center; justify-content: space-between; gap: 10px; flex-wrap: wrap; margin: 14px 0; color: var(--muted); }
 .wu-list { display: flex; flex-direction: column; gap: 14px; }
-.wu { background: var(--card, #fff); border: 1px solid var(--line); border-radius: var(--radius, 14px); padding: 16px 18px; }
-.wu-focus { border-color: var(--gold); box-shadow: 0 0 0 2px var(--gold-soft, #efe2b8); }
-.wu-top { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; margin-bottom: 8px; }
-.wu-ref { font-weight: 700; color: var(--navy); text-decoration: none; }
-.wu-ref:hover { text-decoration: underline; }
-.wu-theme { margin-left: auto; font-size: 13px; font-weight: 600; color: var(--gold-ink); }
+.wis-clear .btn { width: 100%; min-height: 44px; }
+.wis-clear .btn[disabled] { opacity: .45; cursor: default; }
+.wu { background: var(--card); border: 1px solid var(--line); border-radius: 14px; overflow: hidden; }
+.wu.open { border-color: var(--navy-soft, #c9d3e0); }
+.wu-focus { border-color: var(--gold); box-shadow: 0 0 0 2px var(--gold-soft); }
+.wu-row { display: flex; flex-direction: column; gap: 8px; width: 100%; text-align: left; background: none; border: 0; padding: 16px 18px 14px; font: inherit; color: inherit; cursor: pointer; }
+.wu-row:hover .wu-cue { text-decoration: underline; }
+.wu-top { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+.wu-ref { font-weight: 700; color: var(--navy); }
+.wu-theme { margin-left: auto; font-size: 13px; color: var(--muted); }
 .wu-draft { font-size: 11px; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; background: var(--off); color: var(--off-ink); border-radius: 6px; padding: 2px 6px; }
-.wu-text { font-family: var(--serif); font-size: 18px; line-height: 1.55; color: var(--ink); }
+.wu-text { display: block; font-family: var(--serif); font-size: 18px; line-height: 1.55; color: var(--ink); }
 .wu-ln { display: block; }
 .wu-ln + .wu-ln { padding-left: 1.2em; }
 .wu-vn { font-family: var(--sans); font-size: 11px; font-weight: 700; color: var(--gold-ink); margin-right: 3px; }
-.wu-sum { margin: 10px 0 0; font-weight: 600; color: var(--navy); }
-.wu-more { margin-top: 10px; background: none; border: 0; padding: 6px 0; font: inherit; font-size: 14px; font-weight: 700; color: var(--gold-ink); cursor: pointer; }
-.wu-body { border-top: 1px solid var(--line); margin-top: 8px; padding-top: 6px; }
-.wu-body h3 { margin: 14px 0 4px; font-size: 13px; letter-spacing: .1em; text-transform: uppercase; color: var(--gold-ink); }
-.wu-body p { margin: 0; }
-.wu-rel { margin: 0; padding-left: 18px; }
-.wu-rel li { margin: 6px 0; }
+.wu-sum { display: block; border-left: 3px solid var(--gold); padding: 2px 0 2px 12px; font-weight: 600; color: var(--navy); }
+.wu-sumlab { display: block; font-size: 11px; font-weight: 700; letter-spacing: .12em; text-transform: uppercase; color: var(--muted); margin-bottom: 2px; }
+.wu-cue { align-self: flex-end; font-size: 14px; font-weight: 700; color: var(--navy); }
+.wu-card { margin: 0 12px 14px; }
+.wu-card .lc p { margin: 0; line-height: 1.6; }
+.wu-principle p { font-family: var(--serif); font-size: 19px; line-height: 1.5; color: var(--navy); }
+.wu-relhead { display: flex; align-items: baseline; justify-content: space-between; gap: 10px; flex-wrap: wrap; margin-bottom: 8px; }
+.wu-relhead h3 { margin: 0; font-size: 13px; font-weight: 700; letter-spacing: .12em; text-transform: uppercase; color: var(--navy); }
+.wu-thread { background: none; border: 0; padding: 0; font: inherit; font-size: 14px; font-weight: 700; color: var(--navy); cursor: pointer; text-decoration: underline; }
+.wu-rel { list-style: none; margin: 0; padding: 0; }
+.wu-rel li { display: flex; flex-direction: column; gap: 2px; padding: 10px 0; border-top: 1px solid var(--line-2, #eef1f5); }
+.wu-rel li:first-child { border-top: 0; padding-top: 2px; }
+.wu-rl { display: flex; align-items: center; gap: 8px; }
 .wu-rref { background: none; border: 0; padding: 0; font: inherit; font-weight: 700; color: var(--navy); text-decoration: underline; cursor: pointer; }
-.wu-rtype { font-size: 12px; font-weight: 700; color: var(--muted); text-transform: uppercase; letter-spacing: .06em; }
-.wu-thread { margin-top: 10px; }
-.wu-tags { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 14px; }
-.wu-tag { font-size: 13px; cursor: pointer; }
-.wu-study { display: inline-block; margin-top: 14px; font-weight: 600; }
+.wu-rtype { font-size: 11px; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; color: var(--gold-ink); background: var(--cream); border-radius: 6px; padding: 2px 6px; }
+.wu-rn { font-size: 15px; color: var(--ink-2, #3a4655); }
+.wu-find h3 { color: var(--navy); }
+.wu-tg { display: flex; gap: 10px; align-items: baseline; padding: 4px 0; }
+.wu-tgl { flex: 0 0 84px; font-size: 13px; color: var(--muted); }
+.wu-tgc { display: flex; flex-wrap: wrap; gap: 6px; }
+.wu-tag { background: #fff; border: 1px solid var(--line); border-radius: 999px; padding: 4px 10px; font: inherit; font-size: 14px; color: var(--navy); cursor: pointer; }
+.wu-tag:hover { background: var(--tint); }
+.wu-tag.on { background: var(--tint); border-color: var(--gold); font-weight: 600; cursor: default; }
+.wu-foot a { font-weight: 600; }
 .wis-more { text-align: center; margin: 20px 0; }

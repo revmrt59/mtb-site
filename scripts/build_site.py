@@ -269,6 +269,9 @@ def build_wisdom(problems, notes):
                  % (shown, len(out["chapters"]), approved, ", drafts included for the pilot" if WISDOM_INCLUDE_DRAFTS else ""))
 
 
+OLD_PAGE_SCRIPTS = ["mtb-word-studies-nav", "mtb-master-word-links"]
+
+
 def stamp_versions():
     """Give the site's CSS/JS links a fresh ?v= so browsers load the newest copy after each build."""
     stamp = datetime.now().strftime("%Y%m%d%H%M%S")
@@ -279,6 +282,8 @@ def stamp_versions():
         with open(path, encoding="utf-8") as f:
             t = f.read()
         t2 = re.sub(r'(ui/[a-z]+\.(?:css|js))(\?v=[\w-]+)?"', r'\1?v=' + stamp + '"', t)
+        # Old-site helper scripts that other tools sometimes add to pages; the new site has its own versions.
+        t2 = re.sub(r'[ \t]*<script[^>]+src="[^"]*assets/js/(?:%s)\.js[^"]*"[^>]*>\s*</script>[ \t]*\r?\n?' % "|".join(OLD_PAGE_SCRIPTS), "", t2)
         if t2 != t:
             with open(path, "w", encoding="utf-8", newline="") as f:
                 f.write(t2)

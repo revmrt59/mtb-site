@@ -28,6 +28,11 @@
     ["About", "about.html"]
   ];
 
+  // data-mtb-word-studies-tab tells the old word-study nav script (if a tool re-adds it) that the link already exists.
+  function navLink(n) {
+    return '<a href="' + n[1] + '"' + (n[0] === "Word Studies" ? " data-mtb-word-studies-tab" : "") + ">" + esc(n[0]) + "</a>";
+  }
+
   var MTB = {
     root: ROOT,
     esc: esc,
@@ -67,14 +72,14 @@
         '<div class="wrap">' +
           '<a class="brand" href="index.html">Mastering the Bible</a>' +
           '<nav class="topnav" aria-label="Main">' +
-            NAV.map(function (n) { return '<a href="' + n[1] + '">' + esc(n[0]) + "</a>"; }).join("") +
+            NAV.map(navLink).join("") +
           "</nav>" +
           '<button type="button" class="picker-btn" data-open-picker aria-haspopup="dialog">' + BOOK_ICON +
             '<span class="long">Choose a passage</span><span class="short">Books</span></button>' +
           '<button type="button" class="menu-btn" aria-expanded="false" aria-controls="mtb-mobile-nav" aria-label="Menu">' + MENU_ICON + "</button>" +
         "</div>" +
         '<nav id="mtb-mobile-nav" class="mobile-nav" aria-label="Main">' +
-          NAV.map(function (n) { return '<a href="' + n[1] + '">' + esc(n[0]) + "</a>"; }).join("") +
+          NAV.map(navLink).join("") +
         "</nav>";
       var mb = top.querySelector(".menu-btn"), mn = top.querySelector(".mobile-nav");
       mb.addEventListener("click", function () {

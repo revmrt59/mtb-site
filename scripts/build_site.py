@@ -26,7 +26,7 @@ SITE_ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 BOOKS_DIR = os.path.join(SITE_ROOT, "books")
 OUT_DIR = os.path.join(SITE_ROOT, "data")
 # The new site's own pages (in the site root). Their ui/ links get a fresh version number each build.
-SITE_PAGES = ["index.html", "chapter.html", "book.html", "word.html", "doc.html", "about.html"]
+SITE_PAGES = ["index.html", "chapter.html", "book.html", "word.html", "doc.html", "about.html", "wisdom.html"]
 
 # Canon in Bible order, grouped the same way as the Bible Context pages (sections/).
 CANON = [
@@ -85,6 +85,7 @@ LAYER_KINDS = {
     "scripture": "scripture",
     "resources": "resources",
     "insights": "insights",
+    "outline": "outline",          # published Chapter Outline: the authoritative section list
 }
 # The layers that make a chapter "complete" (Scripture comes from the Bible files).
 CORE_LAYERS = ["overview", "study", "hearing", "reflections"]
@@ -204,6 +205,70 @@ def build_pages():
     write_json(os.path.join(OUT_DIR, "pages.json"), out)
 
 
+# ---------------------------------------------------------------- Proverbs Wisdom
+# The Proverbs Project database stays in the Library. The site never reads it directly:
+# this export copies ONLY the public fields into data/wisdom.json.
+WISDOM_DB = os.path.join(os.path.dirname(os.path.dirname(SITE_ROOT)), "Library", "Proverbs Project", "Proverbs Wisdom.sqlite")
+# Pilot: show the newest submission of every chapter, marking unapproved ones as drafts.
+# Set to False before launch to show approved chapters only.
+WISDOM_INCLUDE_DRAFTS = True
+# Fields copied to the site. Anything not listed here (Source Locator, NLT, reviews, history,
+# author workspaces, examples, hashes) is never exported.
+WISDOM_FIELDS = {
+    "Verse Notes": "notes",
+    "One-Sentence Summary": "summary",
+    "Key Principle": "principle",
+    "Pastoral Insight": "insight",
+    "Practical Application": "application",
+}
+
+
+def build_wisdom(problems, notes):
+    import sqlite3
+    if not os.path.exists(WISDOM_DB):
+        notes.append("Proverbs Wisdom: database not found at %s; wisdom.json not updated" % WISDOM_DB)
+        return
+    from pathlib import Path
+    con = sqlite3.connect(Path(WISDOM_DB).resolve().as_uri() + "?mode=ro", uri=True)
+    con.row_factory = sqlite3.Row
+    split = lambda v: [x.strip() for x in (v or "").split(";") if x.strip()]
+    out = {"generated": datetime.now().strftime("%Y-%m-%d %H:%M"), "drafts": WISDOM_INCLUDE_DRAFTS,
+           "vocab": {}, "chapters": {}, "units": []}
+    for r in con.execute("SELECT kind, tag, definition FROM vocabulary WHERE kind IN ('themes','characters','keywords','teaching_forms') ORDER BY kind, tag"):
+        out["vocab"].setdefault(r["kind"], {})[r["tag"]] = r["definition"]
+    approved = shown = 0
+    for ch in con.execute("SELECT chapter, approved_submission_id FROM chapters ORDER BY chapter").fetchall():
+        sub_id, status = ch["approved_submission_id"], "APPROVED"
+        if not sub_id and WISDOM_INCLUDE_DRAFTS:
+            row = con.execute("SELECT id, status FROM submissions WHERE chapter=? ORDER BY revision DESC LIMIT 1", (ch["chapter"],)).fetchone()
+            if row:
+                sub_id, status = row["id"], row["status"]
+        if not sub_id:
+            continue
+        out["chapters"][str(ch["chapter"])] = "approved" if status == "APPROVED" else "draft"
+        approved += status == "APPROVED"
+        rels = {}
+        for r in con.execute("SELECT unit_id, reference, type, explanation FROM submission_relationships WHERE submission_id=?", (sub_id,)):
+            rels.setdefault(r["unit_id"], []).append({"ref": r["reference"], "type": r["type"], "note": r["explanation"]})
+        for u in con.execute("SELECT unit_id, chapter, start_verse, end_verse, data_json FROM submission_units WHERE submission_id=? ORDER BY start_verse", (sub_id,)):
+            d = json.loads(u["data_json"])
+            unit = {"id": u["unit_id"], "ref": d.get("Wisdom Unit") or "", "c": u["chapter"], "s": u["start_verse"], "e": u["end_verse"],
+                    "theme": (d.get("Primary Theme") or "").strip(), "themes2": split(d.get("Secondary Themes")),
+                    "chars": split(d.get("Character Types")), "kw": split(d.get("Keywords")), "forms": split(d.get("Teaching Forms")),
+                    "rel": rels.get(u["unit_id"], [])}
+            for src, key in WISDOM_FIELDS.items():
+                if (d.get(src) or "").strip():
+                    unit[key] = d[src].strip()
+            if status != "APPROVED":
+                unit["draft"] = 1
+            out["units"].append(unit)
+            shown += 1
+    con.close()
+    write_json(os.path.join(OUT_DIR, "wisdom.json"), out)
+    notes.append("Proverbs Wisdom: %d units from %d chapters (%d approved chapters%s)"
+                 % (shown, len(out["chapters"]), approved, ", drafts included for the pilot" if WISDOM_INCLUDE_DRAFTS else ""))
+
+
 def stamp_versions():
     """Give the site's CSS/JS links a fresh ?v= so browsers load the newest copy after each build."""
     stamp = datetime.now().strftime("%Y%m%d%H%M%S")
@@ -263,7 +328,11 @@ def book_supplements(folder, slug, files):
     for f in sorted(files):
         m = re.match(r"^book-(?:supplement|special)-%s-([a-z0-9-]+)\.html$" % re.escape(slug), f)
         if m:
-            label = labels.get(f) or m.group(1).replace("-", " ").title()
+            # The tab name comes from the file name (naming convention: book-supplement-<book>-<name>).
+            # The generator's book-supplement.json title is only a fallback.
+            words = m.group(1).split("-")
+            small = {"of", "the", "and", "a", "an", "in", "on", "to", "for"}
+            label = " ".join(w if (i and w in small) else w.capitalize() for i, w in enumerate(words)) or labels.get(f, "")
             out.append({"id": m.group(1), "label": label, "file": f})
     return out
 
@@ -360,6 +429,10 @@ def main():
     stamp_versions()
     build_pages()
     build_word_index(notes)
+    try:
+        build_wisdom(problems, notes)
+    except Exception as e:  # never stop the whole build for this
+        problems.append("Proverbs Wisdom export failed (%s)" % e)
 
     lines = []
     lines.append("MTB site build - %s" % lib["generated"])

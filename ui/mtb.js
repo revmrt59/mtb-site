@@ -23,6 +23,7 @@
   var NAV = [
     ["Library", "index.html#library"],
     ["Word Studies", ROOT + "word-studies/"],
+    ["Wisdom", "wisdom.html"],
     ["The Life of Jesus", ROOT + "loc/life-of-jesus"],
     ["About", "about.html"]
   ];

@@ -395,29 +395,34 @@ def read_culture(path):
     return cards
 
 
-def read_chapter_outline(path, chapter, nverses):
-    """Read the approved section headings and require exact chapter coverage."""
-    headings = [node for node in parse(path).walk() if node.tag in ("h1", "h2", "h3", "h4")]
-    sections = []
-    section_heading = None
-    for node in headings:
-        text = node.get_text()
-        if section_heading is None:
-            if text.casefold() == "chapter sections":
-                section_heading = node.tag
-            continue
-        if node.tag <= section_heading:
-            break
-        parsed = parse_range(text, chapter)
-        if parsed and parsed[2]:
-            sections.append(dict(start=parsed[0], end=parsed[1], title=parsed[2]))
-    covered = [verse for section in sections for verse in range(section["start"], section["end"] + 1)]
-    if covered != list(range(1, nverses + 1)):
-        raise ValueError("published outline sections do not cover the chapter exactly once")
-    return sections
-
-
 # ---------------------------------------------------------------- one chapter
+def read_outline(path, chapter):
+    """Published Chapter Outline -> {"focus": html, "sections": [{start, end, title, summary}]}"""
+    root = parse(path)
+    out = {"focus": "", "sections": []}
+
+    def after(h, tags):
+        par = h.parent
+        idx = par.children.index(h)
+        parts = []
+        for sib in par.children[idx + 1:]:
+            if sib.tag in ("h1", "h2", "h3", "h4"):
+                break
+            if sib.tag in tags:
+                parts.append("<%s>%s</%s>" % (sib.tag, clean_html(sib), sib.tag))
+        return "".join(parts)
+
+    for h in root.walk():
+        if h.tag == "h2" and "focus" in h.get_text().lower():
+            out["focus"] = after(h, ("p",))
+        elif h.tag in ("h3", "h4"):
+            label = re.sub(r"^\s*\d+[.)]\s*", "", h.get_text().strip())
+            r = parse_range(label, chapter)
+            if r:
+                out["sections"].append({"start": r[0], "end": r[1], "title": r[2], "summary": after(h, ("p", "ul", "ol"))})
+    return out
+
+
 def build_chapter(site_root, testament, slug, name, n, files, nverses):
     """files: dict layer -> filename inside books/<t>/<slug>/<###>/"""
     folder = os.path.join(site_root, "books", testament, slug, "%03d" % n)
@@ -439,18 +444,33 @@ def build_chapter(site_root, testament, slug, name, n, files, nverses):
     if "culture" in files:
         data["culture"] = read_culture(p("culture"))
 
-    # Sections: from the overview outline; else from reflection sections; else the whole chapter.
+    # Sections: the published Chapter Outline is authoritative; then the overview outline;
+    # then study headings; then reflection sections; else the whole chapter.
     sections = []
-    for line in (data.get("overview") or {}).get("outline", []):
+    outline_secs = []
+    if "outline" in files:
+        try:
+            ol = read_outline(p("outline"), n)
+            outline_secs = ol["sections"]
+            if ol["focus"]:
+                data["focus"] = ol["focus"]
+            if not outline_secs:
+                warn.append("chapter outline has no sections the converter recognizes")
+        except Exception as e:
+            warn.append("chapter outline could not be read (%s)" % e)
+    for o in outline_secs:
+        sections.append({"start": o["start"], "end": min(o["end"], nverses), "title": o["title"], "summary": o["summary"]})
+    # Report where the overview outline disagrees with the published outline.
+    if outline_secs and data.get("overview"):
+        ov = [parse_range(l, n) for l in data["overview"].get("outline", [])]
+        ov = [(a, min(b, nverses)) for a, b, _ in [x for x in ov if x]]
+        pub = [(o["start"], min(o["end"], nverses)) for o in outline_secs]
+        if ov and ov != pub:
+            warn.append("overview outline sections differ from the published Chapter Outline")
+    for line in ([] if sections else (data.get("overview") or {}).get("outline", [])):
         r = parse_range(line, n)
         if r:
             sections.append({"start": r[0], "end": min(r[1], nverses), "title": r[2]})
-    if "outline" in files:
-        try:
-            sections = read_chapter_outline(p("outline"), n, nverses)
-            data["outline"] = f"books/{testament}/{slug}/{n:03d}/{files['outline']}"
-        except ValueError as e:
-            warn.append(str(e))
     if not sections and study_heads:
         sections = [{"start": h["start"], "end": min(h["end"], nverses), "title": h["title"]} for h in study_heads]
     if not sections:
@@ -466,7 +486,7 @@ def build_chapter(site_root, testament, slug, name, n, files, nverses):
         if not fixed and start > 1:
             fixed.append({"start": 1, "end": start - 1, "title": ""})
         if start <= min(nverses, nxt - 1):
-            fixed.append({"start": start, "end": min(nverses, nxt - 1), "title": sec["title"]})
+            fixed.append({"start": start, "end": min(nverses, nxt - 1), "title": sec["title"], "summary": sec.get("summary", "")})
     sections = fixed or [{"start": 1, "end": nverses, "title": ""}]
     for s in sections:
         s["groups"] = []

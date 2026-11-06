@@ -247,7 +247,8 @@
         html += '<section class="sec" id="s' + s.start + '" aria-labelledby="sh' + s.start + '">';
         if (s.title || D.sections.length > 1) {
           html += '<div class="sec-head"><div class="eyebrow">' + esc(bookTitle(D.book)) + " " + CH + ":" + ref(s.start, s.end) + "</div>" +
-            (s.title ? '<h2 id="sh' + s.start + '">' + esc(s.title) + "</h2>" : '<h2 id="sh' + s.start + '" class="sr-only">Verses</h2>') + "</div>";
+            (s.title ? '<h2 id="sh' + s.start + '">' + esc(s.title) + "</h2>" : '<h2 id="sh' + s.start + '" class="sr-only">Verses</h2>') +
+            (s.summary ? '<details class="sec-sum"><summary>Section summary</summary><div class="prose">' + s.summary + "</div></details>" : "") + "</div>";
         } else {
           html += '<h2 id="sh' + s.start + '" class="sr-only">' + esc(bookTitle(D.book) + " " + CH) + "</h2>";
         }

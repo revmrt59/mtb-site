@@ -547,3 +547,51 @@ dialog.picker::backdrop { background: rgba(15, 42, 69, .55); }
 /* Scripture copyright notice (chapter page) */
 .sc-copy{margin:2rem 0 0;padding-top:1rem;border-top:1px solid var(--line,#ddd);font-size:.78rem;line-height:1.5;color:var(--muted,#666)}
 .sc-warn{color:#9a6b00}
+
+/* Section summary from the published Chapter Outline */
+.sec-sum{margin-top:.5rem}
+.sec-sum summary{cursor:pointer;font-size:.85rem;font-weight:600;color:var(--gold-ink);list-style:none}
+.sec-sum summary::-webkit-details-marker{display:none}
+.sec-sum summary::after{content:" ▾"}
+.sec-sum[open] summary::after{content:" ▴"}
+.sec-sum .prose{margin-top:.4rem;font-size:.95rem;color:var(--ink)}
+
+/* ---------- Wisdom from Proverbs ---------- */
+.wis-head .eyebrow { color: var(--gold); }
+.wis-intro { margin: 0; color: #dfe6f0; max-width: 640px; }
+.wis-stat { margin: 0; font-size: 14px; color: var(--gold-soft, #e9d9a8); }
+.wis-bar { background: var(--page); padding: 12px 0 10px; border-bottom: 1px solid var(--line); }
+.wis-filters { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; }
+.wis-f { display: flex; flex-direction: column; gap: 3px; font-size: 12px; font-weight: 700; letter-spacing: .06em; text-transform: uppercase; color: var(--muted); min-width: 0; }
+.wis-f select, .wis-f input { width: 100%; min-height: 44px; border: 1px solid var(--line); border-radius: 10px; background: #fff; padding: 0 10px; font: inherit; font-size: 16px; font-weight: 400; letter-spacing: 0; text-transform: none; color: var(--ink); }
+.wis-f.on select { border-color: var(--gold); background: var(--tint); font-weight: 600; }
+.wis-q { grid-column: span 2; }
+@media (min-width: 760px) { .wis-bar { position: sticky; top: 60px; z-index: 20; } .wis-filters { grid-template-columns: repeat(6, minmax(0, 1fr)); } .wis-q { grid-column: auto; } }
+.wis-defs { margin: 12px 0 0; font-size: 14px; color: var(--muted); }
+.wis-status { display: flex; align-items: center; justify-content: space-between; gap: 10px; flex-wrap: wrap; margin: 14px 0; color: var(--muted); }
+.wu-list { display: flex; flex-direction: column; gap: 14px; }
+.wu { background: var(--card, #fff); border: 1px solid var(--line); border-radius: var(--radius, 14px); padding: 16px 18px; }
+.wu-focus { border-color: var(--gold); box-shadow: 0 0 0 2px var(--gold-soft, #efe2b8); }
+.wu-top { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; margin-bottom: 8px; }
+.wu-ref { font-weight: 700; color: var(--navy); text-decoration: none; }
+.wu-ref:hover { text-decoration: underline; }
+.wu-theme { margin-left: auto; font-size: 13px; font-weight: 600; color: var(--gold-ink); }
+.wu-draft { font-size: 11px; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; background: var(--off); color: var(--off-ink); border-radius: 6px; padding: 2px 6px; }
+.wu-text { font-family: var(--serif); font-size: 18px; line-height: 1.55; color: var(--ink); }
+.wu-ln { display: block; }
+.wu-ln + .wu-ln { padding-left: 1.2em; }
+.wu-vn { font-family: var(--sans); font-size: 11px; font-weight: 700; color: var(--gold-ink); margin-right: 3px; }
+.wu-sum { margin: 10px 0 0; font-weight: 600; color: var(--navy); }
+.wu-more { margin-top: 10px; background: none; border: 0; padding: 6px 0; font: inherit; font-size: 14px; font-weight: 700; color: var(--gold-ink); cursor: pointer; }
+.wu-body { border-top: 1px solid var(--line); margin-top: 8px; padding-top: 6px; }
+.wu-body h3 { margin: 14px 0 4px; font-size: 13px; letter-spacing: .1em; text-transform: uppercase; color: var(--gold-ink); }
+.wu-body p { margin: 0; }
+.wu-rel { margin: 0; padding-left: 18px; }
+.wu-rel li { margin: 6px 0; }
+.wu-rref { background: none; border: 0; padding: 0; font: inherit; font-weight: 700; color: var(--navy); text-decoration: underline; cursor: pointer; }
+.wu-rtype { font-size: 12px; font-weight: 700; color: var(--muted); text-transform: uppercase; letter-spacing: .06em; }
+.wu-thread { margin-top: 10px; }
+.wu-tags { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 14px; }
+.wu-tag { font-size: 13px; cursor: pointer; }
+.wu-study { display: inline-block; margin-top: 14px; font-weight: 600; }
+.wis-more { text-align: center; margin: 20px 0; }

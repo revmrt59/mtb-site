@@ -1,9 +1,10 @@
-MTB site build - 2026-11-05 23:54
+MTB site build - 2026-11-06 14:29
 
 Ready: 79 chapters in 8 books (5 complete with all core layers).
 
-NEEDS ATTENTION (13)
-  - Ruth 1–4: missing overview, hearing, reflections
+NEEDS ATTENTION (14)
+  - Ruth 1–4: missing hearing, reflections
+  - 1 Samuel 4: overview outline sections differ from the published Chapter Outline
   - 1 Samuel 1–2: missing hearing
   - 1 Samuel 3: missing hearing, reflections
   - 1 Chronicles 1, 4: missing hearing, reflections
@@ -17,92 +18,9 @@ NEEDS ATTENTION (13)
   - Titus 1–3: missing study, hearing, reflections
   - 2 John 1: missing hearing
 
-FYI, NOT SHOWN ON THE SITE (88)
-  - Ruth 1: extra file ignored: ruth-1-chapter-outline.html
-  - Ruth 2: extra file ignored: ruth-2-chapter-outline.html
-  - Ruth 3: extra file ignored: ruth-3-chapter-outline.html
-  - Ruth 4: extra file ignored: ruth-4-chapter-outline.html
-  - 1 Samuel 1: extra file ignored: 1-samuel-1-chapter-outline.html
+FYI, NOT SHOWN ON THE SITE (5)
   - 1 Samuel 1: extra file ignored: 1-samuel-2-chapter-resources.html
-  - 1 Samuel 2: extra file ignored: 1-samuel-2-chapter-outline.html
-  - 1 Samuel 3: extra file ignored: 1-samuel-3-chapter-outline.html
-  - 1 Samuel 4: extra file ignored: 1-samuel-4-chapter-outline.html
-  - 1 Samuel 5: extra file ignored: 1-samuel-5-chapter-outline.html
-  - 1 Samuel 6: extra file ignored: 1-samuel-6-chapter-outline.html
-  - 1 Samuel 7: extra file ignored: 1-samuel-7-chapter-outline.html
-  - 1 Samuel 8: extra file ignored: 1-samuel-8-chapter-outline.html
-  - 1 Samuel 9: extra file ignored: 1-samuel-9-chapter-outline.html
-  - 1 Samuel 10: extra file ignored: 1-samuel-10-chapter-outline.html
-  - 1 Samuel 11: extra file ignored: 1-samuel-11-chapter-outline.html
-  - 1 Samuel 12: extra file ignored: 1-samuel-12-chapter-outline.html
-  - 1 Samuel 13: extra file ignored: 1-samuel-13-chapter-outline.html
-  - 1 Samuel 14: extra file ignored: 1-samuel-14-chapter-outline.html
-  - 1 Samuel 15: extra file ignored: 1-samuel-15-chapter-outline.html
-  - 1 Samuel 16: extra file ignored: 1-samuel-16-chapter-outline.html
-  - 1 Samuel 17: extra file ignored: 1-samuel-17-chapter-outline.html
-  - 1 Samuel 18: extra file ignored: 1-samuel-18-chapter-outline.html
-  - 1 Samuel 19: extra file ignored: 1-samuel-19-chapter-outline.html
-  - 1 Samuel 20: extra file ignored: 1-samuel-20-chapter-outline.html
-  - 1 Samuel 21: extra file ignored: 1-samuel-21-chapter-outline.html
-  - 1 Samuel 22: extra file ignored: 1-samuel-22-chapter-outline.html
-  - 1 Samuel 23: extra file ignored: 1-samuel-23-chapter-outline.html
-  - 1 Samuel 24: extra file ignored: 1-samuel-24-chapter-outline.html
-  - 1 Samuel 25: extra file ignored: 1-samuel-25-chapter-outline.html
-  - 1 Samuel 26: extra file ignored: 1-samuel-26-chapter-outline.html
-  - 1 Samuel 27: extra file ignored: 1-samuel-27-chapter-outline.html
-  - 1 Samuel 28: extra file ignored: 1-samuel-28-chapter-outline.html
-  - 1 Samuel 29: extra file ignored: 1-samuel-29-chapter-outline.html
-  - 1 Samuel 30: extra file ignored: 1-samuel-30-chapter-outline.html
-  - 1 Samuel 31: extra file ignored: 1-samuel-31-chapter-outline.html
-  - 1 Chronicles 1: extra file ignored: 1-chronicles-1-chapter-outline.html
-  - 1 Chronicles 2: extra file ignored: 1-chronicles-2-chapter-outline.html
-  - 1 Chronicles 3: extra file ignored: 1-chronicles-3-chapter-outline.html
-  - 1 Chronicles 4: extra file ignored: 1-chronicles-4-chapter-outline.html
-  - Psalms 19: extra file ignored: psalms-19-chapter-outline.html
-  - Psalms 20: extra file ignored: psalms-20-chapter-outline.html
-  - Psalms 23: extra file ignored: psalms-23-chapter-outline.html
-  - Psalms 52: extra file ignored: psalms-52-chapter-outline.html
-  - Psalms 58: extra file ignored: psalms-58-chapter-outline.html
-  - Psalms 117: extra file ignored: psalms-117-chapter-outline.html
-  - Proverbs 1: extra file ignored: proverbs-1-chapter-outline.html
-  - Proverbs 2: extra file ignored: proverbs-2-chapter-outline.html
-  - Proverbs 3: extra file ignored: proverbs-3-chapter-outline.html
-  - Proverbs 4: extra file ignored: proverbs-4-chapter-outline.html
-  - Proverbs 5: extra file ignored: proverbs-5-chapter-outline.html
-  - Proverbs 6: extra file ignored: proverbs-6-chapter-outline.html
-  - Proverbs 7: extra file ignored: proverbs-7-chapter-outline.html
-  - Proverbs 8: extra file ignored: proverbs-8-chapter-outline.html
-  - Proverbs 9: extra file ignored: proverbs-9-chapter-outline.html
-  - Proverbs 10: extra file ignored: proverbs-10-chapter-outline.html
-  - Proverbs 11: extra file ignored: proverbs-11-chapter-outline.html
-  - Proverbs 12: extra file ignored: proverbs-12-chapter-outline.html
-  - Proverbs 13: extra file ignored: proverbs-13-chapter-outline.html
-  - Proverbs 14: extra file ignored: proverbs-14-chapter-outline.html
-  - Proverbs 15: extra file ignored: proverbs-15-chapter-outline.html
-  - Proverbs 16: extra file ignored: proverbs-16-chapter-outline.html
-  - Proverbs 17: extra file ignored: proverbs-17-chapter-outline.html
-  - Proverbs 18: extra file ignored: proverbs-18-chapter-outline.html
-  - Proverbs 19: extra file ignored: proverbs-19-chapter-outline.html
-  - Proverbs 20: extra file ignored: proverbs-20-chapter-outline.html
-  - Proverbs 21: extra file ignored: proverbs-21-chapter-outline.html
-  - Proverbs 22: extra file ignored: proverbs-22-chapter-outline.html
-  - Proverbs 23: extra file ignored: proverbs-23-chapter-outline.html
-  - Proverbs 24: extra file ignored: proverbs-24-chapter-outline.html
-  - Proverbs 25: extra file ignored: proverbs-25-chapter-outline.html
-  - Proverbs 26: extra file ignored: proverbs-26-chapter-outline.html
-  - Proverbs 27: extra file ignored: proverbs-27-chapter-outline.html
-  - Proverbs 28: extra file ignored: proverbs-28-chapter-outline.html
-  - Proverbs 29: extra file ignored: proverbs-29-chapter-outline.html
-  - Proverbs 30: extra file ignored: proverbs-30-chapter-outline.html
-  - Proverbs 31: extra file ignored: proverbs-31-chapter-outline.html
-  - Obadiah 1: extra file ignored: obadiah-1-chapter-outline.html
   - Obadiah: folder 007 is beyond the book's 1 chapters
-  - Matthew 1: extra file ignored: matthew-1-chapter-outline.html
-  - Philemon 1: extra file ignored: philemon-1-chapter-outline.html
   - Titus 1: extra file ignored: titus-1-chapter-insights-copy.html
   - Titus 1: extra file ignored: titus-1-chapter-orientation-copy.html
-  - Titus 1: extra file ignored: titus-1-chapter-outline.html
-  - Titus 2: extra file ignored: titus-2-chapter-outline.html
-  - Titus 3: extra file ignored: titus-3-chapter-outline.html
-  - Jude 1: extra file ignored: jude-1-chapter-outline.html
-  - 2 John 1: extra file ignored: 2-john-1-chapter-outline.html
+  - Proverbs Wisdom: 911 units from 31 chapters (1 approved chapters, drafts included for the pilot)

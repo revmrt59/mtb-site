@@ -1,53 +1,23 @@
 <!doctype html>
-<html>
+<html lang="en">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>The Life of Jesus</title>
-
-  <!-- IMPORTANT: load your site stylesheet -->
-<link rel="stylesheet" href="/assets/css/style.css">
-<link rel="stylesheet" href="/assets/css/mtb-ui.css">
-<link rel="stylesheet" href="/assets/css/mtb-ui-overrides.css">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="mtb-root" content="../">
+<title>The Life of Jesus · Mastering the Bible</title>
+<meta name="description" content="The life of Jesus told event by event from all four Gospels: the story woven together, how the accounts fit, the world behind each scene, and what each event shows us about Jesus.">
+<link rel="icon" href="../assets/images/favicon.ico.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Sans+3:wght@400;600;700&family=Source+Serif+4:ital,wght@0,400;0,600;0,700;1,400&display=swap">
+<link rel="stylesheet" href="../ui/mtb.css">
+<link rel="stylesheet" href="../ui/loc.css">
 </head>
-
-<body class="loc-index mtb-no-gap loj-index">
-  <!-- Optional: top nav if you want it on this page -->
-  <header class="site-header mtb-primary-header">
-    <nav class="main-nav">
-    <a href="index.html">Home</a>
-    <a href="/aboutthebible.html">About the Bible</a>
-    <a href="/loc/life-of-jesus.html">The Life of Jesus</a>
-    <a href="/about.html">About MTB</a>
-    <a href="/resources/index.html">Resources</a>
-    </nav>
-  </header>
-
-  <main class="doc-shell mtb-paper wide">
-    <section class="loc-head">
-
-      <div class="loc-sticky-header">
-        <h1 class="mtb-page-title">The Life of Jesus</h1>
-
-        <div class="loc-head-controls">
-          <label for="loc-search">Search</label>
-          <input id="loc-search" type="text" placeholder="Search event title, date, phase, rollup..." />
-
-          <label for="loc-rollup">Rollup</label>
-          <select id="loc-rollup"></select>
-
-          <label for="loc-phase">Phase</label>
-          <select id="loc-phase"></select>
-        </div>
-      </div>
-
-      <div class="loc-scroll-area">
-        <div id="loc-head-table"></div>
-      </div>
-
-    </section>
-  </main>
-
-  <script src="/assets/js/loc/loc-head.js"></script>
+<body class="loj">
+<header id="mtb-top"></header>
+<div id="loj-app" aria-live="polite"><p class="wrap loj-loading">Loading…</p></div>
+<footer id="mtb-foot"></footer>
+<script src="../ui/mtb.js"></script>
+<script src="../ui/loc.js"></script>
 </body>
 </html>

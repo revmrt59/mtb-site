@@ -26,7 +26,8 @@ SITE_ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 BOOKS_DIR = os.path.join(SITE_ROOT, "books")
 OUT_DIR = os.path.join(SITE_ROOT, "data")
 # The new site's own pages (in the site root). Their ui/ links get a fresh version number each build.
-SITE_PAGES = ["index.html", "chapter.html", "book.html", "word.html", "doc.html", "about.html", "wisdom.html"]
+SITE_PAGES = ["index.html", "chapter.html", "book.html", "word.html", "doc.html", "about.html", "wisdom.html",
+              "loc/life-of-jesus.html"]
 
 # Canon in Bible order, grouped the same way as the Bible Context pages (sections/).
 CANON = [
@@ -391,6 +392,10 @@ def main():
                         layers, stray = chapter_layers(book_dir, slug, n)
                         for s in stray:
                             notes.append("%s %d: extra file ignored: %s" % (name, n, s))
+                        # An old "orientation" file on its own is a leftover, not a chapter study.
+                        if set(layers) - {"scripture", "outline"} == {"overview"} and layers["overview"].endswith("-orientation.html"):
+                            notes.append("%s %d: only an old orientation file is here, so the chapter is not listed: %s" % (name, n, layers["overview"]))
+                            continue
                         if "study" not in layers and "overview" not in layers:
                             continue
                         have = [l for l in LAYER_ORDER if l in layers]
@@ -442,6 +447,11 @@ def main():
         build_wisdom(problems, notes)
     except Exception as e:  # never stop the whole build for this
         problems.append("Proverbs Wisdom export failed (%s)" % e)
+    try:
+        import build_loc  # The Life of Jesus: loc/data from mtb-source/source/loc-head
+        build_loc.build(SITE_ROOT, problems, notes)
+    except Exception as e:  # never stop the whole build for this
+        problems.append("Life of Jesus export failed (%s)" % e)
 
     lines = []
     lines.append("MTB site build - %s" % lib["generated"])

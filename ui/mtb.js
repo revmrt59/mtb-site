@@ -21,11 +21,11 @@
   }
 
   var NAV = [
-    ["Library", "index.html#library"],
+    ["Library", ROOT + "index.html#library"],
     ["Word Studies", ROOT + "word-studies/"],
-    ["The King’s Wisdom", "wisdom.html"],
-    ["The Life of Jesus", ROOT + "loc/life-of-jesus"],
-    ["About", "about.html"]
+    ["The King’s Wisdom", ROOT + "wisdom.html"],
+    ["The Life of Jesus", ROOT + "loc/life-of-jesus.html"],
+    ["About", ROOT + "about.html"]
   ];
 
   // data-mtb-word-studies-tab tells the old word-study nav script (if a tool re-adds it) that the link already exists.
@@ -36,12 +36,12 @@
   var MTB = {
     root: ROOT,
     esc: esc,
-    chapterUrl: function (slug, n) { return "chapter.html?book=" + encodeURIComponent(slug) + "&c=" + n; },
-    bookUrl: function (slug) { return "book.html?book=" + encodeURIComponent(slug); },
+    chapterUrl: function (slug, n) { return ROOT + "chapter.html?book=" + encodeURIComponent(slug) + "&c=" + n; },
+    bookUrl: function (slug) { return ROOT + "book.html?book=" + encodeURIComponent(slug); },
     _lib: null,
     library: function () {
       if (!MTB._lib) {
-        MTB._lib = fetch("data/library.json", { cache: "no-cache" }).then(function (r) {
+        MTB._lib = fetch(ROOT + "data/library.json", { cache: "no-cache" }).then(function (r) {
           if (!r.ok) throw new Error("library " + r.status);
           return r.json();
         });
@@ -70,7 +70,7 @@
       top.className = "topbar";
       top.innerHTML =
         '<div class="wrap">' +
-          '<a class="brand" href="index.html">Mastering the Bible</a>' +
+          '<a class="brand" href="' + ROOT + 'index.html">Mastering the Bible</a>' +
           '<nav class="topnav" aria-label="Main">' +
             NAV.map(navLink).join("") +
           "</nav>" +
@@ -94,9 +94,9 @@
       foot.className = "footer";
       foot.innerHTML =
         '<div class="wrap">' +
-          '<a href="about.html#mtb">About Mastering the Bible</a>' +
-          '<a href="about.html#bible">About the Bible</a>' +
-          '<a href="' + ROOT + 'loc/life-of-jesus">The Life of Jesus</a>' +
+          '<a href="' + ROOT + 'about.html#mtb">About Mastering the Bible</a>' +
+          '<a href="' + ROOT + 'about.html#bible">About the Bible</a>' +
+          '<a href="' + ROOT + 'loc/life-of-jesus.html">The Life of Jesus</a>' +
           '<a href="' + ROOT + 'resources/">Resources</a>' +
           '<span class="visits" id="mtb-visits" hidden></span>' +
           '<span class="copy">Mastering the Bible · Helping People Hear God’s Voice</span>' +

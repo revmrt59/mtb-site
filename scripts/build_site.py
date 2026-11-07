@@ -215,7 +215,6 @@ WISDOM_INCLUDE_DRAFTS = True
 # Fields copied to the site. Anything not listed here (Source Locator, NLT, reviews, history,
 # author workspaces, examples, hashes) is never exported.
 WISDOM_FIELDS = {
-    "Explanation": "explanation",
     "Verse Notes": "notes",
     "One-Sentence Summary": "summary",
     "Key Principle": "principle",
@@ -318,7 +317,9 @@ def build_word_index(notes):
 
 
 def book_supplements(folder, slug, files):
-    """Extra book tabs: book-supplement-<book>-<name>.html, labelled by book-supplement.json when present."""
+    """Extra book tabs, in this order: book-supplement-<book>-<name>.html, then
+    book-supplement1-<book>-<name>.html, book-supplement2-..., and so on.
+    The tab name comes from <name> (the-journey -> The Journey)."""
     labels = {}
     meta = os.path.join(folder, "book-supplement.json")
     if os.path.exists(meta):
@@ -330,17 +331,19 @@ def book_supplements(folder, slug, files):
                     labels[item["file"]] = item.get("title") or ""
         except (OSError, ValueError):
             pass
-    out = []
-    for f in sorted(files):
-        m = re.match(r"^book-(?:supplement|special)-%s-([a-z0-9-]+)\.html$" % re.escape(slug), f)
+    small = {"of", "the", "and", "a", "an", "in", "on", "to", "for"}
+    found = []
+    for f in files:
+        m = re.match(r"^book-(?:supplement|special)(\d*)-%s-([a-z0-9-]+)\.html$" % re.escape(slug), f)
         if m:
-            # The tab name comes from the file name (naming convention: book-supplement-<book>-<name>).
-            # The generator's book-supplement.json title is only a fallback.
-            words = m.group(1).split("-")
-            small = {"of", "the", "and", "a", "an", "in", "on", "to", "for"}
+            words = m.group(2).split("-")
             label = " ".join(w if (i and w in small) else w.capitalize() for i, w in enumerate(words)) or labels.get(f, "")
-            out.append({"id": m.group(1), "label": label, "file": f})
-    return out
+            num = int(m.group(1)) if m.group(1) else 0
+            found.append((num, f, {"id": (m.group(1) or "") + "-" + m.group(2) if m.group(1) else m.group(2), "label": label, "file": f}))
+    # An old unnumbered copy is left over when the same supplement is now numbered; skip it.
+    numbered = {x[2]["label"] for x in found if x[0]}
+    found = [x for x in found if x[0] or x[2]["label"] not in numbered]
+    return [x[2] for x in sorted(found)]
 
 
 def ranges(nums):

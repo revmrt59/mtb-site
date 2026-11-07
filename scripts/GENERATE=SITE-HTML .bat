@@ -62,8 +62,14 @@ echo Running Mode: %MODE%
 echo.
 
 powershell -NoProfile -ExecutionPolicy Bypass -File "%PS1%" -Mode %MODE%
-if not errorlevel 1 if "%CHOICE%"=="5" python "%BAT_DIR%build_site.py"
-if not errorlevel 1 if "%CHOICE%"=="6" python "%BAT_DIR%build_site.py"
+if errorlevel 1 (
+  echo.
+  echo The generator reported a problem, so the site data was not rebuilt.
+) else (
+  echo.
+  echo Rebuilding the site data ^(Library, chapters, tabs, King's Wisdom^)...
+  python "%BAT_DIR%build_site.py"
+)
 echo.
 pause
 goto MENU

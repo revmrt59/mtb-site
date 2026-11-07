@@ -1,14 +1,14 @@
-MTB site build - 2026-11-06 19:23
+MTB site build - 2026-11-07 04:59
 
-Ready: 84 chapters in 10 books (5 complete with all core layers).
+Ready: 57 chapters in 10 books (5 complete with all core layers).
 
 NEEDS ATTENTION (21)
   - Ruth 1–4: missing hearing, reflections
   - 1 Samuel 4: overview outline sections differ from the published Chapter Outline
   - 1 Samuel 1–2: missing hearing
   - 1 Samuel 3: missing hearing, reflections
-  - 1 Chronicles 1, 4: missing hearing, reflections
-  - 1 Chronicles 2–3, 5–29: missing overview, hearing, reflections
+  - 1 Chronicles 1: missing hearing, reflections
+  - 1 Chronicles 4: missing study, hearing, reflections
   - 1 Chronicles: has ready chapters but no Book Overview
   - Psalms 52: missing hearing
   - Psalms 58: missing hearing, reflections
@@ -30,4 +30,4 @@ FYI, NOT SHOWN ON THE SITE (5)
   - Obadiah: folder 007 is beyond the book's 1 chapters
   - Titus 1: extra file ignored: titus-1-chapter-insights-copy.html
   - Titus 1: extra file ignored: titus-1-chapter-orientation-copy.html
-  - Proverbs Wisdom: 911 units from 31 chapters (31 approved chapters, drafts included for the pilot)
+  - Proverbs Wisdom: 900 units from 31 chapters (31 approved chapters, drafts included for the pilot)

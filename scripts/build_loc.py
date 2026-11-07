@@ -28,6 +28,7 @@ from datetime import datetime
 LOC_INCLUDE_DRAFTS = True     # show Draft events on the site (with a Draft badge); set False to show only Approved
 
 GOSPELS = ("matthew", "mark", "luke", "john")
+OTHER_BOOKS = {"Acts": "acts", "1 Cor": "1-corinthians", "1 Corinthians": "1-corinthians"}
 CONFIDENCE = ("Stated", "Strong likelihood", "Reasonable possibility", "Views differ")
 
 
@@ -106,6 +107,13 @@ def check_event(ev, row, bible):
             hay += bible.verses(g, spec)
         except Exception as e:
             errs.append("reference %s %s could not be read (%s)" % (g, spec, e))
+    for o in (row.get("other") or "").split(";"):
+        m = re.match(r"^(\d?\s?[A-Za-z]+)\s+([\d:,\-]+)$", o.strip())
+        if m and m.group(1) in OTHER_BOOKS:
+            try:
+                hay += bible.verses(OTHER_BOOKS[m.group(1)], m.group(2))
+            except Exception as e:
+                errs.append("reference %s could not be read (%s)" % (o.strip(), e))
     hay = _norm(" ".join(hay))
     for i, p in enumerate(ev.get("story") or []):
         for q in re.findall(r"“([^”]+)”", p):
@@ -154,7 +162,10 @@ def build(site_root, problems, notes):
     os.makedirs(out_events, exist_ok=True)
     for old in os.listdir(out_events):
         if old.endswith(".json"):
-            os.remove(os.path.join(out_events, old))
+            try:
+                os.remove(os.path.join(out_events, old))
+            except OSError:
+                pass  # it will be overwritten below if the event still exists
 
     by_n = {r["n"]: r for r in rows}
     written = {"approved": 0, "draft": 0}

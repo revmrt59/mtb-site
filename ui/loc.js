@@ -387,11 +387,17 @@
       var g = G[TAGS[t]]; return '<span class="loj-src ' + g.cls + '" title="' + g.name + '">' + t + "</span>";
     });
   }
+  function storyNote(e) {
+    var gs = gospelsOf(e);
+    if (gs.length > 1) return "Retold by MTB from all " + ["", "", "two", "three", "four"][gs.length] + " accounts. Quotations are from the NKJV; the tags show which Gospel a detail comes from.";
+    if (gs.length === 1) return "Retold by MTB from " + G[gs[0]].name + "’s account. Quotations are from the NKJV.";
+    return "Retold by MTB. Quotations are from the NKJV.";
+  }
   function layer(title, sub, body, id) {
     return '<details class="loj-layer" open' + (id ? ' id="' + id + '"' : "") + '><summary><span><span class="lt">' + title + '</span><span class="ls">' + sub + "</span></span></summary><div class=\"loj-lb\">" + body + "</div></details>";
   }
   function labelled(items) {
-    return "<ul>" + (items || []).map(function (s) { return "<li><b>" + esc(s.label) + ".</b> " + esc(s.text) + "</li>"; }).join("") + "</ul>";
+    return "<ul>" + (items || []).map(function (s) { return "<li><b>" + esc(s.label) + (/[.?!]$/.test(s.label) ? "" : ".") + "</b> " + esc(s.text) + "</li>"; }).join("") + "</ul>";
   }
   function chapterLink(text) {
     var m = String(text || "").match(/^(Matthew|Mark|Luke|John)\s+(\d+)/);
@@ -422,9 +428,9 @@
       h += '<div class="loj-chips">' + badges(e, { noSoon: true }) + (e.passover ? '<span class="loj-badge diff">' + esc(e.passover) + "</span>" : "") + "</div></div></section>";
       h += '<main class="wrap loj-main"><div class="loj-layers-bar"><div class="loj-label">Go deeper</div><button type="button" class="loj-openall" data-toggle-all>Close all</button></div><div class="loj-layers">';
       if (full) {
-        h += layer("The Story", "All the accounts, woven into one telling",
+        h += layer("The Story", gospelsOf(e).length > 1 ? "All the accounts, woven into one telling" : "The event, retold",
           '<div class="loj-story">' + (full.story || []).map(function (p) { return "<p>" + storyHtml(p) + "</p>"; }).join("") +
-          '</div><p class="loj-small">Retold by MTB from ' + (gospelsOf(e).length > 1 ? "all " + ["", "", "two", "three", "four"][gospelsOf(e).length] + " accounts" : "the account") + ". Quotations are from the NKJV; the tags show which Gospel a detail comes from.</p>");
+          '</div><p class="loj-small">' + storyNote(e) + "</p>");
       } else {
         h += '<div class="loj-soon"><b>The written study for this event is coming.</b> For now you can read the accounts side by side below.</div>';
       }

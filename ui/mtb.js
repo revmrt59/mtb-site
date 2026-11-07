@@ -153,27 +153,21 @@
         var html = '<div class="pk-booklinks">';
         if (b.overview) html += '<a href="' + MTB.bookUrl(b.slug) + '">Book Overview</a>';
         html += '<a href="' + MTB.bookUrl(b.slug) + '#context">Bible Context: ' + esc(b.group.name) + "</a>";
+        if (b.outline) html += '<a href="' + MTB.bookUrl(b.slug) + '#outline">Book Outline</a>';
+        (b.special || []).forEach(function (s) { html += '<a href="' + MTB.bookUrl(b.slug) + "#extra-" + esc(s.id) + '">' + esc(s.label) + "</a>"; });
         html += "</div>";
-        var big = b.chapters > 12;
-        html += '<div class="pk-toolbar"><span class="lede">' + b.ready.length + " of " + b.chapters + (b.chapters === 1 ? " chapter" : " chapters") + " ready</span>";
-        if (big) html += '<button type="button" class="pk-toggle" aria-pressed="' + (!state.readyOnly) + '">' + (state.readyOnly ? "Show all " + b.chapters + " chapters" : "Only show what’s ready") + "</button>";
-        html += "</div>";
-        html += '<div class="pk-chapters">';
-        for (var n = 1; n <= b.chapters; n++) {
-          var r = ready[n];
-          if (!r && state.readyOnly && big) continue;
-          if (r) html += '<a class="chip" href="' + MTB.chapterUrl(b.slug, n) + '" aria-label="' + esc(b.name) + " " + n + '">' + n + "</a>";
-          else html += '<span class="chip off" aria-label="' + esc(b.name) + " " + n + ', coming later">' + n + "</span>";
+        // Only chapters that can be opened are shown.
+        if (b.ready.length) {
+          html += '<div class="pk-toolbar"><span class="lede">' + (b.ready.length === b.chapters ? "All " + b.chapters + " chapters ready"
+            : b.ready.length + " of " + b.chapters + (b.chapters === 1 ? " chapter" : " chapters") + " ready") + "</span></div>";
+          html += '<div class="pk-chapters">' + b.ready.map(function (r) {
+            return '<a class="chip" href="' + MTB.chapterUrl(b.slug, r.n) + '" aria-label="' + esc(b.name) + " " + r.n + '">' + r.n + "</a>";
+          }).join("") + "</div>";
+        } else {
+          html += '<p class="lede pk-none">Chapter studies for ' + esc(b.name) + " are coming.</p>";
         }
-        html += "</div>";
         body.innerHTML = html;
         body.scrollTop = 0;
-        var tg = body.querySelector(".pk-toggle");
-        if (tg) tg.addEventListener("click", function () {
-          state.readyOnly = !state.readyOnly;
-          store("mtb-ready-only", state.readyOnly ? "1" : "0");
-          draw();
-        });
         var first = body.querySelector("a.chip");
         if (first) first.focus();
         return;

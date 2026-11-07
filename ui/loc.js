@@ -234,12 +234,13 @@
     var h = head({ back: [link("seasons"), "Seasons"], eyebrow: "Seasons · Movement 7", title: "Holy Week, Day by Day",
       text: "About a third of the Gospels covers these eight days. Walk through them in order, from Bethany to the empty tomb." });
     h += '<main class="wrap loj-main"><div class="loj-note"><span><b>For pastors:</b> each day works as a Holy Week reading, a Lent series or a Good Friday service. The days follow the usual reckoning; a few placements are debated.</span></div>';
-    var order = [], groups = {};
+    var order = [], groups = {}, afterPalm = false;
     D.events.forEach(function (e) {
       if (!e.day) return;
       var key = e.day;
-      if (key === "Friday" && e.n > 140) key = "Good Friday";
-      if (key === "Saturday" && e.n < 130) key = "Friday";
+      if (key === "Sunday") afterPalm = true;
+      if (!afterPalm && (key === "Friday" || key === "Saturday")) key = "Friday";   // arrival and anointing at Bethany
+      else if (afterPalm && key === "Friday") key = "Good Friday";
       if (!groups[key]) { groups[key] = []; order.push(key); }
       groups[key].push(e);
     });

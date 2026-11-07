@@ -1,8 +1,8 @@
-MTB site build - 2026-11-06 16:18
+MTB site build - 2026-11-06 19:23
 
-Ready: 79 chapters in 8 books (5 complete with all core layers).
+Ready: 84 chapters in 10 books (5 complete with all core layers).
 
-NEEDS ATTENTION (14)
+NEEDS ATTENTION (21)
   - Ruth 1–4: missing hearing, reflections
   - 1 Samuel 4: overview outline sections differ from the published Chapter Outline
   - 1 Samuel 1–2: missing hearing
@@ -14,7 +14,14 @@ NEEDS ATTENTION (14)
   - Psalms 58: missing hearing, reflections
   - Psalms: has ready chapters but no Book Overview
   - Proverbs 1–31: missing hearing, reflections
+  - Ecclesiastes 1: chapter outline has no sections the converter recognizes
+  - Ecclesiastes 1: missing study, hearing, reflections
   - Obadiah 1: missing hearing
+  - Colossians 1: chapter outline has no sections the converter recognizes
+  - Colossians 2: chapter outline has no sections the converter recognizes
+  - Colossians 3: chapter outline has no sections the converter recognizes
+  - Colossians 4: chapter outline has no sections the converter recognizes
+  - Colossians 1–4: missing hearing, reflections
   - Titus 1–3: missing study, hearing, reflections
   - 2 John 1: missing hearing
 
@@ -23,4 +30,4 @@ FYI, NOT SHOWN ON THE SITE (5)
   - Obadiah: folder 007 is beyond the book's 1 chapters
   - Titus 1: extra file ignored: titus-1-chapter-insights-copy.html
   - Titus 1: extra file ignored: titus-1-chapter-orientation-copy.html
-  - Proverbs Wisdom: 911 units from 31 chapters (1 approved chapters, drafts included for the pilot)
+  - Proverbs Wisdom: 911 units from 31 chapters (31 approved chapters, drafts included for the pilot)

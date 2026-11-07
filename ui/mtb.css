@@ -318,6 +318,8 @@ dialog.picker::backdrop { background: rgba(15, 42, 69, .55); }
 @media (min-width: 700px) { .lc { padding: 18px 20px; } }
 .lc > h3 { margin: 0 0 8px; font-size: 13px; font-weight: 700; letter-spacing: .12em; text-transform: uppercase; color: var(--navy); }
 .lc.meaning p { margin: 0; font-size: 17px; line-height: 1.65; }
+.lc.meaning p + p, .lc.notes p + p { margin-top: 10px; }
+.wu-card .lc.notes p { margin: 0; }
 .lc.hear { background: var(--cream); }
 .lc.hear > h3 { color: var(--gold-ink); }
 .pair { display: flex; flex-direction: column; gap: 8px; }

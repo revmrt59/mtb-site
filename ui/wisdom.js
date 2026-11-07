@@ -49,7 +49,7 @@
     if (!u._hay) {
       var ch = NKJV[String(u.c)] || {}, vt = [];
       for (var v = u.s; v <= u.e; v++) vt.push(ch[String(v)] || "");
-      u._hay = [u.ref, u.summary, u.principle, u.insight, u.application, u.notes, themesOf(u).join(" "),
+      u._hay = [u.ref, u.summary, u.explanation, u.principle, u.insight, u.application, u.notes, themesOf(u).join(" "),
         (u.chars || []).join(" "), (u.kw || []).join(" "), vt.join(" ")].join(" ").toLowerCase();
     }
     return u._hay;
@@ -145,6 +145,10 @@
     }).join("") + "</div>";
   }
 
+  // One <p> per line, so multi-line notes (bullets) keep their breaks.
+  function paras(t) {
+    return String(t).split(/\n+/).filter(function (l) { return l.trim(); }).map(function (l) { return "<p>" + esc(l.trim()).replace(/\*([^*\n]+)\*/g, "<em>$1</em>") + "</p>"; }).join("");
+  }
   function card(u) {
     var o = !!openCard[u.id];
     var study = MTB.chapterUrl("proverbs", u.c) + "#v" + u.s;
@@ -159,10 +163,11 @@
       "</button>";
     if (o) {
       html += '<div class="layers-card wu-card">' +
+        (u.explanation ? '<div class="lc meaning"><h3>The Meaning</h3>' + paras(u.explanation) + "</div>" : "") +
         (u.principle ? '<div class="lc wu-principle"><h3>Key Principle</h3><p>' + esc(u.principle) + "</p></div>" : "") +
         (u.insight ? '<div class="lc hear"><h3>Pastoral Insight</h3><p>' + esc(u.insight) + "</p></div>" : "") +
         (u.application ? '<div class="lc"><h3>Practical Application</h3><p>' + esc(u.application) + "</p></div>" : "") +
-        (u.notes ? '<div class="lc notes"><h3>Notes</h3><p>' + esc(u.notes) + "</p></div>" : "");
+        (u.notes ? '<div class="lc notes"><h3>Notes</h3>' + paras(u.notes) + "</div>" : "");
       if (u.rel && u.rel.length) {
         html += '<div class="lc"><div class="wu-relhead"><h3>Related Proverbs · ' + u.rel.length + "</h3>" +
           (state.focus === u.id ? "" : '<button type="button" class="wu-thread" data-focus="' + esc(u.id) + '">Read them together →</button>') + "</div>" +

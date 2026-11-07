@@ -215,6 +215,7 @@ WISDOM_INCLUDE_DRAFTS = True
 # Fields copied to the site. Anything not listed here (Source Locator, NLT, reviews, history,
 # author workspaces, examples, hashes) is never exported.
 WISDOM_FIELDS = {
+    "Explanation": "explanation",
     "Verse Notes": "notes",
     "One-Sentence Summary": "summary",
     "Key Principle": "principle",

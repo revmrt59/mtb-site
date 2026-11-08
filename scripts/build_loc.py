@@ -14,6 +14,11 @@ and writes the site data in  mtb-site\\loc\\data :
 It also checks every quotation in each event's Story against the NKJV text
 of that event's passages, and reports anything that does not match.
 
+Gospel tag check (loc_tagcheck.py): each {Mt} {Mk} {Lk} {Jn} tag is checked
+against that Gospel's passage. A quotation under the wrong tag goes to the
+build report. Names and numbers that may come from another Gospel are listed
+in data/loc-tag-check.txt for a person or the reviewer to look at.
+
 build_site.py runs this automatically. To run it alone:
   python scripts/build_loc.py
 """
@@ -24,6 +29,12 @@ import os
 import re
 import sys
 from datetime import datetime
+
+try:
+    import loc_tagcheck
+except ImportError:  # running from another folder
+    sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+    import loc_tagcheck
 
 LOC_INCLUDE_DRAFTS = True     # show Draft events on the site (with a Draft badge); set False to show only Approved
 
@@ -169,6 +180,7 @@ def build(site_root, problems, notes):
 
     by_n = {r["n"]: r for r in rows}
     written = {"approved": 0, "draft": 0}
+    tag_checks = []
     events_out = []
     for r in rows:
         e = {k: r[k] for k in ("n", "slug", "title", "movement", "when", "day", "place", "region", "kind",
@@ -186,6 +198,10 @@ def build(site_root, problems, notes):
                 status = (ev.get("status") or "draft").lower()
                 for err in check_event(ev, r, bible):
                     problems.append("Life of Jesus %d %s: %s" % (r["n"], r["title"], err))
+                tag_errs, tag_chk = loc_tagcheck.check_tags(ev, r, bible)
+                for err in tag_errs:
+                    problems.append("Life of Jesus %d %s: %s" % (r["n"], r["title"], err))
+                tag_checks += [(kind, r["n"], r["title"], msg) for kind, msg in tag_chk]
                 if status == "approved" or LOC_INCLUDE_DRAFTS:
                     e["status"] = status
                     e["summary"] = ev.get("summary", "")
@@ -207,6 +223,7 @@ def build(site_root, problems, notes):
         movements.append(dict(m, summary=t.get("summary", ""), intro=t.get("intro", ""),
                               order_note=t.get("order_note", ""), story=t.get("story", []),
                               count=m["last"] - m["first"] + 1))
+    write_tag_report(site_root, tag_checks, notes)
     data = {"generated": datetime.now().strftime("%Y-%m-%d %H:%M"), "drafts": LOC_INCLUDE_DRAFTS,
             "intro": intro, "story_status": story_status, "movements": movements,
             "threads": meta["threads"], "events": events_out}
@@ -215,6 +232,26 @@ def build(site_root, problems, notes):
     notes.append("Life of Jesus: %d events listed; %d approved, %d draft written%s"
                  % (len(events_out), written["approved"], written["draft"],
                     "" if LOC_INCLUDE_DRAFTS else " (drafts hidden)"))
+
+
+def write_tag_report(site_root, checks, notes):
+    """List the names and numbers the Gospel tag check could not place."""
+    a = [c for c in checks if c[0] == "A"]
+    b = [c for c in checks if c[0] == "B"]
+    lines = ["Life of Jesus - Gospel tag check - %s" % datetime.now().strftime("%Y-%m-%d %H:%M"), "",
+             "A. Probably the wrong tag (%d)" % len(a),
+             "   The word is missing from the tagged Gospel but present in another account.", ""]
+    lines += ["  %03d %s: %s" % (n, t, m) for _, n, t, m in a] or ["  none"]
+    lines += ["", "B. Look at it (%d)" % len(b),
+              "   The word is in none of the event's passages. Usually scene-setting from an",
+              "   earlier event and fine; sometimes a summary that says more than the text.", ""]
+    lines += ["  %03d %s: %s" % (n, t, m) for _, n, t, m in b] or ["  none"]
+    out = os.path.join(site_root, "data", "loc-tag-check.txt")
+    os.makedirs(os.path.dirname(out), exist_ok=True)
+    with open(out, "w", encoding="utf-8") as f:
+        f.write("\n".join(lines) + "\n")
+    notes.append("Life of Jesus tag check: %d probably wrong tags, %d to look at (data/loc-tag-check.txt)"
+                 % (len(a), len(b)))
 
 
 if __name__ == "__main__":

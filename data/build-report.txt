@@ -1,14 +1,15 @@
-MTB site build - 2026-11-07 13:38
+MTB site build - 2026-11-08 00:20
 
 Ready: 58 chapters in 10 books (5 complete with all core layers).
 
-NEEDS ATTENTION (22)
+NEEDS ATTENTION (27)
   - Ruth 1–4: missing hearing, reflections
   - 1 Samuel 4: overview outline sections differ from the published Chapter Outline
   - 1 Samuel 1–2: missing hearing
   - 1 Samuel 3: missing hearing, reflections
   - 1 Chronicles 1: missing hearing, reflections
   - 1 Chronicles: has ready chapters but no Book Overview
+  - Psalms 58: placeholder text ("Coming soon") shows to readers: Meaning 11 of 11 verses; Verse Explanation 11 of 11 verses; Study Notes 11 of 11 verses. Finish it or remove the chapter from the Library
   - Psalms 52: missing hearing
   - Psalms 58: missing hearing, reflections
   - Psalms: has ready chapters but no Book Overview
@@ -17,6 +18,7 @@ NEEDS ATTENTION (22)
   - Ecclesiastes 2: chapter outline has no sections the converter recognizes
   - Ecclesiastes 3: chapter outline has no sections the converter recognizes
   - Ecclesiastes 1–3: missing hearing, reflections
+  - Obadiah 1: placeholder text ("Coming soon") shows to readers: Meaning 21 of 21 verses; Verse Explanation 21 of 21 verses; Study Notes 21 of 21 verses. Finish it or remove the chapter from the Library
   - Obadiah 1: missing hearing
   - Colossians 1: chapter outline has no sections the converter recognizes
   - Colossians 2: chapter outline has no sections the converter recognizes
@@ -25,12 +27,16 @@ NEEDS ATTENTION (22)
   - Colossians 1–4: missing hearing, reflections
   - Titus 1–3: missing study, hearing, reflections
   - 2 John 1: missing hearing
+  - Life of Jesus 41 Lord of the Sabbath: Story paragraph 3: quotation tagged Mark is not in Mark's passage (it is in Matthew): "Have you not read what David did when he was hungry, he and those who "
+  - Life of Jesus 57 The Beelzebub Accusation: Story paragraph 5: quotation tagged Luke is not in Luke's passage (it is in Mark): "No one can enter a strong man’s house and plunder his goods, unless he"
+  - Life of Jesus 73 Feeding the Five Thousand: Story paragraph 3: quotation tagged John is not in John's passage (it is in Matthew and Mark and Luke): "You give them something to eat."
 
-FYI, NOT SHOWN ON THE SITE (7)
+FYI, NOT SHOWN ON THE SITE (8)
   - 1 Samuel 1: extra file ignored: 1-samuel-2-chapter-resources.html
   - 1 Chronicles 4: only an old orientation file is here, so the chapter is not listed: 1-chronicles-4-chapter-orientation.html
   - Obadiah: folder 007 is beyond the book's 1 chapters
   - Titus 1: extra file ignored: titus-1-chapter-insights-copy.html
   - Titus 1: extra file ignored: titus-1-chapter-orientation-copy.html
   - Proverbs Wisdom: 900 units from 31 chapters (31 approved chapters, drafts included for the pilot)
-  - Life of Jesus: 184 events listed; 184 approved, 0 draft written
+  - Life of Jesus tag check: 18 probably wrong tags, 32 to look at (data/loc-tag-check.txt)
+  - Life of Jesus: 191 events listed; 191 approved, 0 draft written

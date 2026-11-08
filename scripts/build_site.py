@@ -361,6 +361,24 @@ def ranges(nums):
     return ", ".join(out)
 
 
+PLACEHOLDERS = ("coming soon", "lorem ipsum", "[insert", "[tbd")
+
+
+def placeholder_check(data):
+    """Readers should never see placeholder text. Count verses that show it, by field."""
+    hits = {}
+    verses = data.get("verses") or {}
+    for v, x in verses.items():
+        for k, val in x.items():
+            if isinstance(val, str) and any(ph in val.lower() for ph in PLACEHOLDERS):
+                hits[k] = hits.get(k, 0) + 1
+    names = {"brief": "Meaning", "explain": "Verse Explanation", "notes": "Study Notes"}
+    if not hits:
+        return []
+    where = "; ".join("%s %d of %d verses" % (names.get(k, k), c, len(verses)) for k, c in sorted(hits.items()))
+    return ["placeholder text (\"Coming soon\") shows to readers: %s. Finish it or remove the chapter from the Library" % where]
+
+
 def main():
     gaps = {}
     problems = []
@@ -410,6 +428,8 @@ def main():
                                 data, warn = mtb_convert.build_chapter(SITE_ROOT, t_key, slug, name, n, layers, nv)
                                 write_json(os.path.join(OUT_DIR, "chapters", "%s-%d.json" % (slug, n)), data)
                                 for w in warn:
+                                    problems.append("%s %d: %s" % (name, n, w))
+                                for w in placeholder_check(data):
                                     problems.append("%s %d: %s" % (name, n, w))
                             except Exception as e:  # keep going; report it
                                 problems.append("%s %d: could not convert (%s)" % (name, n, e))

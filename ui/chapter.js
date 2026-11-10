@@ -22,7 +22,8 @@
   })();
   function save() { try { localStorage.setItem("mtb-settings", JSON.stringify(settings)); } catch (e) { /* ignore */ } }
 
-  var D = null, BIBLE = {}, WORDS = null, open = {}, hearAll = {}, reflOpen = {}, reflFilter = {}, groupOpen = {}, refocus = null;
+  var D = null, BIBLE = {}, WORDS = null, WORD_LINKS = {}, DICTIONARY = null;
+  var open = {}, hearAll = {}, reflOpen = {}, reflFilter = {}, groupOpen = {}, refocus = null;
 
   function bookTitle(name) { return name === "Psalms" ? "Psalm" : name; }
   function ref(a, b) { return a === b ? String(a) : a + "–" + b; }
@@ -45,7 +46,8 @@
   var COPY = {}, SOURCE = {};
 
   function loadStored(tr) {
-    return fetch(MTB.root + "assets/js/bibles-json/" + tr + "/" + SLUG + ".json").then(function (r) {
+    var textSlug = tr === "nkjv" && SLUG === "song-of-solomon" ? "song-of-songs" : SLUG;
+    return fetch(MTB.root + "assets/js/bibles-json/" + tr + "/" + textSlug + ".json").then(function (r) {
       if (!r.ok) throw new Error(tr);
       return r.json();
     }).then(function (j) { COPY[tr] = NOTICES[tr] || ""; return (j.chapters || {})[String(CH)] || {}; });
@@ -85,21 +87,17 @@
   function verseHtml(text, n) {
     if (!text) return '<span class="ln">—</span>';
     var t = String(text);
-    var words = settings.tr === "nkjv" && D.verses[n] ? (D.verses[n].words || []) : [];
-    // Mark word-study words with placeholder characters (in order), then escape, then turn them into spans.
+    var words = settings.tr === "nkjv" ? (WORD_LINKS[n] || []) : [];
+    // Use verified positions in the exact NKJV verse text. A stale span fails closed.
     if (words.length) {
-      var pos = 0;
+      var pos = 0, marked = "";
       words.forEach(function (w) {
-        var re = new RegExp("(^|[^A-Za-z’'])(" + w[0].replace(/[.*+?^${}()|[\]\\]/g, "\\$&") + ")(?![A-Za-z])", "g");
-        re.lastIndex = pos;
-        var m = re.exec(t);
-        if (m) {
-          var start = m.index + m[1].length;
-          var mark = "\u0001" + w[1] + "\u0002" + m[2] + "\u0003";
-          t = t.slice(0, start) + mark + t.slice(start + m[2].length);
-          pos = start + mark.length;
-        }
+        var start = w[0], end = w[1], strong = w[2], surface = w[3];
+        if (start < pos || end <= start || t.slice(start, end) !== surface || !/^[gh]\d{4,5}$/.test(strong)) return;
+        marked += t.slice(pos, start) + "\u0001" + strong + "\u0002" + surface + "\u0003";
+        pos = end;
       });
+      t = marked + t.slice(pos);
     }
     var lines;
     if (/\S\s{2,}\S/.test(t)) lines = t.split(/\s{2,}/);
@@ -362,26 +360,51 @@
      Phone or tablet: tap a dotted word for the summary card, then tap through for the full study. */
   var hoverT = null, hideT = null, popFor = null;
   function words() { return WORDS || (WORDS = fetch("data/words.json", { cache: "no-cache" }).then(function (r) { return r.json(); }).catch(function () { return {}; })); }
+  function dictionary() {
+    return DICTIONARY || (DICTIONARY = fetch(MTB.root + "assets/data/step-dictionary.json").then(function (r) {
+      if (!r.ok) throw new Error("dictionary");
+      return r.json();
+    }).catch(function () { DICTIONARY = null; return { entries: {} }; }));
+  }
   function wordUrl(s) { return "word.html?s=" + encodeURIComponent(s); }
-  function showWord(el, byHover) {
+  var wordRequest = 0;
+  async function showWord(el, byHover) {
     var s = el.dataset.s;
-    words().then(function (w) {
-      var info = w[s] || {};
-      popFor = el;
+    var request = ++wordRequest;
+    var info = (await words())[s];
+    if (request !== wordRequest || !el.isConnected || (byHover && !el.matches(":hover"))) return;
+    if (info && info.p === true && !byHover && FINE) {
+      location.href = wordUrl(s);
+      return;
+    }
+    if (!info || info.p !== true) {
+      var data = await dictionary(), entry = data.entries[s];
+      if (request !== wordRequest || !el.isConnected || (byHover && !el.matches(":hover"))) return;
+      var basis = s.charAt(0) === "g" ? "the Greek Textus Receptus" : "the Leningrad text (Qere)";
+      var count = entry ? entry.count.toLocaleString("en-US") + (entry.count === 1 ? " occurrence" : " occurrences") : "";
+      pop.innerHTML = (byHover ? "" : '<button type="button" class="wp-x" aria-label="Close">×</button>') +
+        '<div class="wp-top"><span class="wp-word">' + esc(entry ? entry.word : el.textContent) +
+        '</span><span class="wp-strong">' + esc(s.toUpperCase()) + '</span></div>' +
+        (entry ? '<div class="wp-tr">' + esc(entry.transliteration) + '</div><p class="wp-gloss">' + esc(entry.meaning) +
+          '</p><p class="wp-sum">' + esc(entry.definition) + '</p><p class="wp-sum">' + esc(count + " in " + basis) + '</p>' : '') +
+        '<p class="wp-sum">MTB study not yet available.</p>' +
+        (entry ? '<a href="' + esc(data.credit_url) + '">' + esc(data.credit) + '</a>' : '');
+    } else {
       pop.innerHTML = (byHover ? "" : '<button type="button" class="wp-x" aria-label="Close">×</button>') +
         '<div class="wp-top"><span class="wp-word">' + esc(info.w || el.textContent) + '</span><span class="wp-strong">' + esc(s.toUpperCase()) + "</span></div>" +
         '<div class="wp-tr">' + esc(info.t || "") + (info.l ? " · " + esc(info.l) : "") + "</div>" +
         (info.sum ? '<p class="wp-sum">' + esc(trim(info.sum, byHover ? 240 : 420)) + "</p>" : (info.g ? '<p class="wp-sum">Translated: ' + esc(shortGloss(info.g)) + "</p>" : "")) +
-        (info.p !== false ? '<a href="' + wordUrl(s) + '">' + (byHover ? "Click the word for the full study" : "Read the full word study →") + "</a>" : "");
-      pop.classList.toggle("hovering", !!byHover);
-      pop.hidden = false;
-      var r = el.getBoundingClientRect(), pw = pop.offsetWidth, ph = pop.offsetHeight;
-      var left = Math.max(12, Math.min(window.innerWidth - pw - 12, r.left + r.width / 2 - pw / 2));
-      var top = r.bottom + 8 + ph < window.innerHeight ? r.bottom + 8 : Math.max(12, r.top - ph - 8);
-      pop.style.left = left + "px"; pop.style.top = top + "px";
-      var x = pop.querySelector(".wp-x");
-      if (x) { x.addEventListener("click", hideWord); var a = pop.querySelector("a"); (a || x).focus(); }
-    });
+        '<a href="' + wordUrl(s) + '">' + (byHover ? "Click the word for the full study" : "Read the full word study →") + "</a>";
+    }
+    popFor = el;
+    pop.classList.toggle("hovering", !!byHover);
+    pop.hidden = false;
+    var r = el.getBoundingClientRect(), pw = pop.offsetWidth, ph = pop.offsetHeight;
+    var left = Math.max(12, Math.min(window.innerWidth - pw - 12, r.left + r.width / 2 - pw / 2));
+    var top = r.bottom + 8 + ph < window.innerHeight ? r.bottom + 8 : Math.max(12, r.top - ph - 8);
+    pop.style.left = left + "px"; pop.style.top = top + "px";
+    var x = pop.querySelector(".wp-x");
+    if (x) { x.addEventListener("click", hideWord); var a = pop.querySelector("a"); (a || x).focus(); }
   }
   function trim(t, n) { if (t.length <= n) return t; var c = t.slice(0, n); return c.slice(0, c.lastIndexOf(" ")).replace(/[,;:]$/, "") + "…"; }
   function shortGloss(g) {
@@ -389,10 +412,12 @@
     String(g).split(/,\s*/).forEach(function (w) { var k = w.toLowerCase().replace(/[’']s$/, ""); if (!seen[k]) { seen[k] = 1; out.push(w); } });
     return out.slice(0, 8).join(", ") + (out.length > 8 ? ", …" : "");
   }
-  function hideWord() { pop.hidden = true; popFor = null; }
+  function hideWord() { wordRequest++; pop.hidden = true; popFor = null; }
   function onWordClick(ws) {
-    if (FINE) { location.href = wordUrl(ws.dataset.s); return; }
-    if (popFor === ws && !pop.hidden) { hideWord(); return; }
+    clearTimeout(hoverT);
+    clearTimeout(hideT);
+    if (popFor === ws && !pop.hidden && !pop.classList.contains("hovering")) { hideWord(); return; }
+    pop.classList.remove("hovering");
     showWord(ws, false);
   }
   if (FINE) {
@@ -419,9 +444,14 @@
   if (!SLUG || !CH) { main.innerHTML = '<p class="notice">Choose a book and chapter to begin.</p>'; head.innerHTML = '<h1 id="ch-title">Choose a passage</h1>'; return; }
   Promise.all([
     MTB.library(),
-    fetch("data/chapters/" + SLUG + "-" + CH + ".json", { cache: "no-cache" }).then(function (r) { if (!r.ok) throw new Error("missing"); return r.json(); })
+    fetch("data/chapters/" + SLUG + "-" + CH + ".json", { cache: "no-cache" }).then(function (r) { if (!r.ok) throw new Error("missing"); return r.json(); }),
+    fetch(MTB.root + "data/word-links/" + encodeURIComponent(SLUG) + ".json").then(function (r) {
+      if (!r.ok) throw new Error("word links");
+      return r.json();
+    }).catch(function () { return {}; })
   ]).then(function (res) {
     D = res[1];
+    WORD_LINKS = res[2][CH] || {};
     PAGE.nav = renderHead(res[0]);
     var m = /^#v(\d+)$/.exec(location.hash);
     if (m) open[m[1]] = true;

@@ -16,8 +16,10 @@ Run it with "BUILD SITE DATA.bat" (double-click), or:
 import json
 import os
 import re
+import subprocess
 import sys
 from datetime import datetime
+from pathlib import Path
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 import mtb_convert  # noqa: E402
@@ -361,7 +363,14 @@ def ranges(nums):
     return ", ".join(out)
 
 
+def build_word_popups():
+    site = Path(SITE_ROOT)
+    bridge = site.parents[1] / 'Scripts' / 'STEP_WordData' / 'site_bridge.py'
+    subprocess.run([sys.executable, str(bridge), 'site-popups', str(site)], check=True)
+
+
 def main():
+    build_word_popups()
     gaps = {}
     problems = []
     notes = []
@@ -471,4 +480,4 @@ def main():
 
 
 if __name__ == "__main__":
-    sys.exit(main())
+    sys.exit(build_word_popups() if sys.argv[1:] == ['--word-popups-only'] else main())

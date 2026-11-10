@@ -371,10 +371,13 @@
   async function showWord(el, byHover) {
     var s = el.dataset.s;
     var request = ++wordRequest;
-    var info = (await words())[s];
+    var studies = await words();
+    // The chapter links use padded IDs. Some published files still use unpadded IDs.
+    var studyKey = studies[s] && studies[s].p === true ? s : s.replace(/^([gh])0+(?=\d)/, "$1");
+    var info = studies[studyKey];
     if (request !== wordRequest || !el.isConnected || (byHover && !el.matches(":hover"))) return;
     if (info && info.p === true && !byHover && FINE) {
-      location.href = wordUrl(s);
+      location.href = wordUrl(studyKey);
       return;
     }
     if (!info || info.p !== true) {
@@ -394,7 +397,7 @@
         '<div class="wp-top"><span class="wp-word">' + esc(info.w || el.textContent) + '</span><span class="wp-strong">' + esc(s.toUpperCase()) + "</span></div>" +
         '<div class="wp-tr">' + esc(info.t || "") + (info.l ? " · " + esc(info.l) : "") + "</div>" +
         (info.sum ? '<p class="wp-sum">' + esc(trim(info.sum, byHover ? 240 : 420)) + "</p>" : (info.g ? '<p class="wp-sum">Translated: ' + esc(shortGloss(info.g)) + "</p>" : "")) +
-        '<a href="' + wordUrl(s) + '">' + (byHover ? "Click the word for the full study" : "Read the full word study →") + "</a>";
+        '<a href="' + wordUrl(studyKey) + '">' + (byHover ? "Click the word for the full study" : "Read the full word study →") + "</a>";
     }
     popFor = el;
     pop.classList.toggle("hovering", !!byHover);

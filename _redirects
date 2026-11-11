@@ -5,3 +5,8 @@
 # Old "About the Bible" page now lives on the About page.
 /aboutthebible       /about.html   301!
 /aboutthebible.html  /about.html   301!
+
+# The former Shepherd study is now published under H7462.
+/word-studies/h7473.html  /word-studies/h7462.html  301!
+/word-studies/h7473       /word-studies/h7462.html  301!
+/word.html s=h7473       /word.html?s=h7462       301!

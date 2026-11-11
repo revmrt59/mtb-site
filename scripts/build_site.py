@@ -302,6 +302,8 @@ def build_word_index(notes):
     except (OSError, ValueError) as e:
         notes.append("word studies list could not be read (%s)" % e)
         return
+    scope_path = Path(OUT_DIR) / "word-study-scopes.json"
+    scopes = json.loads(scope_path.read_bytes()) if scope_path.is_file() else {}
     for r in rows:
         s = str(r.get("strong") or "").lower()
         if not s:
@@ -315,6 +317,8 @@ def build_word_index(notes):
                 entry["w"] = head
             if summary:
                 entry["sum"] = summary
+        if s in scopes:
+            entry["study_spans"] = scopes[s]
         out[s] = entry
     write_json(os.path.join(OUT_DIR, "words.json"), out)
 

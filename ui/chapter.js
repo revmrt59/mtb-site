@@ -94,7 +94,7 @@
       words.forEach(function (w) {
         var start = w[0], end = w[1], strong = w[2], surface = w[3];
         if (start < pos || end <= start || t.slice(start, end) !== surface || !/^[gh]\d{4,5}$/.test(strong)) return;
-        marked += t.slice(pos, start) + "\u0001" + strong + "\u0002" + surface + "\u0003";
+        marked += t.slice(pos, start) + "\u0001" + strong + ":" + start + ":" + end + "\u0002" + surface + "\u0003";
         pos = end;
       });
       t = marked + t.slice(pos);
@@ -106,8 +106,8 @@
     return lines.map(function (ln) {
       var h = esc(ln.trim())
         .replace(/\{([^}]*)\}/g, "<em>$1</em>")
-        .replace(/\u0001([a-z]\d+)\u0002([^\u0003]*)\u0003/gi, function (_, s, w) {
-          return '<span class="ws" data-s="' + s.toLowerCase() + '">' + w + "</span>";
+        .replace(/\u0001([a-z]\d+):(\d+:\d+)\u0002([^\u0003]*)\u0003/gi, function (_, s, span, w) {
+          return '<span class="ws" data-s="' + s.toLowerCase() + '" data-span="' + span + '">' + w + "</span>";
         });
       return '<span class="ln">' + h + "</span>";
     }).join("");
@@ -375,6 +375,11 @@
     // The chapter links use padded IDs. Some published files still use unpadded IDs.
     var studyKey = studies[s] && studies[s].p === true ? s : s.replace(/^([gh])0+(?=\d)/, "$1");
     var info = studies[studyKey];
+    if (info && info.study_spans) {
+      var verse = el.closest("[data-v]").dataset.v;
+      var spanKey = [SLUG, CH, verse, el.dataset.span, el.textContent].join(":");
+      if (info.study_spans.indexOf(spanKey) === -1) info = null;
+    }
     if (request !== wordRequest || !el.isConnected || (byHover && !el.matches(":hover"))) return;
     if (info && info.p === true && !byHover && FINE) {
       location.href = wordUrl(studyKey);

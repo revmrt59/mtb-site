@@ -1,0 +1,4 @@
+# Keep the site out of search engines until launch (Mike, Nov 10 2026).
+# Netlify sends this header with every file. Delete this file at launch.
+/*
+  X-Robots-Tag: noindex, nofollow

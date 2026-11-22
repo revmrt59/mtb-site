@@ -1,0 +1,97 @@
+<section class="mtb-doc mtb-doc--read" data-doc-type="chapter-overview" data-mtb-status="complete">
+<style>
+.mtb-print-controls{display:flex;justify-content:flex-end;gap:8px;margin:0 0 14px;padding:0 4px}
+.mtb-print-button{appearance:none;border:1px solid #b9c8d5;border-radius:8px;background:#fff;padding:9px 14px;color:#173a5e;font:700 14px Arial,Helvetica,sans-serif;cursor:pointer}
+.mtb-print-button:hover{background:#f2f6f9}
+@media print{
+  @page{size:auto;margin:.45in}
+  html,body{background:#fff!important;color:#000!important}
+  .mtb-print-controls,.mtb-study-controls,.mtb-reflections-controls{display:none!important}
+  .mtb-doc{display:block!important;width:100%!important;max-width:none!important;margin:0!important;padding:0!important}
+  .mtb-overview-hero,.mtb-study-hero,.mtb-reflections-hero,.mtb-culture-hero{box-shadow:none!important;background:#fff!important;border-color:#777!important}
+  .mtb-overview-grid,.mtb-reflections-grid,.mtb-culture-grid,.mtb-study-verse-grid{display:block!important}
+  .mtb-overview-card,.mtb-reflections-card,.mtb-culture-card,.mtb-study-verse,.mtb-study-verse-panel,.mtb-intro-card{
+    display:block!important;width:100%!important;max-width:none!important;height:auto!important;margin:0 0 12pt!important;
+    break-inside:avoid;page-break-inside:avoid;box-shadow:none!important;background:#fff!important;color:#000!important
+  }
+  details.mtb-study-verse,details.mtb-reflection-section{display:block!important;overflow:visible!important}
+  details.mtb-study-verse>summary,details.mtb-reflection-section>summary{display:flex!important;background:#fff!important;color:#000!important;border-bottom:1px solid #777!important}
+  details.mtb-study-verse>summary:after,details.mtb-reflection-section>summary:after{display:none!important}
+  details.mtb-study-verse>.mtb-study-verse-body,details.mtb-reflection-section>.mtb-reflection-section-body{display:block!important}
+  h1,h2,h3,h4{break-after:avoid;page-break-after:avoid;color:#000!important}
+  p,li{orphans:3;widows:3}
+  a{color:#000!important;text-decoration:none!important}
+  a[href]::after{content:none!important}
+}
+</style>
+<div class="mtb-print-controls"><button type="button" class="mtb-print-button" onclick="(function(button){var doc=button.closest('.mtb-doc')||document;var panels=Array.prototype.slice.call(doc.querySelectorAll('details'));panels.forEach(function(panel){panel.open=true;});window.print();})(this)">&#128438; Print This Page</button></div>
+<style>
+.mtb-chapter-overview-dashboard{--mtb-navy:#173a5e;--mtb-navy-2:#2b587f;--mtb-gold:#b7832f;--mtb-blue-soft:#eef4f9;--mtb-border:#d7e0e8;--mtb-text:#1d2935;width:100%;max-width:1600px;margin:0 auto;padding:2px 4px 30px;color:var(--mtb-text);font-family:Arial,Helvetica,sans-serif}.mtb-chapter-overview-dashboard *{box-sizing:border-box}
+.mtb-overview-glance{margin:0 0 18px;overflow:hidden;border:1px solid #cbd8e3;border-radius:14px;background:linear-gradient(135deg,#f7fafc 0%,#e8f0f7 100%);box-shadow:0 4px 15px rgba(28,48,66,.045)}
+.mtb-overview-glance-head{display:flex;align-items:center;justify-content:space-between;gap:20px;padding:18px 24px 13px;border-bottom:1px solid rgba(23,58,94,.12);background:var(--mtb-blue-soft)}
+.mtb-overview-eyebrow{margin:0 0 4px;color:var(--mtb-gold);font-size:.78rem;font-weight:800;letter-spacing:.13em;text-transform:uppercase}.mtb-overview-title{margin:0;color:var(--mtb-navy);font-size:clamp(1.4rem,2.6vw,1.95rem);line-height:1.1}.mtb-overview-badge{flex:0 0 auto;padding:9px 15px;border:1px solid rgba(23,58,94,.18);border-radius:999px;background:#fff;color:var(--mtb-navy);font-weight:800}
+.mtb-overview-glance-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:0;padding:8px 22px 13px;background:#fff}.mtb-overview-glance-item{min-width:0;padding:10px 12px;font-size:1rem;line-height:1.42}.mtb-overview-glance-item:nth-child(even){border-left:1px solid rgba(23,58,94,.11)}.mtb-overview-glance-label{display:inline;color:var(--mtb-navy);font-weight:800}.mtb-overview-glance-content{display:inline}.mtb-overview-glance-content p{display:inline;margin:0}.mtb-overview-glance-structure .mtb-overview-glance-content{display:block;margin-top:4px}.mtb-overview-glance-structure ul,.mtb-overview-glance-structure ol{margin:4px 0 0;padding-left:1.25em}.mtb-overview-glance-structure li{margin:0 0 2px}.mtb-overview-glance-structure li p{display:block;margin:0}.mtb-overview-glance-keyverse .mtb-overview-glance-content{font-style:italic}
+.mtb-overview-deeper{margin:0}.mtb-overview-deeper>summary{display:flex;align-items:center;justify-content:space-between;gap:16px;cursor:pointer;list-style:none;padding:14px 18px;border:1px solid #cbd8e3;border-radius:10px;background:#f4f7fa;color:var(--mtb-navy);font-size:1rem;font-weight:800;user-select:none}.mtb-overview-deeper>summary::-webkit-details-marker{display:none}.mtb-overview-deeper>summary::after{content:'+';font-size:1.35rem;line-height:1}.mtb-overview-deeper[open]>summary{margin-bottom:16px;border-color:#b8cad9;background:#eef4f9}.mtb-overview-deeper[open]>summary::after{content:'−'}
+.mtb-overview-grid{display:grid;grid-template-columns:repeat(12,minmax(0,1fr));gap:16px;align-items:stretch}.mtb-overview-card{min-width:0;overflow:hidden;border:1px solid var(--mtb-border);border-top:4px solid var(--mtb-navy-2);border-radius:12px;background:#fff;box-shadow:0 4px 15px rgba(28,48,66,.055)}.mtb-overview-card-heart{grid-column:1/-1}.mtb-overview-card-sections{grid-column:1/span 6}.mtb-overview-card-matters{grid-column:7/span 6}.mtb-overview-card-themes{grid-column:1/span 6}.mtb-overview-card-words{grid-column:7/span 6}.mtb-overview-card-psalm-author{grid-column:1/span 4}.mtb-overview-card-psalm-occasion{grid-column:5/span 4}.mtb-overview-card-psalm-kind{grid-column:9/span 4}.mtb-overview-card-header{margin:0;padding:12px 16px 10px;border-bottom:1px solid #e5ebf0;background:var(--mtb-blue-soft);color:var(--mtb-navy);font-size:.96rem;font-weight:800}.mtb-overview-card-body{padding:16px 18px 18px;font-size:1rem;line-height:1.48;overflow-wrap:anywhere}.mtb-overview-card-heart .mtb-overview-card-body{font-size:1.04rem}.mtb-overview-card-body p{margin:0 0 .72em}.mtb-overview-card-body p:last-child{margin-bottom:0}.mtb-overview-card-body ul,.mtb-overview-card-body ol{margin:0;padding-left:1.25em}.mtb-overview-card-body li{margin:0 0 .35em}
+@media(max-width:980px){.mtb-overview-card{grid-column:span 6!important}.mtb-overview-card-heart{grid-column:1/-1!important}.mtb-overview-glance-grid{grid-template-columns:1fr}.mtb-overview-glance-item:nth-child(even){border-left:0}.mtb-overview-glance-item+.mtb-overview-glance-item{border-top:1px solid rgba(23,58,94,.09)}}
+@media(max-width:760px){.mtb-overview-grid{grid-template-columns:1fr}.mtb-overview-card{grid-column:1/-1!important}.mtb-overview-glance-head{align-items:flex-start;flex-direction:column;padding:17px 18px 12px}.mtb-overview-glance-grid{padding:6px 10px 12px}.mtb-overview-glance-item{padding:9px 8px}.mtb-overview-deeper>summary{padding:13px 15px}}
+@media print{.mtb-overview-deeper>summary{display:none!important}.mtb-overview-deeper:not([open])>.mtb-overview-grid{display:grid!important}}
+</style><div class="mtb-chapter-overview-dashboard"><section class="mtb-overview-glance" aria-labelledby="mtb-at-a-glance-title"><div class="mtb-overview-glance-head"><div><p class="mtb-overview-eyebrow">Chapter Overview</p><h1 id="mtb-at-a-glance-title" class="mtb-overview-title">At a Glance</h1></div><div class="mtb-overview-badge">Chapter 1</div></div><div class="mtb-overview-glance-grid"><div class="mtb-overview-glance-item"><span class="mtb-overview-glance-label">Main Idea: </span><div class="mtb-overview-glance-content"><p>Jude calls believers to contend for the faith once delivered to the saints, warns that the ungodly intruders among them face certain judgment, and rests the church’s hope in the God who is able to keep them from stumbling.</p></div></div><div class="mtb-overview-glance-item"><span class="mtb-overview-glance-label">Setting: </span><div class="mtb-overview-glance-content"><p>Jude, a bondservant of Jesus Christ and brother of James, writes to believers whose fellowship has been entered by men who turn grace into lewdness and deny the Lord Jesus Christ (1:1, 4). The letter draws heavily on Old Testament examples and closely parallels 2 Peter 2.</p></div></div><div class="mtb-overview-glance-item mtb-overview-glance-structure"><span class="mtb-overview-glance-label">Chapter Outline: </span><div class="mtb-overview-glance-content"><ul>
+<li><div data-custom-style="List Bullet">
+<p><strong>Jude 1:1–2 — Jude Greets the Called and Kept</strong></p>
+</div></li>
+<li><div data-custom-style="List Bullet">
+<p><strong>Jude 1:3–4 — The Urgent Call to Contend for the Faith</strong></p>
+</div></li>
+<li><div data-custom-style="List Bullet">
+<p><strong>Jude 1:5–7 — Three Reminders of God’s Judgment</strong></p>
+</div></li>
+<li><div data-custom-style="List Bullet">
+<p><strong>Jude 1:8–10 — Dreamers Who Revile What They Do Not Know</strong></p>
+</div></li>
+<li><div data-custom-style="List Bullet">
+<p><strong>Jude 1:11–13 — Woe to Those Who Follow Cain, Balaam, and Korah</strong></p>
+</div></li>
+<li><div data-custom-style="List Bullet">
+<p><strong>Jude 1:14–16 — Enoch’s Prophecy of the Lord’s Coming Judgment</strong></p>
+</div></li>
+<li><div data-custom-style="List Bullet">
+<p><strong>Jude 1:17–19 — Remember the Apostles’ Warning</strong></p>
+</div></li>
+<li><div data-custom-style="List Bullet">
+<p><strong>Jude 1:20–23 — Keep Yourselves in the Love of God and Rescue Others</strong></p>
+</div></li>
+<li><div data-custom-style="List Bullet">
+<p><strong>Jude 1:24–25 — Glory to the God Who Is Able to Keep</strong></p>
+</div></li>
+</ul></div></div><div class="mtb-overview-glance-item mtb-overview-glance-keyverse"><span class="mtb-overview-glance-label">Key Verse: </span><div class="mtb-overview-glance-content"><p>“Beloved, while I was very diligent to write to you concerning our common salvation, I found it necessary to write to you exhorting you to contend earnestly for the faith which was once for all delivered to the saints.” (Jude 1:3, NKJV)</p></div></div></div></section><details class="mtb-overview-deeper"><summary>Go Deeper</summary><div class="mtb-overview-grid"><article class="mtb-overview-card mtb-overview-card-heart"><h2 class="mtb-overview-card-header">The Heart of the Chapter</h2><div class="mtb-overview-card-body"><p>Jude meant to write about “our common salvation,” but danger in the church changed his letter. Men had “crept in unnoticed” who “turn the grace of our God into lewdness and deny the only Lord God and our Lord Jesus Christ” (1:3–4). So he urges his readers “to contend earnestly for the faith which was once for all delivered to the saints” (1:3). The faith is the apostolic gospel, a message received from God that carries moral demands, and Jude will not let anyone treat grace as permission to sin.</p>
+<p>Most of the letter exposes these intruders. Jude reaches back to Israel after the exodus, to the angels who left their proper domain, and to Sodom and Gomorrah (1:5–7), then to Cain, Balaam and Korah (1:11). His images pile up: “clouds without water,” trees “twice dead,” and “wandering stars for whom is reserved the blackness of darkness forever” (1:12–13). Enoch’s prophecy seals the warning: “Behold, the Lord comes with ten thousands of His saints” (1:14). Past privilege gives no shelter to persistent rebellion.</p>
+<p>Then Jude turns with the words “But you, beloved” (1:17, 20). Believers are to build themselves up, pray in the Holy Spirit, keep themselves in the love of God and reach out to rescue others (1:20–23). The letter ends in worship of the One “who is able to keep you from stumbling” (1:24). Those already preserved in Jesus Christ (1:1) are called to remain in God’s love (1:21), and their final safety rests on the God who is able to keep them (1:24).</p></div></article><article class="mtb-overview-card mtb-overview-card-sections"><h2 class="mtb-overview-card-header">Chapter Sections</h2><div class="mtb-overview-card-body"><p><strong>Jude 1:1–2 — Jude Greets the Called and Kept</strong></p>
+<p>Jude identifies himself as a bondservant of Jesus Christ and brother of James, and he addresses believers as called, sanctified by God the Father and preserved in Jesus Christ, so the letter begins with God’s keeping hold on His people before any warning is given. He then prays that mercy, peace and love will be multiplied to them, gifts they will need to stand against what has crept in.</p>
+<p><strong>Jude 1:3–4 — The Urgent Call to Contend for the Faith</strong></p>
+<p>Jude sets aside the letter he planned in order to urge the church to contend for the faith delivered once for all, because ungodly men have slipped in unnoticed. They turn God’s grace into an excuse for immorality and deny Christ’s lordship, and their condemnation was announced long ago.</p>
+<p><strong>Jude 1:5–7 — Three Reminders of God’s Judgment</strong></p>
+<p>Jude recalls three judgments: the Lord destroyed unbelievers after saving Israel from Egypt, angels who left their proper domain are kept in chains for judgment, and Sodom and Gomorrah, which gave themselves over to sexual immorality and went after “strange flesh,” stand as an example of eternal fire. Each example shows that former privilege does not protect those who persist in rebellion.</p>
+<p><strong>Jude 1:8–10 — Dreamers Who Revile What They Do Not Know</strong></p>
+<p>The intruders defile the flesh, reject authority and speak evil of dignitaries, yet even Michael the archangel would not bring a reviling accusation against the devil but said, “The Lord rebuke you!” (1:9). Against that restraint, these men speak evil of what they do not understand and corrupt themselves like brute beasts.</p>
+<p><strong>Jude 1:11–13 — Woe to Those Who Follow Cain, Balaam, and Korah</strong></p>
+<p>Jude pronounces woe on men who follow the way of Cain, the error of Balaam and the rebellion of Korah. His images, from spots in the love feasts to wandering stars, expose intruders who promise much, give nothing and serve only themselves.</p>
+<p><strong>Jude 1:14–16 — Enoch’s Prophecy of the Lord’s Coming Judgment</strong></p>
+<p>Jude applies Enoch’s prophecy that the Lord comes with ten thousands of His saints to judge the ungodly for their deeds and for their harsh words against Him. The intruders fit the description as grumblers and complainers who follow their own desires and flatter people for gain.</p>
+<p><strong>Jude 1:17–19 — Remember the Apostles’ Warning</strong></p>
+<p>Turning to his readers, Jude reminds them that the apostles of the Lord Jesus Christ warned of mockers in the last time. Such people cause divisions and do not have the Spirit, so their presence should neither surprise nor unsettle the church.</p>
+<p><strong>Jude 1:20–23 — Keep Yourselves in the Love of God and Rescue Others</strong></p>
+<p>Having exposed the intruders, Jude shows the beloved how to stand: by building on their faith, praying in the Holy Spirit, keeping themselves in God’s love and waiting for the mercy of Christ that leads to eternal life. From that secure place they reach toward others, showing compassion with discernment and pulling the endangered from the fire, without making peace with the corruption that defiles.</p>
+<p><strong>Jude 1:24–25 — Glory to the God Who Is Able to Keep</strong></p>
+<p>The letter that warned so sternly ends in worship, resting the church’s safety on God’s power to keep His people from stumbling and to bring them faultless and joyful into His presence. Every warning in the letter gives way to the praise of God our Savior, to whom all glory and authority belong forever.</p></div></article><article class="mtb-overview-card mtb-overview-card-matters"><h2 class="mtb-overview-card-header">Why This Chapter Matters</h2><div class="mtb-overview-card-body"><p>Jude shows that love for Christ includes guarding the truth about Him. A church can lose its way without anyone announcing a new doctrine, simply by letting grace become an excuse for sin. Jude’s warnings are severe, yet he writes them to people who are “called” and “preserved in Jesus Christ” (1:1).</p>
+<p>The letter also shows how faithful believers live in a troubled church. They neither turn harsh nor simply withdraw. They keep themselves in God’s love, pray in the Spirit and reach toward those in danger with mercy and holy fear. Above all, Jude reminds the church that its final safety rests on the God who is able to keep it.</p></div></article><article class="mtb-overview-card mtb-overview-card-themes"><h2 class="mtb-overview-card-header">Key Themes to Watch For</h2><div class="mtb-overview-card-body"><p><strong>Contending for the faith.</strong> Believers are called to defend the gospel once delivered to the saints (1:3).</p>
+<p><strong>Grace twisted into license.</strong> The intruders use grace as cover for immorality and follow their own desires (1:4, 8, 16, 18).</p>
+<p><strong>Judgment on persistent rebellion.</strong> Israel in the wilderness, the angels, Sodom, Cain, Balaam, Korah and Enoch’s prophecy all warn of certain judgment (1:5–7, 11, 14–15).</p>
+<p><strong>Keeping and being kept.</strong> Believers keep themselves in the love of God, and God is able to keep them from stumbling (1:1, 21, 24).</p>
+<p><strong>Mercy and rescue.</strong> Faithfulness reaches out with compassion and urgency toward those in danger (1:22–23).</p></div></article><article class="mtb-overview-card mtb-overview-card-words"><h2 class="mtb-overview-card-header">Key Words &amp; Concepts</h2><div class="mtb-overview-card-body"><p><strong>“The faith which was once for all delivered to the saints.”</strong> The apostolic gospel, entrusted once to God’s people, which no later claim of revelation may revise (1:3).</p>
+<p><strong>“The Lord” in verse 5.</strong> The NKJV reads Lord, the divine deliverer and judge of the exodus. Some important Greek manuscripts read Jesus here, which several modern translations follow (1:5).</p>
+<p><strong>Michael the archangel.</strong> A chief angel who disputed with the devil over the body of Moses and left the rebuke to the Lord (1:9). Jude gives no further details of that dispute.</p>
+<p><strong>Love feasts.</strong> Shared meals of the early church that joined fellowship and worship, where the intruders were like hidden dangers (1:12).</p>
+<p><strong>Enoch’s prophecy.</strong> Jude quotes a prophecy of “Enoch, the seventh from Adam” (1:14). A similar passage appears in the ancient book of 1 Enoch; Jude affirms this prophecy as true without making that whole book Scripture.</p>
+<p><strong>Praying in the Holy Spirit.</strong> Prayer enabled and directed by the Spirit, including speaking in tongues, through which believers are built up in their inner life (1:20; 1 Corinthians 14:4). The phrase is broader than tongues but includes them.</p></div></article></div></details></div>
+</section>

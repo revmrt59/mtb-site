@@ -419,6 +419,8 @@ def main():
                                 b["resources"] = "<a " in rf.read()
                         b["outline"] = ("book-outline-%s.html" % slug) in files
                         b["special"] = book_supplements(bk, slug, files)
+                        # Key Questions: generated as key-decision.html (older names also accepted).
+                        b["keyq"] = next((k for k in ("key-decision.html", "key-decisions-%s.html" % slug, "key-questions-%s.html" % slug) if k in files), "")
                     for n in range(1, nchap + 1):
                         layers, stray = chapter_layers(book_dir, slug, n)
                         for s in stray:

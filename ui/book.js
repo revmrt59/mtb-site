@@ -1,4 +1,4 @@
-/* Book page: Book Overview, Bible Context, Chapters, Resources, and any special tab. */
+/* Book page: Book Overview, Bible Context, Chapters, Key Questions, Resources, and any special tab. */
 (function () {
   "use strict";
   var MTB = window.MTB, esc = MTB.esc;
@@ -29,6 +29,7 @@
       tabs.push({ id: "extra-" + s.id, label: s.label, path: base + s.file });
     });
     tabs.push({ id: "chapters", label: "Chapters" });
+    if (b.keyq) tabs.push({ id: "key-questions", label: "Key Questions", path: base + b.keyq });
     if (b.resources) tabs.push({ id: "resources", label: "Resources", path: base + b.slug + "-0-book-resources.html" });
 
     tabsEl.innerHTML = tabs.map(function (t) {
@@ -80,7 +81,23 @@
       var btn = e.target.closest(".bk-tab");
       if (btn) show(btn.dataset.tab);
     });
-    window.addEventListener("hashchange", function () { var h = location.hash.replace("#", ""); if (h) show(h); });
+    // Links inside a document (Key Questions "Jump to", "Back to top", "Related") scroll
+    // within the page instead of changing the tab.
+    panel.addEventListener("click", function (e) {
+      var a = e.target.closest('a[href^="#"]');
+      if (!a) return;
+      var id = decodeURIComponent(a.getAttribute("href").slice(1));
+      if (!id || tabs.some(function (x) { return x.id === id; })) return;
+      var el = document.getElementById(id);
+      if (!el) return;
+      e.preventDefault();
+      if (!el.offsetParent) el = tabsEl;
+      window.scrollTo({ top: el.getBoundingClientRect().top + window.pageYOffset - 90, behavior: "smooth" });
+    });
+    window.addEventListener("hashchange", function () {
+      var h = location.hash.replace("#", "");
+      if (h && tabs.some(function (x) { return x.id === h; })) show(h);
+    });
     var start = location.hash.replace("#", "");
     if (!start) start = b.overview ? "overview" : "chapters";
     show(start);

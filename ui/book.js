@@ -7,6 +7,70 @@
 
   function titleCase(s) { return s.replace(/-/g, " ").replace(/\b\w/g, function (c) { return c.toUpperCase(); }); }
 
+
+  /* Key Questions: keep Scripture links on the site. A chapter that is on the site opens at
+     the verse; any other passage opens in a small NKJV popup instead of an outside website. */
+  var NKJV = {};
+  function nkjvBook(slug) {
+    var file = slug === "song-of-solomon" ? "song-of-songs" : slug;
+    if (!NKJV[file]) NKJV[file] = fetch(MTB.root + "assets/js/bibles-json/nkjv/" + file + ".json").then(function (r) {
+      if (!r.ok) throw new Error("text"); return r.json();
+    }).then(function (j) { return j.chapters || {}; });
+    return NKJV[file];
+  }
+  function parseRef(text) {
+    var m = /^(.+?)\s+(\d+)(?::(\d+))?(?:\s*[–—-]\s*(\d+)(?::(\d+))?)?\s*$/.exec(text.trim());
+    if (!m) return null;
+    var r = { name: m[1], c: +m[2], v: m[3] ? +m[3] : 0, c2: +m[2], v2: m[3] ? +m[3] : 0 };
+    if (m[5]) { r.c2 = +m[4]; r.v2 = +m[5]; } else if (m[4]) { if (m[3]) r.v2 = +m[4]; else { r.c2 = +m[4]; } }
+    return r;
+  }
+  function linkScripture(box, lib) {
+    var byName = {};
+    MTB.books(lib).forEach(function (x) { byName[x.name.toLowerCase()] = x; byName[x.slug.replace(/-/g, " ")] = x; });
+    byName["psalm"] = byName["psalms"]; byName["song of songs"] = byName["song of songs"] || byName["song of solomon"];
+    Array.prototype.forEach.call(box.querySelectorAll('a[href^="http"]'), function (a) {
+      var href = a.getAttribute("href") || "";
+      if (!/mtb\.bible|masteringthebible|biblegateway\.com|biblehub\.com/i.test(href)) return;
+      var r = parseRef(a.textContent), bk = r && byName[r.name.toLowerCase()];
+      if (!bk) return;
+      a.removeAttribute("target"); a.removeAttribute("rel");
+      var onSite = bk.ready.some(function (x) { return x.n === r.c; });
+      if (onSite) { a.href = MTB.chapterUrl(bk.slug, r.c) + (r.v ? "#v" + r.v : ""); return; }
+      a.href = "#"; a.className = (a.className + " kq-ref").trim();
+      a.dataset.slug = bk.slug; a.dataset.ref = JSON.stringify(r);
+    });
+    box.addEventListener("click", function (e) {
+      var a = e.target.closest("a.kq-ref");
+      if (!a) return;
+      e.preventDefault(); e.stopPropagation();
+      var r = JSON.parse(a.dataset.ref);
+      showPassage(a.textContent, a.dataset.slug, r);
+    });
+  }
+  function showPassage(label, slug, r) {
+    var ov = document.createElement("div");
+    ov.className = "kq-pop-overlay";
+    ov.innerHTML = '<div class="kq-pop" role="dialog" aria-modal="true" aria-label="' + esc(label) + '"><button type="button" class="kq-pop-close" aria-label="Close">×</button><h3>' + esc(label) + ' <span>NKJV</span></h3><div class="kq-pop-body">Loading…</div><p class="kq-pop-copy">Scripture taken from the New King James Version®. Copyright © 1982 by Thomas Nelson. Used by permission. All rights reserved.</p></div>';
+    function close() { ov.remove(); document.removeEventListener("keydown", key); }
+    function key(e) { if (e.key === "Escape") close(); }
+    ov.addEventListener("click", function (e) { if (e.target === ov || e.target.closest(".kq-pop-close")) close(); });
+    document.addEventListener("keydown", key);
+    document.body.appendChild(ov);
+    nkjvBook(slug).then(function (ch) {
+      var out = [];
+      for (var c = r.c; c <= r.c2; c++) {
+        var verses = ch[String(c)] || {}, nums = Object.keys(verses).map(Number).sort(function (a, b) { return a - b; });
+        nums.forEach(function (v) {
+          var from = c === r.c ? (r.v || 1) : 1, to = c === r.c2 ? (r.v2 || (r.v ? r.v : 999)) : 999;
+          if (!r.v && c === r.c2 && r.c2 !== r.c) to = 999;
+          if (v >= from && v <= to) out.push('<p><sup>' + (r.c2 !== r.c ? c + ":" : "") + v + "</sup> " + esc(String(verses[v]).replace(/\s+/g, " ").trim()) + "</p>");
+        });
+      }
+      ov.querySelector(".kq-pop-body").innerHTML = out.join("") || "<p>This passage could not be found.</p>";
+    }).catch(function () { ov.querySelector(".kq-pop-body").innerHTML = "<p>This passage could not be loaded.</p>"; });
+  }
+
   MTB.library().then(function (lib) {
     var b = MTB.books(lib).filter(function (x) { return x.slug === SLUG; })[0];
     if (!b) { head.innerHTML = '<h1 id="ch-title">Book not found</h1>'; return; }
@@ -72,6 +136,7 @@
         if (!box) { panel.innerHTML = '<p class="bk-missing">' + esc(t.missing || "This page isn’t available yet.") + "</p>"; return; }
         box.className = "doc hide-h1";
         if (t.id === "context") tidyContext(box);
+        if (t.id === "key-questions") linkScripture(box, lib);
         panel.innerHTML = "";
         panel.appendChild(box);
       });

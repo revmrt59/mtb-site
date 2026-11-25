@@ -613,8 +613,11 @@ dialog.picker::backdrop { background: rgba(15, 42, 69, .55); }
 .wis-more { text-align: center; margin: 20px 0; }
 
 /* Key Questions page: readable question headings and the NKJV passage popup. */
+.doc[data-doc-type="key-decisions"] h4,
+.doc[data-doc-type="key-decisions"] h5,
 .doc [data-doc-type="key-decisions"] h4,
 .doc [data-doc-type="key-decisions"] h5 { font-family: var(--serif); font-size: 20px; line-height: 1.3; color: var(--navy); font-style: normal; margin: 26px 0 6px; }
+.doc[data-doc-type="key-decisions"] h3,
 .doc [data-doc-type="key-decisions"] h3 { font-size: 22px; margin-top: 32px; }
 .kq-pop-overlay { position: fixed; inset: 0; z-index: 10050; background: rgba(17,31,43,.55); display: flex; align-items: center; justify-content: center; padding: 20px; }
 .kq-pop { position: relative; width: min(620px, 94vw); max-height: 80vh; overflow: auto; background: #fff; border-radius: 12px; padding: 18px 22px 14px; box-shadow: 0 20px 60px rgba(0,0,0,.3); }

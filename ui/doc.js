@@ -22,6 +22,8 @@
         var root = doc.querySelector("main.doc-content") || doc.querySelector(".mtb-doc") || doc.body;
         var box = document.createElement("div");
         box.innerHTML = root.innerHTML;
+        // Keep the document type (e.g. "key-decisions") so its page-specific styles still apply.
+        if (root.getAttribute && root.getAttribute("data-doc-type")) box.setAttribute("data-doc-type", root.getAttribute("data-doc-type"));
         Array.prototype.forEach.call(box.querySelectorAll("style, script, link, meta, button, .mtb-print-controls, header.site-header, nav.main-nav"), function (n) { n.remove(); });
         // Links: site-absolute links to page pieces open in the doc viewer; others are made relative to the site root.
         Array.prototype.forEach.call(box.querySelectorAll("a[href]"), function (a) {

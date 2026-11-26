@@ -29,6 +29,10 @@
     var back = /^about|^aboutthebible/.test(path) ? '<a class="wd-back" href="about.html">← About</a>' : '<a class="wd-back" href="javascript:history.back()">← Back</a>';
     head.innerHTML = back + '<h1 id="ch-title">' + esc(title) + "</h1>";
     box.className = "doc hide-h1";
+    // Some documents repeat the title as their first heading or bold line; the page header already shows it.
+    var same = function (s) { return s.toLowerCase().replace(/\bmtb\b/g, "mastering the bible").replace(/[^a-z]+/g, " ").trim(); };
+    var first = box.querySelector("h1, h2, h3, p");
+    if (first && first.tagName !== "H1" && same(first.textContent) === same(title)) first.remove();
     main.innerHTML = "";
     main.appendChild(box);
   });

@@ -425,6 +425,16 @@ def main():
                         b["special"] = book_supplements(bk, slug, files)
                         # Key Questions: generated as key-decision.html (older names also accepted).
                         b["keyq"] = next((k for k in ("key-decision.html", "key-decisions-%s.html" % slug, "key-questions-%s.html" % slug) if k in files), "")
+                        if b["keyq"]:
+                            # Chapters with their own Key Questions, so a chapter page can link to them:
+                            # headings like id="hebrews-11-5-questions" (numbered books drop the digit: "timothy-1-3-questions").
+                            with open(os.path.join(bk, b["keyq"]), encoding="utf-8", errors="replace") as kf:
+                                base = re.sub(r"^\d-", "", slug)
+                                kq = {}
+                                for m in re.finditer(r'id="(%s-(\d+)-(\d+)-questions?)"' % re.escape(base), kf.read()):
+                                    kq.setdefault(m.group(2), {"n": int(m.group(3)), "id": m.group(1)})
+                                if kq:
+                                    b["keyq_ch"] = kq
                     for n in range(1, nchap + 1):
                         layers, stray = chapter_layers(book_dir, slug, n)
                         for s in stray:

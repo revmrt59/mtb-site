@@ -139,6 +139,11 @@
         if (t.id === "key-questions") linkScripture(box, lib);
         panel.innerHTML = "";
         panel.appendChild(box);
+        if (jumpTo) {
+          var el = document.getElementById(jumpTo);
+          jumpTo = "";
+          if (el) setTimeout(function () { window.scrollTo({ top: el.getBoundingClientRect().top + window.pageYOffset - 140 }); }, 50);
+        }
       });
     }
 
@@ -164,6 +169,9 @@
       if (h && tabs.some(function (x) { return x.id === h; })) show(h);
     });
     var start = location.hash.replace("#", "");
+    // A chapter page links to "#key-questions/<heading id>" to open its own questions.
+    var jumpTo = "";
+    if (start.indexOf("/") > 0) { jumpTo = decodeURIComponent(start.slice(start.indexOf("/") + 1)); start = start.slice(0, start.indexOf("/")); }
     if (!start) start = b.overview ? "overview" : "chapters";
     show(start);
   });

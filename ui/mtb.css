@@ -254,6 +254,8 @@ dialog.picker::backdrop { background: rgba(15, 42, 69, .55); }
 .outline { display: flex; flex-wrap: wrap; gap: 8px; }
 .outline a { display: inline-flex; align-items: center; gap: 8px; min-height: 44px; padding: 6px 14px; border-radius: 22px; background: #fff; color: var(--navy); text-decoration: none; font-size: 15px; font-weight: 700; line-height: 1.25; }
 .outline a span { color: var(--gold-ink); white-space: nowrap; }
+.ch-kq { display: inline-block; margin: 4px 0 14px; color: #fff; font-weight: 700; font-size: 15px; text-decoration: underline; text-underline-offset: 3px; }
+.ch-kq:hover { color: var(--gold-soft); }
 .deeper-btn { align-self: flex-start; min-height: 44px; padding: 0 16px; border-radius: 10px; border: 1px solid rgba(255,255,255,.5); background: transparent; color: #fff; font-weight: 700; cursor: pointer; }
 .deeper-btn:hover { background: rgba(255,255,255,.1); }
 .deeper { display: grid; gap: 12px; grid-template-columns: repeat(auto-fit, minmax(min(100%, 380px), 1fr)); }

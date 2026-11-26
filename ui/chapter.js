@@ -100,6 +100,10 @@
       t = marked + t.slice(pos);
     }
     var lines;
+    // The NKJV file marks poetry lines with double spaces, but it also has stray double spaces
+    // (after a verse's first word, and before a lowercase word mid-sentence). Those are not line breaks.
+    t = t.replace(/^([^\s\u0001]*(?:\u0001[^\u0002]*\u0002[^\u0003]*\u0003)?[^\s\u0001]*)\s{2,}/, "$1 ")
+         .replace(/\s{2,}(?=(?:\u0001[^\u0002]*\u0002)?[a-z])/g, " ");
     if (/\S\s{2,}\S/.test(t)) lines = t.split(/\s{2,}/);
     else if (/[;:,.!?”][A-Za-z“]/.test(t)) lines = t.split(/(?<=[;:,.!?”])(?=[A-Za-z“])/);
     else lines = [t];
@@ -186,6 +190,9 @@
         return '<a href="#s' + s.start + '"><span>' + ref(s.start, s.end) + "</span>" + esc(s.title) + "</a>";
       }).join("") + "</nav>";
     }
+    var bk = MTB.books(lib).filter(function (x) { return x.slug === SLUG; })[0];
+    var kq = bk && bk.keyq_ch && bk.keyq_ch[String(CH)];
+    if (kq) html += '<a class="ch-kq" href="' + MTB.bookUrl(SLUG) + "#key-questions/" + encodeURIComponent(kq.id) + '">Key Questions on ' + esc(title) + " (" + kq.n + ") →</a>";
     var cards = ov.cards.filter(function (c) { return c.title !== "Chapter Sections"; });
     if (cards.length) {
       html += '<button type="button" class="deeper-btn" aria-expanded="false" aria-controls="deeper">Go deeper into ' + esc(title) + " ▾</button>" +
@@ -220,7 +227,7 @@
     bar.hidden = false;
     bar.innerHTML = '<div class="wrap rb-inner">' +
       '<button type="button" class="rb-btn" id="rb-layers" aria-expanded="' + panelOpen + '" aria-controls="rb-panel">' + ICON_LAYERS +
-        '<span>Layers</span><span class="rb-count" title="' + on + " of " + LAYERS.length + ' layers showing">' + on + "/" + LAYERS.length + "</span></button>" +
+        '<span>Layers</span><span class="rb-count" title="' + on + " of the " + avail.length + ' study layers written for this chapter show when you open a verse. Click to choose.">' + on + " on</span></button>" +
       '<label class="sr-only" for="tr-sel">Translation</label><select class="rb-sel" id="tr-sel">' +
         TRANSLATIONS.map(function (t) { return '<option value="' + t[0] + '"' + (t[0] === settings.tr ? " selected" : "") + ">" + t[1] + "</option>"; }).join("") + "</select>" +
       '<button type="button" class="rb-btn rb-ws" data-layer="ws" aria-pressed="' + (!!settings.ws && nk) + '"' + (nk ? "" : ' disabled title="Word-study underlines are available in the NKJV"') +

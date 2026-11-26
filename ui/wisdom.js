@@ -38,6 +38,8 @@
     for (var v = u.s; v <= u.e; v++) {
       var t = String(ch[String(v)] || "").trim();
       if (!t) continue;
+      // Stray double spaces in the NKJV file (after the first word, or before a lowercase word) are not line breaks.
+      t = t.replace(/^(\S+)\s{2,}/, "$1 ").replace(/\s{2,}(?=[a-z])/g, " ");
       // Poetry lines: double spaces where the file has them; otherwise a new line starts at a capital after punctuation.
       var parts = /\S\s{2,}\S/.test(t) ? t.split(/\s{2,}/) : t.split(/(?<=[,;:.!?’”])\s+(?=[A-Z“‘])/);
       var lines = parts.map(function (l) { return '<span class="wu-ln">' + esc(l.trim()) + "</span>"; }).join("");

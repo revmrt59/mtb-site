@@ -1,30 +1,20 @@
-MTB site build - 2026-11-25 20:50
+MTB site build - 2026-11-26 11:35
 
 Ready: 82 chapters in 17 books (5 complete with all core layers).
 
-NEEDS ATTENTION (34)
+NEEDS ATTENTION (21)
   - Ruth 1–4: missing hearing, reflections
-  - 1 Samuel 4: overview outline sections differ from the published Chapter Outline
   - 1 Samuel 1–2: missing hearing
   - 1 Samuel 3: missing hearing, reflections
   - 1 Chronicles 1: missing hearing, reflections
   - 1 Chronicles: has ready chapters but no Book Overview
-  - Psalms 58: placeholder text ("Coming soon") shows to readers: Meaning 11 of 11 verses; Verse Explanation 11 of 11 verses; Study Notes 11 of 11 verses. Finish it or remove the chapter from the Library
   - Psalms 52: missing hearing
-  - Psalms 58: missing hearing, reflections
+  - Psalms 58: missing study, hearing, reflections
   - Psalms: has ready chapters but no Book Overview
   - Proverbs 1–31: missing hearing, reflections
-  - Ecclesiastes 1: chapter outline has no sections the converter recognizes
-  - Ecclesiastes 2: chapter outline has no sections the converter recognizes
-  - Ecclesiastes 3: chapter outline has no sections the converter recognizes
-  - Ecclesiastes 4: chapter outline has no sections the converter recognizes
   - Ecclesiastes 1–5: missing hearing, reflections
   - Obadiah 1: missing hearing
   - Matthew 7: missing overview, hearing, reflections
-  - Colossians 1: chapter outline has no sections the converter recognizes
-  - Colossians 2: chapter outline has no sections the converter recognizes
-  - Colossians 3: chapter outline has no sections the converter recognizes
-  - Colossians 4: chapter outline has no sections the converter recognizes
   - Colossians 1–4: missing hearing, reflections
   - Philemon 1: missing hearing
   - 2 Timothy 1–4: missing hearing, reflections
@@ -34,16 +24,8 @@ NEEDS ATTENTION (34)
   - Jude 1: missing hearing, reflections
   - 2 John 1: missing hearing
   - 3 John 1: missing hearing, reflections
-  - Life of Jesus 41 Lord of the Sabbath: Story paragraph 3: quotation tagged Mark is not in Mark's passage (it is in Matthew): "Have you not read what David did when he was hungry, he and those who "
-  - Life of Jesus 57 The Beelzebub Accusation: Story paragraph 5: quotation tagged Luke is not in Luke's passage (it is in Mark): "No one can enter a strong man’s house and plunder his goods, unless he"
-  - Life of Jesus 73 Feeding the Five Thousand: Story paragraph 3: quotation tagged John is not in John's passage (it is in Matthew and Mark and Luke): "You give them something to eat."
 
-FYI, NOT SHOWN ON THE SITE (8)
-  - 1 Samuel 1: extra file ignored: 1-samuel-2-chapter-resources.html
-  - 1 Chronicles 4: only an old orientation file is here, so the chapter is not listed: 1-chronicles-4-chapter-orientation.html
-  - Obadiah: folder 007 is beyond the book's 1 chapters
-  - Titus 1: extra file ignored: titus-1-chapter-insights-copy.html
-  - Titus 1: extra file ignored: titus-1-chapter-orientation-copy.html
+FYI, NOT SHOWN ON THE SITE (3)
   - Proverbs Wisdom: 900 units from 31 chapters (31 approved chapters, drafts included for the pilot)
-  - Life of Jesus tag check: 18 probably wrong tags, 32 to look at (data/loc-tag-check.txt)
+  - Life of Jesus tag check: 7 probably wrong tags, 30 to look at (data/loc-tag-check.txt)
   - Life of Jesus: 191 events listed; 191 approved, 0 draft written

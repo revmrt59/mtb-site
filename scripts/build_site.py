@@ -119,6 +119,10 @@ def chapter_layers(book_dir, slug, n):
         # Skip empty placeholders.
         if os.path.getsize(path) < 400 and layer != "scripture":
             continue
+        # Skip files the generator marked as placeholders ("Coming soon"), so readers never see them.
+        with open(path, encoding="utf-8", errors="replace") as pf:
+            if 'data-mtb-status="placeholder"' in pf.read(600):
+                continue
         found.setdefault(layer, name)
     if "overview" in found and found["overview"].endswith("-orientation.html"):
         alt = "%s-%d-chapter-overview.html" % (slug, n)

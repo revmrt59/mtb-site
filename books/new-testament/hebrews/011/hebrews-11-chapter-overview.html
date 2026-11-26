@@ -1,0 +1,97 @@
+<section class="mtb-doc mtb-doc--read" data-doc-type="chapter-overview" data-mtb-status="complete">
+<style>
+.mtb-print-controls{display:flex;justify-content:flex-end;gap:8px;margin:0 0 14px;padding:0 4px}
+.mtb-print-button{appearance:none;border:1px solid #b9c8d5;border-radius:8px;background:#fff;padding:9px 14px;color:#173a5e;font:700 14px Arial,Helvetica,sans-serif;cursor:pointer}
+.mtb-print-button:hover{background:#f2f6f9}
+@media print{
+  @page{size:auto;margin:.45in}
+  html,body{background:#fff!important;color:#000!important}
+  .mtb-print-controls,.mtb-study-controls,.mtb-reflections-controls{display:none!important}
+  .mtb-doc{display:block!important;width:100%!important;max-width:none!important;margin:0!important;padding:0!important}
+  .mtb-overview-hero,.mtb-study-hero,.mtb-reflections-hero,.mtb-culture-hero{box-shadow:none!important;background:#fff!important;border-color:#777!important}
+  .mtb-overview-grid,.mtb-reflections-grid,.mtb-culture-grid,.mtb-study-verse-grid{display:block!important}
+  .mtb-overview-card,.mtb-reflections-card,.mtb-culture-card,.mtb-study-verse,.mtb-study-verse-panel,.mtb-intro-card{
+    display:block!important;width:100%!important;max-width:none!important;height:auto!important;margin:0 0 12pt!important;
+    break-inside:avoid;page-break-inside:avoid;box-shadow:none!important;background:#fff!important;color:#000!important
+  }
+  details.mtb-study-verse,details.mtb-reflection-section{display:block!important;overflow:visible!important}
+  details.mtb-study-verse>summary,details.mtb-reflection-section>summary{display:flex!important;background:#fff!important;color:#000!important;border-bottom:1px solid #777!important}
+  details.mtb-study-verse>summary:after,details.mtb-reflection-section>summary:after{display:none!important}
+  details.mtb-study-verse>.mtb-study-verse-body,details.mtb-reflection-section>.mtb-reflection-section-body{display:block!important}
+  h1,h2,h3,h4{break-after:avoid;page-break-after:avoid;color:#000!important}
+  p,li{orphans:3;widows:3}
+  a{color:#000!important;text-decoration:none!important}
+  a[href]::after{content:none!important}
+}
+</style>
+<div class="mtb-print-controls"><button type="button" class="mtb-print-button" onclick="(function(button){var doc=button.closest('.mtb-doc')||document;var panels=Array.prototype.slice.call(doc.querySelectorAll('details'));panels.forEach(function(panel){panel.open=true;});window.print();})(this)">&#128438; Print This Page</button></div>
+<style>
+.mtb-chapter-overview-dashboard{--mtb-navy:#173a5e;--mtb-navy-2:#2b587f;--mtb-gold:#b7832f;--mtb-blue-soft:#eef4f9;--mtb-border:#d7e0e8;--mtb-text:#1d2935;width:100%;max-width:1600px;margin:0 auto;padding:2px 4px 30px;color:var(--mtb-text);font-family:Arial,Helvetica,sans-serif}.mtb-chapter-overview-dashboard *{box-sizing:border-box}
+.mtb-overview-glance{margin:0 0 18px;overflow:hidden;border:1px solid #cbd8e3;border-radius:14px;background:linear-gradient(135deg,#f7fafc 0%,#e8f0f7 100%);box-shadow:0 4px 15px rgba(28,48,66,.045)}
+.mtb-overview-glance-head{display:flex;align-items:center;justify-content:space-between;gap:20px;padding:18px 24px 13px;border-bottom:1px solid rgba(23,58,94,.12);background:var(--mtb-blue-soft)}
+.mtb-overview-eyebrow{margin:0 0 4px;color:var(--mtb-gold);font-size:.78rem;font-weight:800;letter-spacing:.13em;text-transform:uppercase}.mtb-overview-title{margin:0;color:var(--mtb-navy);font-size:clamp(1.4rem,2.6vw,1.95rem);line-height:1.1}.mtb-overview-badge{flex:0 0 auto;padding:9px 15px;border:1px solid rgba(23,58,94,.18);border-radius:999px;background:#fff;color:var(--mtb-navy);font-weight:800}
+.mtb-overview-glance-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:0;padding:8px 22px 13px;background:#fff}.mtb-overview-glance-item{min-width:0;padding:10px 12px;font-size:1rem;line-height:1.42}.mtb-overview-glance-item:nth-child(even){border-left:1px solid rgba(23,58,94,.11)}.mtb-overview-glance-label{display:inline;color:var(--mtb-navy);font-weight:800}.mtb-overview-glance-content{display:inline}.mtb-overview-glance-content p{display:inline;margin:0}.mtb-overview-glance-structure .mtb-overview-glance-content{display:block;margin-top:4px}.mtb-overview-glance-structure ul,.mtb-overview-glance-structure ol{margin:4px 0 0;padding-left:1.25em}.mtb-overview-glance-structure li{margin:0 0 2px}.mtb-overview-glance-structure li p{display:block;margin:0}.mtb-overview-glance-keyverse .mtb-overview-glance-content{font-style:italic}
+.mtb-overview-deeper{margin:0}.mtb-overview-deeper>summary{display:flex;align-items:center;justify-content:space-between;gap:16px;cursor:pointer;list-style:none;padding:14px 18px;border:1px solid #cbd8e3;border-radius:10px;background:#f4f7fa;color:var(--mtb-navy);font-size:1rem;font-weight:800;user-select:none}.mtb-overview-deeper>summary::-webkit-details-marker{display:none}.mtb-overview-deeper>summary::after{content:'+';font-size:1.35rem;line-height:1}.mtb-overview-deeper[open]>summary{margin-bottom:16px;border-color:#b8cad9;background:#eef4f9}.mtb-overview-deeper[open]>summary::after{content:'−'}
+.mtb-overview-grid{display:grid;grid-template-columns:repeat(12,minmax(0,1fr));gap:16px;align-items:stretch}.mtb-overview-card{min-width:0;overflow:hidden;border:1px solid var(--mtb-border);border-top:4px solid var(--mtb-navy-2);border-radius:12px;background:#fff;box-shadow:0 4px 15px rgba(28,48,66,.055)}.mtb-overview-card-heart{grid-column:1/-1}.mtb-overview-card-sections{grid-column:1/span 6}.mtb-overview-card-matters{grid-column:7/span 6}.mtb-overview-card-themes{grid-column:1/span 6}.mtb-overview-card-words{grid-column:7/span 6}.mtb-overview-card-psalm-author{grid-column:1/span 4}.mtb-overview-card-psalm-occasion{grid-column:5/span 4}.mtb-overview-card-psalm-kind{grid-column:9/span 4}.mtb-overview-card-header{margin:0;padding:12px 16px 10px;border-bottom:1px solid #e5ebf0;background:var(--mtb-blue-soft);color:var(--mtb-navy);font-size:.96rem;font-weight:800}.mtb-overview-card-body{padding:16px 18px 18px;font-size:1rem;line-height:1.48;overflow-wrap:anywhere}.mtb-overview-card-heart .mtb-overview-card-body{font-size:1.04rem}.mtb-overview-card-body p{margin:0 0 .72em}.mtb-overview-card-body p:last-child{margin-bottom:0}.mtb-overview-card-body ul,.mtb-overview-card-body ol{margin:0;padding-left:1.25em}.mtb-overview-card-body li{margin:0 0 .35em}
+@media(max-width:980px){.mtb-overview-card{grid-column:span 6!important}.mtb-overview-card-heart{grid-column:1/-1!important}.mtb-overview-glance-grid{grid-template-columns:1fr}.mtb-overview-glance-item:nth-child(even){border-left:0}.mtb-overview-glance-item+.mtb-overview-glance-item{border-top:1px solid rgba(23,58,94,.09)}}
+@media(max-width:760px){.mtb-overview-grid{grid-template-columns:1fr}.mtb-overview-card{grid-column:1/-1!important}.mtb-overview-glance-head{align-items:flex-start;flex-direction:column;padding:17px 18px 12px}.mtb-overview-glance-grid{padding:6px 10px 12px}.mtb-overview-glance-item{padding:9px 8px}.mtb-overview-deeper>summary{padding:13px 15px}}
+@media print{.mtb-overview-deeper>summary{display:none!important}.mtb-overview-deeper:not([open])>.mtb-overview-grid{display:grid!important}}
+</style><div class="mtb-chapter-overview-dashboard"><section class="mtb-overview-glance" aria-labelledby="mtb-at-a-glance-title"><div class="mtb-overview-glance-head"><div><p class="mtb-overview-eyebrow">Chapter Overview</p><h1 id="mtb-at-a-glance-title" class="mtb-overview-title">At a Glance</h1></div><div class="mtb-overview-badge">Chapter 11</div></div><div class="mtb-overview-glance-grid"><div class="mtb-overview-glance-item"><span class="mtb-overview-glance-label">Main Idea: </span><div class="mtb-overview-glance-content"><p>Faith takes God at His word and lives now in light of what He has promised but not yet shown, as the long line of witnesses from Abel to the suffering prophets proves, all of them commended by God and waiting for a fulfillment they will share with us.</p></div></div><div class="mtb-overview-glance-item"><span class="mtb-overview-glance-label">Setting: </span><div class="mtb-overview-glance-content"><p>Hebrews 11 answers the call of 10:38–39 to live by faith and not draw back. Its examples come from Genesis through the prophets, and the chapter leads straight into the call to run the race looking to Jesus (12:1–2).</p></div></div><div class="mtb-overview-glance-item mtb-overview-glance-structure"><span class="mtb-overview-glance-label">Chapter Outline: </span><div class="mtb-overview-glance-content"><ul>
+<li><div data-custom-style="List Bullet">
+<p><strong>Hebrews 11:1–3 — What Faith Is</strong></p>
+</div></li>
+<li><div data-custom-style="List Bullet">
+<p><strong>Hebrews 11:4–7 — Abel, Enoch, and Noah</strong></p>
+</div></li>
+<li><div data-custom-style="List Bullet">
+<p><strong>Hebrews 11:8–12 — Abraham and Sarah Trust the One Who Promised</strong></p>
+</div></li>
+<li><div data-custom-style="List Bullet">
+<p><strong>Hebrews 11:13–16 — Strangers Seeking a Heavenly Country</strong></p>
+</div></li>
+<li><div data-custom-style="List Bullet">
+<p><strong>Hebrews 11:17–22 — Faith That Looks Beyond Death</strong></p>
+</div></li>
+<li><div data-custom-style="List Bullet">
+<p><strong>Hebrews 11:23–28 — The Faith of Moses</strong></p>
+</div></li>
+<li><div data-custom-style="List Bullet">
+<p><strong>Hebrews 11:29–31 — The Red Sea, Jericho, and Rahab</strong></p>
+</div></li>
+<li><div data-custom-style="List Bullet">
+<p><strong>Hebrews 11:32–38 — Faith in Deliverance and in Suffering</strong></p>
+</div></li>
+<li><div data-custom-style="List Bullet">
+<p><strong>Hebrews 11:39–40 — Made Perfect Together</strong></p>
+</div></li>
+</ul></div></div><div class="mtb-overview-glance-item mtb-overview-glance-keyverse"><span class="mtb-overview-glance-label">Key Verse: </span><div class="mtb-overview-glance-content"><p>“Now faith is the substance of things hoped for, the evidence of things not seen.” (Hebrews 11:1)</p></div></div></div></section><details class="mtb-overview-deeper"><summary>Go Deeper</summary><div class="mtb-overview-grid"><article class="mtb-overview-card mtb-overview-card-heart"><h2 class="mtb-overview-card-header">The Heart of the Chapter</h2><div class="mtb-overview-card-body"><p>Hebrews 11 opens by describing faith: “the substance of things hoped for, the evidence of things not seen” (11:1). Faith rests on who God is and what He has said, so His unseen promises carry real weight in how His people live now. It begins with creation itself, understanding that “the worlds were framed by the word of God” (11:3). Then, “without faith it is impossible to please Him,” for whoever comes to God must believe “that He is, and that He is a rewarder of those who diligently seek Him” (11:6).</p>
+<p>The chapter then calls its witnesses. Abel worshiped, Enoch pleased God, and Noah built an ark for a flood no one had seen. Abraham “went out, not knowing where he was going” (11:8), and lived in tents while waiting “for the city which has foundations, whose builder and maker is God” (11:10). Sarah “judged Him faithful who had promised” (11:11). Abraham offered Isaac, trusting that God could raise him from the dead. Moses chose to suffer with God’s people rather than enjoy Egypt’s treasures, “for he endured as seeing Him who is invisible” (11:27). Israel crossed the sea, Jericho’s walls fell, and Rahab was spared.</p>
+<p>Many of these people “died in faith, not having received the promises” (11:13). They called themselves strangers and pilgrims, longing for a heavenly country, “Therefore God is not ashamed to be called their God” (11:16). The chapter honors the same trust in God under very different outcomes. Some through faith conquered kingdoms and escaped the sword; others were tortured, refusing release, “that they might obtain a better resurrection” (11:35). The world was not worthy of them. All were commended, and God has planned for them to be made perfect together with us (11:39–40).</p></div></article><article class="mtb-overview-card mtb-overview-card-sections"><h2 class="mtb-overview-card-header">Chapter Sections</h2><div class="mtb-overview-card-body"><p><strong>Hebrews 11:1–3 — What Faith Is</strong></p>
+<p>Faith is confident assurance of what God has promised and conviction about realities not yet seen. By faith God’s people of old were commended, and by faith we understand that the worlds were framed by the word of God, so that what is seen was not made out of visible things.</p>
+<p><strong>Hebrews 11:4–7 — Abel, Enoch, and Noah</strong></p>
+<p>By faith Abel offered a better sacrifice, Enoch was taken without seeing death, and Noah built an ark in response to God’s warning about things not yet seen. Without faith no one can please God, for those who come to Him must believe that He exists and rewards those who seek Him.</p>
+<p><strong>Hebrews 11:8–12 — Abraham and Sarah Trust the One Who Promised</strong></p>
+<p>By faith Abraham left home without knowing where he was going and lived as a foreigner in the promised land, waiting for the city God Himself would build. By faith Sarah received strength to bear a child in old age because she trusted God’s faithfulness, and from one aging man came countless descendants.</p>
+<p><strong>Hebrews 11:13–16 — Strangers Seeking a Heavenly Country</strong></p>
+<p>The patriarchs died still trusting God’s promises, seeing them from a distance and confessing that they were strangers on the earth. They longed for a better, heavenly homeland, so God is not ashamed to be called their God and has prepared a city for them.</p>
+<p><strong>Hebrews 11:17–22 — Faith That Looks Beyond Death</strong></p>
+<p>By faith Abraham offered Isaac, the son of promise, reasoning that God could raise him from the dead, and in a figurative sense he received him back. Isaac, Jacob, and Joseph each acted on God’s promises about the future even as they faced death.</p>
+<p><strong>Hebrews 11:23–28 — The Faith of Moses</strong></p>
+<p>By faith Moses’ parents hid him without fear of the king, and Moses chose to suffer with God’s people instead of enjoying Egypt’s treasures, valuing the reproach of Christ above them. By faith he left Egypt, persevering as one who saw the invisible God, and kept the Passover.</p>
+<p><strong>Hebrews 11:29–31 — The Red Sea, Jericho, and Rahab</strong></p>
+<p>By faith Israel crossed the Red Sea on dry land, while the pursuing Egyptians drowned. By faith Jericho’s walls fell, and Rahab was spared because she welcomed the spies in peace.</p>
+<p><strong>Hebrews 11:32–38 — Faith in Deliverance and in Suffering</strong></p>
+<p>The writer has no time to tell of all the judges, kings, and prophets who through faith conquered, escaped danger, and grew strong out of weakness. Others through faith endured torture, chains, and death, refusing release to gain a better resurrection, and the world was not worthy of them.</p>
+<p><strong>Hebrews 11:39–40 — Made Perfect Together</strong></p>
+<p>All these were commended for their faith, yet they did not receive the promise in its fullness. God planned something better, so that they would reach the goal together with us.</p></div></article><article class="mtb-overview-card mtb-overview-card-matters"><h2 class="mtb-overview-card-header">Why This Chapter Matters</h2><div class="mtb-overview-card-body"><p>Hebrews 11 shows that faith is not wishful thinking. It rests on God’s character and His word, and it acts before the outcome can be seen. Abraham went, Noah built, Moses chose, and each trusted that God would keep His promise (11:6–8, 24–26).</p>
+<p>The chapter also refuses to measure faith by outcomes alone. Some believers escaped the sword, and others died by it; both are listed as people of faith, and God commends them all (11:33–39). Believers who are suffering are not failing in faith. They stand in the same line as those of whom the world was not worthy, waiting with them for what God has promised.</p></div></article><article class="mtb-overview-card mtb-overview-card-themes"><h2 class="mtb-overview-card-header">Key Themes to Watch For</h2><div class="mtb-overview-card-body"><p><strong>What faith is.</strong> Faith gives God’s unseen promises real weight now (11:1–3).</p>
+<p><strong>Pleasing God.</strong> Without faith it is impossible to please Him (11:6).</p>
+<p><strong>Pilgrims seeking a city.</strong> The patriarchs lived as strangers, waiting for the city God built (11:9–16).</p>
+<p><strong>Faith beyond death.</strong> Abraham, Isaac, Jacob, and Joseph trusted God’s promises beyond their own lifetimes (11:17–22).</p>
+<p><strong>Deliverance and suffering.</strong> The same trust in God brought some through to victory and carried others through suffering and death, and God commended it in both (11:32–40).</p></div></article><article class="mtb-overview-card mtb-overview-card-words"><h2 class="mtb-overview-card-header">Key Words &amp; Concepts</h2><div class="mtb-overview-card-body"><p><strong>Faith (11:1).</strong> Faith is the persuasion that God is who He has revealed Himself to be in His Word and that He is faithful to perform all He has promised. In this chapter that persuasion shows itself in trust and obedience before the promise can be seen.</p>
+<p><strong>Substance and evidence (11:1).</strong> Faith gives firm reality to what God has promised and treats unseen things as certain, because God has spoken.</p>
+<p><strong>The elders (11:2).</strong> God’s people of earlier generations, whom God commended for their faith.</p>
+<p><strong>Strangers and pilgrims (11:13).</strong> People living away from their true home. The patriarchs confessed that their homeland lay ahead, in the heavenly country God had prepared.</p>
+<p><strong>The reproach of Christ (11:26).</strong> The disgrace Moses accepted by siding with God’s people. Hebrews counts that suffering as sharing in the reproach Christ Himself would bear.</p>
+<p><strong>Made perfect apart from us (11:40).</strong> Brought to God’s intended goal. The faithful of old will share that fulfillment together with believers today through Christ.</p></div></article></div></details></div>
+</section>

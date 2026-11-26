@@ -401,12 +401,23 @@ def read_outline(path, chapter):
     root = parse(path)
     out = {"focus": "", "sections": []}
 
+    def bold_label(n):
+        """Some outlines were published with each section title as a bold paragraph instead of a heading:
+        <p><strong>1. Colossians 1:1-2 - Title</strong></p>. Return the label, or None."""
+        if n.tag != "p":
+            return None
+        kids = [c for c in n.children if c.tag or (c.text or "").strip()]
+        if len(kids) != 1 or kids[0].tag not in ("strong", "b"):
+            return None
+        label = re.sub(r"^\s*\d+[.)]\s*", "", n.get_text().strip())
+        return label if parse_range(label, chapter) else None
+
     def after(h, tags):
         par = h.parent
         idx = par.children.index(h)
         parts = []
         for sib in par.children[idx + 1:]:
-            if sib.tag in ("h1", "h2", "h3", "h4"):
+            if sib.tag in ("h1", "h2", "h3", "h4") or bold_label(sib):
                 break
             if sib.tag in tags:
                 parts.append("<%s>%s</%s>" % (sib.tag, clean_html(sib), sib.tag))
@@ -415,7 +426,7 @@ def read_outline(path, chapter):
     for h in root.walk():
         if h.tag == "h2" and "focus" in h.get_text().lower():
             out["focus"] = after(h, ("p",))
-        elif h.tag in ("h3", "h4"):
+        elif h.tag in ("h3", "h4") or bold_label(h):
             label = re.sub(r"^\s*\d+[.)]\s*", "", h.get_text().strip())
             r = parse_range(label, chapter)
             if r:

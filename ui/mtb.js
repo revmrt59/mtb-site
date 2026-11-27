@@ -100,7 +100,7 @@
           '<a href="' + ROOT + 'resources/">Resources</a>' +
           '<span class="visits" id="mtb-visits" hidden></span>' +
           '<span class="copy">Mastering the Bible · Helping People Hear God’s Voice</span>' +
-          '<span class="copy legal">© 2026 Mastering the Bible. All rights reserved. ' +
+          '<span class="copy legal">© 2026 Mastering the Bible (mtb.bible). All rights reserved. ' +
             'Hebrew and Greek word data from <a href="https://www.stepbible.org" target="_blank" rel="noopener">STEPBible</a> ' +
             '(Tyndale House, Cambridge), used under <a href="https://creativecommons.org/licenses/by/4.0/" target="_blank" rel="noopener">CC BY 4.0</a>.</span>' +
         "</div>";

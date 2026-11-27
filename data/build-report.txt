@@ -1,8 +1,9 @@
-MTB site build - 2026-11-26 21:44
+MTB site build - 2026-11-26 20:53
 
-Ready: 82 chapters in 17 books (5 complete with all core layers).
+Ready: 132 chapters in 18 books (5 complete with all core layers).
 
-NEEDS ATTENTION (21)
+NEEDS ATTENTION (22)
+  - Exodus 1–4, 6–40: missing overview, hearing, reflections
   - Ruth 1–4: missing hearing, reflections
   - 1 Samuel 1–2: missing hearing
   - 1 Samuel 3: missing hearing, reflections
@@ -12,7 +13,7 @@ NEEDS ATTENTION (21)
   - Psalms 58: missing study, hearing, reflections
   - Psalms: has ready chapters but no Book Overview
   - Proverbs 1–31: missing hearing, reflections
-  - Ecclesiastes 1–5: missing hearing, reflections
+  - Ecclesiastes 1–12: missing hearing, reflections
   - Obadiah 1: missing hearing
   - Matthew 7: missing overview, hearing, reflections
   - Colossians 1–4: missing hearing, reflections
@@ -20,7 +21,7 @@ NEEDS ATTENTION (21)
   - 2 Timothy 1–4: missing hearing, reflections
   - Titus 1–3: missing hearing, reflections
   - Hebrews 1–13: missing hearing, reflections
-  - James 1: missing overview, hearing, reflections
+  - James 1–5: missing hearing, reflections
   - Jude 1: missing hearing, reflections
   - 2 John 1: missing hearing
   - 3 John 1: missing hearing, reflections

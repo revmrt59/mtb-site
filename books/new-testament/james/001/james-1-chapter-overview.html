@@ -1,0 +1,97 @@
+<section class="mtb-doc mtb-doc--read" data-doc-type="chapter-overview" data-mtb-status="complete">
+<style>
+.mtb-print-controls{display:flex;justify-content:flex-end;gap:8px;margin:0 0 14px;padding:0 4px}
+.mtb-print-button{appearance:none;border:1px solid #b9c8d5;border-radius:8px;background:#fff;padding:9px 14px;color:#173a5e;font:700 14px Arial,Helvetica,sans-serif;cursor:pointer}
+.mtb-print-button:hover{background:#f2f6f9}
+@media print{
+  @page{size:auto;margin:.45in}
+  html,body{background:#fff!important;color:#000!important}
+  .mtb-print-controls,.mtb-study-controls,.mtb-reflections-controls{display:none!important}
+  .mtb-doc{display:block!important;width:100%!important;max-width:none!important;margin:0!important;padding:0!important}
+  .mtb-overview-hero,.mtb-study-hero,.mtb-reflections-hero,.mtb-culture-hero{box-shadow:none!important;background:#fff!important;border-color:#777!important}
+  .mtb-overview-grid,.mtb-reflections-grid,.mtb-culture-grid,.mtb-study-verse-grid{display:block!important}
+  .mtb-overview-card,.mtb-reflections-card,.mtb-culture-card,.mtb-study-verse,.mtb-study-verse-panel,.mtb-intro-card{
+    display:block!important;width:100%!important;max-width:none!important;height:auto!important;margin:0 0 12pt!important;
+    break-inside:avoid;page-break-inside:avoid;box-shadow:none!important;background:#fff!important;color:#000!important
+  }
+  details.mtb-study-verse,details.mtb-reflection-section{display:block!important;overflow:visible!important}
+  details.mtb-study-verse>summary,details.mtb-reflection-section>summary{display:flex!important;background:#fff!important;color:#000!important;border-bottom:1px solid #777!important}
+  details.mtb-study-verse>summary:after,details.mtb-reflection-section>summary:after{display:none!important}
+  details.mtb-study-verse>.mtb-study-verse-body,details.mtb-reflection-section>.mtb-reflection-section-body{display:block!important}
+  h1,h2,h3,h4{break-after:avoid;page-break-after:avoid;color:#000!important}
+  p,li{orphans:3;widows:3}
+  a{color:#000!important;text-decoration:none!important}
+  a[href]::after{content:none!important}
+}
+</style>
+<div class="mtb-print-controls"><button type="button" class="mtb-print-button" onclick="(function(button){var doc=button.closest('.mtb-doc')||document;var panels=Array.prototype.slice.call(doc.querySelectorAll('details'));panels.forEach(function(panel){panel.open=true;});window.print();})(this)">&#128438; Print This Page</button></div>
+<style>
+.mtb-chapter-overview-dashboard{--mtb-navy:#173a5e;--mtb-navy-2:#2b587f;--mtb-gold:#b7832f;--mtb-blue-soft:#eef4f9;--mtb-border:#d7e0e8;--mtb-text:#1d2935;width:100%;max-width:1600px;margin:0 auto;padding:2px 4px 30px;color:var(--mtb-text);font-family:Arial,Helvetica,sans-serif}.mtb-chapter-overview-dashboard *{box-sizing:border-box}
+.mtb-overview-glance{margin:0 0 18px;overflow:hidden;border:1px solid #cbd8e3;border-radius:14px;background:linear-gradient(135deg,#f7fafc 0%,#e8f0f7 100%);box-shadow:0 4px 15px rgba(28,48,66,.045)}
+.mtb-overview-glance-head{display:flex;align-items:center;justify-content:space-between;gap:20px;padding:18px 24px 13px;border-bottom:1px solid rgba(23,58,94,.12);background:var(--mtb-blue-soft)}
+.mtb-overview-eyebrow{margin:0 0 4px;color:var(--mtb-gold);font-size:.78rem;font-weight:800;letter-spacing:.13em;text-transform:uppercase}.mtb-overview-title{margin:0;color:var(--mtb-navy);font-size:clamp(1.4rem,2.6vw,1.95rem);line-height:1.1}.mtb-overview-badge{flex:0 0 auto;padding:9px 15px;border:1px solid rgba(23,58,94,.18);border-radius:999px;background:#fff;color:var(--mtb-navy);font-weight:800}
+.mtb-overview-glance-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:0;padding:8px 22px 13px;background:#fff}.mtb-overview-glance-item{min-width:0;padding:10px 12px;font-size:1rem;line-height:1.42}.mtb-overview-glance-item:nth-child(even){border-left:1px solid rgba(23,58,94,.11)}.mtb-overview-glance-label{display:inline;color:var(--mtb-navy);font-weight:800}.mtb-overview-glance-content{display:inline}.mtb-overview-glance-content p{display:inline;margin:0}.mtb-overview-glance-structure .mtb-overview-glance-content{display:block;margin-top:4px}.mtb-overview-glance-structure ul,.mtb-overview-glance-structure ol{margin:4px 0 0;padding-left:1.25em}.mtb-overview-glance-structure li{margin:0 0 2px}.mtb-overview-glance-structure li p{display:block;margin:0}.mtb-overview-glance-keyverse .mtb-overview-glance-content{font-style:italic}
+.mtb-overview-deeper{margin:0}.mtb-overview-deeper>summary{display:flex;align-items:center;justify-content:space-between;gap:16px;cursor:pointer;list-style:none;padding:14px 18px;border:1px solid #cbd8e3;border-radius:10px;background:#f4f7fa;color:var(--mtb-navy);font-size:1rem;font-weight:800;user-select:none}.mtb-overview-deeper>summary::-webkit-details-marker{display:none}.mtb-overview-deeper>summary::after{content:'+';font-size:1.35rem;line-height:1}.mtb-overview-deeper[open]>summary{margin-bottom:16px;border-color:#b8cad9;background:#eef4f9}.mtb-overview-deeper[open]>summary::after{content:'−'}
+.mtb-overview-grid{display:grid;grid-template-columns:repeat(12,minmax(0,1fr));gap:16px;align-items:stretch}.mtb-overview-card{min-width:0;overflow:hidden;border:1px solid var(--mtb-border);border-top:4px solid var(--mtb-navy-2);border-radius:12px;background:#fff;box-shadow:0 4px 15px rgba(28,48,66,.055)}.mtb-overview-card-heart{grid-column:1/-1}.mtb-overview-card-sections{grid-column:1/span 6}.mtb-overview-card-matters{grid-column:7/span 6}.mtb-overview-card-themes{grid-column:1/span 6}.mtb-overview-card-words{grid-column:7/span 6}.mtb-overview-card-psalm-author{grid-column:1/span 4}.mtb-overview-card-psalm-occasion{grid-column:5/span 4}.mtb-overview-card-psalm-kind{grid-column:9/span 4}.mtb-overview-card-header{margin:0;padding:12px 16px 10px;border-bottom:1px solid #e5ebf0;background:var(--mtb-blue-soft);color:var(--mtb-navy);font-size:.96rem;font-weight:800}.mtb-overview-card-body{padding:16px 18px 18px;font-size:1rem;line-height:1.48;overflow-wrap:anywhere}.mtb-overview-card-heart .mtb-overview-card-body{font-size:1.04rem}.mtb-overview-card-body p{margin:0 0 .72em}.mtb-overview-card-body p:last-child{margin-bottom:0}.mtb-overview-card-body ul,.mtb-overview-card-body ol{margin:0;padding-left:1.25em}.mtb-overview-card-body li{margin:0 0 .35em}
+@media(max-width:980px){.mtb-overview-card{grid-column:span 6!important}.mtb-overview-card-heart{grid-column:1/-1!important}.mtb-overview-glance-grid{grid-template-columns:1fr}.mtb-overview-glance-item:nth-child(even){border-left:0}.mtb-overview-glance-item+.mtb-overview-glance-item{border-top:1px solid rgba(23,58,94,.09)}}
+@media(max-width:760px){.mtb-overview-grid{grid-template-columns:1fr}.mtb-overview-card{grid-column:1/-1!important}.mtb-overview-glance-head{align-items:flex-start;flex-direction:column;padding:17px 18px 12px}.mtb-overview-glance-grid{padding:6px 10px 12px}.mtb-overview-glance-item{padding:9px 8px}.mtb-overview-deeper>summary{padding:13px 15px}}
+@media print{.mtb-overview-deeper>summary{display:none!important}.mtb-overview-deeper:not([open])>.mtb-overview-grid{display:grid!important}}
+</style><div class="mtb-chapter-overview-dashboard"><section class="mtb-overview-glance" aria-labelledby="mtb-at-a-glance-title"><div class="mtb-overview-glance-head"><div><p class="mtb-overview-eyebrow">Chapter Overview</p><h1 id="mtb-at-a-glance-title" class="mtb-overview-title">At a Glance</h1></div><div class="mtb-overview-badge">Chapter 1</div></div><div class="mtb-overview-glance-grid"><div class="mtb-overview-glance-item"><span class="mtb-overview-glance-label">Main Idea: </span><div class="mtb-overview-glance-content"><p>James calls scattered believers to meet trials with joy and wholehearted trust, warns that desire gives birth to sin and death, and sets against it the unchanging Father who gives new birth by His word, a word they must now receive and do.</p></div></div><div class="mtb-overview-glance-item"><span class="mtb-overview-glance-label">Setting: </span><div class="mtb-overview-glance-content"><p>James, most likely the Lord’s brother, writes to “the twelve tribes which are scattered abroad” (1:1), Jewish believers in Jesus living away from their homeland. Many of the letter’s later subjects, including trials, wisdom, wealth, speech, and doing God’s word, first appear here.</p></div></div><div class="mtb-overview-glance-item mtb-overview-glance-structure"><span class="mtb-overview-glance-label">Chapter Outline: </span><div class="mtb-overview-glance-content"><ul>
+<li><div data-custom-style="List Bullet">
+<p><strong>James 1:1 — James Greets the Scattered Twelve Tribes</strong></p>
+</div></li>
+<li><div data-custom-style="List Bullet">
+<p><strong>James 1:2–4 — Joy in Trials That Produce Patience</strong></p>
+</div></li>
+<li><div data-custom-style="List Bullet">
+<p><strong>James 1:5–8 — Asking God for Wisdom in Faith</strong></p>
+</div></li>
+<li><div data-custom-style="List Bullet">
+<p><strong>James 1:9–11 — The Lowly Brother and the Rich Who Fade</strong></p>
+</div></li>
+<li><div data-custom-style="List Bullet">
+<p><strong>James 1:12–15 — Enduring Temptation and the Birth of Sin</strong></p>
+</div></li>
+<li><div data-custom-style="List Bullet">
+<p><strong>James 1:16–18 — The Father of Lights Gives New Birth</strong></p>
+</div></li>
+<li><div data-custom-style="List Bullet">
+<p><strong>James 1:19–21 — Receiving the Implanted Word with Meekness</strong></p>
+</div></li>
+<li><div data-custom-style="List Bullet">
+<p><strong>James 1:22–25 — Doers of the Word, Not Hearers Only</strong></p>
+</div></li>
+<li><div data-custom-style="List Bullet">
+<p><strong>James 1:26–27 — Religion That Is Pure Before God</strong></p>
+</div></li>
+</ul></div></div><div class="mtb-overview-glance-item mtb-overview-glance-keyverse"><span class="mtb-overview-glance-label">Key Verse: </span><div class="mtb-overview-glance-content"><p>“Of His own will He brought us forth by the word of truth, that we might be a kind of firstfruits of His creatures.” (James 1:18)</p></div></div></div></section><details class="mtb-overview-deeper"><summary>Go Deeper</summary><div class="mtb-overview-grid"><article class="mtb-overview-card mtb-overview-card-heart"><h2 class="mtb-overview-card-header">The Heart of the Chapter</h2><div class="mtb-overview-card-body"><p>James opens with a command that sounds impossible: “count it all joy when you fall into various trials” (1:2). The joy rests on what God does through hardship. Tested faith produces patience, and patience allowed to finish its work makes believers “perfect and complete, lacking nothing” (1:4). For that road James offers a resource. Anyone who lacks wisdom may ask God, “who gives to all liberally and without reproach” (1:5). But James warns that the one who asks must ask in faith; a double-minded person who wavers between trusting God and doubting Him should not expect to receive anything from the Lord (1:6–8).</p>
+<p>The same hardship that tests faith can become an occasion for sin, and James will not let anyone blame God for that. “God cannot be tempted by evil, nor does He Himself tempt anyone” (1:13). Enticement comes from a person’s own desires, and James traces its deadly growth: desire conceives and “gives birth to sin; and sin, when it is full-grown, brings forth death” (1:15). Against that birth he sets another. The Father of lights, “with whom there is no variation or shadow of turning,” gives every good gift, and “Of His own will He brought us forth by the word of truth” (1:17–18).</p>
+<p>Everything else in the chapter flows from that new birth. The word that gave believers life must be received “with meekness” (1:21) and then done. A hearer who walks away unchanged is like a man who glances in a mirror and forgets his own face (1:23–24). Real devotion shows up in a bridled tongue, care for orphans and widows, and a life kept unspotted from the world (1:26–27).</p></div></article><article class="mtb-overview-card mtb-overview-card-sections"><h2 class="mtb-overview-card-header">Chapter Sections</h2><div class="mtb-overview-card-body"><p><strong>James 1:1 — James Greets the Scattered Twelve Tribes</strong></p>
+<p>James introduces himself as a bondservant of God and of the Lord Jesus Christ, not as the Lord’s brother. He writes to Jewish believers scattered among the nations, whose trials and conduct the rest of the letter addresses.</p>
+<p><strong>James 1:2–4 — Joy in Trials That Produce Patience</strong></p>
+<p>Believers can count their trials as joy because the testing of faith produces patience. When patience finishes its work, it brings them to maturity, complete and lacking nothing.</p>
+<p><strong>James 1:5–8 — Asking God for Wisdom in Faith</strong></p>
+<p>Anyone who lacks wisdom to walk through trials faithfully should ask the God who gives generously and without scolding. The request must come from undivided trust, because a person who wavers between God and doubt is as unsettled as a wave tossed by the wind.</p>
+<p><strong>James 1:9–11 — The Lowly Brother and the Rich Who Fade</strong></p>
+<p>The lowly believer can rejoice in the high standing God has given him, and the rich believer in the humbling truth that he depends on God just as fully. Like a wildflower withered by the sun, earthly life and wealth pass quickly away.</p>
+<p><strong>James 1:12–15 — Enduring Temptation and the Birth of Sin</strong></p>
+<p>The one who endures testing is blessed and will receive the crown of life promised to those who love the Lord. God never entices anyone to evil; temptation grows from a person’s own desires, which give birth to sin, and sin, fully grown, brings death.</p>
+<p><strong>James 1:16–18 — The Father of Lights Gives New Birth</strong></p>
+<p>James warns believers not to be deceived about God. Every good gift comes from the unchanging Father, who by His own will gave His people new birth through the word of truth, so that they belong to Him as the first part of His harvest.</p>
+<p><strong>James 1:19–21 — Receiving the Implanted Word with Meekness</strong></p>
+<p>Because God gave them life through His word, believers must be quick to listen and slow to speak and to anger. Putting away moral filth, they are to receive humbly the word planted in them, which rescues them from sin’s destructive work now and carries them toward the day God completes their salvation.</p>
+<p><strong>James 1:22–25 — Doers of the Word, Not Hearers Only</strong></p>
+<p>Hearing God’s word without doing it is self-deception, like looking in a mirror and forgetting what you saw. The person who looks into the perfect law of liberty, keeps looking, and acts on it will be blessed in what he does.</p>
+<p><strong>James 1:26–27 — Religion That Is Pure Before God</strong></p>
+<p>A person who cannot control his tongue only fools himself about his religion. The devotion God accepts cares for orphans and widows in their trouble and stays unstained by the world.</p></div></article><article class="mtb-overview-card mtb-overview-card-matters"><h2 class="mtb-overview-card-header">Why This Chapter Matters</h2><div class="mtb-overview-card-body"><p>James 1 shows that God gives before He asks. He gives wisdom generously, every good and perfect gift, and new birth by His word (1:5, 17–18). The commands that follow, to endure, to listen, to obey, and to care for the vulnerable, are the response of people who have already received. That order protects readers from turning James into a list of demands.</p>
+<p>The chapter also exposes self-deception at its roots. A person can blame God for temptation (1:13), hear the word without changing (1:22), or think himself religious while his tongue runs wild (1:26). James answers each with the truth about God’s character and the call to let His word reach ordinary life.</p></div></article><article class="mtb-overview-card mtb-overview-card-themes"><h2 class="mtb-overview-card-header">Key Themes to Watch For</h2><div class="mtb-overview-card-body"><p><strong>Tested faith.</strong> Trials test faith and produce patience that leads to maturity, and the one who endures receives the crown of life (1:2–4, 12).</p>
+<p><strong>The generous Father.</strong> God gives wisdom liberally, gives every good gift, and never changes (1:5, 17).</p>
+<p><strong>Two births.</strong> Desire gives birth to sin and death, while the Father gives His people life by the word of truth (1:15, 18).</p>
+<p><strong>Hearing and doing.</strong> The word must be received with meekness and put into practice (1:21–25).</p>
+<p><strong>Devotion that shows.</strong> Controlled speech, mercy to the vulnerable, and moral purity mark genuine religion (1:26–27).</p></div></article><article class="mtb-overview-card mtb-overview-card-words"><h2 class="mtb-overview-card-header">Key Words &amp; Concepts</h2><div class="mtb-overview-card-body"><p><strong>Trials and temptation (1:2, 12–14).</strong> The Greek word translated “trials” in 1:2 is also translated “temptation” in 1:12, and a related verb is translated “tempted” in 1:13–14. The same hardship can test faith and also become an occasion for sin, but God never tempts anyone to evil.</p>
+<p><strong>Double-minded (1:8).</strong> The Greek word means “two-souled.” It describes a person divided between trusting God and trusting something else, never settled in either.</p>
+<p><strong>The crown of life (1:12).</strong> The victor’s wreath, standing for eternal life itself, promised to those who love the Lord. Believers begin to taste that life now, including freedom from sin’s destructive fruit, and will receive it in full in the future.</p>
+<p><strong>Father of lights (1:17).</strong> God as the Creator of the sun, moon, and stars. Those lights move and change, but He has “no variation or shadow of turning.”</p>
+<p><strong>Firstfruits (1:18).</strong> The first part of a harvest, which in Israel belonged to God. Those born by the word of truth belong to Him and point ahead to the fuller harvest of His purposes.</p>
+<p><strong>The perfect law of liberty (1:25).</strong> God’s word, which James calls perfect because it is complete and freeing because it directs a life that responds to God. He connects it to the implanted word (1:21) and later to the command to love your neighbor (2:8).</p></div></article></div></details></div>
+</section>

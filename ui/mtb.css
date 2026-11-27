@@ -168,6 +168,8 @@ dialog.picker::backdrop { background: rgba(15, 42, 69, .55); }
 .footer { border-top: 1px solid var(--line); background: #fff; padding: 24px 0 32px; margin-top: 8px; }
 .footer .wrap { display: flex; flex-wrap: wrap; gap: 10px 22px; font-size: 15px; }
 .footer .copy { width: 100%; color: var(--muted); font-size: 14px; }
+.footer .copy.legal { font-size: 13px; margin-top: -4px; }
+.footer .copy.legal a { color: inherit; text-decoration: underline; }
 
 /* ---------- Home ---------- */
 .hero {

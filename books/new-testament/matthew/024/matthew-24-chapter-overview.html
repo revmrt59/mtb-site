@@ -1,0 +1,85 @@
+<section class="mtb-doc mtb-doc--read" data-doc-type="chapter-overview" data-mtb-status="complete">
+<style>
+.mtb-print-controls{display:flex;justify-content:flex-end;gap:8px;margin:0 0 14px;padding:0 4px}
+.mtb-print-button{appearance:none;border:1px solid #b9c8d5;border-radius:8px;background:#fff;padding:9px 14px;color:#173a5e;font:700 14px Arial,Helvetica,sans-serif;cursor:pointer}
+.mtb-print-button:hover{background:#f2f6f9}
+@media print{
+  @page{size:auto;margin:.45in}
+  html,body{background:#fff!important;color:#000!important}
+  .mtb-print-controls,.mtb-study-controls,.mtb-reflections-controls{display:none!important}
+  .mtb-doc{display:block!important;width:100%!important;max-width:none!important;margin:0!important;padding:0!important}
+  .mtb-overview-hero,.mtb-study-hero,.mtb-reflections-hero,.mtb-culture-hero{box-shadow:none!important;background:#fff!important;border-color:#777!important}
+  .mtb-overview-grid,.mtb-reflections-grid,.mtb-culture-grid,.mtb-study-verse-grid{display:block!important}
+  .mtb-overview-card,.mtb-reflections-card,.mtb-culture-card,.mtb-study-verse,.mtb-study-verse-panel,.mtb-intro-card{
+    display:block!important;width:100%!important;max-width:none!important;height:auto!important;margin:0 0 12pt!important;
+    break-inside:avoid;page-break-inside:avoid;box-shadow:none!important;background:#fff!important;color:#000!important
+  }
+  details.mtb-study-verse,details.mtb-reflection-section{display:block!important;overflow:visible!important}
+  details.mtb-study-verse>summary,details.mtb-reflection-section>summary{display:flex!important;background:#fff!important;color:#000!important;border-bottom:1px solid #777!important}
+  details.mtb-study-verse>summary:after,details.mtb-reflection-section>summary:after{display:none!important}
+  details.mtb-study-verse>.mtb-study-verse-body,details.mtb-reflection-section>.mtb-reflection-section-body{display:block!important}
+  h1,h2,h3,h4{break-after:avoid;page-break-after:avoid;color:#000!important}
+  p,li{orphans:3;widows:3}
+  a{color:#000!important;text-decoration:none!important}
+  a[href]::after{content:none!important}
+}
+</style>
+<div class="mtb-print-controls"><button type="button" class="mtb-print-button" onclick="(function(button){var doc=button.closest('.mtb-doc')||document;var panels=Array.prototype.slice.call(doc.querySelectorAll('details'));panels.forEach(function(panel){panel.open=true;});window.print();})(this)">&#128438; Print This Page</button></div>
+<style>
+.mtb-chapter-overview-dashboard{--mtb-navy:#173a5e;--mtb-navy-2:#2b587f;--mtb-gold:#b7832f;--mtb-blue-soft:#eef4f9;--mtb-border:#d7e0e8;--mtb-text:#1d2935;width:100%;max-width:1600px;margin:0 auto;padding:2px 4px 30px;color:var(--mtb-text);font-family:Arial,Helvetica,sans-serif}.mtb-chapter-overview-dashboard *{box-sizing:border-box}
+.mtb-overview-glance{margin:0 0 18px;overflow:hidden;border:1px solid #cbd8e3;border-radius:14px;background:linear-gradient(135deg,#f7fafc 0%,#e8f0f7 100%);box-shadow:0 4px 15px rgba(28,48,66,.045)}
+.mtb-overview-glance-head{display:flex;align-items:center;justify-content:space-between;gap:20px;padding:18px 24px 13px;border-bottom:1px solid rgba(23,58,94,.12);background:var(--mtb-blue-soft)}
+.mtb-overview-eyebrow{margin:0 0 4px;color:var(--mtb-gold);font-size:.78rem;font-weight:800;letter-spacing:.13em;text-transform:uppercase}.mtb-overview-title{margin:0;color:var(--mtb-navy);font-size:clamp(1.4rem,2.6vw,1.95rem);line-height:1.1}.mtb-overview-badge{flex:0 0 auto;padding:9px 15px;border:1px solid rgba(23,58,94,.18);border-radius:999px;background:#fff;color:var(--mtb-navy);font-weight:800}
+.mtb-overview-glance-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:0;padding:8px 22px 13px;background:#fff}.mtb-overview-glance-item{min-width:0;padding:10px 12px;font-size:1rem;line-height:1.42}.mtb-overview-glance-item:nth-child(even){border-left:1px solid rgba(23,58,94,.11)}.mtb-overview-glance-label{display:inline;color:var(--mtb-navy);font-weight:800}.mtb-overview-glance-content{display:inline}.mtb-overview-glance-content p{display:inline;margin:0}.mtb-overview-glance-structure .mtb-overview-glance-content{display:block;margin-top:4px}.mtb-overview-glance-structure ul,.mtb-overview-glance-structure ol{margin:4px 0 0;padding-left:1.25em}.mtb-overview-glance-structure li{margin:0 0 2px}.mtb-overview-glance-structure li p{display:block;margin:0}.mtb-overview-glance-keyverse .mtb-overview-glance-content{font-style:italic}
+.mtb-overview-deeper{margin:0}.mtb-overview-deeper>summary{display:flex;align-items:center;justify-content:space-between;gap:16px;cursor:pointer;list-style:none;padding:14px 18px;border:1px solid #cbd8e3;border-radius:10px;background:#f4f7fa;color:var(--mtb-navy);font-size:1rem;font-weight:800;user-select:none}.mtb-overview-deeper>summary::-webkit-details-marker{display:none}.mtb-overview-deeper>summary::after{content:'+';font-size:1.35rem;line-height:1}.mtb-overview-deeper[open]>summary{margin-bottom:16px;border-color:#b8cad9;background:#eef4f9}.mtb-overview-deeper[open]>summary::after{content:'−'}
+.mtb-overview-grid{display:grid;grid-template-columns:repeat(12,minmax(0,1fr));gap:16px;align-items:stretch}.mtb-overview-card{min-width:0;overflow:hidden;border:1px solid var(--mtb-border);border-top:4px solid var(--mtb-navy-2);border-radius:12px;background:#fff;box-shadow:0 4px 15px rgba(28,48,66,.055)}.mtb-overview-card-heart{grid-column:1/-1}.mtb-overview-card-sections{grid-column:1/span 6}.mtb-overview-card-matters{grid-column:7/span 6}.mtb-overview-card-themes{grid-column:1/span 6}.mtb-overview-card-words{grid-column:7/span 6}.mtb-overview-card-psalm-author{grid-column:1/span 4}.mtb-overview-card-psalm-occasion{grid-column:5/span 4}.mtb-overview-card-psalm-kind{grid-column:9/span 4}.mtb-overview-card-header{margin:0;padding:12px 16px 10px;border-bottom:1px solid #e5ebf0;background:var(--mtb-blue-soft);color:var(--mtb-navy);font-size:.96rem;font-weight:800}.mtb-overview-card-body{padding:16px 18px 18px;font-size:1rem;line-height:1.48;overflow-wrap:anywhere}.mtb-overview-card-heart .mtb-overview-card-body{font-size:1.04rem}.mtb-overview-card-body p{margin:0 0 .72em}.mtb-overview-card-body p:last-child{margin-bottom:0}.mtb-overview-card-body ul,.mtb-overview-card-body ol{margin:0;padding-left:1.25em}.mtb-overview-card-body li{margin:0 0 .35em}
+@media(max-width:980px){.mtb-overview-card{grid-column:span 6!important}.mtb-overview-card-heart{grid-column:1/-1!important}.mtb-overview-glance-grid{grid-template-columns:1fr}.mtb-overview-glance-item:nth-child(even){border-left:0}.mtb-overview-glance-item+.mtb-overview-glance-item{border-top:1px solid rgba(23,58,94,.09)}}
+@media(max-width:760px){.mtb-overview-grid{grid-template-columns:1fr}.mtb-overview-card{grid-column:1/-1!important}.mtb-overview-glance-head{align-items:flex-start;flex-direction:column;padding:17px 18px 12px}.mtb-overview-glance-grid{padding:6px 10px 12px}.mtb-overview-glance-item{padding:9px 8px}.mtb-overview-deeper>summary{padding:13px 15px}}
+@media print{.mtb-overview-deeper>summary{display:none!important}.mtb-overview-deeper:not([open])>.mtb-overview-grid{display:grid!important}}
+</style><div class="mtb-chapter-overview-dashboard"><section class="mtb-overview-glance" aria-labelledby="mtb-at-a-glance-title"><div class="mtb-overview-glance-head"><div><p class="mtb-overview-eyebrow">Chapter Overview</p><h1 id="mtb-at-a-glance-title" class="mtb-overview-title">At a Glance</h1></div><div class="mtb-overview-badge">Chapter 24</div></div><div class="mtb-overview-glance-grid"><div class="mtb-overview-glance-item"><span class="mtb-overview-glance-label">Main Idea: </span><div class="mtb-overview-glance-content"><p>Jesus foretells the temple’s destruction and, answering His disciples’ questions, warns of deception, persecution, and great tribulation, promises His glorious return as the Son of Man, and calls His servants to watchful faithfulness because no one knows the day or the hour.</p></div></div><div class="mtb-overview-glance-item"><span class="mtb-overview-glance-label">Setting: </span><div class="mtb-overview-glance-content"><p>Matthew 24 opens the sixth movement and the fifth great discourse (24–25). Jesus leaves the temple and teaches His disciples privately on the Mount of Olives.</p></div></div><div class="mtb-overview-glance-item mtb-overview-glance-structure"><span class="mtb-overview-glance-label">Chapter Outline: </span><div class="mtb-overview-glance-content"><ul>
+<li><div data-custom-style="List Bullet">
+<p>Matthew 24:1–2 — Jesus Foretells the Temple’s Destruction</p>
+</div></li>
+<li><div data-custom-style="List Bullet">
+<p>Matthew 24:3–14 — The Beginning of Sorrows and the Gospel to All Nations</p>
+</div></li>
+<li><div data-custom-style="List Bullet">
+<p>Matthew 24:15–28 — The Abomination of Desolation and the Great Tribulation</p>
+</div></li>
+<li><div data-custom-style="List Bullet">
+<p>Matthew 24:29–31 — The Coming of the Son of Man</p>
+</div></li>
+<li><div data-custom-style="List Bullet">
+<p>Matthew 24:32–35 — The Lesson of the Fig Tree</p>
+</div></li>
+<li><div data-custom-style="List Bullet">
+<p>Matthew 24:36–44 — No One Knows the Day or the Hour</p>
+</div></li>
+<li><div data-custom-style="List Bullet">
+<p>Matthew 24:45–51 — The Faithful Servant and the Evil Servant</p>
+</div></li>
+</ul></div></div><div class="mtb-overview-glance-item mtb-overview-glance-keyverse"><span class="mtb-overview-glance-label">Key Verse: </span><div class="mtb-overview-glance-content"><p>“Therefore you also be ready, for the Son of Man is coming at an hour you do not expect.” (Matthew 24:44)</p></div></div></div></section><details class="mtb-overview-deeper"><summary>Go Deeper</summary><div class="mtb-overview-grid"><article class="mtb-overview-card mtb-overview-card-heart"><h2 class="mtb-overview-card-header">The Heart of the Chapter</h2><div class="mtb-overview-card-body"><p>The disciples admire the temple buildings, and Jesus tells them not one stone will be left on another. They ask when this will happen and what will be the sign of His coming and the end of the age. Jesus answers on two horizons. Near at hand lies a real Judean crisis: false christs, wars, persecution, love growing cold, the abomination of desolation, and an urgent command for those in Judea to flee. Jerusalem’s siege and the temple’s fall in AD 70 fulfill that warning, and “this generation” (24:34) saw these things. That first-century crisis also sets a pattern that recurs through the age and intensifies into a final tribulation before Christ returns.</p>
+<p>Beyond it stands the coming of the Son of Man on the clouds with power and great glory, as unmistakable as lightning, gathering His elect from the four winds. Heaven and earth will pass away, but His words will not. Yet the day and hour belong to the Father alone. So the chapter ends with a household servant. The faithful one feeds those in his care, and the evil one uses the master’s delay to abuse others. Readiness shows in how we live while He seems away.</p></div></article><article class="mtb-overview-card mtb-overview-card-sections"><h2 class="mtb-overview-card-header">Chapter Sections</h2><div class="mtb-overview-card-body"><h2 id="matthew-2412-jesus-foretells-the-temples-destruction">Matthew 24:1–2 — Jesus Foretells the Temple’s Destruction</h2>
+<p>As the disciples point out the temple buildings, Jesus declares that not one stone will be left upon another.</p>
+<h2 id="matthew-24314-the-beginning-of-sorrows-and-the-gospel-to-all-nations">Matthew 24:3–14 — The Beginning of Sorrows and the Gospel to All Nations</h2>
+<p>On the Mount of Olives Jesus warns of false christs, wars, famines, and earthquakes, which are only the beginning of sorrows. His followers will be hated and persecuted, but whoever endures to the end will be saved, and the gospel of the kingdom will be preached to all nations before the end comes.</p>
+<h2 id="matthew-241528-the-abomination-of-desolation-and-the-great-tribulation">Matthew 24:15–28 — The Abomination of Desolation and the Great Tribulation</h2>
+<p>When the abomination of desolation stands in the holy place, those in Judea must flee at once, for the tribulation will be great. Jesus warns against false christs and false prophets, because His coming will be as visible as lightning.</p>
+<h2 id="matthew-242931-the-coming-of-the-son-of-man">Matthew 24:29–31 — The Coming of the Son of Man</h2>
+<p>After the tribulation, the heavens will be shaken, the sign of the Son of Man will appear, and all the tribes of the earth will see Him coming on the clouds with power and great glory. He will send His angels to gather His elect.</p>
+<h2 id="matthew-243235-the-lesson-of-the-fig-tree">Matthew 24:32–35 — The Lesson of the Fig Tree</h2>
+<p>As a fig tree’s leaves show that summer is near, the signs Jesus has described will show that His coming is near. This generation will not pass away until all these things take place, and His words will never pass away.</p>
+<h2 id="matthew-243644-no-one-knows-the-day-or-the-hour">Matthew 24:36–44 — No One Knows the Day or the Hour</h2>
+<p>No one but the Father knows the day and hour. As in the days of Noah, people will be unprepared, one will be taken and another left, and so disciples must watch and be ready.</p>
+<h2 id="matthew-244551-the-faithful-servant-and-the-evil-servant">Matthew 24:45–51 — The Faithful Servant and the Evil Servant</h2>
+<p>The faithful and wise servant feeds his master’s household and will be set over all his goods. The evil servant who abuses others during the delay will be cut in two and given his portion with the hypocrites.</p></div></article><article class="mtb-overview-card mtb-overview-card-matters"><h2 class="mtb-overview-card-header">Why This Chapter Matters</h2><div class="mtb-overview-card-body"><p>Matthew 24 gives Jesus’ people both a sober warning and a sure hope. They should not be surprised by deception, persecution, and distress, and they should not be shaken by every claim that the Christ has appeared. The gospel will go to all nations, and the Son of Man will return in glory.</p>
+<p>The chapter also turns curiosity about timing into faithfulness. Jesus forbids calculating the day and hour and calls His servants to watch. Watching means faithful care for the people entrusted to us, carried on with endurance through delay and difficulty.</p></div></article><article class="mtb-overview-card mtb-overview-card-themes"><h2 class="mtb-overview-card-header">Key Themes to Watch For</h2><div class="mtb-overview-card-body"><p><strong>The temple’s fall.</strong> Jesus’ prediction is fulfilled in Jerusalem’s destruction (24:2, 15–22).</p>
+<p><strong>Endurance and witness.</strong> Disciples endure persecution while the gospel reaches all nations (24:9–14).</p>
+<p><strong>Discernment.</strong> False christs and prophets will deceive many (24:4–5, 23–26).</p>
+<p><strong>The Son of Man’s return.</strong> He will come visibly in power and great glory (24:27, 30–31).</p>
+<p><strong>Watchful faithfulness.</strong> The unknown hour calls for ready, faithful service (24:42–51).</p></div></article><article class="mtb-overview-card mtb-overview-card-words"><h2 class="mtb-overview-card-header">Key Words &amp; Concepts</h2><div class="mtb-overview-card-body"><p><strong>Beginning of sorrows (24:8).</strong> Literally birth pains. Wars and disasters are early pangs, not the end itself.</p>
+<p><strong>Abomination of desolation (24:15).</strong> Daniel’s phrase for a desecration of God’s holy place. It was fulfilled in the Roman siege and destruction of Jerusalem and points ahead to a final desecration before Christ’s return (Daniel 9:27; 2 Thessalonians 2:3–4).</p>
+<p><strong>Great tribulation (24:21).</strong> A time of unequaled distress. Jerusalem’s fall is its first fulfillment, and the pattern intensifies before the Son of Man comes.</p>
+<p><strong>This generation (24:34).</strong> Jesus’ contemporaries, who saw the events of verses 4–28 culminate in AD 70. The generation that sees the signs converge at the end will see His return.</p>
+<p><strong>One taken, the other left (24:40–41).</strong> A sudden separation. In verse 39 the flood takes people away in judgment, but in verses 40–41 Matthew uses a different verb, one that can describe receiving someone, as Jesus does in John 14:3. For those two reasons the identity of the one taken is left open. The point is to watch.</p></div></article></div></details></div>
+</section>

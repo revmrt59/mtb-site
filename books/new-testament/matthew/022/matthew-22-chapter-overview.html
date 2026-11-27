@@ -1,0 +1,75 @@
+<section class="mtb-doc mtb-doc--read" data-doc-type="chapter-overview" data-mtb-status="complete">
+<style>
+.mtb-print-controls{display:flex;justify-content:flex-end;gap:8px;margin:0 0 14px;padding:0 4px}
+.mtb-print-button{appearance:none;border:1px solid #b9c8d5;border-radius:8px;background:#fff;padding:9px 14px;color:#173a5e;font:700 14px Arial,Helvetica,sans-serif;cursor:pointer}
+.mtb-print-button:hover{background:#f2f6f9}
+@media print{
+  @page{size:auto;margin:.45in}
+  html,body{background:#fff!important;color:#000!important}
+  .mtb-print-controls,.mtb-study-controls,.mtb-reflections-controls{display:none!important}
+  .mtb-doc{display:block!important;width:100%!important;max-width:none!important;margin:0!important;padding:0!important}
+  .mtb-overview-hero,.mtb-study-hero,.mtb-reflections-hero,.mtb-culture-hero{box-shadow:none!important;background:#fff!important;border-color:#777!important}
+  .mtb-overview-grid,.mtb-reflections-grid,.mtb-culture-grid,.mtb-study-verse-grid{display:block!important}
+  .mtb-overview-card,.mtb-reflections-card,.mtb-culture-card,.mtb-study-verse,.mtb-study-verse-panel,.mtb-intro-card{
+    display:block!important;width:100%!important;max-width:none!important;height:auto!important;margin:0 0 12pt!important;
+    break-inside:avoid;page-break-inside:avoid;box-shadow:none!important;background:#fff!important;color:#000!important
+  }
+  details.mtb-study-verse,details.mtb-reflection-section{display:block!important;overflow:visible!important}
+  details.mtb-study-verse>summary,details.mtb-reflection-section>summary{display:flex!important;background:#fff!important;color:#000!important;border-bottom:1px solid #777!important}
+  details.mtb-study-verse>summary:after,details.mtb-reflection-section>summary:after{display:none!important}
+  details.mtb-study-verse>.mtb-study-verse-body,details.mtb-reflection-section>.mtb-reflection-section-body{display:block!important}
+  h1,h2,h3,h4{break-after:avoid;page-break-after:avoid;color:#000!important}
+  p,li{orphans:3;widows:3}
+  a{color:#000!important;text-decoration:none!important}
+  a[href]::after{content:none!important}
+}
+</style>
+<div class="mtb-print-controls"><button type="button" class="mtb-print-button" onclick="(function(button){var doc=button.closest('.mtb-doc')||document;var panels=Array.prototype.slice.call(doc.querySelectorAll('details'));panels.forEach(function(panel){panel.open=true;});window.print();})(this)">&#128438; Print This Page</button></div>
+<style>
+.mtb-chapter-overview-dashboard{--mtb-navy:#173a5e;--mtb-navy-2:#2b587f;--mtb-gold:#b7832f;--mtb-blue-soft:#eef4f9;--mtb-border:#d7e0e8;--mtb-text:#1d2935;width:100%;max-width:1600px;margin:0 auto;padding:2px 4px 30px;color:var(--mtb-text);font-family:Arial,Helvetica,sans-serif}.mtb-chapter-overview-dashboard *{box-sizing:border-box}
+.mtb-overview-glance{margin:0 0 18px;overflow:hidden;border:1px solid #cbd8e3;border-radius:14px;background:linear-gradient(135deg,#f7fafc 0%,#e8f0f7 100%);box-shadow:0 4px 15px rgba(28,48,66,.045)}
+.mtb-overview-glance-head{display:flex;align-items:center;justify-content:space-between;gap:20px;padding:18px 24px 13px;border-bottom:1px solid rgba(23,58,94,.12);background:var(--mtb-blue-soft)}
+.mtb-overview-eyebrow{margin:0 0 4px;color:var(--mtb-gold);font-size:.78rem;font-weight:800;letter-spacing:.13em;text-transform:uppercase}.mtb-overview-title{margin:0;color:var(--mtb-navy);font-size:clamp(1.4rem,2.6vw,1.95rem);line-height:1.1}.mtb-overview-badge{flex:0 0 auto;padding:9px 15px;border:1px solid rgba(23,58,94,.18);border-radius:999px;background:#fff;color:var(--mtb-navy);font-weight:800}
+.mtb-overview-glance-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:0;padding:8px 22px 13px;background:#fff}.mtb-overview-glance-item{min-width:0;padding:10px 12px;font-size:1rem;line-height:1.42}.mtb-overview-glance-item:nth-child(even){border-left:1px solid rgba(23,58,94,.11)}.mtb-overview-glance-label{display:inline;color:var(--mtb-navy);font-weight:800}.mtb-overview-glance-content{display:inline}.mtb-overview-glance-content p{display:inline;margin:0}.mtb-overview-glance-structure .mtb-overview-glance-content{display:block;margin-top:4px}.mtb-overview-glance-structure ul,.mtb-overview-glance-structure ol{margin:4px 0 0;padding-left:1.25em}.mtb-overview-glance-structure li{margin:0 0 2px}.mtb-overview-glance-structure li p{display:block;margin:0}.mtb-overview-glance-keyverse .mtb-overview-glance-content{font-style:italic}
+.mtb-overview-deeper{margin:0}.mtb-overview-deeper>summary{display:flex;align-items:center;justify-content:space-between;gap:16px;cursor:pointer;list-style:none;padding:14px 18px;border:1px solid #cbd8e3;border-radius:10px;background:#f4f7fa;color:var(--mtb-navy);font-size:1rem;font-weight:800;user-select:none}.mtb-overview-deeper>summary::-webkit-details-marker{display:none}.mtb-overview-deeper>summary::after{content:'+';font-size:1.35rem;line-height:1}.mtb-overview-deeper[open]>summary{margin-bottom:16px;border-color:#b8cad9;background:#eef4f9}.mtb-overview-deeper[open]>summary::after{content:'−'}
+.mtb-overview-grid{display:grid;grid-template-columns:repeat(12,minmax(0,1fr));gap:16px;align-items:stretch}.mtb-overview-card{min-width:0;overflow:hidden;border:1px solid var(--mtb-border);border-top:4px solid var(--mtb-navy-2);border-radius:12px;background:#fff;box-shadow:0 4px 15px rgba(28,48,66,.055)}.mtb-overview-card-heart{grid-column:1/-1}.mtb-overview-card-sections{grid-column:1/span 6}.mtb-overview-card-matters{grid-column:7/span 6}.mtb-overview-card-themes{grid-column:1/span 6}.mtb-overview-card-words{grid-column:7/span 6}.mtb-overview-card-psalm-author{grid-column:1/span 4}.mtb-overview-card-psalm-occasion{grid-column:5/span 4}.mtb-overview-card-psalm-kind{grid-column:9/span 4}.mtb-overview-card-header{margin:0;padding:12px 16px 10px;border-bottom:1px solid #e5ebf0;background:var(--mtb-blue-soft);color:var(--mtb-navy);font-size:.96rem;font-weight:800}.mtb-overview-card-body{padding:16px 18px 18px;font-size:1rem;line-height:1.48;overflow-wrap:anywhere}.mtb-overview-card-heart .mtb-overview-card-body{font-size:1.04rem}.mtb-overview-card-body p{margin:0 0 .72em}.mtb-overview-card-body p:last-child{margin-bottom:0}.mtb-overview-card-body ul,.mtb-overview-card-body ol{margin:0;padding-left:1.25em}.mtb-overview-card-body li{margin:0 0 .35em}
+@media(max-width:980px){.mtb-overview-card{grid-column:span 6!important}.mtb-overview-card-heart{grid-column:1/-1!important}.mtb-overview-glance-grid{grid-template-columns:1fr}.mtb-overview-glance-item:nth-child(even){border-left:0}.mtb-overview-glance-item+.mtb-overview-glance-item{border-top:1px solid rgba(23,58,94,.09)}}
+@media(max-width:760px){.mtb-overview-grid{grid-template-columns:1fr}.mtb-overview-card{grid-column:1/-1!important}.mtb-overview-glance-head{align-items:flex-start;flex-direction:column;padding:17px 18px 12px}.mtb-overview-glance-grid{padding:6px 10px 12px}.mtb-overview-glance-item{padding:9px 8px}.mtb-overview-deeper>summary{padding:13px 15px}}
+@media print{.mtb-overview-deeper>summary{display:none!important}.mtb-overview-deeper:not([open])>.mtb-overview-grid{display:grid!important}}
+</style><div class="mtb-chapter-overview-dashboard"><section class="mtb-overview-glance" aria-labelledby="mtb-at-a-glance-title"><div class="mtb-overview-glance-head"><div><p class="mtb-overview-eyebrow">Chapter Overview</p><h1 id="mtb-at-a-glance-title" class="mtb-overview-title">At a Glance</h1></div><div class="mtb-overview-badge">Chapter 22</div></div><div class="mtb-overview-glance-grid"><div class="mtb-overview-glance-item"><span class="mtb-overview-glance-label">Main Idea: </span><div class="mtb-overview-glance-content"><p>Jesus tells of a king’s wedding feast whose invitation is refused and whose unprepared guest is cast out, then silences His opponents’ testing questions about taxes, resurrection, and the greatest commandment, and asks how David’s Son can also be David’s Lord.</p></div></div><div class="mtb-overview-glance-item"><span class="mtb-overview-glance-label">Setting: </span><div class="mtb-overview-glance-content"><p>Matthew 22 continues the confrontation in the temple courts during Jesus’ final days in Jerusalem. Pharisees, Herodians, and Sadducees take turns trying to trap Him.</p></div></div><div class="mtb-overview-glance-item mtb-overview-glance-structure"><span class="mtb-overview-glance-label">Chapter Outline: </span><div class="mtb-overview-glance-content"><ul>
+<li><div data-custom-style="List Bullet">
+<p>Matthew 22:1–14 — The Parable of the Wedding Feast</p>
+</div></li>
+<li><div data-custom-style="List Bullet">
+<p>Matthew 22:15–22 — Paying Taxes to Caesar</p>
+</div></li>
+<li><div data-custom-style="List Bullet">
+<p>Matthew 22:23–33 — The Sadducees and the Resurrection</p>
+</div></li>
+<li><div data-custom-style="List Bullet">
+<p>Matthew 22:34–40 — The Great Commandment</p>
+</div></li>
+<li><div data-custom-style="List Bullet">
+<p>Matthew 22:41–46 — David’s Son and David’s Lord</p>
+</div></li>
+</ul></div></div><div class="mtb-overview-glance-item mtb-overview-glance-keyverse"><span class="mtb-overview-glance-label">Key Verse: </span><div class="mtb-overview-glance-content"><p>“You shall love the LORD your God with all your heart, with all your soul, and with all your mind.” (Matthew 22:37)</p></div></div></div></section><details class="mtb-overview-deeper"><summary>Go Deeper</summary><div class="mtb-overview-grid"><article class="mtb-overview-card mtb-overview-card-heart"><h2 class="mtb-overview-card-header">The Heart of the Chapter</h2><div class="mtb-overview-card-body"><p>The King has prepared a wedding feast for His son. The invited guests make light of it, and some kill the servants who bring the invitation. So the king sends his servants into the highways to gather everyone they find, bad and good, until the hall is full. One guest, though, has no wedding garment. The invitation is generous beyond expectation, yet coming to the feast means receiving what the king provides. That garment pictures the righteousness of Christ received by grace, which a life fitting the invitation then displays. “Many are called, but few are chosen” (22:14).</p>
+<p>The leaders answer with traps. Asked about taxes, Jesus calls for a coin bearing Caesar’s image and says to give Caesar what is his and God what is God’s. The Sadducees, who deny the resurrection, invent a puzzle about a woman married seven times. Jesus says they know neither the Scriptures nor the power of God, because God is the God of Abraham, Isaac, and Jacob, the God of the living. Asked for the greatest commandment, He joins love for God with love for neighbor. Then He asks His own question from Psalm 110: if the Christ is David’s Son, why does David call Him Lord?</p></div></article><article class="mtb-overview-card mtb-overview-card-sections"><h2 class="mtb-overview-card-header">Chapter Sections</h2><div class="mtb-overview-card-body"><h2 id="matthew-22114-the-parable-of-the-wedding-feast">Matthew 22:1–14 — The Parable of the Wedding Feast</h2>
+<p>A king’s invited guests refuse his wedding feast and kill his servants, so he gathers others from the highways. A guest without a wedding garment is cast out, for many are called but few are chosen.</p>
+<h2 id="matthew-221522-paying-taxes-to-caesar">Matthew 22:15–22 — Paying Taxes to Caesar</h2>
+<p>The Pharisees and Herodians ask whether it is lawful to pay taxes to Caesar. Pointing to the image on a denarius, Jesus tells them to render to Caesar what is Caesar’s and to God what is God’s.</p>
+<h2 id="matthew-222333-the-sadducees-and-the-resurrection">Matthew 22:23–33 — The Sadducees and the Resurrection</h2>
+<p>The Sadducees, who deny the resurrection, pose a question about a woman married to seven brothers. Jesus answers that they do not know the Scriptures or God’s power, for the risen do not marry, and God is the God of the living.</p>
+<h2 id="matthew-223440-the-great-commandment">Matthew 22:34–40 — The Great Commandment</h2>
+<p>A lawyer asks which commandment is greatest. Jesus answers with love for God with all the heart, soul, and mind, and love for one’s neighbor as oneself, on which hang all the Law and the Prophets.</p>
+<h2 id="matthew-224146-davids-son-and-davids-lord">Matthew 22:41–46 — David’s Son and David’s Lord</h2>
+<p>Jesus asks the Pharisees whose Son the Christ is, and they answer David’s. From Psalm 110:1 He asks how David can call Him Lord, and from that day no one dares question Him further.</p></div></article><article class="mtb-overview-card mtb-overview-card-matters"><h2 class="mtb-overview-card-header">Why This Chapter Matters</h2><div class="mtb-overview-card-body"><p>Matthew 22 holds together God’s generous invitation and the seriousness of responding to it. The king welcomes people from the roads, bad and good, yet no one can enter on his own terms. Attendance, religious ritual, and good works cannot replace the righteousness that God gives in Christ.</p>
+<p>The chapter also shows the depth of Jesus’ wisdom and the height of His identity. He affirms real obligations to government while claiming every person, who bears God’s image, for God. He grounds resurrection hope in God’s faithfulness. He sums up the Law in love. Finally He reveals that the Messiah is more than David’s heir. He is David’s Lord.</p></div></article><article class="mtb-overview-card mtb-overview-card-themes"><h2 class="mtb-overview-card-header">Key Themes to Watch For</h2><div class="mtb-overview-card-body"><p><strong>The King’s invitation.</strong> God invites many to the wedding feast of His Son (22:2–10).</p>
+<p><strong>A fitting response.</strong> The wedding garment shows that receiving the invitation matters (22:11–14).</p>
+<p><strong>God’s claim and Caesar’s.</strong> Civic duty stands under God’s greater claim (22:21).</p>
+<p><strong>Resurrection hope.</strong> God is the God of the living (22:29–32).</p>
+<p><strong>David’s Lord.</strong> The Messiah is both David’s Son and his Lord (22:42–45).</p></div></article><article class="mtb-overview-card mtb-overview-card-words"><h2 class="mtb-overview-card-header">Key Words &amp; Concepts</h2><div class="mtb-overview-card-body"><p><strong>Wedding garment (22:11).</strong> Clothing fit for the king’s feast. It pictures the righteousness of Christ received by grace and the life that fits it (Isaiah 61:10).</p>
+<p><strong>Herodians (22:16).</strong> Supporters of the Herod family’s rule who cooperated with Rome. They join the Pharisees in the tax question.</p>
+<p><strong>Render to Caesar (22:21).</strong> Give the government what belongs to it, while giving God what belongs to Him, which is the whole person made in His image.</p>
+<p><strong>Sadducees (22:23).</strong> A priestly party who say there is no resurrection (22:23). They frame their question from Moses’ law, and Jesus answers them from Exodus 3:6.</p>
+<p><strong>The great commandment (22:37–39).</strong> Jesus joins Deuteronomy 6:5 and Leviticus 19:18. Love for God and neighbor holds all the commands together.</p></div></article></div></details></div>
+</section>

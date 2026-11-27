@@ -1,0 +1,81 @@
+<section class="mtb-doc mtb-doc--read" data-doc-type="chapter-overview" data-mtb-status="complete">
+<style>
+.mtb-print-controls{display:flex;justify-content:flex-end;gap:8px;margin:0 0 14px;padding:0 4px}
+.mtb-print-button{appearance:none;border:1px solid #b9c8d5;border-radius:8px;background:#fff;padding:9px 14px;color:#173a5e;font:700 14px Arial,Helvetica,sans-serif;cursor:pointer}
+.mtb-print-button:hover{background:#f2f6f9}
+@media print{
+  @page{size:auto;margin:.45in}
+  html,body{background:#fff!important;color:#000!important}
+  .mtb-print-controls,.mtb-study-controls,.mtb-reflections-controls{display:none!important}
+  .mtb-doc{display:block!important;width:100%!important;max-width:none!important;margin:0!important;padding:0!important}
+  .mtb-overview-hero,.mtb-study-hero,.mtb-reflections-hero,.mtb-culture-hero{box-shadow:none!important;background:#fff!important;border-color:#777!important}
+  .mtb-overview-grid,.mtb-reflections-grid,.mtb-culture-grid,.mtb-study-verse-grid{display:block!important}
+  .mtb-overview-card,.mtb-reflections-card,.mtb-culture-card,.mtb-study-verse,.mtb-study-verse-panel,.mtb-intro-card{
+    display:block!important;width:100%!important;max-width:none!important;height:auto!important;margin:0 0 12pt!important;
+    break-inside:avoid;page-break-inside:avoid;box-shadow:none!important;background:#fff!important;color:#000!important
+  }
+  details.mtb-study-verse,details.mtb-reflection-section{display:block!important;overflow:visible!important}
+  details.mtb-study-verse>summary,details.mtb-reflection-section>summary{display:flex!important;background:#fff!important;color:#000!important;border-bottom:1px solid #777!important}
+  details.mtb-study-verse>summary:after,details.mtb-reflection-section>summary:after{display:none!important}
+  details.mtb-study-verse>.mtb-study-verse-body,details.mtb-reflection-section>.mtb-reflection-section-body{display:block!important}
+  h1,h2,h3,h4{break-after:avoid;page-break-after:avoid;color:#000!important}
+  p,li{orphans:3;widows:3}
+  a{color:#000!important;text-decoration:none!important}
+  a[href]::after{content:none!important}
+}
+</style>
+<div class="mtb-print-controls"><button type="button" class="mtb-print-button" onclick="(function(button){var doc=button.closest('.mtb-doc')||document;var panels=Array.prototype.slice.call(doc.querySelectorAll('details'));panels.forEach(function(panel){panel.open=true;});window.print();})(this)">&#128438; Print This Page</button></div>
+<style>
+.mtb-chapter-overview-dashboard{--mtb-navy:#173a5e;--mtb-navy-2:#2b587f;--mtb-gold:#b7832f;--mtb-blue-soft:#eef4f9;--mtb-border:#d7e0e8;--mtb-text:#1d2935;width:100%;max-width:1600px;margin:0 auto;padding:2px 4px 30px;color:var(--mtb-text);font-family:Arial,Helvetica,sans-serif}.mtb-chapter-overview-dashboard *{box-sizing:border-box}
+.mtb-overview-glance{margin:0 0 18px;overflow:hidden;border:1px solid #cbd8e3;border-radius:14px;background:linear-gradient(135deg,#f7fafc 0%,#e8f0f7 100%);box-shadow:0 4px 15px rgba(28,48,66,.045)}
+.mtb-overview-glance-head{display:flex;align-items:center;justify-content:space-between;gap:20px;padding:18px 24px 13px;border-bottom:1px solid rgba(23,58,94,.12);background:var(--mtb-blue-soft)}
+.mtb-overview-eyebrow{margin:0 0 4px;color:var(--mtb-gold);font-size:.78rem;font-weight:800;letter-spacing:.13em;text-transform:uppercase}.mtb-overview-title{margin:0;color:var(--mtb-navy);font-size:clamp(1.4rem,2.6vw,1.95rem);line-height:1.1}.mtb-overview-badge{flex:0 0 auto;padding:9px 15px;border:1px solid rgba(23,58,94,.18);border-radius:999px;background:#fff;color:var(--mtb-navy);font-weight:800}
+.mtb-overview-glance-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:0;padding:8px 22px 13px;background:#fff}.mtb-overview-glance-item{min-width:0;padding:10px 12px;font-size:1rem;line-height:1.42}.mtb-overview-glance-item:nth-child(even){border-left:1px solid rgba(23,58,94,.11)}.mtb-overview-glance-label{display:inline;color:var(--mtb-navy);font-weight:800}.mtb-overview-glance-content{display:inline}.mtb-overview-glance-content p{display:inline;margin:0}.mtb-overview-glance-structure .mtb-overview-glance-content{display:block;margin-top:4px}.mtb-overview-glance-structure ul,.mtb-overview-glance-structure ol{margin:4px 0 0;padding-left:1.25em}.mtb-overview-glance-structure li{margin:0 0 2px}.mtb-overview-glance-structure li p{display:block;margin:0}.mtb-overview-glance-keyverse .mtb-overview-glance-content{font-style:italic}
+.mtb-overview-deeper{margin:0}.mtb-overview-deeper>summary{display:flex;align-items:center;justify-content:space-between;gap:16px;cursor:pointer;list-style:none;padding:14px 18px;border:1px solid #cbd8e3;border-radius:10px;background:#f4f7fa;color:var(--mtb-navy);font-size:1rem;font-weight:800;user-select:none}.mtb-overview-deeper>summary::-webkit-details-marker{display:none}.mtb-overview-deeper>summary::after{content:'+';font-size:1.35rem;line-height:1}.mtb-overview-deeper[open]>summary{margin-bottom:16px;border-color:#b8cad9;background:#eef4f9}.mtb-overview-deeper[open]>summary::after{content:'−'}
+.mtb-overview-grid{display:grid;grid-template-columns:repeat(12,minmax(0,1fr));gap:16px;align-items:stretch}.mtb-overview-card{min-width:0;overflow:hidden;border:1px solid var(--mtb-border);border-top:4px solid var(--mtb-navy-2);border-radius:12px;background:#fff;box-shadow:0 4px 15px rgba(28,48,66,.055)}.mtb-overview-card-heart{grid-column:1/-1}.mtb-overview-card-sections{grid-column:1/span 6}.mtb-overview-card-matters{grid-column:7/span 6}.mtb-overview-card-themes{grid-column:1/span 6}.mtb-overview-card-words{grid-column:7/span 6}.mtb-overview-card-psalm-author{grid-column:1/span 4}.mtb-overview-card-psalm-occasion{grid-column:5/span 4}.mtb-overview-card-psalm-kind{grid-column:9/span 4}.mtb-overview-card-header{margin:0;padding:12px 16px 10px;border-bottom:1px solid #e5ebf0;background:var(--mtb-blue-soft);color:var(--mtb-navy);font-size:.96rem;font-weight:800}.mtb-overview-card-body{padding:16px 18px 18px;font-size:1rem;line-height:1.48;overflow-wrap:anywhere}.mtb-overview-card-heart .mtb-overview-card-body{font-size:1.04rem}.mtb-overview-card-body p{margin:0 0 .72em}.mtb-overview-card-body p:last-child{margin-bottom:0}.mtb-overview-card-body ul,.mtb-overview-card-body ol{margin:0;padding-left:1.25em}.mtb-overview-card-body li{margin:0 0 .35em}
+@media(max-width:980px){.mtb-overview-card{grid-column:span 6!important}.mtb-overview-card-heart{grid-column:1/-1!important}.mtb-overview-glance-grid{grid-template-columns:1fr}.mtb-overview-glance-item:nth-child(even){border-left:0}.mtb-overview-glance-item+.mtb-overview-glance-item{border-top:1px solid rgba(23,58,94,.09)}}
+@media(max-width:760px){.mtb-overview-grid{grid-template-columns:1fr}.mtb-overview-card{grid-column:1/-1!important}.mtb-overview-glance-head{align-items:flex-start;flex-direction:column;padding:17px 18px 12px}.mtb-overview-glance-grid{padding:6px 10px 12px}.mtb-overview-glance-item{padding:9px 8px}.mtb-overview-deeper>summary{padding:13px 15px}}
+@media print{.mtb-overview-deeper>summary{display:none!important}.mtb-overview-deeper:not([open])>.mtb-overview-grid{display:grid!important}}
+</style><div class="mtb-chapter-overview-dashboard"><section class="mtb-overview-glance" aria-labelledby="mtb-at-a-glance-title"><div class="mtb-overview-glance-head"><div><p class="mtb-overview-eyebrow">Chapter Overview</p><h1 id="mtb-at-a-glance-title" class="mtb-overview-title">At a Glance</h1></div><div class="mtb-overview-badge">Chapter 10</div></div><div class="mtb-overview-glance-grid"><div class="mtb-overview-glance-item"><span class="mtb-overview-glance-label">Main Idea: </span><div class="mtb-overview-glance-content"><p>Jesus gives the twelve apostles His authority, sends them to the lost sheep of Israel to proclaim and display the kingdom, and prepares them for persecution, fearless confession, divided households, and the cost of loving Him above all, promising that whoever receives them receives Him.</p></div></div><div class="mtb-overview-glance-item"><span class="mtb-overview-glance-label">Setting: </span><div class="mtb-overview-glance-content"><p>Matthew 10 is the second of Matthew’s five great discourses. Jesus answers the harvest prayer of 9:38 by sending out His own laborers.</p></div></div><div class="mtb-overview-glance-item mtb-overview-glance-structure"><span class="mtb-overview-glance-label">Chapter Outline: </span><div class="mtb-overview-glance-content"><ul>
+<li><div data-custom-style="List Bullet">
+<p>Matthew 10:1–4 — Jesus Gives Authority to the Twelve</p>
+</div></li>
+<li><div data-custom-style="List Bullet">
+<p>Matthew 10:5–15 — The Twelve Sent to the Lost Sheep of Israel</p>
+</div></li>
+<li><div data-custom-style="List Bullet">
+<p>Matthew 10:16–23 — Sheep among Wolves: Persecution and Endurance</p>
+</div></li>
+<li><div data-custom-style="List Bullet">
+<p>Matthew 10:24–33 — Do Not Fear Those Who Kill the Body</p>
+</div></li>
+<li><div data-custom-style="List Bullet">
+<p>Matthew 10:34–39 — Not Peace but a Sword: Loving Jesus Above All</p>
+</div></li>
+<li><div data-custom-style="List Bullet">
+<p>Matthew 10:40–42 — Receiving Jesus’ Messengers</p>
+</div></li>
+</ul></div></div><div class="mtb-overview-glance-item mtb-overview-glance-keyverse"><span class="mtb-overview-glance-label">Key Verse: </span><div class="mtb-overview-glance-content"><p>“He who finds his life will lose it, and he who loses his life for My sake will find it.” (Matthew 10:39)</p></div></div></div></section><details class="mtb-overview-deeper"><summary>Go Deeper</summary><div class="mtb-overview-grid"><article class="mtb-overview-card mtb-overview-card-heart"><h2 class="mtb-overview-card-header">The Heart of the Chapter</h2><div class="mtb-overview-card-body"><p>The prayer for laborers at the end of chapter 9 is answered at once. Jesus calls the Twelve, names them, and gives them His own authority to heal and to cast out unclean spirits. They are to go first to “the lost sheep of the house of Israel” (10:6), proclaiming that the kingdom of heaven is at hand. The Davidic King gathers Israel first, and the later commission to all nations (28:19) will widen this mission without abandoning Israel. They travel light and give freely, because they have received freely.</p>
+<p>Then Jesus looks beyond this first tour. His messengers will be sheep among wolves, handed over to councils, flogged, and brought before governors and kings. Families will divide over Him. Yet the Spirit of their Father will give them words, the Father who notices a falling sparrow numbers the hairs of their heads, and the One to fear is God, not people. Following Jesus means loving Him above father, mother, son, or daughter and taking up the cross. The chapter ends with comfort: Jesus so identifies with His messengers that even a cup of cold water given to one of them will not lose its reward.</p></div></article><article class="mtb-overview-card mtb-overview-card-sections"><h2 class="mtb-overview-card-header">Chapter Sections</h2><div class="mtb-overview-card-body"><h2 id="matthew-1014-jesus-gives-authority-to-the-twelve">Matthew 10:1–4 — Jesus Gives Authority to the Twelve</h2>
+<p>Jesus gives the Twelve authority over unclean spirits and every sickness, and Matthew names them, ending with Judas Iscariot, who betrayed Him.</p>
+<h2 id="matthew-10515-the-twelve-sent-to-the-lost-sheep-of-israel">Matthew 10:5–15 — The Twelve Sent to the Lost Sheep of Israel</h2>
+<p>Jesus sends the Twelve only to the lost sheep of Israel to preach the kingdom, heal, and deliver, giving freely what they have freely received. They are to depend on the hospitality of worthy households and shake off the dust of towns that refuse them.</p>
+<h2 id="matthew-101623-sheep-among-wolves-persecution-and-endurance">Matthew 10:16–23 — Sheep among Wolves: Persecution and Endurance</h2>
+<p>Jesus warns that His messengers will face councils, floggings, rulers, and betrayal within families, but the Spirit of their Father will speak through them. Whoever endures to the end will be saved, and the Son of Man will come before they finish Israel’s cities.</p>
+<h2 id="matthew-102433-do-not-fear-those-who-kill-the-body">Matthew 10:24–33 — Do Not Fear Those Who Kill the Body</h2>
+<p>A disciple will be treated as his Master was, but he need not fear people, because God alone has authority over body and soul in hell and the Father watches over every sparrow. Jesus will confess before His Father those who confess Him before others.</p>
+<h2 id="matthew-103439-not-peace-but-a-sword-loving-jesus-above-all">Matthew 10:34–39 — Not Peace but a Sword: Loving Jesus Above All</h2>
+<p>Jesus brings a sword that divides even households. Whoever loves family more than Him or will not take up the cross is not worthy of Him, and losing one’s life for His sake is finding it.</p>
+<h2 id="matthew-104042-receiving-jesus-messengers">Matthew 10:40–42 — Receiving Jesus’ Messengers</h2>
+<p>Whoever receives Jesus’ messengers receives Him and the Father who sent Him. Even a cup of cold water given to one of these little ones because he is a disciple will be rewarded.</p></div></article><article class="mtb-overview-card mtb-overview-card-matters"><h2 class="mtb-overview-card-header">Why This Chapter Matters</h2><div class="mtb-overview-card-body"><p>Matthew 10 shows that the mission of Jesus’ people grows from His compassion and is carried out with His authority. The disciples do not invent the message or the power. They speak the King’s word, do the King’s works, and depend on Him for daily needs.</p>
+<p>The chapter also prepares every disciple for opposition. Following Jesus can cost reputation, family peace, and even life, and Jesus says so plainly. Courage does not come from pretending the danger is small. It comes from the Father’s close care, the Spirit’s help in the hour of trial, and the honor of belonging to a King who calls His messengers His own.</p></div></article><article class="mtb-overview-card mtb-overview-card-themes"><h2 class="mtb-overview-card-header">Key Themes to Watch For</h2><div class="mtb-overview-card-body"><p><strong>Authority shared.</strong> Jesus gives His messengers power to heal and deliver (10:1, 8).</p>
+<p><strong>Israel first.</strong> The Twelve are sent to the lost sheep of Israel (10:5–6).</p>
+<p><strong>Endurance under persecution.</strong> The Spirit speaks through witnesses who endure to the end (10:19–22).</p>
+<p><strong>Fear God, not people.</strong> The Father’s care and judgment free disciples to confess Christ (10:28–33).</p>
+<p><strong>Christ above all.</strong> Love for Jesus outranks every family tie (10:37–39).</p></div></article><article class="mtb-overview-card mtb-overview-card-words"><h2 class="mtb-overview-card-header">Key Words &amp; Concepts</h2><div class="mtb-overview-card-body"><p><strong>Apostles (10:2).</strong> Those sent out with authority to represent the one who sends them. Matthew uses the word only here.</p>
+<p><strong>Lost sheep of the house of Israel (10:6).</strong> Israel’s people, wandering without true shepherds (9:36). The Messiah gathers them first.</p>
+<p><strong>Shake off the dust (10:14).</strong> A sign that a town that rejected the message is left to answer for its refusal.</p>
+<p><strong>The Son of Man comes (10:23).</strong> Jesus’ resurrection in royal authority (28:18) is the decisive coming that opens the mission to all nations. His return in glory remains the final horizon.</p>
+<p><strong>Take his cross (10:38).</strong> To follow Jesus in willing obedience, even when it brings loss, shame, or death.</p>
+<p><strong>Little ones (10:42).</strong> Jesus’ humble disciples. To welcome them as His disciples is to welcome Him.</p></div></article></div></details></div>
+</section>

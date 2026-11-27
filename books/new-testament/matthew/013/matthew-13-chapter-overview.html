@@ -1,0 +1,96 @@
+<section class="mtb-doc mtb-doc--read" data-doc-type="chapter-overview" data-mtb-status="complete">
+<style>
+.mtb-print-controls{display:flex;justify-content:flex-end;gap:8px;margin:0 0 14px;padding:0 4px}
+.mtb-print-button{appearance:none;border:1px solid #b9c8d5;border-radius:8px;background:#fff;padding:9px 14px;color:#173a5e;font:700 14px Arial,Helvetica,sans-serif;cursor:pointer}
+.mtb-print-button:hover{background:#f2f6f9}
+@media print{
+  @page{size:auto;margin:.45in}
+  html,body{background:#fff!important;color:#000!important}
+  .mtb-print-controls,.mtb-study-controls,.mtb-reflections-controls{display:none!important}
+  .mtb-doc{display:block!important;width:100%!important;max-width:none!important;margin:0!important;padding:0!important}
+  .mtb-overview-hero,.mtb-study-hero,.mtb-reflections-hero,.mtb-culture-hero{box-shadow:none!important;background:#fff!important;border-color:#777!important}
+  .mtb-overview-grid,.mtb-reflections-grid,.mtb-culture-grid,.mtb-study-verse-grid{display:block!important}
+  .mtb-overview-card,.mtb-reflections-card,.mtb-culture-card,.mtb-study-verse,.mtb-study-verse-panel,.mtb-intro-card{
+    display:block!important;width:100%!important;max-width:none!important;height:auto!important;margin:0 0 12pt!important;
+    break-inside:avoid;page-break-inside:avoid;box-shadow:none!important;background:#fff!important;color:#000!important
+  }
+  details.mtb-study-verse,details.mtb-reflection-section{display:block!important;overflow:visible!important}
+  details.mtb-study-verse>summary,details.mtb-reflection-section>summary{display:flex!important;background:#fff!important;color:#000!important;border-bottom:1px solid #777!important}
+  details.mtb-study-verse>summary:after,details.mtb-reflection-section>summary:after{display:none!important}
+  details.mtb-study-verse>.mtb-study-verse-body,details.mtb-reflection-section>.mtb-reflection-section-body{display:block!important}
+  h1,h2,h3,h4{break-after:avoid;page-break-after:avoid;color:#000!important}
+  p,li{orphans:3;widows:3}
+  a{color:#000!important;text-decoration:none!important}
+  a[href]::after{content:none!important}
+}
+</style>
+<div class="mtb-print-controls"><button type="button" class="mtb-print-button" onclick="(function(button){var doc=button.closest('.mtb-doc')||document;var panels=Array.prototype.slice.call(doc.querySelectorAll('details'));panels.forEach(function(panel){panel.open=true;});window.print();})(this)">&#128438; Print This Page</button></div>
+<style>
+.mtb-chapter-overview-dashboard{--mtb-navy:#173a5e;--mtb-navy-2:#2b587f;--mtb-gold:#b7832f;--mtb-blue-soft:#eef4f9;--mtb-border:#d7e0e8;--mtb-text:#1d2935;width:100%;max-width:1600px;margin:0 auto;padding:2px 4px 30px;color:var(--mtb-text);font-family:Arial,Helvetica,sans-serif}.mtb-chapter-overview-dashboard *{box-sizing:border-box}
+.mtb-overview-glance{margin:0 0 18px;overflow:hidden;border:1px solid #cbd8e3;border-radius:14px;background:linear-gradient(135deg,#f7fafc 0%,#e8f0f7 100%);box-shadow:0 4px 15px rgba(28,48,66,.045)}
+.mtb-overview-glance-head{display:flex;align-items:center;justify-content:space-between;gap:20px;padding:18px 24px 13px;border-bottom:1px solid rgba(23,58,94,.12);background:var(--mtb-blue-soft)}
+.mtb-overview-eyebrow{margin:0 0 4px;color:var(--mtb-gold);font-size:.78rem;font-weight:800;letter-spacing:.13em;text-transform:uppercase}.mtb-overview-title{margin:0;color:var(--mtb-navy);font-size:clamp(1.4rem,2.6vw,1.95rem);line-height:1.1}.mtb-overview-badge{flex:0 0 auto;padding:9px 15px;border:1px solid rgba(23,58,94,.18);border-radius:999px;background:#fff;color:var(--mtb-navy);font-weight:800}
+.mtb-overview-glance-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:0;padding:8px 22px 13px;background:#fff}.mtb-overview-glance-item{min-width:0;padding:10px 12px;font-size:1rem;line-height:1.42}.mtb-overview-glance-item:nth-child(even){border-left:1px solid rgba(23,58,94,.11)}.mtb-overview-glance-label{display:inline;color:var(--mtb-navy);font-weight:800}.mtb-overview-glance-content{display:inline}.mtb-overview-glance-content p{display:inline;margin:0}.mtb-overview-glance-structure .mtb-overview-glance-content{display:block;margin-top:4px}.mtb-overview-glance-structure ul,.mtb-overview-glance-structure ol{margin:4px 0 0;padding-left:1.25em}.mtb-overview-glance-structure li{margin:0 0 2px}.mtb-overview-glance-structure li p{display:block;margin:0}.mtb-overview-glance-keyverse .mtb-overview-glance-content{font-style:italic}
+.mtb-overview-deeper{margin:0}.mtb-overview-deeper>summary{display:flex;align-items:center;justify-content:space-between;gap:16px;cursor:pointer;list-style:none;padding:14px 18px;border:1px solid #cbd8e3;border-radius:10px;background:#f4f7fa;color:var(--mtb-navy);font-size:1rem;font-weight:800;user-select:none}.mtb-overview-deeper>summary::-webkit-details-marker{display:none}.mtb-overview-deeper>summary::after{content:'+';font-size:1.35rem;line-height:1}.mtb-overview-deeper[open]>summary{margin-bottom:16px;border-color:#b8cad9;background:#eef4f9}.mtb-overview-deeper[open]>summary::after{content:'−'}
+.mtb-overview-grid{display:grid;grid-template-columns:repeat(12,minmax(0,1fr));gap:16px;align-items:stretch}.mtb-overview-card{min-width:0;overflow:hidden;border:1px solid var(--mtb-border);border-top:4px solid var(--mtb-navy-2);border-radius:12px;background:#fff;box-shadow:0 4px 15px rgba(28,48,66,.055)}.mtb-overview-card-heart{grid-column:1/-1}.mtb-overview-card-sections{grid-column:1/span 6}.mtb-overview-card-matters{grid-column:7/span 6}.mtb-overview-card-themes{grid-column:1/span 6}.mtb-overview-card-words{grid-column:7/span 6}.mtb-overview-card-psalm-author{grid-column:1/span 4}.mtb-overview-card-psalm-occasion{grid-column:5/span 4}.mtb-overview-card-psalm-kind{grid-column:9/span 4}.mtb-overview-card-header{margin:0;padding:12px 16px 10px;border-bottom:1px solid #e5ebf0;background:var(--mtb-blue-soft);color:var(--mtb-navy);font-size:.96rem;font-weight:800}.mtb-overview-card-body{padding:16px 18px 18px;font-size:1rem;line-height:1.48;overflow-wrap:anywhere}.mtb-overview-card-heart .mtb-overview-card-body{font-size:1.04rem}.mtb-overview-card-body p{margin:0 0 .72em}.mtb-overview-card-body p:last-child{margin-bottom:0}.mtb-overview-card-body ul,.mtb-overview-card-body ol{margin:0;padding-left:1.25em}.mtb-overview-card-body li{margin:0 0 .35em}
+@media(max-width:980px){.mtb-overview-card{grid-column:span 6!important}.mtb-overview-card-heart{grid-column:1/-1!important}.mtb-overview-glance-grid{grid-template-columns:1fr}.mtb-overview-glance-item:nth-child(even){border-left:0}.mtb-overview-glance-item+.mtb-overview-glance-item{border-top:1px solid rgba(23,58,94,.09)}}
+@media(max-width:760px){.mtb-overview-grid{grid-template-columns:1fr}.mtb-overview-card{grid-column:1/-1!important}.mtb-overview-glance-head{align-items:flex-start;flex-direction:column;padding:17px 18px 12px}.mtb-overview-glance-grid{padding:6px 10px 12px}.mtb-overview-glance-item{padding:9px 8px}.mtb-overview-deeper>summary{padding:13px 15px}}
+@media print{.mtb-overview-deeper>summary{display:none!important}.mtb-overview-deeper:not([open])>.mtb-overview-grid{display:grid!important}}
+</style><div class="mtb-chapter-overview-dashboard"><section class="mtb-overview-glance" aria-labelledby="mtb-at-a-glance-title"><div class="mtb-overview-glance-head"><div><p class="mtb-overview-eyebrow">Chapter Overview</p><h1 id="mtb-at-a-glance-title" class="mtb-overview-title">At a Glance</h1></div><div class="mtb-overview-badge">Chapter 13</div></div><div class="mtb-overview-glance-grid"><div class="mtb-overview-glance-item"><span class="mtb-overview-glance-label">Main Idea: </span><div class="mtb-overview-glance-content"><p>In parables by the sea, Jesus explains how people receive the word of the kingdom, how the kingdom grows amid opposition until the final harvest, and why it is worth everything; then His hometown takes offense at Him.</p></div></div><div class="mtb-overview-glance-item"><span class="mtb-overview-glance-label">Setting: </span><div class="mtb-overview-glance-content"><p>Matthew 13 is the third of Matthew’s great discourses. After the rejection in chapter 12, Jesus teaches the crowds from a boat and explains the parables to His disciples in the house.</p></div></div><div class="mtb-overview-glance-item mtb-overview-glance-structure"><span class="mtb-overview-glance-label">Chapter Outline: </span><div class="mtb-overview-glance-content"><ul>
+<li><div data-custom-style="List Bullet">
+<p>Matthew 13:1–9 — The Parable of the Sower</p>
+</div></li>
+<li><div data-custom-style="List Bullet">
+<p>Matthew 13:10–17 — Why Jesus Speaks in Parables</p>
+</div></li>
+<li><div data-custom-style="List Bullet">
+<p>Matthew 13:18–23 — The Sower Explained</p>
+</div></li>
+<li><div data-custom-style="List Bullet">
+<p>Matthew 13:24–30 — The Parable of the Wheat and the Tares</p>
+</div></li>
+<li><div data-custom-style="List Bullet">
+<p>Matthew 13:31–35 — The Mustard Seed, the Leaven, and Speaking in Parables</p>
+</div></li>
+<li><div data-custom-style="List Bullet">
+<p>Matthew 13:36–43 — The Wheat and the Tares Explained</p>
+</div></li>
+<li><div data-custom-style="List Bullet">
+<p>Matthew 13:44–46 — The Hidden Treasure and the Pearl of Great Price</p>
+</div></li>
+<li><div data-custom-style="List Bullet">
+<p>Matthew 13:47–52 — The Dragnet and the Householder’s Treasure</p>
+</div></li>
+<li><div data-custom-style="List Bullet">
+<p>Matthew 13:53–58 — Rejected in His Hometown</p>
+</div></li>
+</ul></div></div><div class="mtb-overview-glance-item mtb-overview-glance-keyverse"><span class="mtb-overview-glance-label">Key Verse: </span><div class="mtb-overview-glance-content"><p>“But he who received seed on the good ground is he who hears the word and understands it, who indeed bears fruit and produces: some a hundredfold, some sixty, some thirty.’” (Matthew 13:23)</p></div></div></div></section><details class="mtb-overview-deeper"><summary>Go Deeper</summary><div class="mtb-overview-grid"><article class="mtb-overview-card mtb-overview-card-heart"><h2 class="mtb-overview-card-header">The Heart of the Chapter</h2><div class="mtb-overview-card-body"><p>The chapter opens with a sower, and Jesus Himself explains the story. The seed is the word of the kingdom, and the soils are the hearers: some lose the word to the evil one, some receive it with shallow joy and fall away under pressure, some let cares and riches choke it, and some understand and bear fruit. The same soils can describe different areas of one disciple’s heart, so the parable presses every hearer to receive Jesus’ word, not just to sort others.</p>
+<p>The parables that follow describe a kingdom that is present but not yet complete. Wheat and tares grow together in the world until the Son of Man sends His angels at the end of the age. A tiny mustard seed becomes a tree where the birds of the air nest, a picture of the nations finding shelter under Christ’s reign, and leaven quietly works through the whole lump. A man finds a treasure and in his joy sells all he has, and a merchant sells everything for one pearl. Both pictures call for joyful, wholehearted surrender to the kingdom’s worth. The dragnet keeps final judgment in view. Then Nazareth, admiring His wisdom yet offended at His familiar family, shows unreceptive soil in a single town.</p></div></article><article class="mtb-overview-card mtb-overview-card-sections"><h2 class="mtb-overview-card-header">Chapter Sections</h2><div class="mtb-overview-card-body"><h2 id="matthew-1319-the-parable-of-the-sower">Matthew 13:1–9 — The Parable of the Sower</h2>
+<p>Jesus tells of seed falling on the wayside, stony places, thorns, and good ground, where it yields a crop of a hundredfold, sixtyfold, and thirtyfold. He calls those who have ears to hear.</p>
+<h2 id="matthew-131017-why-jesus-speaks-in-parables">Matthew 13:10–17 — Why Jesus Speaks in Parables</h2>
+<p>Jesus explains that the mysteries of the kingdom are given to His disciples, while those who refuse to see and hear fulfill Isaiah’s words. The disciples are blessed to see and hear what prophets longed for.</p>
+<h2 id="matthew-131823-the-sower-explained">Matthew 13:18–23 — The Sower Explained</h2>
+<p>Jesus explains the sower: the seed is the word of the kingdom, and the soils show what keeps it from bearing fruit. The good ground is the one who hears, understands, and bears fruit.</p>
+<h2 id="matthew-132430-the-parable-of-the-wheat-and-the-tares">Matthew 13:24–30 — The Parable of the Wheat and the Tares</h2>
+<p>An enemy sows tares among a man’s wheat, and the owner lets both grow together until the harvest, when the reapers will separate them.</p>
+<h2 id="matthew-133135-the-mustard-seed-the-leaven-and-speaking-in-parables">Matthew 13:31–35 — The Mustard Seed, the Leaven, and Speaking in Parables</h2>
+<p>The kingdom is like a mustard seed that grows into a tree sheltering birds, and like leaven that works through the whole lump. Matthew notes that Jesus’ use of parables fulfills Psalm 78:2.</p>
+<h2 id="matthew-133643-the-wheat-and-the-tares-explained">Matthew 13:36–43 — The Wheat and the Tares Explained</h2>
+<p>In the house Jesus explains the wheat and tares. The Son of Man sows good seed in the world, the devil sows the tares, and at the end of the age the angels will gather out the wicked, while the righteous shine in the Father’s kingdom.</p>
+<h2 id="matthew-134446-the-hidden-treasure-and-the-pearl-of-great-price">Matthew 13:44–46 — The Hidden Treasure and the Pearl of Great Price</h2>
+<p>A man finds treasure hidden in a field and for joy sells all he has to buy it, and a merchant sells all he has for one pearl of great price. Both show the kingdom’s surpassing worth.</p>
+<h2 id="matthew-134752-the-dragnet-and-the-householders-treasure">Matthew 13:47–52 — The Dragnet and the Householder’s Treasure</h2>
+<p>A dragnet gathers every kind of fish, and the bad are thrown away, as the angels will separate the wicked from the just. A scribe instructed concerning the kingdom brings out treasures new and old.</p>
+<h2 id="matthew-135358-rejected-in-his-hometown">Matthew 13:53–58 — Rejected in His Hometown</h2>
+<p>In Nazareth the people marvel at Jesus’ wisdom and works yet are offended because they know His family. He does few mighty works there because of their unbelief.</p></div></article><article class="mtb-overview-card mtb-overview-card-matters"><h2 class="mtb-overview-card-header">Why This Chapter Matters</h2><div class="mtb-overview-card-body"><p>Matthew 13 explains why the same message produces such different results. The seed is good; the difference lies in the hearer’s heart, and the soils invite honest cultivation of one’s own heart.</p>
+<p>The chapter also teaches patience and hope. The kingdom begins small and hidden, grows past every expectation, and works from within until it changes everything it touches. Evil and good grow side by side for now, but the Son of Man will make the final separation. Meanwhile the kingdom is worth more than anything a person could give up to have it, and those who find it give joyfully. That surrender also echoes the King, who gave all to purchase His people (1 Corinthians 6:20).</p></div></article><article class="mtb-overview-card mtb-overview-card-themes"><h2 class="mtb-overview-card-header">Key Themes to Watch For</h2><div class="mtb-overview-card-body"><p><strong>Hearing the word.</strong> The soils show how the word of the kingdom is received or resisted (13:3–9, 18–23).</p>
+<p><strong>Revealing and concealing.</strong> Parables open the mysteries to disciples and hide them from willful refusal (13:11–15).</p>
+<p><strong>Growth amid resistance.</strong> The kingdom grows alongside evil until the harvest (13:24–33).</p>
+<p><strong>Surpassing worth.</strong> The treasure and the pearl call for joyful, total surrender (13:44–46).</p>
+<p><strong>Final separation.</strong> The harvest and the dragnet keep judgment in view (13:40–43, 49–50).</p></div></article><article class="mtb-overview-card mtb-overview-card-words"><h2 class="mtb-overview-card-header">Key Words &amp; Concepts</h2><div class="mtb-overview-card-body"><p><strong>Parable (13:3).</strong> A story drawn from ordinary life that teaches about the kingdom. Jesus’ parables both reveal and conceal.</p>
+<p><strong>Mysteries of the kingdom (13:11).</strong> Truths about God’s reign once hidden and now revealed by God to Jesus’ disciples.</p>
+<p><strong>Tares (13:25).</strong> Weeds that look like wheat while growing. Jesus identifies them as the sons of the wicked one sown by the devil (13:38–39).</p>
+<p><strong>Mustard seed (13:31).</strong> A very small seed that grows into a large plant. The birds in its branches recall Ezekiel 17:22–24 and Daniel 4:12, where nations shelter under a great tree.</p>
+<p><strong>Leaven (13:33).</strong> Yeast that spreads quietly through dough. Here it pictures the reign of Christ working from within until it reaches the whole.</p>
+<p><strong>Things new and old (13:52).</strong> The instructed scribe holds together the Scriptures already given and their fulfillment now revealed in Jesus.</p></div></article></div></details></div>
+</section>

@@ -1,0 +1,101 @@
+<section class="mtb-doc mtb-doc--read" data-doc-type="chapter-overview" data-mtb-status="complete">
+<style>
+.mtb-print-controls{display:flex;justify-content:flex-end;gap:8px;margin:0 0 14px;padding:0 4px}
+.mtb-print-button{appearance:none;border:1px solid #b9c8d5;border-radius:8px;background:#fff;padding:9px 14px;color:#173a5e;font:700 14px Arial,Helvetica,sans-serif;cursor:pointer}
+.mtb-print-button:hover{background:#f2f6f9}
+@media print{
+  @page{size:auto;margin:.45in}
+  html,body{background:#fff!important;color:#000!important}
+  .mtb-print-controls,.mtb-study-controls,.mtb-reflections-controls{display:none!important}
+  .mtb-doc{display:block!important;width:100%!important;max-width:none!important;margin:0!important;padding:0!important}
+  .mtb-overview-hero,.mtb-study-hero,.mtb-reflections-hero,.mtb-culture-hero{box-shadow:none!important;background:#fff!important;border-color:#777!important}
+  .mtb-overview-grid,.mtb-reflections-grid,.mtb-culture-grid,.mtb-study-verse-grid{display:block!important}
+  .mtb-overview-card,.mtb-reflections-card,.mtb-culture-card,.mtb-study-verse,.mtb-study-verse-panel,.mtb-intro-card{
+    display:block!important;width:100%!important;max-width:none!important;height:auto!important;margin:0 0 12pt!important;
+    break-inside:avoid;page-break-inside:avoid;box-shadow:none!important;background:#fff!important;color:#000!important
+  }
+  details.mtb-study-verse,details.mtb-reflection-section{display:block!important;overflow:visible!important}
+  details.mtb-study-verse>summary,details.mtb-reflection-section>summary{display:flex!important;background:#fff!important;color:#000!important;border-bottom:1px solid #777!important}
+  details.mtb-study-verse>summary:after,details.mtb-reflection-section>summary:after{display:none!important}
+  details.mtb-study-verse>.mtb-study-verse-body,details.mtb-reflection-section>.mtb-reflection-section-body{display:block!important}
+  h1,h2,h3,h4{break-after:avoid;page-break-after:avoid;color:#000!important}
+  p,li{orphans:3;widows:3}
+  a{color:#000!important;text-decoration:none!important}
+  a[href]::after{content:none!important}
+}
+</style>
+<div class="mtb-print-controls"><button type="button" class="mtb-print-button" onclick="(function(button){var doc=button.closest('.mtb-doc')||document;var panels=Array.prototype.slice.call(doc.querySelectorAll('details'));panels.forEach(function(panel){panel.open=true;});window.print();})(this)">&#128438; Print This Page</button></div>
+<style>
+.mtb-chapter-overview-dashboard{--mtb-navy:#173a5e;--mtb-navy-2:#2b587f;--mtb-gold:#b7832f;--mtb-blue-soft:#eef4f9;--mtb-border:#d7e0e8;--mtb-text:#1d2935;width:100%;max-width:1600px;margin:0 auto;padding:2px 4px 30px;color:var(--mtb-text);font-family:Arial,Helvetica,sans-serif}.mtb-chapter-overview-dashboard *{box-sizing:border-box}
+.mtb-overview-glance{margin:0 0 18px;overflow:hidden;border:1px solid #cbd8e3;border-radius:14px;background:linear-gradient(135deg,#f7fafc 0%,#e8f0f7 100%);box-shadow:0 4px 15px rgba(28,48,66,.045)}
+.mtb-overview-glance-head{display:flex;align-items:center;justify-content:space-between;gap:20px;padding:18px 24px 13px;border-bottom:1px solid rgba(23,58,94,.12);background:var(--mtb-blue-soft)}
+.mtb-overview-eyebrow{margin:0 0 4px;color:var(--mtb-gold);font-size:.78rem;font-weight:800;letter-spacing:.13em;text-transform:uppercase}.mtb-overview-title{margin:0;color:var(--mtb-navy);font-size:clamp(1.4rem,2.6vw,1.95rem);line-height:1.1}.mtb-overview-badge{flex:0 0 auto;padding:9px 15px;border:1px solid rgba(23,58,94,.18);border-radius:999px;background:#fff;color:var(--mtb-navy);font-weight:800}
+.mtb-overview-glance-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:0;padding:8px 22px 13px;background:#fff}.mtb-overview-glance-item{min-width:0;padding:10px 12px;font-size:1rem;line-height:1.42}.mtb-overview-glance-item:nth-child(even){border-left:1px solid rgba(23,58,94,.11)}.mtb-overview-glance-label{display:inline;color:var(--mtb-navy);font-weight:800}.mtb-overview-glance-content{display:inline}.mtb-overview-glance-content p{display:inline;margin:0}.mtb-overview-glance-structure .mtb-overview-glance-content{display:block;margin-top:4px}.mtb-overview-glance-structure ul,.mtb-overview-glance-structure ol{margin:4px 0 0;padding-left:1.25em}.mtb-overview-glance-structure li{margin:0 0 2px}.mtb-overview-glance-structure li p{display:block;margin:0}.mtb-overview-glance-keyverse .mtb-overview-glance-content{font-style:italic}
+.mtb-overview-deeper{margin:0}.mtb-overview-deeper>summary{display:flex;align-items:center;justify-content:space-between;gap:16px;cursor:pointer;list-style:none;padding:14px 18px;border:1px solid #cbd8e3;border-radius:10px;background:#f4f7fa;color:var(--mtb-navy);font-size:1rem;font-weight:800;user-select:none}.mtb-overview-deeper>summary::-webkit-details-marker{display:none}.mtb-overview-deeper>summary::after{content:'+';font-size:1.35rem;line-height:1}.mtb-overview-deeper[open]>summary{margin-bottom:16px;border-color:#b8cad9;background:#eef4f9}.mtb-overview-deeper[open]>summary::after{content:'−'}
+.mtb-overview-grid{display:grid;grid-template-columns:repeat(12,minmax(0,1fr));gap:16px;align-items:stretch}.mtb-overview-card{min-width:0;overflow:hidden;border:1px solid var(--mtb-border);border-top:4px solid var(--mtb-navy-2);border-radius:12px;background:#fff;box-shadow:0 4px 15px rgba(28,48,66,.055)}.mtb-overview-card-heart{grid-column:1/-1}.mtb-overview-card-sections{grid-column:1/span 6}.mtb-overview-card-matters{grid-column:7/span 6}.mtb-overview-card-themes{grid-column:1/span 6}.mtb-overview-card-words{grid-column:7/span 6}.mtb-overview-card-psalm-author{grid-column:1/span 4}.mtb-overview-card-psalm-occasion{grid-column:5/span 4}.mtb-overview-card-psalm-kind{grid-column:9/span 4}.mtb-overview-card-header{margin:0;padding:12px 16px 10px;border-bottom:1px solid #e5ebf0;background:var(--mtb-blue-soft);color:var(--mtb-navy);font-size:.96rem;font-weight:800}.mtb-overview-card-body{padding:16px 18px 18px;font-size:1rem;line-height:1.48;overflow-wrap:anywhere}.mtb-overview-card-heart .mtb-overview-card-body{font-size:1.04rem}.mtb-overview-card-body p{margin:0 0 .72em}.mtb-overview-card-body p:last-child{margin-bottom:0}.mtb-overview-card-body ul,.mtb-overview-card-body ol{margin:0;padding-left:1.25em}.mtb-overview-card-body li{margin:0 0 .35em}
+@media(max-width:980px){.mtb-overview-card{grid-column:span 6!important}.mtb-overview-card-heart{grid-column:1/-1!important}.mtb-overview-glance-grid{grid-template-columns:1fr}.mtb-overview-glance-item:nth-child(even){border-left:0}.mtb-overview-glance-item+.mtb-overview-glance-item{border-top:1px solid rgba(23,58,94,.09)}}
+@media(max-width:760px){.mtb-overview-grid{grid-template-columns:1fr}.mtb-overview-card{grid-column:1/-1!important}.mtb-overview-glance-head{align-items:flex-start;flex-direction:column;padding:17px 18px 12px}.mtb-overview-glance-grid{padding:6px 10px 12px}.mtb-overview-glance-item{padding:9px 8px}.mtb-overview-deeper>summary{padding:13px 15px}}
+@media print{.mtb-overview-deeper>summary{display:none!important}.mtb-overview-deeper:not([open])>.mtb-overview-grid{display:grid!important}}
+</style><div class="mtb-chapter-overview-dashboard"><section class="mtb-overview-glance" aria-labelledby="mtb-at-a-glance-title"><div class="mtb-overview-glance-head"><div><p class="mtb-overview-eyebrow">Chapter Overview</p><h1 id="mtb-at-a-glance-title" class="mtb-overview-title">At a Glance</h1></div><div class="mtb-overview-badge">Chapter 26</div></div><div class="mtb-overview-glance-grid"><div class="mtb-overview-glance-item"><span class="mtb-overview-glance-label">Main Idea: </span><div class="mtb-overview-glance-content"><p>As the leaders plot His death, Jesus is anointed for burial, gives the bread and cup of the new covenant at the Passover, yields to the Father in Gethsemane, is betrayed and arrested, and confesses His identity before the council while Peter denies Him.</p></div></div><div class="mtb-overview-glance-item"><span class="mtb-overview-glance-label">Setting: </span><div class="mtb-overview-glance-content"><p>Matthew 26 opens the final movement, The King Gives His Life and Rises with All Authority (26:1–28:20). It begins two days before the Passover in Jerusalem and Bethany.</p></div></div><div class="mtb-overview-glance-item mtb-overview-glance-structure"><span class="mtb-overview-glance-label">Chapter Outline: </span><div class="mtb-overview-glance-content"><ul>
+<li><div data-custom-style="List Bullet">
+<p>Matthew 26:1–5 — The Plot to Kill Jesus</p>
+</div></li>
+<li><div data-custom-style="List Bullet">
+<p>Matthew 26:6–13 — A Woman Anoints Jesus at Bethany</p>
+</div></li>
+<li><div data-custom-style="List Bullet">
+<p>Matthew 26:14–16 — Judas Agrees to Betray Jesus</p>
+</div></li>
+<li><div data-custom-style="List Bullet">
+<p>Matthew 26:17–25 — Jesus Foretells His Betrayal at the Passover</p>
+</div></li>
+<li><div data-custom-style="List Bullet">
+<p>Matthew 26:26–29 — The Bread and the Cup of the New Covenant</p>
+</div></li>
+<li><div data-custom-style="List Bullet">
+<p>Matthew 26:30–35 — Jesus Foretells the Disciples’ Scattering and Peter’s Denial</p>
+</div></li>
+<li><div data-custom-style="List Bullet">
+<p>Matthew 26:36–46 — Jesus Prays in Gethsemane</p>
+</div></li>
+<li><div data-custom-style="List Bullet">
+<p>Matthew 26:47–56 — Betrayal and Arrest</p>
+</div></li>
+<li><div data-custom-style="List Bullet">
+<p>Matthew 26:57–68 — Jesus before Caiaphas and the Council</p>
+</div></li>
+<li><div data-custom-style="List Bullet">
+<p>Matthew 26:69–75 — Peter Denies Jesus Three Times</p>
+</div></li>
+</ul></div></div><div class="mtb-overview-glance-item mtb-overview-glance-keyverse"><span class="mtb-overview-glance-label">Key Verse: </span><div class="mtb-overview-glance-content"><p>“For this is My blood of the new covenant, which is shed for many for the remission of sins.” (Matthew 26:28)</p></div></div></div></section><details class="mtb-overview-deeper"><summary>Go Deeper</summary><div class="mtb-overview-grid"><article class="mtb-overview-card mtb-overview-card-heart"><h2 class="mtb-overview-card-header">The Heart of the Chapter</h2><div class="mtb-overview-card-body"><p>Jesus knows exactly where He is going. As the chief priests and elders plot to kill Him quietly, He announces that the Son of Man will be delivered up to be crucified at the Passover. In Bethany a woman pours costly oil on His head, and when the disciples call it waste, Jesus says she has prepared Him for burial. Judas, one of the Twelve, sells Him for thirty pieces of silver.</p>
+<p>Jesus eats the Passover with the Twelve on Wednesday evening, at the beginning of Nisan 14, and He is crucified on Thursday afternoon, later in that same biblical day, the Day of Preparation. At the meal He names His betrayer and then gives the meal its new meaning. The bread is His body, and the cup is “My blood of the new covenant, which is shed for many for the remission of sins” (26:28). In Gethsemane He is sorrowful even to death. He prays three times, first, “not as I will, but as You will” (26:39), and each time He submits to the Father’s will, while His closest friends sleep. When Judas comes with a crowd, Jesus refuses the sword and gives Himself up so that the Scriptures may be fulfilled. Before the council He stays silent under false testimony until the high priest puts Him under oath. Then He declares that they will see the Son of Man at the right hand of Power. Outside, Peter denies Him three times and weeps bitterly.</p></div></article><article class="mtb-overview-card mtb-overview-card-sections"><h2 class="mtb-overview-card-header">Chapter Sections</h2><div class="mtb-overview-card-body"><h2 id="matthew-2615-the-plot-to-kill-jesus">Matthew 26:1–5 — The Plot to Kill Jesus</h2>
+<p>Jesus tells His disciples that He will be delivered up to be crucified at the Passover, while the chief priests and elders plot to seize and kill Him by trickery.</p>
+<h2 id="matthew-26613-a-woman-anoints-jesus-at-bethany">Matthew 26:6–13 — A Woman Anoints Jesus at Bethany</h2>
+<p>In Bethany a woman pours very costly oil on Jesus’ head. When the disciples protest the waste, Jesus says she has done a good work, preparing His body for burial, and that her act will be told wherever the gospel is preached.</p>
+<h2 id="matthew-261416-judas-agrees-to-betray-jesus">Matthew 26:14–16 — Judas Agrees to Betray Jesus</h2>
+<p>Judas Iscariot goes to the chief priests and agrees to betray Jesus for thirty pieces of silver.</p>
+<h2 id="matthew-261725-jesus-foretells-his-betrayal-at-the-passover">Matthew 26:17–25 — Jesus Foretells His Betrayal at the Passover</h2>
+<p>At the Passover meal Jesus announces that one of the Twelve will betray Him. The Son of Man goes as it is written, but woe to the betrayer, and Jesus answers Judas, “You have said it” (26:25).</p>
+<h2 id="matthew-262629-the-bread-and-the-cup-of-the-new-covenant">Matthew 26:26–29 — The Bread and the Cup of the New Covenant</h2>
+<p>Jesus gives the bread as His body and the cup as His blood of the new covenant, shed for many for the remission of sins. He promises to drink it new with them in His Father’s kingdom.</p>
+<h2 id="matthew-263035-jesus-foretells-the-disciples-scattering-and-peters-denial">Matthew 26:30–35 — Jesus Foretells the Disciples’ Scattering and Peter’s Denial</h2>
+<p>On the way to the Mount of Olives, Jesus foretells that all His disciples will stumble and scatter, and that He will go before them to Galilee after He rises. Peter insists he will never deny Him, but Jesus tells him he will deny Him three times that night.</p>
+<h2 id="matthew-263646-jesus-prays-in-gethsemane">Matthew 26:36–46 — Jesus Prays in Gethsemane</h2>
+<p>In Gethsemane Jesus, deeply sorrowful, prays three times that the cup might pass yet submits to the Father’s will. His disciples sleep instead of watching and praying with Him.</p>
+<h2 id="matthew-264756-betrayal-and-arrest">Matthew 26:47–56 — Betrayal and Arrest</h2>
+<p>Judas betrays Jesus with a kiss, and Jesus forbids the use of the sword, saying He could call more than twelve legions of angels. He surrenders so that the Scriptures may be fulfilled, and all the disciples flee.</p>
+<h2 id="matthew-265768-jesus-before-caiaphas-and-the-council">Matthew 26:57–68 — Jesus before Caiaphas and the Council</h2>
+<p>Before Caiaphas and the council, false witnesses fail to agree, and Jesus is silent. Under oath He affirms that He is the Christ and declares the Son of Man’s coming, and the council condemns Him to death and abuses Him.</p>
+<h2 id="matthew-266975-peter-denies-jesus-three-times">Matthew 26:69–75 — Peter Denies Jesus Three Times</h2>
+<p>In the high priest’s courtyard Peter denies knowing Jesus three times, the last time with cursing and swearing. When the rooster crows, he remembers Jesus’ word and weeps bitterly.</p></div></article><article class="mtb-overview-card mtb-overview-card-matters"><h2 class="mtb-overview-card-header">Why This Chapter Matters</h2><div class="mtb-overview-card-body"><p>Matthew 26 shows that Jesus’ death was not an accident or a defeat. He announces it, interprets it at the table, chooses it in prayer, and surrenders to it with angels at His command. His blood is covenant blood shed for forgiveness, and the Lord’s Supper continues to offer His people real communion with Him through the Spirit, never repeating His once-for-all sacrifice.</p>
+<p>The chapter also shows the King’s faithfulness beside His followers’ failure. Judas sells Him, the disciples sleep and scatter, and Peter denies Him. Yet Jesus has already promised to meet them in Galilee after He rises.</p></div></article><article class="mtb-overview-card mtb-overview-card-themes"><h2 class="mtb-overview-card-header">Key Themes to Watch For</h2><div class="mtb-overview-card-body"><p><strong>The appointed hour.</strong> Jesus knows and accepts the time of His death (26:2, 18, 45).</p>
+<p><strong>Costly devotion.</strong> The woman’s anointing prepares Him for burial (26:10–13).</p>
+<p><strong>The new covenant.</strong> The bread and cup point to His body and covenant blood (26:26–28).</p>
+<p><strong>Surrendered obedience.</strong> In Gethsemane the Son yields to the Father’s will (26:39, 42).</p>
+<p><strong>Faithfulness and failure.</strong> Jesus confesses the truth while Peter denies Him (26:63–75).</p></div></article><article class="mtb-overview-card mtb-overview-card-words"><h2 class="mtb-overview-card-header">Key Words &amp; Concepts</h2><div class="mtb-overview-card-body"><p><strong>Passover (26:2).</strong> The feast remembering Israel’s rescue from Egypt by the blood of the lamb. Jesus eats it with the Twelve on Wednesday evening as Nisan 14 begins, the day of His crucifixion.</p>
+<p><strong>Thirty pieces of silver (26:15).</strong> The price the leaders pay Judas, recalling Zechariah 11:12, where the shepherd is valued at that amount.</p>
+<p><strong>Covenant (26:28).</strong> A binding relationship God establishes. Jesus’ blood brings in the new covenant promised in Jeremiah 31:31–34, with forgiveness of sins.</p>
+<p><strong>Gethsemane (26:36).</strong> A garden on the Mount of Olives. The name means oil press.</p>
+<p><strong>Cup (26:39).</strong> The suffering and judgment Jesus is about to bear in His death.</p>
+<p><strong>Right hand of the Power (26:64).</strong> The place of authority beside God, drawn from Psalm 110:1 and joined to Daniel 7:13.</p></div></article></div></details></div>
+</section>

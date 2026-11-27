@@ -1,0 +1,86 @@
+<section class="mtb-doc mtb-doc--read" data-doc-type="chapter-overview" data-mtb-status="complete">
+<style>
+.mtb-print-controls{display:flex;justify-content:flex-end;gap:8px;margin:0 0 14px;padding:0 4px}
+.mtb-print-button{appearance:none;border:1px solid #b9c8d5;border-radius:8px;background:#fff;padding:9px 14px;color:#173a5e;font:700 14px Arial,Helvetica,sans-serif;cursor:pointer}
+.mtb-print-button:hover{background:#f2f6f9}
+@media print{
+  @page{size:auto;margin:.45in}
+  html,body{background:#fff!important;color:#000!important}
+  .mtb-print-controls,.mtb-study-controls,.mtb-reflections-controls{display:none!important}
+  .mtb-doc{display:block!important;width:100%!important;max-width:none!important;margin:0!important;padding:0!important}
+  .mtb-overview-hero,.mtb-study-hero,.mtb-reflections-hero,.mtb-culture-hero{box-shadow:none!important;background:#fff!important;border-color:#777!important}
+  .mtb-overview-grid,.mtb-reflections-grid,.mtb-culture-grid,.mtb-study-verse-grid{display:block!important}
+  .mtb-overview-card,.mtb-reflections-card,.mtb-culture-card,.mtb-study-verse,.mtb-study-verse-panel,.mtb-intro-card{
+    display:block!important;width:100%!important;max-width:none!important;height:auto!important;margin:0 0 12pt!important;
+    break-inside:avoid;page-break-inside:avoid;box-shadow:none!important;background:#fff!important;color:#000!important
+  }
+  details.mtb-study-verse,details.mtb-reflection-section{display:block!important;overflow:visible!important}
+  details.mtb-study-verse>summary,details.mtb-reflection-section>summary{display:flex!important;background:#fff!important;color:#000!important;border-bottom:1px solid #777!important}
+  details.mtb-study-verse>summary:after,details.mtb-reflection-section>summary:after{display:none!important}
+  details.mtb-study-verse>.mtb-study-verse-body,details.mtb-reflection-section>.mtb-reflection-section-body{display:block!important}
+  h1,h2,h3,h4{break-after:avoid;page-break-after:avoid;color:#000!important}
+  p,li{orphans:3;widows:3}
+  a{color:#000!important;text-decoration:none!important}
+  a[href]::after{content:none!important}
+}
+</style>
+<div class="mtb-print-controls"><button type="button" class="mtb-print-button" onclick="(function(button){var doc=button.closest('.mtb-doc')||document;var panels=Array.prototype.slice.call(doc.querySelectorAll('details'));panels.forEach(function(panel){panel.open=true;});window.print();})(this)">&#128438; Print This Page</button></div>
+<style>
+.mtb-chapter-overview-dashboard{--mtb-navy:#173a5e;--mtb-navy-2:#2b587f;--mtb-gold:#b7832f;--mtb-blue-soft:#eef4f9;--mtb-border:#d7e0e8;--mtb-text:#1d2935;width:100%;max-width:1600px;margin:0 auto;padding:2px 4px 30px;color:var(--mtb-text);font-family:Arial,Helvetica,sans-serif}.mtb-chapter-overview-dashboard *{box-sizing:border-box}
+.mtb-overview-glance{margin:0 0 18px;overflow:hidden;border:1px solid #cbd8e3;border-radius:14px;background:linear-gradient(135deg,#f7fafc 0%,#e8f0f7 100%);box-shadow:0 4px 15px rgba(28,48,66,.045)}
+.mtb-overview-glance-head{display:flex;align-items:center;justify-content:space-between;gap:20px;padding:18px 24px 13px;border-bottom:1px solid rgba(23,58,94,.12);background:var(--mtb-blue-soft)}
+.mtb-overview-eyebrow{margin:0 0 4px;color:var(--mtb-gold);font-size:.78rem;font-weight:800;letter-spacing:.13em;text-transform:uppercase}.mtb-overview-title{margin:0;color:var(--mtb-navy);font-size:clamp(1.4rem,2.6vw,1.95rem);line-height:1.1}.mtb-overview-badge{flex:0 0 auto;padding:9px 15px;border:1px solid rgba(23,58,94,.18);border-radius:999px;background:#fff;color:var(--mtb-navy);font-weight:800}
+.mtb-overview-glance-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:0;padding:8px 22px 13px;background:#fff}.mtb-overview-glance-item{min-width:0;padding:10px 12px;font-size:1rem;line-height:1.42}.mtb-overview-glance-item:nth-child(even){border-left:1px solid rgba(23,58,94,.11)}.mtb-overview-glance-label{display:inline;color:var(--mtb-navy);font-weight:800}.mtb-overview-glance-content{display:inline}.mtb-overview-glance-content p{display:inline;margin:0}.mtb-overview-glance-structure .mtb-overview-glance-content{display:block;margin-top:4px}.mtb-overview-glance-structure ul,.mtb-overview-glance-structure ol{margin:4px 0 0;padding-left:1.25em}.mtb-overview-glance-structure li{margin:0 0 2px}.mtb-overview-glance-structure li p{display:block;margin:0}.mtb-overview-glance-keyverse .mtb-overview-glance-content{font-style:italic}
+.mtb-overview-deeper{margin:0}.mtb-overview-deeper>summary{display:flex;align-items:center;justify-content:space-between;gap:16px;cursor:pointer;list-style:none;padding:14px 18px;border:1px solid #cbd8e3;border-radius:10px;background:#f4f7fa;color:var(--mtb-navy);font-size:1rem;font-weight:800;user-select:none}.mtb-overview-deeper>summary::-webkit-details-marker{display:none}.mtb-overview-deeper>summary::after{content:'+';font-size:1.35rem;line-height:1}.mtb-overview-deeper[open]>summary{margin-bottom:16px;border-color:#b8cad9;background:#eef4f9}.mtb-overview-deeper[open]>summary::after{content:'−'}
+.mtb-overview-grid{display:grid;grid-template-columns:repeat(12,minmax(0,1fr));gap:16px;align-items:stretch}.mtb-overview-card{min-width:0;overflow:hidden;border:1px solid var(--mtb-border);border-top:4px solid var(--mtb-navy-2);border-radius:12px;background:#fff;box-shadow:0 4px 15px rgba(28,48,66,.055)}.mtb-overview-card-heart{grid-column:1/-1}.mtb-overview-card-sections{grid-column:1/span 6}.mtb-overview-card-matters{grid-column:7/span 6}.mtb-overview-card-themes{grid-column:1/span 6}.mtb-overview-card-words{grid-column:7/span 6}.mtb-overview-card-psalm-author{grid-column:1/span 4}.mtb-overview-card-psalm-occasion{grid-column:5/span 4}.mtb-overview-card-psalm-kind{grid-column:9/span 4}.mtb-overview-card-header{margin:0;padding:12px 16px 10px;border-bottom:1px solid #e5ebf0;background:var(--mtb-blue-soft);color:var(--mtb-navy);font-size:.96rem;font-weight:800}.mtb-overview-card-body{padding:16px 18px 18px;font-size:1rem;line-height:1.48;overflow-wrap:anywhere}.mtb-overview-card-heart .mtb-overview-card-body{font-size:1.04rem}.mtb-overview-card-body p{margin:0 0 .72em}.mtb-overview-card-body p:last-child{margin-bottom:0}.mtb-overview-card-body ul,.mtb-overview-card-body ol{margin:0;padding-left:1.25em}.mtb-overview-card-body li{margin:0 0 .35em}
+@media(max-width:980px){.mtb-overview-card{grid-column:span 6!important}.mtb-overview-card-heart{grid-column:1/-1!important}.mtb-overview-glance-grid{grid-template-columns:1fr}.mtb-overview-glance-item:nth-child(even){border-left:0}.mtb-overview-glance-item+.mtb-overview-glance-item{border-top:1px solid rgba(23,58,94,.09)}}
+@media(max-width:760px){.mtb-overview-grid{grid-template-columns:1fr}.mtb-overview-card{grid-column:1/-1!important}.mtb-overview-glance-head{align-items:flex-start;flex-direction:column;padding:17px 18px 12px}.mtb-overview-glance-grid{padding:6px 10px 12px}.mtb-overview-glance-item{padding:9px 8px}.mtb-overview-deeper>summary{padding:13px 15px}}
+@media print{.mtb-overview-deeper>summary{display:none!important}.mtb-overview-deeper:not([open])>.mtb-overview-grid{display:grid!important}}
+</style><div class="mtb-chapter-overview-dashboard"><section class="mtb-overview-glance" aria-labelledby="mtb-at-a-glance-title"><div class="mtb-overview-glance-head"><div><p class="mtb-overview-eyebrow">Chapter Overview</p><h1 id="mtb-at-a-glance-title" class="mtb-overview-title">At a Glance</h1></div><div class="mtb-overview-badge">Chapter 9</div></div><div class="mtb-overview-glance-grid"><div class="mtb-overview-glance-item"><span class="mtb-overview-glance-label">Main Idea: </span><div class="mtb-overview-glance-content"><p>Jesus shows His authority to forgive sins, welcomes sinners to His table, brings the joy and newness of the Bridegroom, restores life, health, and sight, and, moved with compassion for the shepherdless crowds, tells His disciples to pray for laborers for the harvest.</p></div></div><div class="mtb-overview-glance-item"><span class="mtb-overview-glance-label">Setting: </span><div class="mtb-overview-glance-content"><p>Matthew 9 completes the account of Jesus’ mighty works begun in chapter 8. He returns to Capernaum, “His own city” (9:1), where opposition from religious leaders begins to grow.</p></div></div><div class="mtb-overview-glance-item mtb-overview-glance-structure"><span class="mtb-overview-glance-label">Chapter Outline: </span><div class="mtb-overview-glance-content"><ul>
+<li><div data-custom-style="List Bullet">
+<p>Matthew 9:1–8 — Jesus Forgives and Heals a Paralytic</p>
+</div></li>
+<li><div data-custom-style="List Bullet">
+<p>Matthew 9:9–13 — Jesus Calls Matthew and Eats with Sinners</p>
+</div></li>
+<li><div data-custom-style="List Bullet">
+<p>Matthew 9:14–17 — The Bridegroom, New Cloth, and New Wine</p>
+</div></li>
+<li><div data-custom-style="List Bullet">
+<p>Matthew 9:18–26 — A Ruler’s Daughter Raised and a Woman Healed</p>
+</div></li>
+<li><div data-custom-style="List Bullet">
+<p>Matthew 9:27–31 — Two Blind Men Receive Their Sight</p>
+</div></li>
+<li><div data-custom-style="List Bullet">
+<p>Matthew 9:32–34 — A Mute Man Delivered and Two Responses</p>
+</div></li>
+<li><div data-custom-style="List Bullet">
+<p>Matthew 9:35–38 — Compassion for the Multitudes and Prayer for Laborers</p>
+</div></li>
+</ul></div></div><div class="mtb-overview-glance-item mtb-overview-glance-keyverse"><span class="mtb-overview-glance-label">Key Verse: </span><div class="mtb-overview-glance-content"><p>“But go and learn what this means: ‘I desire mercy and not sacrifice.’ For I did not come to call the righteous, but sinners, to repentance.’” (Matthew 9:13)</p></div></div></div></section><details class="mtb-overview-deeper"><summary>Go Deeper</summary><div class="mtb-overview-grid"><article class="mtb-overview-card mtb-overview-card-heart"><h2 class="mtb-overview-card-header">The Heart of the Chapter</h2><div class="mtb-overview-card-body"><p>The chapter opens with a paralyzed man carried by friends. Jesus sees their faith, the paralytic’s together with his friends’, and first says, “Son, be of good cheer; your sins are forgiven you” (9:2). When scribes call this blasphemy, Jesus heals the man so they may know that the Son of Man has authority on earth to forgive sins. Then He calls Matthew from the tax office and eats with tax collectors and sinners. To the Pharisees He quotes Hosea: “I desire mercy and not sacrifice” (9:13). The Physician has come for the sick, calling sinners to repentance.</p>
+<p>Jesus’ presence changes everything. Wedding guests do not fast while the Bridegroom is with them, and His new work cannot be patched onto old religious habits. It needs new wineskins. The restorations that follow show the same life: a ruler’s daughter raised, a woman healed after twelve years, two blind men given sight, and a mute man set free. Some marvel, while the Pharisees accuse Him of working by the ruler of demons. The chapter ends with Jesus Himself, seeing weary crowds like sheep without a shepherd, moved with compassion, and asking His disciples to pray for workers.</p></div></article><article class="mtb-overview-card mtb-overview-card-sections"><h2 class="mtb-overview-card-header">Chapter Sections</h2><div class="mtb-overview-card-body"><h2 id="matthew-918-jesus-forgives-and-heals-a-paralytic">Matthew 9:1–8 — Jesus Forgives and Heals a Paralytic</h2>
+<p>Jesus tells a paralyzed man that his sins are forgiven, and when scribes accuse Him of blasphemy, He heals the man to show His authority to forgive. The crowds glorify God for giving such authority.</p>
+<h2 id="matthew-9913-jesus-calls-matthew-and-eats-with-sinners">Matthew 9:9–13 — Jesus Calls Matthew and Eats with Sinners</h2>
+<p>Jesus calls Matthew the tax collector and eats with tax collectors and sinners. Answering the Pharisees, He says that the sick need a physician and that God desires mercy, not sacrifice.</p>
+<h2 id="matthew-91417-the-bridegroom-new-cloth-and-new-wine">Matthew 9:14–17 — The Bridegroom, New Cloth, and New Wine</h2>
+<p>Asked why His disciples do not fast, Jesus says the friends of the Bridegroom cannot mourn while He is with them, though days of mourning will come. New cloth and new wine show that His new work requires new wineskins.</p>
+<h2 id="matthew-91826-a-rulers-daughter-raised-and-a-woman-healed">Matthew 9:18–26 — A Ruler’s Daughter Raised and a Woman Healed</h2>
+<p>A ruler asks Jesus to raise his daughter, and on the way a woman with a twelve-year flow of blood touches His garment in faith. Jesus tells her that her faith has made her well, then takes the girl by the hand and she rises.</p>
+<h2 id="matthew-92731-two-blind-men-receive-their-sight">Matthew 9:27–31 — Two Blind Men Receive Their Sight</h2>
+<p>Two blind men cry out to the Son of David for mercy. Jesus asks whether they believe He can do this, touches their eyes, and they see.</p>
+<h2 id="matthew-93234-a-mute-man-delivered-and-two-responses">Matthew 9:32–34 — A Mute Man Delivered and Two Responses</h2>
+<p>Jesus casts a demon out of a mute man, and he speaks. The crowds marvel, but the Pharisees say Jesus casts out demons by the ruler of the demons.</p>
+<h2 id="matthew-93538-compassion-for-the-multitudes-and-prayer-for-laborers">Matthew 9:35–38 — Compassion for the Multitudes and Prayer for Laborers</h2>
+<p>Jesus teaches, preaches, and heals in all the cities and villages. Seeing the weary crowds like sheep without a shepherd, He is moved with compassion and tells His disciples to pray the Lord of the harvest to send out laborers.</p></div></article><article class="mtb-overview-card mtb-overview-card-matters"><h2 class="mtb-overview-card-header">Why This Chapter Matters</h2><div class="mtb-overview-card-body"><p>Matthew 9 shows that Jesus’ deepest work is forgiveness. The healing of the paralytic makes visible an authority that belongs to God alone, and the table with sinners shows that His mercy reaches people others had written off. Religious knowledge can exist without mercy, and Jesus sends the Pharisees back to Hosea to learn it.</p>
+<p>The chapter also shows where mission begins. Before Jesus sends the Twelve in chapter 10, He looks at the crowds with compassion and tells His disciples to pray. The work of the harvest grows out of His care for people and depends on His sending, not on human plans.</p></div></article><article class="mtb-overview-card mtb-overview-card-themes"><h2 class="mtb-overview-card-header">Key Themes to Watch For</h2><div class="mtb-overview-card-body"><p><strong>Authority to forgive.</strong> The Son of Man forgives sins and proves it by healing (9:2–8).</p>
+<p><strong>Mercy toward sinners.</strong> Jesus calls Matthew and eats with sinners, quoting Hosea 6:6 (9:9–13).</p>
+<p><strong>The Bridegroom’s newness.</strong> His presence brings joy and calls for new wineskins (9:15–17).</p>
+<p><strong>Faith that reaches Him.</strong> The paralytic and his friends, the ruler, the woman, and the blind men bring their need to Jesus (9:2, 18, 21, 28).</p>
+<p><strong>Compassion and harvest.</strong> Jesus’ compassion leads to prayer for laborers (9:36–38).</p></div></article><article class="mtb-overview-card mtb-overview-card-words"><h2 class="mtb-overview-card-header">Key Words &amp; Concepts</h2><div class="mtb-overview-card-body"><p><strong>Blasphemy (9:3).</strong> Speaking against God or claiming what belongs to Him. The scribes understand that forgiving sins is God’s right.</p>
+<p><strong>Tax collectors (9:9–10).</strong> Matthew sat at a tax office collecting taxes. People in this occupation were often dishonest and were widely despised as sinners.</p>
+<p><strong>Bridegroom (9:15).</strong> Jesus’ picture of Himself, recalling God as Israel’s husband (Isaiah 62:5). His presence is a time of joy.</p>
+<p><strong>New wine and new wineskins (9:17).</strong> Fresh wine expanded as it fermented and needed flexible skins. Jesus’ new work calls for hearts and fellowships that are soft and open, not hardened by religious routine.</p>
+<p><strong>Son of David (9:27).</strong> A title for the promised Messiah from David’s line. The blind men call Jesus by it as they ask for mercy.</p>
+<p><strong>Moved with compassion (9:36).</strong> A deep inward stirring of pity that leads to action. It is what moves Jesus toward the crowds.</p></div></article></div></details></div>
+</section>

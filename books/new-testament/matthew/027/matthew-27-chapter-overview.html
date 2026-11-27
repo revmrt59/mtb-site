@@ -1,0 +1,101 @@
+<section class="mtb-doc mtb-doc--read" data-doc-type="chapter-overview" data-mtb-status="complete">
+<style>
+.mtb-print-controls{display:flex;justify-content:flex-end;gap:8px;margin:0 0 14px;padding:0 4px}
+.mtb-print-button{appearance:none;border:1px solid #b9c8d5;border-radius:8px;background:#fff;padding:9px 14px;color:#173a5e;font:700 14px Arial,Helvetica,sans-serif;cursor:pointer}
+.mtb-print-button:hover{background:#f2f6f9}
+@media print{
+  @page{size:auto;margin:.45in}
+  html,body{background:#fff!important;color:#000!important}
+  .mtb-print-controls,.mtb-study-controls,.mtb-reflections-controls{display:none!important}
+  .mtb-doc{display:block!important;width:100%!important;max-width:none!important;margin:0!important;padding:0!important}
+  .mtb-overview-hero,.mtb-study-hero,.mtb-reflections-hero,.mtb-culture-hero{box-shadow:none!important;background:#fff!important;border-color:#777!important}
+  .mtb-overview-grid,.mtb-reflections-grid,.mtb-culture-grid,.mtb-study-verse-grid{display:block!important}
+  .mtb-overview-card,.mtb-reflections-card,.mtb-culture-card,.mtb-study-verse,.mtb-study-verse-panel,.mtb-intro-card{
+    display:block!important;width:100%!important;max-width:none!important;height:auto!important;margin:0 0 12pt!important;
+    break-inside:avoid;page-break-inside:avoid;box-shadow:none!important;background:#fff!important;color:#000!important
+  }
+  details.mtb-study-verse,details.mtb-reflection-section{display:block!important;overflow:visible!important}
+  details.mtb-study-verse>summary,details.mtb-reflection-section>summary{display:flex!important;background:#fff!important;color:#000!important;border-bottom:1px solid #777!important}
+  details.mtb-study-verse>summary:after,details.mtb-reflection-section>summary:after{display:none!important}
+  details.mtb-study-verse>.mtb-study-verse-body,details.mtb-reflection-section>.mtb-reflection-section-body{display:block!important}
+  h1,h2,h3,h4{break-after:avoid;page-break-after:avoid;color:#000!important}
+  p,li{orphans:3;widows:3}
+  a{color:#000!important;text-decoration:none!important}
+  a[href]::after{content:none!important}
+}
+</style>
+<div class="mtb-print-controls"><button type="button" class="mtb-print-button" onclick="(function(button){var doc=button.closest('.mtb-doc')||document;var panels=Array.prototype.slice.call(doc.querySelectorAll('details'));panels.forEach(function(panel){panel.open=true;});window.print();})(this)">&#128438; Print This Page</button></div>
+<style>
+.mtb-chapter-overview-dashboard{--mtb-navy:#173a5e;--mtb-navy-2:#2b587f;--mtb-gold:#b7832f;--mtb-blue-soft:#eef4f9;--mtb-border:#d7e0e8;--mtb-text:#1d2935;width:100%;max-width:1600px;margin:0 auto;padding:2px 4px 30px;color:var(--mtb-text);font-family:Arial,Helvetica,sans-serif}.mtb-chapter-overview-dashboard *{box-sizing:border-box}
+.mtb-overview-glance{margin:0 0 18px;overflow:hidden;border:1px solid #cbd8e3;border-radius:14px;background:linear-gradient(135deg,#f7fafc 0%,#e8f0f7 100%);box-shadow:0 4px 15px rgba(28,48,66,.045)}
+.mtb-overview-glance-head{display:flex;align-items:center;justify-content:space-between;gap:20px;padding:18px 24px 13px;border-bottom:1px solid rgba(23,58,94,.12);background:var(--mtb-blue-soft)}
+.mtb-overview-eyebrow{margin:0 0 4px;color:var(--mtb-gold);font-size:.78rem;font-weight:800;letter-spacing:.13em;text-transform:uppercase}.mtb-overview-title{margin:0;color:var(--mtb-navy);font-size:clamp(1.4rem,2.6vw,1.95rem);line-height:1.1}.mtb-overview-badge{flex:0 0 auto;padding:9px 15px;border:1px solid rgba(23,58,94,.18);border-radius:999px;background:#fff;color:var(--mtb-navy);font-weight:800}
+.mtb-overview-glance-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:0;padding:8px 22px 13px;background:#fff}.mtb-overview-glance-item{min-width:0;padding:10px 12px;font-size:1rem;line-height:1.42}.mtb-overview-glance-item:nth-child(even){border-left:1px solid rgba(23,58,94,.11)}.mtb-overview-glance-label{display:inline;color:var(--mtb-navy);font-weight:800}.mtb-overview-glance-content{display:inline}.mtb-overview-glance-content p{display:inline;margin:0}.mtb-overview-glance-structure .mtb-overview-glance-content{display:block;margin-top:4px}.mtb-overview-glance-structure ul,.mtb-overview-glance-structure ol{margin:4px 0 0;padding-left:1.25em}.mtb-overview-glance-structure li{margin:0 0 2px}.mtb-overview-glance-structure li p{display:block;margin:0}.mtb-overview-glance-keyverse .mtb-overview-glance-content{font-style:italic}
+.mtb-overview-deeper{margin:0}.mtb-overview-deeper>summary{display:flex;align-items:center;justify-content:space-between;gap:16px;cursor:pointer;list-style:none;padding:14px 18px;border:1px solid #cbd8e3;border-radius:10px;background:#f4f7fa;color:var(--mtb-navy);font-size:1rem;font-weight:800;user-select:none}.mtb-overview-deeper>summary::-webkit-details-marker{display:none}.mtb-overview-deeper>summary::after{content:'+';font-size:1.35rem;line-height:1}.mtb-overview-deeper[open]>summary{margin-bottom:16px;border-color:#b8cad9;background:#eef4f9}.mtb-overview-deeper[open]>summary::after{content:'−'}
+.mtb-overview-grid{display:grid;grid-template-columns:repeat(12,minmax(0,1fr));gap:16px;align-items:stretch}.mtb-overview-card{min-width:0;overflow:hidden;border:1px solid var(--mtb-border);border-top:4px solid var(--mtb-navy-2);border-radius:12px;background:#fff;box-shadow:0 4px 15px rgba(28,48,66,.055)}.mtb-overview-card-heart{grid-column:1/-1}.mtb-overview-card-sections{grid-column:1/span 6}.mtb-overview-card-matters{grid-column:7/span 6}.mtb-overview-card-themes{grid-column:1/span 6}.mtb-overview-card-words{grid-column:7/span 6}.mtb-overview-card-psalm-author{grid-column:1/span 4}.mtb-overview-card-psalm-occasion{grid-column:5/span 4}.mtb-overview-card-psalm-kind{grid-column:9/span 4}.mtb-overview-card-header{margin:0;padding:12px 16px 10px;border-bottom:1px solid #e5ebf0;background:var(--mtb-blue-soft);color:var(--mtb-navy);font-size:.96rem;font-weight:800}.mtb-overview-card-body{padding:16px 18px 18px;font-size:1rem;line-height:1.48;overflow-wrap:anywhere}.mtb-overview-card-heart .mtb-overview-card-body{font-size:1.04rem}.mtb-overview-card-body p{margin:0 0 .72em}.mtb-overview-card-body p:last-child{margin-bottom:0}.mtb-overview-card-body ul,.mtb-overview-card-body ol{margin:0;padding-left:1.25em}.mtb-overview-card-body li{margin:0 0 .35em}
+@media(max-width:980px){.mtb-overview-card{grid-column:span 6!important}.mtb-overview-card-heart{grid-column:1/-1!important}.mtb-overview-glance-grid{grid-template-columns:1fr}.mtb-overview-glance-item:nth-child(even){border-left:0}.mtb-overview-glance-item+.mtb-overview-glance-item{border-top:1px solid rgba(23,58,94,.09)}}
+@media(max-width:760px){.mtb-overview-grid{grid-template-columns:1fr}.mtb-overview-card{grid-column:1/-1!important}.mtb-overview-glance-head{align-items:flex-start;flex-direction:column;padding:17px 18px 12px}.mtb-overview-glance-grid{padding:6px 10px 12px}.mtb-overview-glance-item{padding:9px 8px}.mtb-overview-deeper>summary{padding:13px 15px}}
+@media print{.mtb-overview-deeper>summary{display:none!important}.mtb-overview-deeper:not([open])>.mtb-overview-grid{display:grid!important}}
+</style><div class="mtb-chapter-overview-dashboard"><section class="mtb-overview-glance" aria-labelledby="mtb-at-a-glance-title"><div class="mtb-overview-glance-head"><div><p class="mtb-overview-eyebrow">Chapter Overview</p><h1 id="mtb-at-a-glance-title" class="mtb-overview-title">At a Glance</h1></div><div class="mtb-overview-badge">Chapter 27</div></div><div class="mtb-overview-glance-grid"><div class="mtb-overview-glance-item"><span class="mtb-overview-glance-label">Main Idea: </span><div class="mtb-overview-glance-content"><p>Delivered to Pilate, the innocent King is condemned while Barabbas goes free; He is then mocked and crucified, and He dies crying out the words of Psalm 22, while signs, a centurion’s confession, faithful women, and a sealed tomb surround His death and burial.</p></div></div><div class="mtb-overview-glance-item"><span class="mtb-overview-glance-label">Setting: </span><div class="mtb-overview-glance-content"><p>Matthew 27 continues the final movement from the morning after Jesus’ trial before the council. The events take place in Jerusalem and at Golgotha outside the city.</p></div></div><div class="mtb-overview-glance-item mtb-overview-glance-structure"><span class="mtb-overview-glance-label">Chapter Outline: </span><div class="mtb-overview-glance-content"><ul>
+<li><div data-custom-style="List Bullet">
+<p>Matthew 27:1–2 — Jesus Delivered to Pilate</p>
+</div></li>
+<li><div data-custom-style="List Bullet">
+<p>Matthew 27:3–10 — Judas’ Remorse and the Potter’s Field</p>
+</div></li>
+<li><div data-custom-style="List Bullet">
+<p>Matthew 27:11–14 — Jesus Questioned by Pilate</p>
+</div></li>
+<li><div data-custom-style="List Bullet">
+<p>Matthew 27:15–26 — Barabbas Released and Jesus Condemned</p>
+</div></li>
+<li><div data-custom-style="List Bullet">
+<p>Matthew 27:27–31 — The Soldiers Mock the King</p>
+</div></li>
+<li><div data-custom-style="List Bullet">
+<p>Matthew 27:32–44 — The Crucifixion</p>
+</div></li>
+<li><div data-custom-style="List Bullet">
+<p>Matthew 27:45–50 — The Death of Jesus</p>
+</div></li>
+<li><div data-custom-style="List Bullet">
+<p>Matthew 27:51–56 — Signs at His Death and the Centurion’s Confession</p>
+</div></li>
+<li><div data-custom-style="List Bullet">
+<p>Matthew 27:57–61 — The Burial of Jesus</p>
+</div></li>
+<li><div data-custom-style="List Bullet">
+<p>Matthew 27:62–66 — The Tomb Sealed and Guarded</p>
+</div></li>
+</ul></div></div><div class="mtb-overview-glance-item mtb-overview-glance-keyverse"><span class="mtb-overview-glance-label">Key Verse: </span><div class="mtb-overview-glance-content"><p>“So when the centurion and those with him, who were guarding Jesus, saw the earthquake and the things that had happened, they feared greatly, saying, ‘Truly this was the Son of God!’” (Matthew 27:54)</p></div></div></div></section><details class="mtb-overview-deeper"><summary>Go Deeper</summary><div class="mtb-overview-grid"><article class="mtb-overview-card mtb-overview-card-heart"><h2 class="mtb-overview-card-header">The Heart of the Chapter</h2><div class="mtb-overview-card-body"><p>Everyone in this chapter is making a choice about Jesus. Judas confesses that he has betrayed innocent blood and dies in despair. Pilate finds no reason to condemn Him, yet he gives in to the crowd and washes his hands. The chief priests persuade the people to ask for Barabbas. Soldiers dress Jesus in a scarlet robe and a crown of thorns and kneel in mockery. On the cross the charge reads, “THIS IS JESUS THE KING OF THE JEWS” (27:37), and passersby, priests, and robbers taunt Him to save Himself.</p>
+<p>Darkness covers the land, and Jesus cries, “My God, My God, why have You forsaken Me?” (27:46). The words of Psalm 22 express real anguish as He bears the judgment of sinners, and they still address His God in trust, opening a psalm that ends in vindication and the worship of the nations. When He dies, the temple veil tears from top to bottom, the earth shakes, and tombs are opened. A Gentile centurion confesses, “Truly this was the Son of God!” (27:54). Women who followed from Galilee watch, Joseph of Arimathea lays the body in his own new tomb, and the leaders seal the stone and set a guard.</p></div></article><article class="mtb-overview-card mtb-overview-card-sections"><h2 class="mtb-overview-card-header">Chapter Sections</h2><div class="mtb-overview-card-body"><h2 id="matthew-2712-jesus-delivered-to-pilate">Matthew 27:1–2 — Jesus Delivered to Pilate</h2>
+<p>In the morning the chief priests and elders bind Jesus and deliver Him to Pontius Pilate the governor.</p>
+<h2 id="matthew-27310-judas-remorse-and-the-potters-field">Matthew 27:3–10 — Judas’ Remorse and the Potter’s Field</h2>
+<p>Seeing Jesus condemned, Judas is remorseful, returns the silver, confesses that he has betrayed innocent blood, and hangs himself. The priests buy the potter’s field with the money, and Matthew sees the prophetic word fulfilled.</p>
+<h2 id="matthew-271114-jesus-questioned-by-pilate">Matthew 27:11–14 — Jesus Questioned by Pilate</h2>
+<p>Pilate asks Jesus whether He is the King of the Jews, and Jesus answers, “It is as you say” (27:11). To the leaders’ accusations He gives no answer, and the governor marvels.</p>
+<h2 id="matthew-271526-barabbas-released-and-jesus-condemned">Matthew 27:15–26 — Barabbas Released and Jesus Condemned</h2>
+<p>Pilate offers to release Jesus, but the chief priests and elders persuade the crowd to ask for Barabbas. Though Pilate’s wife warns him and he washes his hands, he releases Barabbas and hands Jesus over to be scourged and crucified.</p>
+<h2 id="matthew-272731-the-soldiers-mock-the-king">Matthew 27:27–31 — The Soldiers Mock the King</h2>
+<p>The soldiers dress Jesus in a scarlet robe and a crown of thorns, kneel before Him, mock Him as King of the Jews, and lead Him away to be crucified.</p>
+<h2 id="matthew-273244-the-crucifixion">Matthew 27:32–44 — The Crucifixion</h2>
+<p>Simon of Cyrene carries Jesus’ cross to Golgotha, where Jesus is crucified between two robbers under the charge, “This is Jesus the King of the Jews.” Passersby, chief priests, and the robbers mock Him, daring Him to save Himself.</p>
+<h2 id="matthew-274550-the-death-of-jesus">Matthew 27:45–50 — The Death of Jesus</h2>
+<p>After three hours of darkness, Jesus cries out the opening words of Psalm 22. He cries out again with a loud voice and yields up His spirit.</p>
+<h2 id="matthew-275156-signs-at-his-death-and-the-centurions-confession">Matthew 27:51–56 — Signs at His Death and the Centurion’s Confession</h2>
+<p>The temple veil is torn from top to bottom, the earth quakes, and many saints come out of their tombs after His resurrection. The centurion and those with him confess Jesus as the Son of God, while women from Galilee watch from afar.</p>
+<h2 id="matthew-275761-the-burial-of-jesus">Matthew 27:57–61 — The Burial of Jesus</h2>
+<p>Joseph of Arimathea, a rich disciple, asks Pilate for Jesus’ body, wraps it in clean linen, and lays it in his own new tomb. Mary Magdalene and the other Mary sit opposite the tomb.</p>
+<h2 id="matthew-276266-the-tomb-sealed-and-guarded">Matthew 27:62–66 — The Tomb Sealed and Guarded</h2>
+<p>The chief priests and Pharisees remember Jesus’ promise to rise after three days and ask Pilate to secure the tomb. They seal the stone and set a guard.</p></div></article><article class="mtb-overview-card mtb-overview-card-matters"><h2 class="mtb-overview-card-header">Why This Chapter Matters</h2><div class="mtb-overview-card-body"><p>Matthew 27 shows the cost of salvation. The innocent One is condemned so that the guilty go free, and He bears real judgment and forsakenness for sinners while still trusting His Father. Even then the Son remains fully divine in the undivided life of Father, Son, and Spirit. Matthew names responsibility as it falls, on Judas, the chief priests and elders, Pilate, and the soldiers, without turning the crowd’s cry into a verdict on a whole people.</p>
+<p>The chapter also shows God’s answer already breaking in. The torn veil signals that the way into God’s presence is opened through Christ’s death (Hebrews 10:19–22). A Gentile soldier confesses the Son of God, and faithful women keep watch. The sealed tomb and the guard only make the coming resurrection more certain.</p></div></article><article class="mtb-overview-card mtb-overview-card-themes"><h2 class="mtb-overview-card-header">Key Themes to Watch For</h2><div class="mtb-overview-card-body"><p><strong>The innocent King.</strong> Judas, Pilate, and Pilate’s wife all testify to Jesus’ innocence (27:4, 19, 24).</p>
+<p><strong>Mocked royalty.</strong> Robe, crown, reed, and inscription mock the true King (27:28–29, 37).</p>
+<p><strong>Saving others, not Himself.</strong> The taunts reveal the meaning of His death (27:40–43).</p>
+<p><strong>Forsaken for sinners.</strong> Jesus’ cry from Psalm 22 expresses real anguish and trust (27:46).</p>
+<p><strong>God’s signs.</strong> The veil is torn and the earth quakes at His death, and after His resurrection the raised saints appear in the holy city (27:51–53).</p></div></article><article class="mtb-overview-card mtb-overview-card-words"><h2 class="mtb-overview-card-header">Key Words &amp; Concepts</h2><div class="mtb-overview-card-body"><p><strong>Potter’s field (27:7).</strong> Land bought with Judas’ silver as a burial place for strangers. Matthew draws on Jeremiah’s potter and field passages together with Zechariah 11:12–13.</p>
+<p><strong>Barabbas (27:16).</strong> A notorious prisoner released in Jesus’ place.</p>
+<p><strong>Golgotha (27:33).</strong> An Aramaic name meaning Place of a Skull, the site of the crucifixion outside Jerusalem.</p>
+<p><strong>Eli, Eli, lama sabachthani (27:46).</strong> Aramaic for “My God, My God, why have You forsaken Me?” the first line of Psalm 22.</p>
+<p><strong>Veil of the temple (27:51).</strong> The curtain that closed off the Most Holy Place. Its tearing from top to bottom shows God opening the way to His presence.</p>
+<p><strong>Day of Preparation (27:62).</strong> The day before a Sabbath. Jesus is buried that afternoon, before the High Sabbath of Unleavened Bread and the weekly Sabbath that follows it.</p></div></article></div></details></div>
+</section>

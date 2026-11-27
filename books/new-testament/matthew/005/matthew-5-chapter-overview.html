@@ -1,0 +1,96 @@
+<section class="mtb-doc mtb-doc--read" data-doc-type="chapter-overview" data-mtb-status="complete">
+<style>
+.mtb-print-controls{display:flex;justify-content:flex-end;gap:8px;margin:0 0 14px;padding:0 4px}
+.mtb-print-button{appearance:none;border:1px solid #b9c8d5;border-radius:8px;background:#fff;padding:9px 14px;color:#173a5e;font:700 14px Arial,Helvetica,sans-serif;cursor:pointer}
+.mtb-print-button:hover{background:#f2f6f9}
+@media print{
+  @page{size:auto;margin:.45in}
+  html,body{background:#fff!important;color:#000!important}
+  .mtb-print-controls,.mtb-study-controls,.mtb-reflections-controls{display:none!important}
+  .mtb-doc{display:block!important;width:100%!important;max-width:none!important;margin:0!important;padding:0!important}
+  .mtb-overview-hero,.mtb-study-hero,.mtb-reflections-hero,.mtb-culture-hero{box-shadow:none!important;background:#fff!important;border-color:#777!important}
+  .mtb-overview-grid,.mtb-reflections-grid,.mtb-culture-grid,.mtb-study-verse-grid{display:block!important}
+  .mtb-overview-card,.mtb-reflections-card,.mtb-culture-card,.mtb-study-verse,.mtb-study-verse-panel,.mtb-intro-card{
+    display:block!important;width:100%!important;max-width:none!important;height:auto!important;margin:0 0 12pt!important;
+    break-inside:avoid;page-break-inside:avoid;box-shadow:none!important;background:#fff!important;color:#000!important
+  }
+  details.mtb-study-verse,details.mtb-reflection-section{display:block!important;overflow:visible!important}
+  details.mtb-study-verse>summary,details.mtb-reflection-section>summary{display:flex!important;background:#fff!important;color:#000!important;border-bottom:1px solid #777!important}
+  details.mtb-study-verse>summary:after,details.mtb-reflection-section>summary:after{display:none!important}
+  details.mtb-study-verse>.mtb-study-verse-body,details.mtb-reflection-section>.mtb-reflection-section-body{display:block!important}
+  h1,h2,h3,h4{break-after:avoid;page-break-after:avoid;color:#000!important}
+  p,li{orphans:3;widows:3}
+  a{color:#000!important;text-decoration:none!important}
+  a[href]::after{content:none!important}
+}
+</style>
+<div class="mtb-print-controls"><button type="button" class="mtb-print-button" onclick="(function(button){var doc=button.closest('.mtb-doc')||document;var panels=Array.prototype.slice.call(doc.querySelectorAll('details'));panels.forEach(function(panel){panel.open=true;});window.print();})(this)">&#128438; Print This Page</button></div>
+<style>
+.mtb-chapter-overview-dashboard{--mtb-navy:#173a5e;--mtb-navy-2:#2b587f;--mtb-gold:#b7832f;--mtb-blue-soft:#eef4f9;--mtb-border:#d7e0e8;--mtb-text:#1d2935;width:100%;max-width:1600px;margin:0 auto;padding:2px 4px 30px;color:var(--mtb-text);font-family:Arial,Helvetica,sans-serif}.mtb-chapter-overview-dashboard *{box-sizing:border-box}
+.mtb-overview-glance{margin:0 0 18px;overflow:hidden;border:1px solid #cbd8e3;border-radius:14px;background:linear-gradient(135deg,#f7fafc 0%,#e8f0f7 100%);box-shadow:0 4px 15px rgba(28,48,66,.045)}
+.mtb-overview-glance-head{display:flex;align-items:center;justify-content:space-between;gap:20px;padding:18px 24px 13px;border-bottom:1px solid rgba(23,58,94,.12);background:var(--mtb-blue-soft)}
+.mtb-overview-eyebrow{margin:0 0 4px;color:var(--mtb-gold);font-size:.78rem;font-weight:800;letter-spacing:.13em;text-transform:uppercase}.mtb-overview-title{margin:0;color:var(--mtb-navy);font-size:clamp(1.4rem,2.6vw,1.95rem);line-height:1.1}.mtb-overview-badge{flex:0 0 auto;padding:9px 15px;border:1px solid rgba(23,58,94,.18);border-radius:999px;background:#fff;color:var(--mtb-navy);font-weight:800}
+.mtb-overview-glance-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:0;padding:8px 22px 13px;background:#fff}.mtb-overview-glance-item{min-width:0;padding:10px 12px;font-size:1rem;line-height:1.42}.mtb-overview-glance-item:nth-child(even){border-left:1px solid rgba(23,58,94,.11)}.mtb-overview-glance-label{display:inline;color:var(--mtb-navy);font-weight:800}.mtb-overview-glance-content{display:inline}.mtb-overview-glance-content p{display:inline;margin:0}.mtb-overview-glance-structure .mtb-overview-glance-content{display:block;margin-top:4px}.mtb-overview-glance-structure ul,.mtb-overview-glance-structure ol{margin:4px 0 0;padding-left:1.25em}.mtb-overview-glance-structure li{margin:0 0 2px}.mtb-overview-glance-structure li p{display:block;margin:0}.mtb-overview-glance-keyverse .mtb-overview-glance-content{font-style:italic}
+.mtb-overview-deeper{margin:0}.mtb-overview-deeper>summary{display:flex;align-items:center;justify-content:space-between;gap:16px;cursor:pointer;list-style:none;padding:14px 18px;border:1px solid #cbd8e3;border-radius:10px;background:#f4f7fa;color:var(--mtb-navy);font-size:1rem;font-weight:800;user-select:none}.mtb-overview-deeper>summary::-webkit-details-marker{display:none}.mtb-overview-deeper>summary::after{content:'+';font-size:1.35rem;line-height:1}.mtb-overview-deeper[open]>summary{margin-bottom:16px;border-color:#b8cad9;background:#eef4f9}.mtb-overview-deeper[open]>summary::after{content:'−'}
+.mtb-overview-grid{display:grid;grid-template-columns:repeat(12,minmax(0,1fr));gap:16px;align-items:stretch}.mtb-overview-card{min-width:0;overflow:hidden;border:1px solid var(--mtb-border);border-top:4px solid var(--mtb-navy-2);border-radius:12px;background:#fff;box-shadow:0 4px 15px rgba(28,48,66,.055)}.mtb-overview-card-heart{grid-column:1/-1}.mtb-overview-card-sections{grid-column:1/span 6}.mtb-overview-card-matters{grid-column:7/span 6}.mtb-overview-card-themes{grid-column:1/span 6}.mtb-overview-card-words{grid-column:7/span 6}.mtb-overview-card-psalm-author{grid-column:1/span 4}.mtb-overview-card-psalm-occasion{grid-column:5/span 4}.mtb-overview-card-psalm-kind{grid-column:9/span 4}.mtb-overview-card-header{margin:0;padding:12px 16px 10px;border-bottom:1px solid #e5ebf0;background:var(--mtb-blue-soft);color:var(--mtb-navy);font-size:.96rem;font-weight:800}.mtb-overview-card-body{padding:16px 18px 18px;font-size:1rem;line-height:1.48;overflow-wrap:anywhere}.mtb-overview-card-heart .mtb-overview-card-body{font-size:1.04rem}.mtb-overview-card-body p{margin:0 0 .72em}.mtb-overview-card-body p:last-child{margin-bottom:0}.mtb-overview-card-body ul,.mtb-overview-card-body ol{margin:0;padding-left:1.25em}.mtb-overview-card-body li{margin:0 0 .35em}
+@media(max-width:980px){.mtb-overview-card{grid-column:span 6!important}.mtb-overview-card-heart{grid-column:1/-1!important}.mtb-overview-glance-grid{grid-template-columns:1fr}.mtb-overview-glance-item:nth-child(even){border-left:0}.mtb-overview-glance-item+.mtb-overview-glance-item{border-top:1px solid rgba(23,58,94,.09)}}
+@media(max-width:760px){.mtb-overview-grid{grid-template-columns:1fr}.mtb-overview-card{grid-column:1/-1!important}.mtb-overview-glance-head{align-items:flex-start;flex-direction:column;padding:17px 18px 12px}.mtb-overview-glance-grid{padding:6px 10px 12px}.mtb-overview-glance-item{padding:9px 8px}.mtb-overview-deeper>summary{padding:13px 15px}}
+@media print{.mtb-overview-deeper>summary{display:none!important}.mtb-overview-deeper:not([open])>.mtb-overview-grid{display:grid!important}}
+</style><div class="mtb-chapter-overview-dashboard"><section class="mtb-overview-glance" aria-labelledby="mtb-at-a-glance-title"><div class="mtb-overview-glance-head"><div><p class="mtb-overview-eyebrow">Chapter Overview</p><h1 id="mtb-at-a-glance-title" class="mtb-overview-title">At a Glance</h1></div><div class="mtb-overview-badge">Chapter 5</div></div><div class="mtb-overview-glance-grid"><div class="mtb-overview-glance-item"><span class="mtb-overview-glance-label">Main Idea: </span><div class="mtb-overview-glance-content"><p>On the mountain Jesus describes the blessed people of His kingdom, calls them salt and light, declares that He fulfills the Law and the Prophets, and shows that the righteousness He requires reaches the heart behind anger, desire, marriage, speech, retaliation, and love.</p></div></div><div class="mtb-overview-glance-item"><span class="mtb-overview-glance-label">Setting: </span><div class="mtb-overview-glance-content"><p>Matthew 5 opens the Sermon on the Mount (5–7), the first of Matthew’s five great discourses. Jesus teaches His disciples while the crowds gathered from Galilee and beyond listen.</p></div></div><div class="mtb-overview-glance-item mtb-overview-glance-structure"><span class="mtb-overview-glance-label">Chapter Outline: </span><div class="mtb-overview-glance-content"><ul>
+<li><div data-custom-style="List Bullet">
+<p>Matthew 5:1–12 — The Beatitudes</p>
+</div></li>
+<li><div data-custom-style="List Bullet">
+<p>Matthew 5:13–16 — Salt of the Earth and Light of the World</p>
+</div></li>
+<li><div data-custom-style="List Bullet">
+<p>Matthew 5:17–20 — Jesus Fulfills the Law and the Prophets</p>
+</div></li>
+<li><div data-custom-style="List Bullet">
+<p>Matthew 5:21–26 — Anger, Contempt, and Reconciliation</p>
+</div></li>
+<li><div data-custom-style="List Bullet">
+<p>Matthew 5:27–30 — Lust and Decisive Removal of Sin</p>
+</div></li>
+<li><div data-custom-style="List Bullet">
+<p>Matthew 5:31–32 — Divorce</p>
+</div></li>
+<li><div data-custom-style="List Bullet">
+<p>Matthew 5:33–37 — Oaths and Truthful Speech</p>
+</div></li>
+<li><div data-custom-style="List Bullet">
+<p>Matthew 5:38–42 — Yielding the Right to Retaliate</p>
+</div></li>
+<li><div data-custom-style="List Bullet">
+<p>Matthew 5:43–48 — Love for Enemies</p>
+</div></li>
+</ul></div></div><div class="mtb-overview-glance-item mtb-overview-glance-keyverse"><span class="mtb-overview-glance-label">Key Verse: </span><div class="mtb-overview-glance-content"><p>“‘Do not think that I came to destroy the Law or the Prophets. I did not come to destroy but to fulfill.” (Matthew 5:17)</p></div></div></div></section><details class="mtb-overview-deeper"><summary>Go Deeper</summary><div class="mtb-overview-grid"><article class="mtb-overview-card mtb-overview-card-heart"><h2 class="mtb-overview-card-header">The Heart of the Chapter</h2><div class="mtb-overview-card-body"><p>The King begins with blessing. The poor in spirit, the mourners, the meek, and the hungry for righteousness are not the people the world usually calls fortunate, yet Jesus declares that the kingdom belongs to them. These qualities describe one character growing together by God’s grace: acknowledged need of God, grief over sin, strength yielded to Him, mercy in action, an undivided heart, and peacemaking, even under persecution. People like this are salt and light, and their good works lead others to glorify their Father in heaven.</p>
+<p>Then Jesus speaks about the Scriptures: “I did not come to destroy but to fulfill” (5:17). He fulfills the Law and the Prophets in His person, His perfect obedience, His saving work, and His authoritative teaching. The righteousness He requires exceeds that of the scribes and Pharisees because it reaches the heart. Six times He says, “But I say to you,” and each time He goes beneath the act to its source: anger and contempt, cultivated lust, faithless divorce, evasive oaths, the urge to repay insult, and love limited to friends. The standard is the Father Himself, who sends rain on the just and the unjust.</p></div></article><article class="mtb-overview-card mtb-overview-card-sections"><h2 class="mtb-overview-card-header">Chapter Sections</h2><div class="mtb-overview-card-body"><h2 id="matthew-5112-the-beatitudes">Matthew 5:1–12 — The Beatitudes</h2>
+<p>Jesus pronounces blessed the poor in spirit, the mourners, the meek, the hungry for righteousness, the merciful, the pure in heart, the peacemakers, and the persecuted. These belong to His kingdom now and will receive its full inheritance.</p>
+<h2 id="matthew-51316-salt-of-the-earth-and-light-of-the-world">Matthew 5:13–16 — Salt of the Earth and Light of the World</h2>
+<p>Jesus calls His disciples the salt of the earth and the light of the world. Their visible good works are meant to bring glory to their Father in heaven.</p>
+<h2 id="matthew-51720-jesus-fulfills-the-law-and-the-prophets">Matthew 5:17–20 — Jesus Fulfills the Law and the Prophets</h2>
+<p>Jesus declares that He came to fulfill the Law and the Prophets, not to destroy them. Careless teaching about God’s commands makes a person least in the kingdom, while outward-only righteousness will not enter it at all.</p>
+<h2 id="matthew-52126-anger-contempt-and-reconciliation">Matthew 5:21–26 — Anger, Contempt, and Reconciliation</h2>
+<p>Jesus brings the command against murder to bear on anger and contempt. He urges His hearers to seek reconciliation quickly, even before offering a gift at the altar.</p>
+<h2 id="matthew-52730-lust-and-decisive-removal-of-sin">Matthew 5:27–30 — Lust and Decisive Removal of Sin</h2>
+<p>Jesus shows that lustful looking is already adultery in the heart. His images of the eye and hand call for decisive removal of whatever leads to sin, not bodily harm.</p>
+<h2 id="matthew-53132-divorce">Matthew 5:31–32 — Divorce</h2>
+<p>Jesus confronts the easy use of a certificate of divorce. Except for sexual immorality, divorcing a wife wrongs her and leads to adultery, and Jesus returns to the subject in 19:3–12.</p>
+<h2 id="matthew-53337-oaths-and-truthful-speech">Matthew 5:33–37 — Oaths and Truthful Speech</h2>
+<p>Jesus forbids evasive oaths in everyday speech, since heaven, earth, and Jerusalem all belong to God. A disciple’s plain “Yes” and “No” should be trustworthy.</p>
+<h2 id="matthew-53842-yielding-the-right-to-retaliate">Matthew 5:38–42 — Yielding the Right to Retaliate</h2>
+<p>Jesus calls His disciples to yield the right to retaliate when insulted and wronged. They turn the other cheek, give more than is demanded, and help those who ask.</p>
+<h2 id="matthew-54348-love-for-enemies">Matthew 5:43–48 — Love for Enemies</h2>
+<p>Jesus commands love and prayer for enemies, after the pattern of the Father who gives sun and rain to the evil and the good. His children are to be perfect, mature in love, as their Father is.</p></div></article><article class="mtb-overview-card mtb-overview-card-matters"><h2 class="mtb-overview-card-header">Why This Chapter Matters</h2><div class="mtb-overview-card-body"><p>Matthew 5 shows what life under the King looks like from the inside out. The Beatitudes do not describe a ladder for earning entrance. They describe people who depend on God and whose lives are being changed by His grace.</p>
+<p>The chapter also settles how Christians relate to the Old Testament. Jesus does not discard it. He brings it to its intended purpose, and obedience now flows through Him. His commands reach farther than outward conduct, which exposes every heart and points to the promised new heart and Spirit (Ezekiel 36:26–27). The call to love enemies shows the Father’s own generosity, seen most fully when Christ died for His enemies (Romans 5:8–10).</p></div></article><article class="mtb-overview-card mtb-overview-card-themes"><h2 class="mtb-overview-card-header">Key Themes to Watch For</h2><div class="mtb-overview-card-body"><p><strong>The character of the kingdom.</strong> The Beatitudes portray the people who receive God’s reign (5:3–12).</p>
+<p><strong>Visible witness.</strong> Salt and light make the Father’s goodness seen in actual conduct (5:13–16).</p>
+<p><strong>Fulfillment.</strong> Jesus brings the Law and the Prophets to their purpose (5:17–18).</p>
+<p><strong>Righteousness of the heart.</strong> Each “But I say to you” reaches beneath the act to its source (5:21–48).</p>
+<p><strong>Like the Father.</strong> Love for enemies reflects the Father’s indiscriminate kindness (5:44–48).</p></div></article><article class="mtb-overview-card mtb-overview-card-words"><h2 class="mtb-overview-card-header">Key Words &amp; Concepts</h2><div class="mtb-overview-card-body"><p><strong>Blessed (5:3).</strong> Favored by God and secure in His kingdom, even amid hardship. It describes God’s gift, not a passing feeling.</p>
+<p><strong>Poor in spirit (5:3).</strong> Those who know they have nothing to offer God and depend on Him completely.</p>
+<p><strong>Meek (5:5).</strong> Strength yielded to God’s control. The meek can serve, receive correction, and trust God instead of fighting for themselves.</p>
+<p><strong>Fulfill (5:17).</strong> To bring something to its intended completion. Jesus fulfills Scripture by who He is, what He does, and what He teaches.</p>
+<p><strong>Raca (5:22).</strong> An Aramaic word of contempt meaning roughly “empty-headed.” Jesus treats contemptuous words as serious sin.</p>
+<p><strong>Perfect (5:48).</strong> Complete or mature, especially in love that reaches beyond friends to enemies, as the Father’s does.</p></div></article></div></details></div>
+</section>

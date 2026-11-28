@@ -98,6 +98,9 @@
           '<a href="' + ROOT + 'about.html#bible">About the Bible</a>' +
           '<a href="' + ROOT + 'loc/life-of-jesus.html">The Life of Jesus</a>' +
           '<a href="' + ROOT + 'resources/">Resources</a>' +
+          '<a href="' + ROOT + 'ask-mtb/support.html">Ask MTB Support</a>' +
+          '<a href="' + ROOT + 'ask-mtb/privacy.html">Ask MTB Privacy</a>' +
+          '<a href="' + ROOT + 'ask-mtb/terms.html">Ask MTB Terms</a>' +
           '<span class="visits" id="mtb-visits" hidden></span>' +
           '<span class="copy">Mastering the Bible · Helping People Hear God’s Voice</span>' +
           '<span class="copy legal">© 2026 Mastering the Bible (mtb.bible). All rights reserved. ' +
